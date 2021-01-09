@@ -1,9 +1,11 @@
 package net.tigereye.spellbound.mixins;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.hit.EntityHitResult;
 import net.tigereye.spellbound.enchantments.SBEnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,9 +28,16 @@ public class TridentEntityMixin {
     //  Lnet/minecraft/item/ItemStack;
     //  Lnet/minecraft/entity/EntityGroup;
     // )F
-    @ModifyVariable(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getAttackDamage(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityGroup;)F"), ordinal = 0, method = "onEntityHit")
+    //
+    //Lnet/minecraft/entity/projectile/TridentEntity;getOwner(
+    //)Lnet/minecraft/entity/Entity;
+    @ModifyVariable(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/TridentEntity;getOwner()Lnet/minecraft/entity/Entity;"), ordinal = 0, method = "onEntityHit")
     public float spellboundTridentEntityOnEntityHitMixin(float h, EntityHitResult entityHitResult){
-        return SBEnchantmentHelper.getThrownTridentDamage((TridentEntity)(Object)this,this.asItemStack(), entityHitResult.getEntity());
+        Entity entity = ((TridentEntity)(Object)this).getOwner();
+        if(entity instanceof PlayerEntity){
+            ((PlayerEntity)entity).sendMessage(new LiteralText("h = " + h),true);
+        }
+        return h + SBEnchantmentHelper.getThrownTridentDamage((TridentEntity)(Object)this, this.asItemStack(), entityHitResult.getEntity());
     }
 
     // Lnet/minecraft/enchantment/EnchantmentHelper;onTargetDamaged(

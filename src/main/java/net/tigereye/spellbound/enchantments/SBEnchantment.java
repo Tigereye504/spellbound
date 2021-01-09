@@ -56,7 +56,7 @@ public class SBEnchantment extends Enchantment {
     //called before vanilla on-hit but after vanilla on-hurt
     public void onThrownTridentEntityHit(int level, TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){}
 
-    public int getProtectionAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
+    public float getProtectionAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
         return 0;
     }
 
@@ -67,7 +67,7 @@ public class SBEnchantment extends Enchantment {
     public void onActivate(int level, PlayerEntity playerEntity, ItemStack itemStack, Entity target) {}
 
     public List<Text> addTooltip(int level, ItemStack itemStack, PlayerEntity player, TooltipContext context) {
-        return new ArrayList();
+        return new ArrayList<Text>();
     }
 
     public void onBreakBlock(int level, ItemStack itemStack, World world, BlockPos pos, BlockState state, PlayerEntity player) {

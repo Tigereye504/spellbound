@@ -91,13 +91,13 @@ public class SBEnchantmentHelper {
 
 
     public static int getProtectionAmount(DamageSource source, LivingEntity target, int k, float amount) {
-        MutableInt mutableInt = new MutableInt();
+        MutableFloat mutableFloat = new MutableFloat();
         forEachEnchantment((enchantment, level, itemStack) -> {
             if(enchantment instanceof SBEnchantment) {
-                mutableInt.add(((SBEnchantment) enchantment).getProtectionAmount(level, source, itemStack, target));
+                mutableFloat.add(((SBEnchantment) enchantment).getProtectionAmount(level, source, itemStack, target));
             }
         }, target.getArmorItems());
-        return mutableInt.intValue();
+        return k + mutableFloat.intValue();
     }
 
     public static float getMiningSpeed(PlayerEntity playerEntity, BlockState block, float h) {
@@ -158,10 +158,10 @@ public class SBEnchantmentHelper {
         }
     }
     private static void forEachEnchantment(SBEnchantmentHelper.Consumer consumer, Iterable<ItemStack> stacks) {
-        Iterator var2 = stacks.iterator();
+        Iterator<ItemStack> var2 = stacks.iterator();
 
         while(var2.hasNext()) {
-            ItemStack itemStack = (ItemStack)var2.next();
+            ItemStack itemStack = var2.next();
             forEachEnchantment(consumer, itemStack);
         }
 

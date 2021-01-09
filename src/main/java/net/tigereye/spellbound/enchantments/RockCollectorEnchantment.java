@@ -48,10 +48,11 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
 
     public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack stack, BlockState block, float miningSpeed) {
         float UniqueRockSpeed = 0.0F;
+        int BlockRockSpeed = 0;
         if(miningSpeed > 1.0F) {
             UniqueRockSpeed = calculateUniversalBonus(getUniqueRockCount(stack));
+            BlockRockSpeed = calculateBlockBonus(getBlockRockCount(block,stack));
         }
-        int BlockRockSpeed = calculateBlockBonus(getBlockRockCount(block,stack));
         return miningSpeed + UniqueRockSpeed + BlockRockSpeed;
     }
 
@@ -71,10 +72,10 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
         return addTooltip(level,stack,player,context,10);
     }
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context, int maxsize) {
-        List<Text> output = new ArrayList<Text>();
+        List<Text> output = new ArrayList<>();
         CompoundTag tag = stack.getOrCreateSubTag(ROCK_COLLECTOR_KEY);
         Set<String> keys = tag.getKeys();
-        Map<String,Integer> keyIntMap = new HashMap<String,Integer>();
+        Map<String,Integer> keyIntMap = new HashMap<>();
         keys.forEach((trophyKey) -> {
             if(!trophyKey.equals(UNIQUE_ROCK_COUNT_KEY)) {
                 keyIntMap.put(trophyKey,tag.getInt(trophyKey));
@@ -112,13 +113,13 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
 
     private boolean hasRock(BlockState blockState, ItemStack stack){
         CompoundTag tag = stack.getOrCreateSubTag(ROCK_COLLECTOR_KEY);
-        if(tag.contains(blockState.getBlock().getTranslationKey())){
-            return true;
-        }
-        return false;
+        return tag.contains(blockState.getBlock().getTranslationKey());
     }
 
     private boolean addRock(BlockState blockState, LivingEntity miner, ItemStack stack){
+        if(!stack.getItem().isEffectiveOn(blockState)){
+            return false;
+        }
         CompoundTag tag = stack.getOrCreateSubTag(ROCK_COLLECTOR_KEY);
         if(!hasRock(blockState,stack)){
             tag.putInt(UNIQUE_ROCK_COUNT_KEY,tag.getInt(UNIQUE_ROCK_COUNT_KEY)+1);
@@ -136,7 +137,7 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
         else{
             int newValue = tag.getInt(blockState.getBlock().getTranslationKey())+1;
             tag.putInt(blockState.getBlock().getTranslationKey(),newValue);
-            if(calculateBlockBonus(newValue-1) < (calculateBlockBonus(newValue-1))){
+            if(calculateBlockBonus(newValue-1) < (calculateBlockBonus(newValue))){
                 String message = stack.getName().getString()
                         + "'s "
                         + new TranslatableText(blockState.getBlock().getTranslationKey()).getString()

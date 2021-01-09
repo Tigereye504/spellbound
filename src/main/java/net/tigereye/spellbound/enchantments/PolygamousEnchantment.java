@@ -41,12 +41,12 @@ public class PolygamousEnchantment extends SBEnchantment{
         return super.isAcceptableItem(stack);
     }
 
-    public int getProtectionAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
+    public float getProtectionAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
         testOwnerFaithfulness(stack,target);
         if(target.hasStatusEffect(SBStatusEffects.POLYGAMY)){
-            return 1;
+            return .5f;
         }
-        return -2;
+        return -1;
     }
 
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {

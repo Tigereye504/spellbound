@@ -42,7 +42,7 @@ public class MonogamousEnchantment extends SBEnchantment{
         return super.isAcceptableItem(stack);
     }
 
-    public int getProtectionAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
+    public float getProtectionAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
         testOwnerFaithfulness(stack,target);
         if(target.hasStatusEffect(SBStatusEffects.MONOGAMY)){
             return 2;
