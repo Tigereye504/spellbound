@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "spellbound",
+  "version": "${version}",
+
+  "name": "Spellbound",
+  "description": "Add interesting new enchantments.",
+  "authors": [
+    "David Troyer"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/hellish-materials/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.tigereye.spellbound.Spellbound"
+    ]
+  },
+  "mixins": [
+    "spellbound.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

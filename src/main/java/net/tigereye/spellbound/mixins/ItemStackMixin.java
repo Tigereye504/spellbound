@@ -1,0 +1,45 @@
+package net.tigereye.spellbound.mixins;
+
+import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.tigereye.spellbound.enchantments.SBEnchantmentHelper;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
+import java.util.Random;
+import java.util.function.Consumer;
+
+@Mixin(ItemStack.class)
+public class ItemStackMixin {
+    @ModifyVariable(at = @At(value="CONSTANT", args = "intValue=10", ordinal = 0), ordinal = 0, method = "getTooltip")
+    public List<Text> spellboundItemStackGetTooltipMixin(List<Text> list, PlayerEntity player, TooltipContext context){
+        return SBEnchantmentHelper.addTooltip((ItemStack)(Object)this, list, player, context);
+    }
+
+    //Ljava/util/function/Consumer;accept(
+    //  Lnet/minecraft/entity/LivingEntity;
+    //)V
+    // --OR--
+    //Lnet/minecraft/item/ItemStack;getItem(
+    //)Lnet/minecraft/item/Item;
+    //@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/effect/StatusEffectUtil;hasHaste(Lnet/minecraft/entity/LivingEntity;)Z"),method = "damage")
+    //public <T extends LivingEntity> void spellboundItemStackDamageMixin(int amount, T entity, Consumer<T> breakCallback){
+    //    SBEnchantmentHelper.onToolBreak((ItemStack)(Object)this, (LivingEntity)entity);
+    //}
+
+    @Inject(at = @At(value = "RETURN"),method = "damage")
+    public <T extends LivingEntity> void spellboundItemStackDamageMixin(int amount, Random random, ServerPlayerEntity player, CallbackInfoReturnable<Boolean> info){
+        if(info.getReturnValue()){
+            SBEnchantmentHelper.onToolBreak((ItemStack)(Object)this, player);
+        }
+    }
+}
