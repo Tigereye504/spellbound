@@ -46,11 +46,11 @@
 
  
 
-<b>Dullness</b> is a damage enchantment, the opposite of sharpness. Perfect for those who are worried about hurting their pets while mining. Appears on any digging tool, incompatible with other damage enchantments.
+<b>Dullness</b> is a damage enchantment, the opposite of Sharpness. Perfect for those who are worried about hurting their pets while mining. Appears on any digging tool, incompatible with other damage enchantments.
 
  
 
-<b>Rock Collector</b> is an efficiency enchantment that draws power from the ground it breaks. An enchantment for adventurers and nomads, diverse experiences make this enchantment much more powerful. Appears on any digging tool. Incompatible with efficiency and any other enchantment that is incompatible with efficiency.
+<b>Rock Collector</b> is an efficiency enchantment that draws power from the ground it breaks. An enchantment for adventurers and nomads, diverse experiences make this enchantment much more powerful. Appears on any digging tool. Incompatible with efficiency and any other enchantment that is incompatible with Efficiency.
 
  
 
@@ -70,7 +70,7 @@
 
  
 
-<b>Selfish</b> items refuse to remain damaged. If they are missing any durability, they will take it from other items you have equipped. They will not break other items nor take from other selfish items. Appears on all breakables.
+<b>Selfish</b> items refuse to remain damaged. If they are missing any durability, they will take it from other items you have equipped. They will not break other items nor take from other selfish items. Appears on all breakables, incompatible with Unbreaking and Mending.
 
  
 
