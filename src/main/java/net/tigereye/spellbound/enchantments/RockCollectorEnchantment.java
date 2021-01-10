@@ -91,7 +91,7 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
                             .append(new TranslatableText(entry.getKey()))
                             .append(" (+" + calculateBlockBonus(entry.getValue()) + ")"));
                 });
-        output.add(new LiteralText("----------------------------"));
+        output.add(new LiteralText("--------------------------"));
         return output;
     }
 

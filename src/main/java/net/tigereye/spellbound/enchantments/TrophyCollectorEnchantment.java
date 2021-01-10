@@ -110,21 +110,7 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
                             .append(new TranslatableText(entry.getKey()))
                             .append(" (+" + (int) (Math.sqrt(entry.getValue()) / 4) + ")"));
                 });
-        output.add(new LiteralText("----------------------------"));
-        /*
-        output.add(new LiteralText(
-                "--" + tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + " Unique Trophies (+"
-                        +String.format("%.1f", Math.sqrt(getUniqueTrophyCount(stack))/2)+")--"));
-        keys.forEach((trophyKey) -> {
-            if(!trophyKey.equals(UNIQUE_TROPHY_COUNT_KEY)) {
-                output.add(new LiteralText(
-                                tag.getInt(trophyKey) + " ")
-                                .append(new TranslatableText(trophyKey))
-                                .append(" (+"+(int)(Math.sqrt(tag.getInt(trophyKey))/4)+")"));
-            }
-        });
-        output.add(new LiteralText("----------------------------"));
-        */
+        output.add(new LiteralText("--------------------------"));
         return output;
     }
 
@@ -143,9 +129,8 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
         return stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem
                 || stack.getItem() instanceof TridentItem
-                //|| stack.getItem() instanceof BowItem
-                //|| stack.getItem() instanceof CrossbowItem
-                //TODO: implement getArrowDamage
+                || stack.getItem() instanceof BowItem
+                || stack.getItem() instanceof CrossbowItem
                 || stack.getItem() == Items.BOOK;
     }
 
