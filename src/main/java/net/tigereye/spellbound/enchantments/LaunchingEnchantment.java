@@ -7,13 +7,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 
-public class LaunchingEnchantment extends SBEnchantment {
+public class LaunchingEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
 
     public LaunchingEnchantment() {
-        super(Rarity.UNCOMMON, EnchantmentTarget.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
     public int getMinPower(int level) {
@@ -29,11 +28,7 @@ public class LaunchingEnchantment extends SBEnchantment {
     }
 
     public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack)
-                || EnchantmentTarget.WEAPON.isAcceptableItem(stack.getItem())
-                || EnchantmentTarget.DIGGER.isAcceptableItem(stack.getItem())
-                || stack.getItem() instanceof AxeItem;
-                //TODO: implement for bows and crossbows
+        return isAcceptableAtTable(stack);
     }
 
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
@@ -46,5 +41,14 @@ public class LaunchingEnchantment extends SBEnchantment {
 
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other);
+    }
+
+    public boolean isAcceptableAtTable(ItemStack stack) {
+        return stack.getItem() instanceof SwordItem
+                || stack.getItem() instanceof AxeItem
+                || stack.getItem() instanceof TridentItem
+                || stack.getItem() instanceof BowItem
+                || stack.getItem() instanceof CrossbowItem
+                || stack.getItem() == Items.BOOK;
     }
 }

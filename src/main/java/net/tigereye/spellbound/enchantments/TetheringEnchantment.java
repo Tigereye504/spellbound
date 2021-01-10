@@ -64,5 +64,5 @@ public class TetheringEnchantment extends SBEnchantment {
         target.applyStatusEffect(new TetheredInstance(anchor, 20+(20*level), 0));
     }
 
-    //TODO: add support for bows/crossbows
+    //doesn't support bows/crossbows because arrows usually dont survive impact
 }

@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
 import net.tigereye.spellbound.registration.SBConfig;
 import net.tigereye.spellbound.registration.SBStatusEffects;
@@ -43,6 +44,16 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
         return 0;
     }
 
+    public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
+        if(attacker instanceof LivingEntity) {
+            StatusEffectInstance greenSparkles = ((LivingEntity)attacker).getStatusEffect(SBStatusEffects.GREEN_SPARKLES);
+            if (greenSparkles != null) {
+                return damage + SBConfig.RAMPAGE_DAMAGE_BASE + (SBConfig.RAMPAGE_DAMAGE_PER_LEVEL * level);
+            }
+        }
+        return damage;
+    }
+
     public void onKill(int level, ItemStack stack, LivingEntity killer, LivingEntity victim){
         killer.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.GREEN_SPARKLES,
                 SBConfig.RAMPAGE_DURATION_BASE +(SBConfig.RAMPAGE_DURATION_PER_LEVEL*level),
@@ -58,9 +69,8 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
         return stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem
                 || stack.getItem() instanceof TridentItem
-                //|| stack.getItem() instanceof BowItem
-                //|| stack.getItem() instanceof CrossbowItem
+                || stack.getItem() instanceof BowItem
+                || stack.getItem() instanceof CrossbowItem
                 || stack.getItem() == Items.BOOK;
-                //TODO: make rampage damage work for bows/crossbows
     }
 }

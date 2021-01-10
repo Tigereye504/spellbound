@@ -10,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.tigereye.spellbound.Spellbound;
@@ -56,6 +57,17 @@ public class MonogamousEnchantment extends SBEnchantment{
             return 4;
         }
         return -6;
+    }
+
+    public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
+        if(attacker instanceof LivingEntity) {
+            testOwnerFaithfulness(stack,(LivingEntity)attacker);
+            if(((LivingEntity)attacker).hasStatusEffect(SBStatusEffects.MONOGAMY)){
+                return damage + 4;
+            }
+            return damage + -6;
+        }
+        return damage;
     }
 
     public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack itemStack, BlockState block, float miningSpeed) {
@@ -117,5 +129,4 @@ public class MonogamousEnchantment extends SBEnchantment{
         return id;
     }
 
-    //TODO: implement for projectile attacks like bows
 }

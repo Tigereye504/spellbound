@@ -10,11 +10,13 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.mutable.MutableFloat;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,5 +76,12 @@ public class SBEnchantment extends Enchantment {
     }
 
     public void onToolBreak(int level, ItemStack itemStack, PlayerEntity entity) {
+    }
+
+    public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity victim, float damage) {
+        return damage;
+    }
+
+    public void onProjectileEntityHit(int level, ItemStack itemStack, PersistentProjectileEntity persistentProjectileEntity, Entity entity) {
     }
 }

@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -52,7 +53,8 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
         return stack.getItem() instanceof TridentItem
                 || stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem
+                || stack.getItem() instanceof BowItem
+                || stack.getItem() instanceof CrossbowItem
                 || stack.getItem() == Items.BOOK;
-                //TODO: Implement for Bow/Crossbow
     }
 }

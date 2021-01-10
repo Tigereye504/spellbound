@@ -13,6 +13,7 @@
     "LivingEntityMixin",
     "MobEntityMixin",
     "PlayerEntityMixin",
+    "PersistentProjectileEntityMixin",
     "StatusEffectInstanceMixin",
     "TridentEntityMixin"
   ],

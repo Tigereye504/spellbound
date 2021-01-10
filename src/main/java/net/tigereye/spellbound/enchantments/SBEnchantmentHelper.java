@@ -8,12 +8,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -132,6 +134,28 @@ public class SBEnchantmentHelper {
                 ((SBEnchantment) enchantment).onToolBreak(level, itemStack, entity);
             }
         }, stack);
+    }
+
+    public static int getProjectileDamage(PersistentProjectileEntity persistentProjectileEntity, EntityHitResult entityHitResult, int damage) {
+        Entity entity = persistentProjectileEntity.getOwner();
+        MutableFloat mutableFloat = new MutableFloat(damage);
+        if(entity != null) {
+            forEachEnchantment((enchantment, level, itemStack) -> {
+                if (enchantment instanceof SBEnchantment) {
+                    mutableFloat.setValue(((SBEnchantment) enchantment).getProjectileDamage(level, itemStack, persistentProjectileEntity, entity, entityHitResult.getEntity(), mutableFloat.getValue()));
+                }
+            }, persistentProjectileEntity.getOwner().getItemsEquipped());//TODO: track launching ItemStack on projectile
+        }
+        return mutableFloat.intValue();
+    }
+
+    public static void onProjectileEntityHit(PersistentProjectileEntity persistentProjectileEntity, Entity entity) {
+
+        forEachEnchantment((enchantment, level, itemStack) -> {
+            if(enchantment instanceof SBEnchantment) {
+                ((SBEnchantment) enchantment).onProjectileEntityHit(level, itemStack, persistentProjectileEntity, entity);
+            }
+        }, persistentProjectileEntity.getOwner().getItemsEquipped());//TODO: track launching ItemStack on projectile
     }
 
     public static List<Text> addTooltip(ItemStack stack, List<Text> list, PlayerEntity player, TooltipContext context){

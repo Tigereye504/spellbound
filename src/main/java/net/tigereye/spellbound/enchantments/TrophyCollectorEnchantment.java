@@ -7,6 +7,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -51,6 +52,15 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
             EntityTrophyDamage = (int) (Math.sqrt(getEntityTrophyCount((LivingEntity)defender, stack)) / 4);
         }
         return UniqueTrophyDamage + EntityTrophyDamage;
+    }
+
+    public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
+        float UniqueTrophyDamage = (float)Math.sqrt(getUniqueTrophyCount(stack))/2;
+        int EntityTrophyDamage = 0;
+        if(defender instanceof LivingEntity) {
+            EntityTrophyDamage = (int) (Math.sqrt(getEntityTrophyCount((LivingEntity)defender, stack)) / 4);
+        }
+        return damage + ((UniqueTrophyDamage + EntityTrophyDamage)*2);
     }
 
     public void onKill(int level, ItemStack stack, LivingEntity killer, LivingEntity victim){

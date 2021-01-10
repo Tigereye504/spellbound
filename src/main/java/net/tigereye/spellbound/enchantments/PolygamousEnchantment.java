@@ -8,7 +8,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.tigereye.spellbound.Spellbound;
@@ -55,6 +57,17 @@ public class PolygamousEnchantment extends SBEnchantment{
             return 2;
         }
         return -4;
+    }
+
+    public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
+        if(attacker instanceof LivingEntity) {
+            testOwnerFaithfulness(stack, (LivingEntity)attacker);
+            if (((LivingEntity)attacker).hasStatusEffect(SBStatusEffects.POLYGAMY)) {
+                return damage + 2;
+            }
+            return damage - 4;
+        }
+        return damage;
     }
 
     public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack itemStack, BlockState block, float miningSpeed) {
@@ -116,5 +129,4 @@ public class PolygamousEnchantment extends SBEnchantment{
         return id;
     }
 
-    //TODO: implement for projectile attacks like bows
 }
