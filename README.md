@@ -74,7 +74,7 @@
 
  
 
-Status Effects
+### Status Effects
 
  
 
