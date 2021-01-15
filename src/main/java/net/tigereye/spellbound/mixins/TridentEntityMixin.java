@@ -34,9 +34,6 @@ public class TridentEntityMixin {
     @ModifyVariable(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/TridentEntity;getOwner()Lnet/minecraft/entity/Entity;"), ordinal = 0, method = "onEntityHit")
     public float spellboundTridentEntityOnEntityHitMixin(float h, EntityHitResult entityHitResult){
         Entity entity = ((TridentEntity)(Object)this).getOwner();
-        if(entity instanceof PlayerEntity){
-            ((PlayerEntity)entity).sendMessage(new LiteralText("h = " + h),true);
-        }
         return h + SBEnchantmentHelper.getThrownTridentDamage((TridentEntity)(Object)this, this.asItemStack(), entityHitResult.getEntity());
     }
 
