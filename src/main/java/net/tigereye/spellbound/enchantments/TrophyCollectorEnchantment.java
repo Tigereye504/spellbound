@@ -46,25 +46,25 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
     }
 
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
-        float UniqueTrophyDamage = (float)Math.sqrt(getUniqueTrophyCount(stack))/2;
+        float UniqueTrophyDamage = getUniqueDamageBonus(getUniqueTrophyCount(stack));
         int EntityTrophyDamage = 0;
         if(defender instanceof LivingEntity) {
-            EntityTrophyDamage = (int) (Math.sqrt(getEntityTrophyCount((LivingEntity)defender, stack)) / 4);
+            EntityTrophyDamage = getEntityDamageBonus(getEntityTrophyCount((LivingEntity)defender, stack));
         }
         return UniqueTrophyDamage + EntityTrophyDamage;
     }
 
     public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
-        float UniqueTrophyDamage = (float)Math.sqrt(getUniqueTrophyCount(stack))/2;
-        int EntityTrophyDamage = 0;
+        float UniqueTrophyDamage = getRangedUniqueDamageMultiple(getUniqueTrophyCount(stack));
+        float EntityTrophyDamage = 0;
         if(defender instanceof LivingEntity) {
-            EntityTrophyDamage = (int) (Math.sqrt(getEntityTrophyCount((LivingEntity)defender, stack)) / 4);
+            EntityTrophyDamage = getRangedEntityDamageMultiple(getEntityTrophyCount((LivingEntity)defender, stack));
         }
-        return damage + ((UniqueTrophyDamage + EntityTrophyDamage)*2);
+        return damage*(1+(UniqueTrophyDamage + EntityTrophyDamage));
     }
 
     public void onKill(int level, ItemStack stack, LivingEntity killer, LivingEntity victim){
-        addTrophy(victim,killer,stack);
+        addTrophy(victim, killer, stack,stack.getItem() instanceof RangedWeaponItem);
     }
 
     public void onActivate(int level, PlayerEntity player, ItemStack stack, Entity target) {
@@ -91,6 +91,7 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
     }
 
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
+        boolean isRanged = stack.getItem() instanceof RangedWeaponItem;
         List<Text> output = new ArrayList<Text>();
         CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
         Set<String> keys = tag.getKeys();
@@ -100,15 +101,30 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
                 keyIntMap.put(trophyKey,tag.getInt(trophyKey));
             }
         });
-        output.add(new LiteralText(
-                "--" + tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + " Unique Trophies (+"
-                        +String.format("%.1f", Math.sqrt(getUniqueTrophyCount(stack))/2)+")--"));
+        if(isRanged) {
+            output.add(new LiteralText(
+                    "--" + getUniqueTrophyCount(stack) + " Unique Trophies (+"
+                            + String.format("%.2f", getRangedUniqueDamageMultiple(getUniqueTrophyCount(stack))) + "x)--"));
+        }
+        else{
+            output.add(new LiteralText(
+                    "--" + tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + " Unique Trophies (+"
+                            + String.format("%.1f", getUniqueDamageBonus(getUniqueTrophyCount(stack))) + ")--"));
+        }
         keyIntMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(10)
                 .forEach((entry) -> {
-                    output.add(new LiteralText(
-                            entry.getValue() + " ")
-                            .append(new TranslatableText(entry.getKey()))
-                            .append(" (+" + (int) (Math.sqrt(entry.getValue()) / 4) + ")"));
+                    if(isRanged) {
+                        output.add(new LiteralText(
+                                entry.getValue() + " ")
+                                .append(new TranslatableText(entry.getKey()))
+                                .append(" (+" + String.format("%.1f", getRangedEntityDamageMultiple(entry.getValue())) + "x)"));
+                    }
+                    else{
+                        output.add(new LiteralText(
+                                entry.getValue() + " ")
+                                .append(new TranslatableText(entry.getKey()))
+                                .append(" (+" + (int) getEntityDamageBonus(entry.getValue()) + ")"));
+                    }
                 });
         output.add(new LiteralText("--------------------------"));
         return output;
@@ -122,15 +138,15 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
     //as typically the later is trying to be another form of damage enchantment
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other)
-                && other.canCombine(Enchantments.SHARPNESS);
+                && other.canCombine(Enchantments.SHARPNESS)
+                && other.canCombine(Enchantments.POWER);
     }
 
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem
                 || stack.getItem() instanceof TridentItem
-                || stack.getItem() instanceof BowItem
-                || stack.getItem() instanceof CrossbowItem
+                || stack.getItem() instanceof RangedWeaponItem
                 || stack.getItem() == Items.BOOK;
     }
 
@@ -142,7 +158,7 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
         return false;
     }
 
-    private boolean addTrophy(LivingEntity victim, LivingEntity killer, ItemStack stack){
+    private boolean addTrophy(LivingEntity victim, LivingEntity killer, ItemStack stack,boolean isRanged){
         CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
         if(!hasTrophy(victim,stack)){
             tag.putInt(UNIQUE_TROPHY_COUNT_KEY,tag.getInt(UNIQUE_TROPHY_COUNT_KEY)+1);
@@ -160,13 +176,25 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
         else{
             int newValue = tag.getInt(victim.getType().toString())+1;
             tag.putInt(victim.getType().toString(),newValue);
-            if(((int) (Math.sqrt(newValue-1) / 4)) < ((int) (Math.sqrt(newValue) / 4))){
-                String message = stack.getName().getString()
-                        + "'s "
-                        + new TranslatableText(victim.getType().toString()).getString()
-                        + " trophy improved";
-                ((PlayerEntity)killer).sendMessage(new LiteralText(message)
-                        , true);
+            if(isRanged){
+                if (getRangedEntityDamageMultiple(newValue - 1) < (getRangedEntityDamageMultiple(newValue))) {
+                    String message = stack.getName().getString()
+                            + "'s "
+                            + new TranslatableText(victim.getType().toString()).getString()
+                            + " trophy improved";
+                    ((PlayerEntity) killer).sendMessage(new LiteralText(message)
+                            , true);
+                }
+            }
+            else {
+                if (getEntityDamageBonus(newValue - 1) < (getEntityDamageBonus(newValue))) {
+                    String message = stack.getName().getString()
+                            + "'s "
+                            + new TranslatableText(victim.getType().toString()).getString()
+                            + " trophy improved";
+                    ((PlayerEntity) killer).sendMessage(new LiteralText(message)
+                            , true);
+                }
             }
             return false;
         }
@@ -180,5 +208,21 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
     private int getEntityTrophyCount(LivingEntity victim, ItemStack stack){
         CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
         return tag.getInt(victim.getType().toString());
+    }
+
+    private float getUniqueDamageBonus(int uniques){
+        return (float)Math.sqrt(uniques)/2;
+    }
+
+    private int getEntityDamageBonus(int kills){
+        return (int) (Math.sqrt(kills) / 4);
+    }
+
+    private float getRangedUniqueDamageMultiple(int uniques){
+        return (float)Math.sqrt(uniques)*0.2f;
+    }
+
+    private float getRangedEntityDamageMultiple(int kills){
+        return ((int)(Math.sqrt(kills)/4))*0.2f;
     }
 }

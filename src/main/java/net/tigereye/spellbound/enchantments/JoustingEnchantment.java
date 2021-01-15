@@ -33,8 +33,8 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
 
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack)
-                || stack.getItem() instanceof ShovelItem
                 || EnchantmentTarget.WEAPON.isAcceptableItem(stack.getItem())
+                || stack.getItem() instanceof ShovelItem
                 || stack.getItem() instanceof AxeItem;
     }
 

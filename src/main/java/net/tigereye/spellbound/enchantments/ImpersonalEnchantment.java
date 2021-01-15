@@ -64,6 +64,7 @@ public class ImpersonalEnchantment extends SBEnchantment implements CustomCondit
         return stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem
                 || stack.getItem() instanceof TridentItem
+                || stack.getItem() instanceof RangedWeaponItem
                 || stack.getItem() == Items.BOOK;
     }
 }

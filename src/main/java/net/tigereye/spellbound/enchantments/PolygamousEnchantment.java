@@ -63,9 +63,9 @@ public class PolygamousEnchantment extends SBEnchantment{
         if(attacker instanceof LivingEntity) {
             testOwnerFaithfulness(stack, (LivingEntity)attacker);
             if (((LivingEntity)attacker).hasStatusEffect(SBStatusEffects.POLYGAMY)) {
-                return damage + 2;
+                return damage*1.1f;
             }
-            return damage - 4;
+            return damage*.8f;
         }
         return damage;
     }

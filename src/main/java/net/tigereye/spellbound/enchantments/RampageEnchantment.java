@@ -69,8 +69,7 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
         return stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem
                 || stack.getItem() instanceof TridentItem
-                || stack.getItem() instanceof BowItem
-                || stack.getItem() instanceof CrossbowItem
+                || stack.getItem() instanceof RangedWeaponItem
                 || stack.getItem() == Items.BOOK;
     }
 }

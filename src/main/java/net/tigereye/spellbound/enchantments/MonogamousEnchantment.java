@@ -63,9 +63,9 @@ public class MonogamousEnchantment extends SBEnchantment{
         if(attacker instanceof LivingEntity) {
             testOwnerFaithfulness(stack,(LivingEntity)attacker);
             if(((LivingEntity)attacker).hasStatusEffect(SBStatusEffects.MONOGAMY)){
-                return damage + 4;
+                return damage * 1.2f;
             }
-            return damage + -6;
+            return damage *.7f;
         }
         return damage;
     }
