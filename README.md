@@ -44,7 +44,11 @@
 
 ### Tool Enchantments
 
- 
+
+
+<b>Cave-In</b> causes blocks struck by this item's projectiles to break loose and fall to the ground. Higher levels increase the size of the affected area. Appears on Ranged Weapons and tridents.
+
+
 
 <b>Dullness</b> is a damage enchantment, the opposite of Sharpness. Perfect for those who are worried about hurting their pets while mining. Appears on any digging tool, incompatible with other damage enchantments.
 
