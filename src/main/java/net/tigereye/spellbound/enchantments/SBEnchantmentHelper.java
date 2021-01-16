@@ -9,12 +9,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -150,12 +152,25 @@ public class SBEnchantmentHelper {
     }
 
     public static void onProjectileEntityHit(PersistentProjectileEntity persistentProjectileEntity, Entity entity) {
+        Entity owner = persistentProjectileEntity.getOwner();
+        if(owner != null) {
+            forEachEnchantment((enchantment, level, itemStack) -> {
+                if (enchantment instanceof SBEnchantment) {
+                    ((SBEnchantment) enchantment).onProjectileEntityHit(level, itemStack, persistentProjectileEntity, entity);
+                }
+            }, owner.getItemsEquipped());//TODO: track launching ItemStack on projectile
+        }
+    }
 
-        forEachEnchantment((enchantment, level, itemStack) -> {
-            if(enchantment instanceof SBEnchantment) {
-                ((SBEnchantment) enchantment).onProjectileEntityHit(level, itemStack, persistentProjectileEntity, entity);
-            }
-        }, persistentProjectileEntity.getOwner().getItemsEquipped());//TODO: track launching ItemStack on projectile
+    public static void onProjectileBlockHit(ProjectileEntity projectileEntity, BlockHitResult blockHitResult) {
+        Entity owner = projectileEntity.getOwner();
+        if(owner != null) {
+            forEachEnchantment((enchantment, level, itemStack) -> {
+                if (enchantment instanceof SBEnchantment) {
+                    ((SBEnchantment) enchantment).onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult);
+                }
+            }, owner.getItemsEquipped());//TODO: track launching ItemStack on projectile
+        }
     }
 
     public static List<Text> addTooltip(ItemStack stack, List<Text> list, PlayerEntity player, TooltipContext context){
@@ -210,8 +225,6 @@ public class SBEnchantmentHelper {
         }, equipment);
         return mutableInt.intValue();
     }
-
-
 
 
     @FunctionalInterface

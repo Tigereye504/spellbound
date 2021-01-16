@@ -10,4 +10,5 @@ public class SBConfig {
     public static final float RAMPAGE_DAMAGE_PER_LEVEL = 5;
     public static final double TETHER_ATTRACTION_FACTOR = 1;
     public static final int INTIMACY_DURATION = 12000;
+    public static final int CAVE_IN_MAX_BLAST_RES = 99;
 }

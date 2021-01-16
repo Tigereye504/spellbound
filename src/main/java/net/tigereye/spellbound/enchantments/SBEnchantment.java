@@ -11,9 +11,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableFloat;
@@ -69,7 +71,7 @@ public class SBEnchantment extends Enchantment {
     public void onActivate(int level, PlayerEntity playerEntity, ItemStack itemStack, Entity target) {}
 
     public List<Text> addTooltip(int level, ItemStack itemStack, PlayerEntity player, TooltipContext context) {
-        return new ArrayList<Text>();
+        return new ArrayList<>();
     }
 
     public void onBreakBlock(int level, ItemStack itemStack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
@@ -83,5 +85,8 @@ public class SBEnchantment extends Enchantment {
     }
 
     public void onProjectileEntityHit(int level, ItemStack itemStack, PersistentProjectileEntity persistentProjectileEntity, Entity entity) {
+    }
+
+    public void onProjectileBlockHit(int level, ItemStack itemStack, ProjectileEntity projectileEntity, BlockHitResult blockHitResult) {
     }
 }

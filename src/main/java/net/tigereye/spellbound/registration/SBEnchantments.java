@@ -8,6 +8,7 @@ import net.tigereye.spellbound.enchantments.*;
 
 public class SBEnchantments {
 
+    public static final Enchantment CAVE_IN = new CaveInEnchantment();
     public static final Enchantment DULLNESS = new DullnessEnchantment();
     public static final Enchantment IMPERSONAL = new ImpersonalEnchantment();
     public static final Enchantment JOUSTING = new JoustingEnchantment();
@@ -24,6 +25,7 @@ public class SBEnchantments {
     public static final Enchantment TROPHY_COLLECTING = new TrophyCollectorEnchantment();
 
     public static void register(){
+        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "cave_in"), CAVE_IN);
         Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "dullness"), DULLNESS);
         Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "impersonal"), IMPERSONAL);
         Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "jousting"), JOUSTING);
