@@ -252,6 +252,11 @@ public class SBEnchantmentHelper {
             else{
                 polygamy = (PolygamyInstance) (status);
                 owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
+                if(polygamy.itemUUID == null){
+                    owner.removeStatusEffect(SBStatusEffects.POLYGAMY);
+                    owner.applyStatusEffect(new PolygamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
+                    return true;
+                }
                 if(polygamy.itemUUID.compareTo(id) != 0){
                     polygamy = new PolygamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true);
                     owner.applyStatusEffect(polygamy);
@@ -270,6 +275,11 @@ public class SBEnchantmentHelper {
             }
             else{
                 monogamy = (MonogamyInstance)(status);
+                if(monogamy.itemUUID == null){
+                    owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
+                    owner.applyStatusEffect(new MonogamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
+                    return true;
+                }
                 if(monogamy.itemUUID.compareTo(id) != 0) {
                     owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
                     owner.applyStatusEffect(new PolygamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
