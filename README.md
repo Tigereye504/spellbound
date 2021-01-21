@@ -5,6 +5,10 @@
 ### Weapon Enchantments
 
  
+ 
+<b>Cave-In</b> causes blocks struck by the item's projectiles to obey gravity and fall to the ground and fall to the ground. Higher levels increase the size of the affected area. Appears on Ranged Weapons and tridents.
+
+
 
 <b>Impersonal</b> teleports the user behind the enemy, allowing you to overwhelm foes without breaking stride. Appears on swords, axes, and tridents.
 
@@ -43,10 +47,6 @@
  
 
 ### Tool Enchantments
-
-
-
-<b>Cave-In</b> causes blocks struck by this item's projectiles to break loose and fall to the ground. Higher levels increase the size of the affected area. Appears on Ranged Weapons and tridents.
 
 
 
