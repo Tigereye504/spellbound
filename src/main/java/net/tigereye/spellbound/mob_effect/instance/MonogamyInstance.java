@@ -73,7 +73,7 @@ public class MonogamyInstance extends StatusEffectInstance{
         int duration = tag.getInt("Duration");
         boolean ambient = tag.getBoolean("Ambient");
         boolean showParticles = true;
-        UUID tetherUUID = null;
+        UUID tetherUUID;
         if (tag.contains("ShowParticles", 1)) {
             showParticles = tag.getBoolean("ShowParticles");
         }
@@ -85,6 +85,9 @@ public class MonogamyInstance extends StatusEffectInstance{
 
         if(tag.contains("ItemUUID")){
             tetherUUID = tag.getUuid("ItemUUID");
+        }
+        else{
+            tetherUUID = new UUID(0,0);
         }
         return new MonogamyInstance(tetherUUID,duration,amplifier,ambient,showParticles,showIcon,null);
     }
