@@ -8,6 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.*;
+import net.tigereye.spellbound.mob_effect.Shielded;
 import net.tigereye.spellbound.registration.SBConfig;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
@@ -34,37 +35,22 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
         return isAcceptableAtTable(stack);
     }
 
-    public float onPreArmorDefense(int level, ItemStack stack, DamageSource source, LivingEntity defender, float amount){
-        if(amount <= 0){
-            return amount;
-        }
-        StatusEffectInstance shields = defender.getStatusEffect(SBStatusEffects.SHIELDED);
-        if(shields != null){
-            if(shields.getAmplifier() == 0){
-                defender.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN,
-                        shields.getDuration()-100,
-                        0));
-                defender.removeStatusEffect(SBStatusEffects.SHIELDED);
-            }
-            else{
-                int shieldDuration = shields.getDuration();
-                int shieldAmp = shields.getAmplifier()-1;
-                defender.removeStatusEffect(SBStatusEffects.SHIELDED);
-                defender.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED, shieldDuration, shieldAmp));
-            }
-            return 0;
-        }
-        if(!defender.hasStatusEffect(SBStatusEffects.SHIELDS_DOWN)) {
-            defender.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN,
-                    RedAlertEnchantment.getModifiedRecoveryRate(defender),
-                    0));
-        }
-        return amount;
-    }
-
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        if(!entity.hasStatusEffect(SBStatusEffects.SHIELDS_DOWN) && !entity.hasStatusEffect(SBStatusEffects.SHIELDED))
-        entity.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN, RedAlertEnchantment.getModifiedRecoveryRate(entity), 0));
+        if(entity.hasStatusEffect(SBStatusEffects.SHIELDED)){
+            StatusEffectInstance shielded = entity.getStatusEffect(SBStatusEffects.SHIELDED);
+            if(shielded != null && shielded.getDuration() <= SBConfig.SHIELD_DURATION_OFFSET){
+                int redAlertCount = SBEnchantmentHelper.countEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
+                if(redAlertCount > 0){
+                    entity.removeStatusEffect(SBStatusEffects.SHIELDED);
+                    entity.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
+                            SBConfig.SHIELD_DURATION_OFFSET+ RedAlertEnchantment.getModifiedRecoveryRate(entity,redAlertCount),
+                            Math.min(redAlertCount-1,shielded.getAmplifier()+1)));
+                }
+            }
+        }
+        else if(!entity.hasStatusEffect(SBStatusEffects.SHIELDS_DOWN)) {
+            entity.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN, RedAlertEnchantment.getModifiedRecoveryRate(entity), 0));
+        }
     }
 
     public boolean canAccept(Enchantment other) {
@@ -75,6 +61,9 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
         return getModifiedRecoveryRate(entity,SBEnchantmentHelper.countEnchantmentInstances(entity.getItemsEquipped(),SBEnchantments.RED_ALERT));
     }
     public static int getModifiedRecoveryRate(LivingEntity entity, int redAlertCount){
+        if(redAlertCount == 0){
+            return SBConfig.SHIELD_RECOVERY_RATE;
+        }
         int redAlertLevel = SBEnchantmentHelper.getEnchantmentAmount(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
         return Math.max(SBConfig.MINIMUM_SHIELD_RECOVERY_TIME,
                 SBConfig.SHIELD_RECOVERY_RATE-(SBConfig.SHIELD_RECOVERY_REDUCTION*Math.max(0,redAlertLevel-redAlertCount)/redAlertCount));

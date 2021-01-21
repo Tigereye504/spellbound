@@ -16,7 +16,8 @@
     "PersistentProjectileEntityMixin",
     "ProjectileEntityMixin",
     "StatusEffectInstanceMixin",
-    "TridentEntityMixin"
+    "TridentEntityMixin",
+    "TridentEntityMixin$TridentEntityInvoker"
   ],
   "injectors": {
     "defaultRequire": 1

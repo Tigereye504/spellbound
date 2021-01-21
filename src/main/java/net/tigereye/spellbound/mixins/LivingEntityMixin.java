@@ -3,6 +3,8 @@ package net.tigereye.spellbound.mixins;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.tigereye.spellbound.enchantments.SBEnchantmentHelper;
+import net.tigereye.spellbound.mob_effect.SBStatusEffect;
+import net.tigereye.spellbound.mob_effect.SBStatusEffectHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,7 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class LivingEntityMixin {
     @ModifyVariable(at = @At("HEAD"), ordinal = 0, method = "applyArmorToDamage")
     public float spellboundLivingEntityApplyArmorMixin(float amount, DamageSource source){
-        return SBEnchantmentHelper.onPreArmorDefense(source,(LivingEntity)(Object)this,amount);
+        amount = SBEnchantmentHelper.onPreArmorDefense(source,(LivingEntity)(Object)this,amount);
+        return SBStatusEffectHelper.onPreArmorDefense(source,(LivingEntity)(Object)this,amount);
     }
 
     //Lnet/minecraft/enchantment/EnchantmentHelper;getProtectionAmount(

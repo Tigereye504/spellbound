@@ -1,8 +1,7 @@
 package net.tigereye.spellbound.mob_effect;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectType;
 import net.tigereye.spellbound.enchantments.RedAlertEnchantment;
@@ -19,18 +18,26 @@ public class Shielded extends SBStatusEffect{
 
 
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
-        return duration <= 100;
+        return false;
     }
 
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(!(entity.world.isClient)){
-            int redAlertCount = SBEnchantmentHelper.countEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
-            if(redAlertCount > 0){
-                entity.removeStatusEffect(SBStatusEffects.SHIELDED);
-                entity.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
-                        100+ RedAlertEnchantment.getModifiedRecoveryRate(entity,redAlertCount),
-                        Math.min(redAlertCount-1,amplifier+1)));
-            }
+    }
+
+    public float onPreArmorDefense(StatusEffectInstance instance, DamageSource source, LivingEntity defender, float amount){
+        if(amount <= 0){
+            return amount;
         }
+        else if(instance.getAmplifier() == 0){
+            ShieldsDown.tryApplyShieldsDown(defender,instance.getDuration()- SBConfig.SHIELD_DURATION_OFFSET);
+            defender.removeStatusEffect(SBStatusEffects.SHIELDED);
+        }
+        else{
+            int shieldDuration = instance.getDuration();
+            int shieldAmp = instance.getAmplifier()-1;
+            defender.removeStatusEffect(SBStatusEffects.SHIELDED);
+            defender.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED, shieldDuration, shieldAmp));
+        }
+        return 0;
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.tigereye.spellbound.enchantments.SBEnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
@@ -44,5 +45,11 @@ public class TridentEntityMixin {
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;onTargetDamaged(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/Entity;)V"), method = "onEntityHit")
     public void spellboundTridentEntityOnEntityHitMixinTwo(EntityHitResult entityHitResult, CallbackInfo info){
         SBEnchantmentHelper.onThrownTridentEntityHit((TridentEntity)(Object)this,this.asItemStack(), entityHitResult.getEntity());
+    }
+
+    @Mixin(TridentEntity.class)
+    public interface TridentEntityInvoker {
+        @Invoker("asItemStack")
+        public ItemStack invokeAsItemStack();
     }
 }

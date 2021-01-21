@@ -30,9 +30,19 @@ public class ShieldsDown extends SBStatusEffect{
             int redAlert = SBEnchantmentHelper.countEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
             if(redAlert > 0){
                 entity.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
-                        100+ RedAlertEnchantment.getModifiedRecoveryRate(entity,redAlert),
+                        SBConfig.SHIELD_DURATION_OFFSET+ RedAlertEnchantment.getModifiedRecoveryRate(entity,redAlert),
                         0));
             }
+        }
+    }
+
+    public static void tryApplyShieldsDown(LivingEntity entity, int duration){
+        int redAlert = SBEnchantmentHelper.countEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
+        if(redAlert > 0) {
+            int mrr = RedAlertEnchantment.getModifiedRecoveryRate(entity, redAlert);
+            entity.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN,
+                    Math.min(SBConfig.SHIELD_DURATION_OFFSET + mrr, duration),
+                    0));
         }
     }
 }

@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.mixins.TridentEntityMixin;
 import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
 import net.tigereye.spellbound.mob_effect.instance.PolygamyInstance;
 import net.tigereye.spellbound.registration.SBConfig;
@@ -73,6 +74,7 @@ public class SBEnchantmentHelper {
         }, defender.getItemsEquipped());
         return mutableFloat.floatValue();
     }
+
     //called right after TridentEntity calls getdamage
     public static float getThrownTridentDamage(TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){
         MutableFloat mutableFloat = new MutableFloat();
@@ -171,13 +173,22 @@ public class SBEnchantmentHelper {
     }
 
     public static void onProjectileBlockHit(ProjectileEntity projectileEntity, BlockHitResult blockHitResult) {
-        Entity owner = projectileEntity.getOwner();
-        if(owner != null) {
+        if(projectileEntity instanceof TridentEntity){
             forEachEnchantment((enchantment, level, itemStack) -> {
                 if (enchantment instanceof SBEnchantment) {
                     ((SBEnchantment) enchantment).onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult);
                 }
-            }, owner.getItemsEquipped());//TODO: track launching ItemStack on projectile
+            }, ((TridentEntityMixin.TridentEntityInvoker)projectileEntity).invokeAsItemStack());
+        }
+        else {
+            Entity owner = projectileEntity.getOwner();
+            if (owner != null) {
+                forEachEnchantment((enchantment, level, itemStack) -> {
+                    if (enchantment instanceof SBEnchantment) {
+                        ((SBEnchantment) enchantment).onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult);
+                    }
+                }, owner.getItemsEquipped());//TODO: track launching ItemStack on projectile
+            }
         }
     }
 
