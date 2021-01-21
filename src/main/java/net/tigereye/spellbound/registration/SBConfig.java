@@ -3,6 +3,7 @@ package net.tigereye.spellbound.registration;
 public class SBConfig {
     public static final int SHIELD_RECOVERY_RATE = 240;
     public static final int SHIELD_RECOVERY_REDUCTION = 40;
+    public static final int SHIELD_DURATION_OFFSET = 100;
     public static final int MINIMUM_SHIELD_RECOVERY_TIME = 20; //in case enchantment levels get dumb
     public static final int RAMPAGE_DURATION_BASE = 20;
     public static final int RAMPAGE_DURATION_PER_LEVEL = 10;
