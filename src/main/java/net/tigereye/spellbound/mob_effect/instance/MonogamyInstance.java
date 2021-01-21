@@ -62,7 +62,9 @@ public class MonogamyInstance extends StatusEffectInstance{
         tag.putBoolean("Ambient", this.isAmbient());
         tag.putBoolean("ShowParticles", this.shouldShowParticles());
         tag.putBoolean("ShowIcon", this.shouldShowIcon());
-        tag.putUuid("ItemUUID", itemUUID);
+        if(itemUUID != null) {
+            tag.putUuid("ItemUUID", itemUUID);
+        }
         return tag;
     }
 
