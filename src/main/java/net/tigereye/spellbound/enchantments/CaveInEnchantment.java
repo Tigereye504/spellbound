@@ -62,14 +62,14 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
     private void caveIn(int level, World world, BlockPos center){
         BlockPos lowerCorner = center.add(1-level,1-level,1-level);
         List<BlockState> fallingBlocks = new ArrayList<>();
-        int radius = (level*2)-1;
+        int size = (level*2)-1;
         BlockPos target;
         BlockState targetBlock;
         BlockState blockBelowTarget;
-        for(int y = 0; y < radius; y++){
+        for(int y = 0; y < size; y++){
             if(lowerCorner.getY()+y >= 0){
-                for(int x = 0; x < radius; x++){
-                    for(int z = 0; z < radius; z++){
+                for(int x = 0; x < size; x++){
+                    for(int z = 0; z < size; z++){
                         target = lowerCorner.add(x,y,z);
                         targetBlock = world.getBlockState(target);
                         blockBelowTarget = world.getBlockState(target.down());

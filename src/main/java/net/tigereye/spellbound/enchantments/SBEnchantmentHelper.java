@@ -7,11 +7,13 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
@@ -21,11 +23,17 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
+import net.tigereye.spellbound.mob_effect.instance.PolygamyInstance;
+import net.tigereye.spellbound.registration.SBConfig;
+import net.tigereye.spellbound.registration.SBStatusEffects;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 public class SBEnchantmentHelper {
 
@@ -224,6 +232,67 @@ public class SBEnchantmentHelper {
             }
         }, equipment);
         return mutableInt.intValue();
+    }
+
+    //returns false if they are pologamous, true if they are monogamous
+    public static boolean testOwnerFaithfulness(ItemStack stack, LivingEntity owner){
+        if(owner.world.isClient()){
+            return true;
+        }
+        UUID id = loadItemUUID(stack);
+
+        if(owner.hasStatusEffect(SBStatusEffects.POLYGAMY)){
+            StatusEffectInstance status = owner.getStatusEffect(SBStatusEffects.POLYGAMY);
+            PolygamyInstance polygamy;
+            if(!(status instanceof PolygamyInstance)) {
+                owner.removeStatusEffect(SBStatusEffects.POLYGAMY);
+                polygamy = new PolygamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true);
+                owner.applyStatusEffect(polygamy);
+            }
+            else{
+                polygamy = (PolygamyInstance) (status);
+                owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
+                if(polygamy.itemUUID.compareTo(id) != 0){
+                    polygamy = new PolygamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true);
+                    owner.applyStatusEffect(polygamy);
+                }
+            }
+            return false;
+        }
+        else if(owner.hasStatusEffect(SBStatusEffects.MONOGAMY)) {
+            StatusEffectInstance status = owner.getStatusEffect(SBStatusEffects.MONOGAMY);
+            MonogamyInstance monogamy;
+            if(!(status instanceof MonogamyInstance)) {
+                owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
+                monogamy = new MonogamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true);
+                owner.applyStatusEffect(monogamy);
+                return true;
+            }
+            else{
+                monogamy = (MonogamyInstance)(status);
+                if(monogamy.itemUUID.compareTo(id) != 0) {
+                    owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
+                    owner.applyStatusEffect(new PolygamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
+                    return false;
+                }
+            }
+        }
+        //owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
+        owner.applyStatusEffect(new MonogamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true));
+        return true;
+    }
+
+    public static UUID loadItemUUID(ItemStack stack){
+        CompoundTag tag = stack.getOrCreateTag();
+        UUID id;
+        if(tag.contains(Spellbound.MODID+"ItemID")){
+            id = tag.getUuid(Spellbound.MODID+"ItemID");
+        }
+        else{
+            id = UUID.randomUUID();
+            tag.putUuid(Spellbound.MODID+"ItemID",id);
+        }
+        return id;
     }
 
 

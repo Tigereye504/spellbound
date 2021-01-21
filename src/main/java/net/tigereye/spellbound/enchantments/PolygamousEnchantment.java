@@ -14,6 +14,7 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.mob_effect.Monogamy;
 import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
 import net.tigereye.spellbound.mob_effect.instance.PolygamyInstance;
 import net.tigereye.spellbound.registration.SBConfig;
@@ -44,7 +45,7 @@ public class PolygamousEnchantment extends SBEnchantment{
     }
 
     public float getProtectionAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
-        testOwnerFaithfulness(stack,target);
+        SBEnchantmentHelper.testOwnerFaithfulness(stack,target);
         if(target.hasStatusEffect(SBStatusEffects.POLYGAMY)){
             return .5f;
         }
@@ -52,7 +53,7 @@ public class PolygamousEnchantment extends SBEnchantment{
     }
 
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
-        testOwnerFaithfulness(stack,attacker);
+        SBEnchantmentHelper.testOwnerFaithfulness(stack,attacker);
         if(attacker.hasStatusEffect(SBStatusEffects.POLYGAMY)){
             return 2;
         }
@@ -61,7 +62,7 @@ public class PolygamousEnchantment extends SBEnchantment{
 
     public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
         if(attacker instanceof LivingEntity) {
-            testOwnerFaithfulness(stack, (LivingEntity)attacker);
+            SBEnchantmentHelper.testOwnerFaithfulness(stack, (LivingEntity)attacker);
             if (((LivingEntity)attacker).hasStatusEffect(SBStatusEffects.POLYGAMY)) {
                 return damage*1.1f;
             }
@@ -71,7 +72,7 @@ public class PolygamousEnchantment extends SBEnchantment{
     }
 
     public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack itemStack, BlockState block, float miningSpeed) {
-        testOwnerFaithfulness(itemStack,playerEntity);
+        SBEnchantmentHelper.testOwnerFaithfulness(itemStack,playerEntity);
         if(playerEntity.hasStatusEffect(SBStatusEffects.POLYGAMY)){
             return miningSpeed*1.2f;
         }
@@ -86,47 +87,6 @@ public class PolygamousEnchantment extends SBEnchantment{
         return super.canAccept(other);
     }
 
-    public boolean testOwnerFaithfulness(ItemStack stack, LivingEntity owner){
-        if(owner.world.isClient()){
-            return true;
-        }
-        UUID id = loadItemUUID(stack);
 
-        if(owner.hasStatusEffect(SBStatusEffects.POLYGAMY)){
-            PolygamyInstance polygamy = (PolygamyInstance)(owner.getStatusEffect(SBStatusEffects.POLYGAMY));
-            owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-            if(polygamy.itemUUID.compareTo(id) != 0){
-                polygamy = new PolygamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true);
-                polygamy.itemUUID = id;
-                owner.applyStatusEffect(polygamy);
-            }
-            return false;
-        }
-
-        if(owner.hasStatusEffect(SBStatusEffects.MONOGAMY)) {
-            MonogamyInstance monogamy = (MonogamyInstance)(owner.getStatusEffect(SBStatusEffects.MONOGAMY));
-            if(monogamy.itemUUID.compareTo(id) != 0){
-                owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-                owner.applyStatusEffect(new PolygamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true));
-                return false;
-            }
-        }
-        //owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-        owner.applyStatusEffect(new MonogamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true));
-        return true;
-    }
-
-    private UUID loadItemUUID(ItemStack stack){
-        CompoundTag tag = stack.getOrCreateTag();
-        UUID id;
-        if(tag.contains(Spellbound.MODID+"ItemID")){
-            id = tag.getUuid(Spellbound.MODID+"ItemID");
-        }
-        else{
-            id = UUID.randomUUID();
-            tag.putUuid(Spellbound.MODID+"ItemID",id);
-        }
-        return id;
-    }
 
 }

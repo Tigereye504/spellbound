@@ -31,7 +31,7 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
     }
 
     public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack) || isAcceptableAtTable(stack);
+        return isAcceptableAtTable(stack);
     }
 
     public float onPreArmorDefense(int level, ItemStack stack, DamageSource source, LivingEntity defender, float amount){
@@ -76,9 +76,8 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
     }
     public static int getModifiedRecoveryRate(LivingEntity entity, int redAlertCount){
         int redAlertLevel = SBEnchantmentHelper.getEnchantmentAmount(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
-        int modifiedRecoveryRate = Math.max(SBConfig.MINIMUM_SHIELD_RECOVERY_TIME,
+        return Math.max(SBConfig.MINIMUM_SHIELD_RECOVERY_TIME,
                 SBConfig.SHIELD_RECOVERY_RATE-(SBConfig.SHIELD_RECOVERY_REDUCTION*Math.max(0,redAlertLevel-redAlertCount)/redAlertCount));
-        return modifiedRecoveryRate;
     }
 
     public boolean isAcceptableAtTable(ItemStack stack) {
