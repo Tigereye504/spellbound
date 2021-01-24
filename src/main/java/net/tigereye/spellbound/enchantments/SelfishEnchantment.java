@@ -46,25 +46,28 @@ public class SelfishEnchantment extends SBEnchantment{
         if(!entity.world.isClient() && stack.isDamaged()){
             Iterator<ItemStack> i = entity.getItemsEquipped().iterator();
             ItemStack target;
-            int targetSlot = (int) (entity.world.getTime() % 6);
+            int targetSlot = (int) (entity.world.getTime() % 7);
             switch(targetSlot){
                 case 0:
-                    target = entity.getEquippedStack(EquipmentSlot.HEAD);
+                    target = entity.getEquippedStack(EquipmentSlot.MAINHAND);
                     break;
                 case 1:
-                    target = entity.getEquippedStack(EquipmentSlot.CHEST);
-                    break;
-                case 2:
-                    target = entity.getEquippedStack(EquipmentSlot.LEGS);
-                    break;
-                case 3:
-                    target = entity.getEquippedStack(EquipmentSlot.FEET);
-                    break;
-                case 4:
                     target = entity.getEquippedStack(EquipmentSlot.OFFHAND);
                     break;
+                case 2:
+                    target = entity.getEquippedStack(EquipmentSlot.HEAD);
+                    break;
+                case 3:
+                    target = entity.getEquippedStack(EquipmentSlot.CHEST);
+                    break;
+                case 4:
+                    target = entity.getEquippedStack(EquipmentSlot.LEGS);
+                    break;
+                case 5:
+                    target = entity.getEquippedStack(EquipmentSlot.FEET);
+                    break;
                 default:
-                    target = entity.getEquippedStack(EquipmentSlot.MAINHAND);
+                    return;
             }
             if(target.isDamageable()
                         && target.getDamage() < target.getMaxDamage() - 1
