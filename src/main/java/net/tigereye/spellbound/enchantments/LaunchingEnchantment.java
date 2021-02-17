@@ -7,7 +7,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.tigereye.spellbound.SpellboundPlayerEntity;
 
 public class LaunchingEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
 
@@ -32,10 +34,11 @@ public class LaunchingEnchantment extends SBEnchantment implements CustomConditi
     }
 
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
-        if(target instanceof LivingEntity) {
-            ((LivingEntity) target).setVelocity(0,((LivingEntity) target).getVelocity().length(),0);
+        if(user instanceof SpellboundPlayerEntity &&
+                !(((SpellboundPlayerEntity)user).isMakingFullChargeAttack())){
+            return;
         }
-
+        target.setVelocity(0,target.getVelocity().length(),0);
         super.onTargetDamaged(user, target, level);
     }
 

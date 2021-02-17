@@ -17,12 +17,9 @@ import java.util.List;
 import java.util.Random;
 
 @Mixin(ItemStack.class)
-public class ItemStackMixin {
-
-    @Inject(at = @At(value = "RETURN"),method = "damage")
-    public <T extends LivingEntity> void spellboundItemStackDamageMixin(int amount, Random random, ServerPlayerEntity player, CallbackInfoReturnable<Boolean> info){
-        if(info.getReturnValue()){
-            SBEnchantmentHelper.onToolBreak((ItemStack)(Object)this, player);
-        }
+public class ItemStackClientMixin {
+    @ModifyVariable(at = @At(value="CONSTANT", args = "intValue=10", ordinal = 0), ordinal = 0, method = "getTooltip")
+    public List<Text> spellboundItemStackGetTooltipMixin(List<Text> list, PlayerEntity player, TooltipContext context){
+        return SBEnchantmentHelper.addTooltip((ItemStack)(Object)this, list, player, context);
     }
 }

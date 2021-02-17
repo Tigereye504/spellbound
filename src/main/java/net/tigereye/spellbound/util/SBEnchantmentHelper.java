@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mixins.TridentEntityMixin;
 import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
 import net.tigereye.spellbound.mob_effect.instance.PolygamyInstance;
@@ -216,10 +217,7 @@ public class SBEnchantmentHelper {
         }
     }
     private static void forEachEnchantment(SBEnchantmentHelper.Consumer consumer, Iterable<ItemStack> stacks) {
-        Iterator<ItemStack> var2 = stacks.iterator();
-
-        while(var2.hasNext()) {
-            ItemStack itemStack = var2.next();
+        for (ItemStack itemStack : stacks) {
             forEachEnchantment(consumer, itemStack);
         }
 
@@ -258,19 +256,19 @@ public class SBEnchantmentHelper {
             if(!(status instanceof PolygamyInstance)) {
                 owner.removeStatusEffect(SBStatusEffects.POLYGAMY);
                 polygamy = new PolygamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true);
-                owner.applyStatusEffect(polygamy);
+                owner.addStatusEffect(polygamy);
             }
             else{
                 polygamy = (PolygamyInstance) (status);
                 owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
                 if(polygamy.itemUUID == null){
                     owner.removeStatusEffect(SBStatusEffects.POLYGAMY);
-                    owner.applyStatusEffect(new PolygamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
+                    owner.addStatusEffect(new PolygamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
                     return true;
                 }
                 if(polygamy.itemUUID.compareTo(id) != 0){
                     polygamy = new PolygamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true);
-                    owner.applyStatusEffect(polygamy);
+                    owner.addStatusEffect(polygamy);
                 }
             }
             return false;
@@ -281,25 +279,25 @@ public class SBEnchantmentHelper {
             if(!(status instanceof MonogamyInstance)) {
                 owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
                 monogamy = new MonogamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true);
-                owner.applyStatusEffect(monogamy);
+                owner.addStatusEffect(monogamy);
                 return true;
             }
             else{
                 monogamy = (MonogamyInstance)(status);
                 if(monogamy.itemUUID == null){
                     owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-                    owner.applyStatusEffect(new MonogamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
+                    owner.addStatusEffect(new MonogamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
                     return true;
                 }
                 if(monogamy.itemUUID.compareTo(id) != 0) {
                     owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-                    owner.applyStatusEffect(new PolygamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
+                    owner.addStatusEffect(new PolygamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
                     return false;
                 }
             }
         }
         //owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-        owner.applyStatusEffect(new MonogamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true));
+        owner.addStatusEffect(new MonogamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true));
         return true;
     }
 

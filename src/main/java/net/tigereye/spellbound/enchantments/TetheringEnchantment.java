@@ -11,6 +11,7 @@ import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.mob_effect.instance.TetheredInstance;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
@@ -48,6 +49,7 @@ public class TetheringEnchantment extends SBEnchantment {
     }
 
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
+        Spellbound.LOGGER.info("Tether Target Hit");
         if(target instanceof LivingEntity
                 && EnchantmentHelper.get(((LivingEntity) target).getMainHandStack()).containsKey(SBEnchantments.TETHERING)) {
             tetherTarget(level, user, (LivingEntity) target);
@@ -61,7 +63,8 @@ public class TetheringEnchantment extends SBEnchantment {
     }
 
     private void tetherTarget(int level, Entity anchor, LivingEntity target){
-        target.applyStatusEffect(new TetheredInstance(anchor, 20+(20*level), 0));
+        Spellbound.LOGGER.info("Applying Tethered");
+        target.addStatusEffect(new TetheredInstance(anchor, 20+(20*level), 0));
     }
 
     //doesn't support bows/crossbows because arrows usually dont survive impact

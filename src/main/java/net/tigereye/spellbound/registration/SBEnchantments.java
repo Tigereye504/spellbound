@@ -14,6 +14,7 @@ public class SBEnchantments {
     public static final Enchantment JOUSTING = new JoustingEnchantment();
     public static final Enchantment LAUNCHING = new LaunchingEnchantment();
     public static final Enchantment LEGACY = new LegacyEnchantment();
+    //public static final Enchantment MOUNTED = new MountedEnchantment();
     public static final Enchantment MONOGAMOUS = new MonogamousEnchantment();
     public static final Enchantment POLYGAMOUS = new PolygamousEnchantment();
     public static final Enchantment PRIMING = new PrimingEnchantment();
@@ -31,6 +32,7 @@ public class SBEnchantments {
         Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "jousting"), JOUSTING);
         Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "launching"), LAUNCHING);
         Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "legacy"), LEGACY);
+        //Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "mounted"), MOUNTED);
         Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "monogamous"), MONOGAMOUS);
         Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "polygamous"), POLYGAMOUS);
         Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "priming"), PRIMING);

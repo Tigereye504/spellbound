@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
+import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.mob_effect.instance.TetheredInstance;
 import net.tigereye.spellbound.registration.SBConfig;
 import net.tigereye.spellbound.registration.SBStatusEffects;
@@ -22,6 +23,7 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
     }
 
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+        Spellbound.LOGGER.info("Dragging Target");
         if(!(entity.world.isClient)){
             StatusEffectInstance temp = entity.getStatusEffect(SBStatusEffects.TETHERED);
             if(temp instanceof TetheredInstance){

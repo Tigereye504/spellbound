@@ -6,6 +6,8 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.Angerable;
+import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
@@ -92,10 +94,10 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
 
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
         boolean isRanged = stack.getItem() instanceof RangedWeaponItem;
-        List<Text> output = new ArrayList<Text>();
+        List<Text> output = new ArrayList<>();
         CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
         Set<String> keys = tag.getKeys();
-        Map<String,Integer> keyIntMap = new HashMap<String,Integer>();
+        Map<String,Integer> keyIntMap = new HashMap<>();
         keys.forEach((trophyKey) -> {
             if(!trophyKey.equals(UNIQUE_TROPHY_COUNT_KEY)) {
                 keyIntMap.put(trophyKey,tag.getInt(trophyKey));
@@ -123,7 +125,7 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
                         output.add(new LiteralText(
                                 entry.getValue() + " ")
                                 .append(new TranslatableText(entry.getKey()))
-                                .append(" (+" + (int) getEntityDamageBonus(entry.getValue()) + ")"));
+                                .append(" (+" + getEntityDamageBonus(entry.getValue()) + ")"));
                     }
                 });
         output.add(new LiteralText("--------------------------"));
@@ -152,15 +154,13 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
 
     private boolean hasTrophy(LivingEntity victim, ItemStack stack){
         CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
-        if(tag.contains(victim.getType().toString())){
-            return true;
-        }
-        return false;
+        return tag.contains(victim.getType().toString());
     }
 
     private boolean addTrophy(LivingEntity victim, LivingEntity killer, ItemStack stack,boolean isRanged){
         CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
-        if(!hasTrophy(victim,stack)){
+        if(!hasTrophy(victim,stack)
+                && (victim instanceof HostileEntity || victim instanceof Angerable || victim instanceof PlayerEntity)){
             tag.putInt(UNIQUE_TROPHY_COUNT_KEY,tag.getInt(UNIQUE_TROPHY_COUNT_KEY)+1);
             tag.putInt(victim.getType().toString(),1);
             if(killer instanceof PlayerEntity){

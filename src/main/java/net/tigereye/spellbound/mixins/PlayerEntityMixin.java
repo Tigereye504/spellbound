@@ -2,14 +2,11 @@ package net.tigereye.spellbound.mixins;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-import net.tigereye.spellbound.enchantments.SBEnchantmentHelper;
+import net.tigereye.spellbound.SpellboundPlayerEntity;
+import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,13 +14,30 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
-
 @Mixin(PlayerEntity.class)
-public class PlayerEntityMixin{
+public class PlayerEntityMixin implements SpellboundPlayerEntity {
+
+    boolean spellboundEnchantments_IsMakingFullChargeAttack = false;
+
     @ModifyVariable(at = @At(value = "CONSTANT", args = "floatValue=0.5F", ordinal = 0), ordinal = 1, method = "attack")
     public float spellboundPlayerEntityAttackMixin(float h, Entity target){
         return h + SBEnchantmentHelper.getAttackDamage((PlayerEntity)(Object)this, target);
+    }
+
+    @Override
+    public void setIsMakingFullChargeAttack(boolean set) {
+        spellboundEnchantments_IsMakingFullChargeAttack = set;
+    }
+
+    @Override
+    public boolean isMakingFullChargeAttack() {
+        return spellboundEnchantments_IsMakingFullChargeAttack;
+    }
+
+    //Lnet/minecraft/entity/player/PlayerEntity;resetLastAttackedTicks()V
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;resetLastAttackedTicks()V"), method = "attack")
+    public void spellboundPlayerEntityAttackMixin(CallbackInfo info){
+        setIsMakingFullChargeAttack(((PlayerEntity)(Object)this).getAttackCooldownProgress(0.5F) == 1);
     }
 
     //Lnet/minecraft/entity/effect/StatusEffectUtil;hasHaste(

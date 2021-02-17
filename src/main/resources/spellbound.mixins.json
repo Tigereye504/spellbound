@@ -4,9 +4,6 @@
   "package": "net.tigereye.spellbound.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-
-  ],
-  "client": [
     "BlockMixin",
     "EnchantmentHelperMixin",
     "ItemStackMixin",
@@ -18,6 +15,9 @@
     "StatusEffectInstanceMixin",
     "TridentEntityMixin",
     "TridentEntityMixin$TridentEntityInvoker"
+  ],
+  "client": [
+    "ItemStackClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

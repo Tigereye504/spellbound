@@ -12,4 +12,8 @@ public class SBConfig {
     public static final double TETHER_ATTRACTION_FACTOR = 1;
     public static final int INTIMACY_DURATION = 12000;
     public static final int CAVE_IN_MAX_BLAST_RES = 99;
+    public static final float MOUNTED_DAMAGE_BASE = 0;
+    public static final float MOUNTED_DAMAGE_PER_LEVEL = 1.5f;
+    public static final float MOUNTED_PROJECTILE_BASE = .5f;
+    public static final float MOUNTED_PROJECTILE_PER_LEVEL = .3f;
 }

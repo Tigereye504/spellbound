@@ -3,23 +3,15 @@ package net.tigereye.spellbound.enchantments;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
-import net.tigereye.spellbound.mob_effect.instance.PolygamyInstance;
-import net.tigereye.spellbound.registration.SBConfig;
 import net.tigereye.spellbound.registration.SBStatusEffects;
-
-import java.util.UUID;
+import net.tigereye.spellbound.util.SBEnchantmentHelper;
 
 public class MonogamousEnchantment extends SBEnchantment{
 

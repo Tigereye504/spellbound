@@ -9,8 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-
-import java.awt.print.Book;
+import net.tigereye.spellbound.SpellboundPlayerEntity;
 
 public class ImpersonalEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
 
@@ -36,20 +35,29 @@ public class ImpersonalEnchantment extends SBEnchantment implements CustomCondit
     }
 
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
+        if(user instanceof SpellboundPlayerEntity &&
+                !(((SpellboundPlayerEntity)user).isMakingFullChargeAttack())){
+            return;
+        }
+        if(user.hasVehicle()){
+            user.stopRiding();
+        }
         Direction shift = target.getHorizontalFacing().getOpposite();
         double distanceBehind = 3+target.getBoundingBox().getZLength();
-        BlockPos targetPos = new BlockPos(target.getX() + (shift.getOffsetX()*distanceBehind),
+        BlockPos newPos = new BlockPos(target.getX() + (shift.getOffsetX()*distanceBehind),
                 target.getY() + (shift.getOffsetY()*distanceBehind),
                 target.getZ() + (shift.getOffsetZ()*distanceBehind));
-        BlockState targetBlock = user.world.getBlockState(targetPos);
-        if(!targetBlock.isOpaque()) {
-            user.teleport(targetPos.getX(),targetPos.getY(),targetPos.getZ());
+        BlockState newPosBlock = user.world.getBlockState(newPos);
+        if(!newPosBlock.isOpaque()) {
+            user.teleport(newPos.getX(),newPos.getY(),newPos.getZ());
+            user.yaw = target.getHorizontalFacing().asRotation();
         }
         else{
-            targetPos = targetPos.add(0,1,0);
-            targetBlock = user.world.getBlockState(targetPos);
-            if(!targetBlock.isOpaque()) {
-                user.teleport(targetPos.getX(),targetPos.getY(),targetPos.getZ());
+            newPos = newPos.add(0,1,0);
+            newPosBlock = user.world.getBlockState(newPos);
+            if(!newPosBlock.isOpaque()) {
+                user.teleport(newPos.getX(),newPos.getY(),newPos.getZ());
+                user.yaw = target.getHorizontalFacing().asRotation();
             }
         }
         //TODO: insert warp sound effect here

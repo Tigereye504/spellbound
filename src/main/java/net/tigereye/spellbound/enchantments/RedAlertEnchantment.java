@@ -5,13 +5,12 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.*;
-import net.tigereye.spellbound.mob_effect.Shielded;
 import net.tigereye.spellbound.registration.SBConfig;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
+import net.tigereye.spellbound.util.SBEnchantmentHelper;
 
 public class RedAlertEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
 
@@ -42,14 +41,14 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
                 int redAlertCount = SBEnchantmentHelper.countEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
                 if(redAlertCount > 0){
                     entity.removeStatusEffect(SBStatusEffects.SHIELDED);
-                    entity.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
+                    entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
                             SBConfig.SHIELD_DURATION_OFFSET+ RedAlertEnchantment.getModifiedRecoveryRate(entity,redAlertCount),
                             Math.min(redAlertCount-1,shielded.getAmplifier()+1)));
                 }
             }
         }
         else if(!entity.hasStatusEffect(SBStatusEffects.SHIELDS_DOWN)) {
-            entity.applyStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN, RedAlertEnchantment.getModifiedRecoveryRate(entity), 0));
+            entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN, RedAlertEnchantment.getModifiedRecoveryRate(entity), 0));
         }
     }
 
