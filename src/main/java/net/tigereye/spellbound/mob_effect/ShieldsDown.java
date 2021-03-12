@@ -26,7 +26,7 @@ public class ShieldsDown extends SBStatusEffect{
             if(redAlert > 0){
                 entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
                         SBConfig.SHIELD_DURATION_OFFSET+ RedAlertEnchantment.getModifiedRecoveryRate(entity,redAlert),
-                        0));
+                        0, false, false, true));
             }
         }
     }
