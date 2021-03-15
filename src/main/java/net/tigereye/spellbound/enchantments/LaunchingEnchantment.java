@@ -14,7 +14,7 @@ import net.tigereye.spellbound.SpellboundPlayerEntity;
 public class LaunchingEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
 
     public LaunchingEnchantment() {
-        super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(Rarity.RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
     public int getMinPower(int level) {

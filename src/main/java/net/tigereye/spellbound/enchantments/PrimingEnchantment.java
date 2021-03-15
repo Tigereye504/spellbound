@@ -25,7 +25,7 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
     public int getMaxPower(int level) { return getMinPower(level)+15; }
 
     public int getMaxLevel() {
-        return 10;
+        return 5;
     }
 
     public boolean isAcceptableItem(ItemStack stack) {

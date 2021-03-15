@@ -10,6 +10,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
+import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 
@@ -75,7 +76,7 @@ public class PolygamousEnchantment extends SBEnchantment{
     }
 
     public boolean canAccept(Enchantment other) {
-        return super.canAccept(other);
+        return super.canAccept(other) && other != SBEnchantments.MONOGAMOUS;
     }
 
 

@@ -23,7 +23,7 @@ import java.util.Random;
 public class SelfishEnchantment extends SBEnchantment{
 
     public SelfishEnchantment() {
-        super(Rarity.UNCOMMON, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
     public int getMinPower(int level) {
