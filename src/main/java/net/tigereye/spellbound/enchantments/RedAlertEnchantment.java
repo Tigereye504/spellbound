@@ -43,12 +43,12 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
                     entity.removeStatusEffect(SBStatusEffects.SHIELDED);
                     entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
                             SBConfig.SHIELD_DURATION_OFFSET+ RedAlertEnchantment.getModifiedRecoveryRate(entity,redAlertCount),
-                            Math.min(redAlertCount-1,shielded.getAmplifier()+1)));
+                            Math.min(redAlertCount-1,shielded.getAmplifier()+1), false, false, true));
                 }
             }
         }
         else if(!entity.hasStatusEffect(SBStatusEffects.SHIELDS_DOWN)) {
-            entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN, RedAlertEnchantment.getModifiedRecoveryRate(entity), 0));
+            entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN, RedAlertEnchantment.getModifiedRecoveryRate(entity), 0, false, false, true));
         }
     }
 
