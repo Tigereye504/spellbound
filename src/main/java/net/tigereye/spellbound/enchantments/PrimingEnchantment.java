@@ -34,7 +34,6 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
     }
 
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
-        Spellbound.LOGGER.info("Inflicting Primed      ");
         if(target instanceof LivingEntity) {
             int effectLevel = 0;
             StatusEffectInstance primedInstance = ((LivingEntity)target).getStatusEffect(SBStatusEffects.PRIMED);

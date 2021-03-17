@@ -34,9 +34,6 @@ public class ProjectileEntityMixin  implements SpellboundProjectileEntity {
         if(owner != null){
             if(owner instanceof LivingEntity){
                 source = ((LivingEntity)owner).getActiveItem();
-                if(source != null) {
-                    Spellbound.LOGGER.info("Setting projectile source to "+ source.getName().getString());
-                }
             }
             else {
                 for (ItemStack stack : owner.getItemsHand()) {
