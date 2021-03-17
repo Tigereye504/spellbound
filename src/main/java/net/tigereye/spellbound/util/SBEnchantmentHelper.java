@@ -24,6 +24,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.SpellboundPlayerEntity;
+import net.tigereye.spellbound.SpellboundProjectileEntity;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mixins.TridentEntityMixin;
 import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
@@ -157,7 +159,7 @@ public class SBEnchantmentHelper {
                 if (enchantment instanceof SBEnchantment) {
                     mutableFloat.setValue(((SBEnchantment) enchantment).getProjectileDamage(level, itemStack, persistentProjectileEntity, entity, entityHitResult.getEntity(), mutableFloat.getValue()));
                 }
-            }, persistentProjectileEntity.getOwner().getItemsEquipped());//TODO: track launching ItemStack on projectile
+            }, ((SpellboundProjectileEntity)persistentProjectileEntity).getSource());
         }
         return mutableFloat.intValue();
     }
@@ -165,11 +167,14 @@ public class SBEnchantmentHelper {
     public static void onProjectileEntityHit(PersistentProjectileEntity persistentProjectileEntity, Entity entity) {
         Entity owner = persistentProjectileEntity.getOwner();
         if(owner != null) {
+            if(owner instanceof SpellboundPlayerEntity){
+                ((SpellboundPlayerEntity)owner).setIsMakingFullChargeAttack(true);
+            }
             forEachEnchantment((enchantment, level, itemStack) -> {
                 if (enchantment instanceof SBEnchantment) {
                     ((SBEnchantment) enchantment).onProjectileEntityHit(level, itemStack, persistentProjectileEntity, entity);
                 }
-            }, owner.getItemsEquipped());//TODO: track launching ItemStack on projectile
+            }, ((SpellboundProjectileEntity)persistentProjectileEntity).getSource());
         }
     }
 
@@ -188,7 +193,7 @@ public class SBEnchantmentHelper {
                     if (enchantment instanceof SBEnchantment) {
                         ((SBEnchantment) enchantment).onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult);
                     }
-                }, owner.getItemsEquipped());//TODO: track launching ItemStack on projectile
+                }, ((SpellboundProjectileEntity)projectileEntity).getSource());
             }
         }
     }
@@ -203,15 +208,13 @@ public class SBEnchantmentHelper {
     }
 
     private static void forEachEnchantment(SBEnchantmentHelper.Consumer consumer, ItemStack stack) {
-        if (!stack.isEmpty()) {
+        if (stack != null && !stack.isEmpty()) {
             ListTag listTag = stack.getEnchantments();
 
             for(int i = 0; i < listTag.size(); ++i) {
                 String string = listTag.getCompound(i).getString("id");
                 int j = listTag.getCompound(i).getInt("lvl");
-                Registry.ENCHANTMENT.getOrEmpty(Identifier.tryParse(string)).ifPresent((enchantment) -> {
-                    consumer.accept(enchantment, j, stack);
-                });
+                Registry.ENCHANTMENT.getOrEmpty(Identifier.tryParse(string)).ifPresent((enchantment) -> consumer.accept(enchantment, j, stack));
             }
 
         }

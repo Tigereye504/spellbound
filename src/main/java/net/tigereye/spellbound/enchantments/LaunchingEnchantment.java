@@ -18,15 +18,15 @@ public class LaunchingEnchantment extends SBEnchantment implements CustomConditi
     }
 
     public int getMinPower(int level) {
-        return 20;
+        return 5 + (level - 1) * 20;
     }
 
     public int getMaxPower(int level) {
-        return 50;
+        return getMinPower(level)+25;
     }
 
     public int getMaxLevel() {
-        return 1;
+        return 2;
     }
 
     public boolean isAcceptableItem(ItemStack stack) {
@@ -38,7 +38,7 @@ public class LaunchingEnchantment extends SBEnchantment implements CustomConditi
                 !(((SpellboundPlayerEntity)user).isMakingFullChargeAttack())){
             return;
         }
-        target.setVelocity(0,target.getVelocity().length(),0);
+        target.setVelocity(target.getVelocity().x,Math.abs(target.getVelocity().y)+(level*.3),target.getVelocity().z);
         super.onTargetDamaged(user, target, level);
     }
 

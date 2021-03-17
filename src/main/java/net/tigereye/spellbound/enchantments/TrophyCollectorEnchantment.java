@@ -8,6 +8,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
@@ -159,45 +160,45 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
 
     private boolean addTrophy(LivingEntity victim, LivingEntity killer, ItemStack stack,boolean isRanged){
         CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
-        if(!hasTrophy(victim,stack)
-                && (victim instanceof HostileEntity || victim instanceof Angerable || victim instanceof PlayerEntity)){
-            tag.putInt(UNIQUE_TROPHY_COUNT_KEY,tag.getInt(UNIQUE_TROPHY_COUNT_KEY)+1);
-            tag.putInt(victim.getType().toString(),1);
-            if(killer instanceof PlayerEntity){
-                String message = stack.getName().getString()
-                        + " acquired a "
-                        + new TranslatableText(victim.getType().toString()).getString()
-                        + " trophy";
-                ((PlayerEntity)killer).sendMessage(new LiteralText(message)
-                        , true);
-            }
-            return true;
-        }
-        else{
-            int newValue = tag.getInt(victim.getType().toString())+1;
-            tag.putInt(victim.getType().toString(),newValue);
-            if(isRanged){
-                if (getRangedEntityDamageMultiple(newValue - 1) < (getRangedEntityDamageMultiple(newValue))) {
+        if(!(victim instanceof PassiveEntity) || victim instanceof Angerable) {
+            if (!hasTrophy(victim, stack)) {
+                tag.putInt(UNIQUE_TROPHY_COUNT_KEY, tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + 1);
+                tag.putInt(victim.getType().toString(), 1);
+                if (killer instanceof PlayerEntity) {
                     String message = stack.getName().getString()
-                            + "'s "
+                            + " acquired a "
                             + new TranslatableText(victim.getType().toString()).getString()
-                            + " trophy improved";
+                            + " trophy";
                     ((PlayerEntity) killer).sendMessage(new LiteralText(message)
                             , true);
                 }
-            }
-            else {
-                if (getEntityDamageBonus(newValue - 1) < (getEntityDamageBonus(newValue))) {
-                    String message = stack.getName().getString()
-                            + "'s "
-                            + new TranslatableText(victim.getType().toString()).getString()
-                            + " trophy improved";
-                    ((PlayerEntity) killer).sendMessage(new LiteralText(message)
-                            , true);
+                return true;
+            } else {
+                int newValue = tag.getInt(victim.getType().toString()) + 1;
+                tag.putInt(victim.getType().toString(), newValue);
+                if (isRanged) {
+                    if (getRangedEntityDamageMultiple(newValue - 1) < (getRangedEntityDamageMultiple(newValue))) {
+                        String message = stack.getName().getString()
+                                + "'s "
+                                + new TranslatableText(victim.getType().toString()).getString()
+                                + " trophy improved";
+                        ((PlayerEntity) killer).sendMessage(new LiteralText(message)
+                                , true);
+                    }
+                } else {
+                    if (getEntityDamageBonus(newValue - 1) < (getEntityDamageBonus(newValue))) {
+                        String message = stack.getName().getString()
+                                + "'s "
+                                + new TranslatableText(victim.getType().toString()).getString()
+                                + " trophy improved";
+                        ((PlayerEntity) killer).sendMessage(new LiteralText(message)
+                                , true);
+                    }
                 }
+                return false;
             }
-            return false;
         }
+        return false;
     }
 
     private int getUniqueTrophyCount(ItemStack stack){

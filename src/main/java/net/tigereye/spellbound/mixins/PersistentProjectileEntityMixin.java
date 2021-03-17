@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PersistentProjectileEntity.class)
-public class PersistentProjectileEntityMixin {
+public class PersistentProjectileEntityMixin extends ProjectileEntityMixin{
     @ModifyVariable(at = @At(value = "CONSTANT", args = "intValue=0", ordinal = 0),ordinal = 0, method = "onEntityHit")
     protected int spellboundPersistentProjectileEntityOnEntityHitMixin(int damage, EntityHitResult entityHitResult){
         return SBEnchantmentHelper.getProjectileDamage((PersistentProjectileEntity)(Object)this, entityHitResult, damage);

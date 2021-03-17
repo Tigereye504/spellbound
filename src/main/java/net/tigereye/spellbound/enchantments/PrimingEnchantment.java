@@ -11,6 +11,7 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.mob_effect.SBStatusEffect;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
@@ -33,6 +34,7 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
     }
 
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
+        Spellbound.LOGGER.info("Inflicting Primed      ");
         if(target instanceof LivingEntity) {
             int effectLevel = 0;
             StatusEffectInstance primedInstance = ((LivingEntity)target).getStatusEffect(SBStatusEffects.PRIMED);
