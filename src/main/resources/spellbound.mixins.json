@@ -13,8 +13,7 @@
     "PersistentProjectileEntityMixin",
     "ProjectileEntityMixin",
     "StatusEffectInstanceMixin",
-    "TridentEntityMixin",
-    "TridentEntityMixin$TridentEntityInvoker"
+    "TridentEntityMixin"
   ],
   "client": [
     "ItemStackClientMixin"

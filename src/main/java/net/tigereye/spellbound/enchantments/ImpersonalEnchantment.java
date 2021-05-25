@@ -18,22 +18,27 @@ public class ImpersonalEnchantment extends SBEnchantment implements CustomCondit
         super(Rarity.RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
+    @Override
     public int getMinPower(int level) {
         return 20;
     }
 
+    @Override
     public int getMaxPower(int level) {
         return 50;
     }
 
+    @Override
     public int getMaxLevel() {
         return 1;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);
     }
 
+    @Override
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
         if(user instanceof SpellboundPlayerEntity &&
                 !(((SpellboundPlayerEntity)user).isMakingFullChargeAttack())){
@@ -64,10 +69,12 @@ public class ImpersonalEnchantment extends SBEnchantment implements CustomCondit
         super.onTargetDamaged(user, target, level);
     }
 
+    @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other);
     }
 
+    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem

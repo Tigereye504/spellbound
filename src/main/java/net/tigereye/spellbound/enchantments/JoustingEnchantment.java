@@ -19,18 +19,22 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
         super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
+    @Override
     public int getMinPower(int level) {
         return 5 + (level*10);
     }
 
+    @Override
     public int getMaxPower(int level) {
         return this.getMinPower(level)+15;
     }
 
+    @Override
     public int getMaxLevel() {
         return 3;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack)
                 || EnchantmentTarget.WEAPON.isAcceptableItem(stack.getItem())
@@ -38,6 +42,7 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
                 || stack.getItem() instanceof AxeItem;
     }
 
+    @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
         Vec3d attackerVelocity = getJoustingVelocity(attacker,stack);
         Vec3d relativeVelocity = attackerVelocity.subtract(defender.getVelocity());
@@ -59,6 +64,7 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
         return (float)dotP*10*level;
     }
 
+    @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         CompoundTag tag = stack.getOrCreateSubTag(Spellbound.MODID+"Jousting");
         tag.putDouble("x",tag.getDouble("preX"));
@@ -71,17 +77,20 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
         tag.putLong("pretime",entity.world.getTime());
     }
 
+    @Override
     public boolean isTreasure() {
         return false;
     }
 
     //I want to disallow damageEnchantments and anything else that disallows damageEnchantments
     //as typically the later is trying to be another form of damage enchantment
+    @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other)
                 && other.canCombine(Enchantments.SHARPNESS);
     }
 
+    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof TridentItem
                 || stack.getItem() == Items.BOOK;

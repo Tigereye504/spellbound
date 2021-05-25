@@ -24,6 +24,7 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
         super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
+    @Override
     public int getMinPower(int level) {
         if(level <= 3) {
             return 10 + (level * 5);
@@ -33,28 +34,34 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
         }
     }
 
+    @Override
     public int getMaxPower(int level) {
         return getMinPower(level)+20;
     }
 
+    @Override
     public int getMaxLevel() {
         return 5;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);
     }
 
+    @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other);
     }
 
+    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof RangedWeaponItem
                 || stack.getItem() instanceof TridentItem
                 || stack.getItem() == Items.BOOK;
     }
 
+    @Override
     public void onProjectileBlockHit(int level, ItemStack itemStack, ProjectileEntity projectileEntity, BlockHitResult blockHitResult) {
         caveIn(level,projectileEntity.world,blockHitResult.getBlockPos());
     }

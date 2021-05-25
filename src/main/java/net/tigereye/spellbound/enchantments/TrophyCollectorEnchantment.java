@@ -5,9 +5,11 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -32,22 +34,27 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
         super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
+    @Override
     public int getMinPower(int level) {
         return 1;
     }
 
+    @Override
     public int getMaxPower(int level) {
         return 50;
     }
 
+    @Override
     public int getMaxLevel() {
         return 1;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);
     }
 
+    @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
         float UniqueTrophyDamage = getUniqueDamageBonus(getUniqueTrophyCount(stack));
         int EntityTrophyDamage = 0;
@@ -57,6 +64,7 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
         return UniqueTrophyDamage + EntityTrophyDamage;
     }
 
+    @Override
     public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
         float UniqueTrophyDamage = getRangedUniqueDamageMultiple(getUniqueTrophyCount(stack));
         float EntityTrophyDamage = 0;
@@ -66,10 +74,12 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
         return damage*(1+(UniqueTrophyDamage + EntityTrophyDamage));
     }
 
-    public void onKill(int level, ItemStack stack, LivingEntity killer, LivingEntity victim){
+    @Override
+    public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){
         addTrophy(victim, killer, stack,stack.getItem() instanceof RangedWeaponItem);
     }
 
+    @Override
     public void onActivate(int level, PlayerEntity player, ItemStack stack, Entity target) {
         if(!player.world.isClient && player.getPose() == EntityPose.CROUCHING){
             CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
@@ -93,6 +103,7 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
         }
     }
 
+    @Override
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
         boolean isRanged = stack.getItem() instanceof RangedWeaponItem;
         List<Text> output = new ArrayList<>();
@@ -133,18 +144,21 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
         return output;
     }
 
+    @Override
     public boolean isTreasure() {
         return false;
     }
 
     //I want to disallow damageEnchantments and anything else that disallows damageEnchantments
     //as typically the later is trying to be another form of damage enchantment
+    @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other)
                 && other.canCombine(Enchantments.SHARPNESS)
                 && other.canCombine(Enchantments.POWER);
     }
 
+    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem
@@ -160,7 +174,7 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
 
     private boolean addTrophy(LivingEntity victim, LivingEntity killer, ItemStack stack,boolean isRanged){
         CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
-        if(!(victim instanceof PassiveEntity) || victim instanceof Angerable) {
+        if(!(victim instanceof PassiveEntity) || victim instanceof Angerable || victim instanceof Monster) {
             if (!hasTrophy(victim, stack)) {
                 tag.putInt(UNIQUE_TROPHY_COUNT_KEY, tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + 1);
                 tag.putInt(victim.getType().toString(), 1);
@@ -176,23 +190,25 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
             } else {
                 int newValue = tag.getInt(victim.getType().toString()) + 1;
                 tag.putInt(victim.getType().toString(), newValue);
-                if (isRanged) {
-                    if (getRangedEntityDamageMultiple(newValue - 1) < (getRangedEntityDamageMultiple(newValue))) {
-                        String message = stack.getName().getString()
-                                + "'s "
-                                + new TranslatableText(victim.getType().toString()).getString()
-                                + " trophy improved";
-                        ((PlayerEntity) killer).sendMessage(new LiteralText(message)
-                                , true);
-                    }
-                } else {
-                    if (getEntityDamageBonus(newValue - 1) < (getEntityDamageBonus(newValue))) {
-                        String message = stack.getName().getString()
-                                + "'s "
-                                + new TranslatableText(victim.getType().toString()).getString()
-                                + " trophy improved";
-                        ((PlayerEntity) killer).sendMessage(new LiteralText(message)
-                                , true);
+                if(killer instanceof PlayerEntity) {
+                    if (isRanged) {
+                        if (getRangedEntityDamageMultiple(newValue - 1) < (getRangedEntityDamageMultiple(newValue))) {
+                            String message = stack.getName().getString()
+                                    + "'s "
+                                    + new TranslatableText(victim.getType().toString()).getString()
+                                    + " trophy improved";
+                            ((PlayerEntity) killer).sendMessage(new LiteralText(message)
+                                    , true);
+                        }
+                    } else {
+                        if (getEntityDamageBonus(newValue - 1) < (getEntityDamageBonus(newValue))) {
+                            String message = stack.getName().getString()
+                                    + "'s "
+                                    + new TranslatableText(victim.getType().toString()).getString()
+                                    + " trophy improved";
+                            ((PlayerEntity) killer).sendMessage(new LiteralText(message)
+                                    , true);
+                        }
                     }
                 }
                 return false;

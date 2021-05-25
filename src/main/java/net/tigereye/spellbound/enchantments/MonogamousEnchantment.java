@@ -20,22 +20,27 @@ public class MonogamousEnchantment extends SBEnchantment{
         super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.MAINHAND,EquipmentSlot.OFFHAND});
     }
 
+    @Override
     public int getMinPower(int level) {
         return 5;
     }
 
+    @Override
     public int getMaxPower(int level) {
         return 51;
     }
 
+    @Override
     public int getMaxLevel() {
         return 1;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack);
     }
 
+    @Override
     public float getProtectionAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
         SBEnchantmentHelper.testOwnerFaithfulness(stack,target);
         if(target.hasStatusEffect(SBStatusEffects.MONOGAMY)){
@@ -44,6 +49,7 @@ public class MonogamousEnchantment extends SBEnchantment{
         return -4;
     }
 
+    @Override
     public float getAttackDamage(int level, ItemStack stack, net.minecraft.entity.LivingEntity attacker, Entity defender) {
         SBEnchantmentHelper.testOwnerFaithfulness(stack,attacker);
         if(attacker.hasStatusEffect(SBStatusEffects.MONOGAMY)){
@@ -52,6 +58,7 @@ public class MonogamousEnchantment extends SBEnchantment{
         return -6;
     }
 
+    @Override
     public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
         if(attacker instanceof LivingEntity) {
             SBEnchantmentHelper.testOwnerFaithfulness(stack,(LivingEntity)attacker);
@@ -63,6 +70,7 @@ public class MonogamousEnchantment extends SBEnchantment{
         return damage;
     }
 
+    @Override
     public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack itemStack, BlockState block, float miningSpeed) {
         SBEnchantmentHelper.testOwnerFaithfulness(itemStack,playerEntity);
         if(playerEntity.hasStatusEffect(SBStatusEffects.MONOGAMY)){
@@ -71,10 +79,12 @@ public class MonogamousEnchantment extends SBEnchantment{
         return miningSpeed*.5f;
     }
 
+    @Override
     public boolean isTreasure() {
         return false;
     }
 
+    @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other) && other != SBEnchantments.POLYGAMOUS;
     }

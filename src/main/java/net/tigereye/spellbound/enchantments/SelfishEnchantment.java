@@ -26,22 +26,27 @@ public class SelfishEnchantment extends SBEnchantment{
         super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
+    @Override
     public int getMinPower(int level) {
         return 5;
     }
 
+    @Override
     public int getMaxPower(int level) {
         return 51;
     }
 
+    @Override
     public int getMaxLevel() {
         return 1;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack);
     }
 
+    @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         if(!entity.world.isClient() && stack.isDamaged()){
             Iterator<ItemStack> i = entity.getItemsEquipped().iterator();
@@ -80,10 +85,12 @@ public class SelfishEnchantment extends SBEnchantment{
         }
     }
 
+    @Override
     public boolean isTreasure() {
         return false;
     }
 
+    @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other)
                 && other != Enchantments.UNBREAKING

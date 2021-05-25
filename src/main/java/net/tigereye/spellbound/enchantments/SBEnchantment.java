@@ -38,10 +38,10 @@ public class SBEnchantment extends Enchantment {
     public float onPreArmorDefense(int level, ItemStack stack, DamageSource source, LivingEntity defender, float amount){return amount;}
 
     //for when the user kills
-    public void onKill(int level, ItemStack stack, LivingEntity killer, LivingEntity victim){}
+    public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
 
     //for when the user dies
-    public void onDeath(int level, ItemStack stack, LivingEntity killer, LivingEntity victim){}
+    public void onDeath(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
 
     //for every tick the enchanted item is equipped.
     // Careful, this will be called separately for every instance of the enchantment.

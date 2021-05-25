@@ -12,26 +12,32 @@ public class DullnessEnchantment extends SBEnchantment {
         super(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
+    @Override
     public int getMinPower(int level) {
         return 1 + 8 * (level - 1);
     }
 
+    @Override
     public int getMaxPower(int level) {
         return super.getMinPower(level) + 20;
     }
 
+    @Override
     public int getMaxLevel() {
         return 5;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack) || EnchantmentTarget.BREAKABLE.isAcceptableItem(stack.getItem());
     }
 
+    @Override
     public float getAttackDamage(int level, EntityGroup group) {
         return -1.5f - level;
     }
 
+    @Override
     public boolean canAccept(Enchantment other) {
         return !(other instanceof DamageEnchantment)
                 && other.canCombine(Enchantments.SHARPNESS);

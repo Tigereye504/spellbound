@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
@@ -20,22 +21,27 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
         super(Rarity.RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
+    @Override
     public int getMinPower(int level) {
         return 5 + (10 * level);
     }
 
+    @Override
     public int getMaxPower(int level) {
         return super.getMinPower(level) + 15;
     }
 
+    @Override
     public int getMaxLevel() {
         return 3;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);
     }
 
+    @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
         StatusEffectInstance greenSparkles = attacker.getStatusEffect(SBStatusEffects.GREEN_SPARKLES);
         if(greenSparkles != null){
@@ -44,6 +50,7 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
         return 0;
     }
 
+    @Override
     public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
         if(attacker instanceof LivingEntity) {
             StatusEffectInstance greenSparkles = ((LivingEntity)attacker).getStatusEffect(SBStatusEffects.GREEN_SPARKLES);
@@ -54,17 +61,20 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
         return damage;
     }
 
-    public void onKill(int level, ItemStack stack, LivingEntity killer, LivingEntity victim){
+    @Override
+    public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){
         killer.addStatusEffect(new StatusEffectInstance(SBStatusEffects.GREEN_SPARKLES,
                 SBConfig.RAMPAGE_DURATION_BASE +(SBConfig.RAMPAGE_DURATION_PER_LEVEL*level),
                 level-1));
     }
 
+    @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other)
                 && other.canCombine(Enchantments.SHARPNESS);
     }
 
+    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem

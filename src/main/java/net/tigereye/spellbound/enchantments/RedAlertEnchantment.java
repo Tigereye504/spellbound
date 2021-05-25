@@ -18,27 +18,32 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
         super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
     }
 
+    @Override
     public int getMinPower(int level) {
         return (level*11)-10;
     }
 
+    @Override
     public int getMaxPower(int level) {
         return this.getMinPower(level)+15;
     }
 
+    @Override
     public int getMaxLevel() {
         return 4;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);
     }
 
+    @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         if(entity.hasStatusEffect(SBStatusEffects.SHIELDED)){
             StatusEffectInstance shielded = entity.getStatusEffect(SBStatusEffects.SHIELDED);
             if(shielded != null && shielded.getDuration() <= SBConfig.SHIELD_DURATION_OFFSET){
-                int redAlertCount = SBEnchantmentHelper.countEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
+                int redAlertCount = SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
                 if(redAlertCount > 0){
                     entity.removeStatusEffect(SBStatusEffects.SHIELDED);
                     entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
@@ -52,22 +57,24 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
         }
     }
 
+    @Override
     public boolean canAccept(Enchantment other) {
         return !(other instanceof ProtectionEnchantment) && super.canAccept(other);
     }
 
     public static int getModifiedRecoveryRate(LivingEntity entity){
-        return getModifiedRecoveryRate(entity,SBEnchantmentHelper.countEnchantmentInstances(entity.getItemsEquipped(),SBEnchantments.RED_ALERT));
+        return getModifiedRecoveryRate(entity,SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(),SBEnchantments.RED_ALERT));
     }
     public static int getModifiedRecoveryRate(LivingEntity entity, int redAlertCount){
         if(redAlertCount == 0){
             return SBConfig.SHIELD_RECOVERY_RATE;
         }
-        int redAlertLevel = SBEnchantmentHelper.getEnchantmentAmount(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
+        int redAlertLevel = SBEnchantmentHelper.getSpellboundEnchantmentAmount(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
         return Math.max(SBConfig.MINIMUM_SHIELD_RECOVERY_TIME,
                 SBConfig.SHIELD_RECOVERY_RATE-(SBConfig.SHIELD_RECOVERY_REDUCTION*Math.max(0,redAlertLevel-redAlertCount)/redAlertCount));
     }
 
+    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof ArmorItem
                 || stack.getItem() instanceof ShieldItem

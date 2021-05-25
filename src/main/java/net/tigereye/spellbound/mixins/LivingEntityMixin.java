@@ -44,11 +44,13 @@ public class LivingEntityMixin extends Entity{
         SBEnchantmentHelper.onTickWhileEquipped((LivingEntity)(Object)this);
     }
 
-    @Inject(at = @At("HEAD"), method = "onKilledBy")
-    public void spellboundLivingEntityOnKilledByMixin(LivingEntity adversary, CallbackInfo info){
-        if(adversary != null) {
-            SBEnchantmentHelper.onDeath(adversary,(LivingEntity) (Object) this);
-        }
+    //@Inject(at = @At("HEAD"), method = "onKilledBy")
+    //Lnet/minecraft/entity/LivingEntity;onKilledBy(
+    //  Lnet/minecraft/entity/LivingEntity;
+    //)V
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onKilledBy(Lnet/minecraft/entity/LivingEntity;)V"), method = "onDeath")
+    public void spellboundLivingEntityOnKilledByMixin(DamageSource source, CallbackInfo info){
+        SBEnchantmentHelper.onDeath(source,(LivingEntity) (Object) this);
     }
 
     @Shadow

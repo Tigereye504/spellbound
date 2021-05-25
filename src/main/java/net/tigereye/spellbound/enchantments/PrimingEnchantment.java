@@ -21,18 +21,23 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
         super(Rarity.RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
+    @Override
     public int getMinPower(int level) { return (level*15); }
 
+    @Override
     public int getMaxPower(int level) { return getMinPower(level)+15; }
 
+    @Override
     public int getMaxLevel() {
         return 5;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);
     }
 
+    @Override
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
         if(target instanceof LivingEntity) {
             int effectLevel = 0;
@@ -46,10 +51,12 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
         super.onTargetDamaged(user, target, level);
     }
 
+    @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other);
     }
 
+    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof TridentItem
                 || stack.getItem() instanceof SwordItem

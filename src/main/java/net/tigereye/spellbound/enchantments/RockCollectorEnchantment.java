@@ -29,23 +29,28 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
         super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
+    @Override
     public int getMinPower(int level) {
         return 1;
     }
 
+    @Override
     public int getMaxPower(int level) {
         return 50;
     }
 
+    @Override
     public int getMaxLevel() {
         return 1;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack)
                 ||EnchantmentTarget.DIGGER.isAcceptableItem(stack.getItem());
     }
 
+    @Override
     public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack stack, BlockState block, float miningSpeed) {
         float UniqueRockSpeed = 0.0F;
         int BlockRockSpeed = 0;
@@ -56,18 +61,20 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
         return miningSpeed + UniqueRockSpeed + BlockRockSpeed;
     }
 
+    @Override
     public void onBreakBlock(int level, ItemStack stack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
         addRock(state,player,stack);
     }
 
+    @Override
     public void onActivate(int level, PlayerEntity player, ItemStack stack, Entity target) {
         if(!player.world.isClient && player.getPose() == EntityPose.CROUCHING) {
             List<Text> output = addTooltip(level, stack, player, null, 1000);
-            output.forEach((line) -> {
-                player.sendMessage(line, false);
-            });
+            output.forEach((line) -> player.sendMessage(line, false));
         }
     }
+
+    @Override
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
         return addTooltip(level,stack,player,context,10);
     }
@@ -85,26 +92,27 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
                 "--" + tag.getInt(UNIQUE_ROCK_COUNT_KEY) + " Unique Rocks (+"
                         +String.format("%.1f", calculateUniversalBonus(getUniqueRockCount(stack)))+")--"));
         keyIntMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(maxsize)
-                .forEach((entry) -> {
-                    output.add(new LiteralText(
+                .forEach((entry) -> output.add(new LiteralText(
                             entry.getValue() + " ")
                             .append(new TranslatableText(entry.getKey()))
-                            .append(" (+" + calculateBlockBonus(entry.getValue()) + ")"));
-                });
+                            .append(" (+" + calculateBlockBonus(entry.getValue()) + ")")));
         output.add(new LiteralText("--------------------------"));
         return output;
     }
 
+    @Override
     public boolean isTreasure() {
         return false;
     }
 
     //I want to disallow efficiency and its knockoffs
+    @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other)
                 && other.canCombine(Enchantments.EFFICIENCY);
     }
 
+    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof PickaxeItem
                 || stack.getItem() instanceof ShovelItem

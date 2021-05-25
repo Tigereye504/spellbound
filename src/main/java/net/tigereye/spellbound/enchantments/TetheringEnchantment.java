@@ -22,18 +22,22 @@ public class TetheringEnchantment extends SBEnchantment {
         super(Rarity.UNCOMMON, EnchantmentTarget.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
+    @Override
     public int getMinPower(int level) {
         return 5+(level*10);
     }
 
+    @Override
     public int getMaxPower(int level) {
         return getMinPower(level)+20;
     }
 
+    @Override
     public int getMaxLevel() {
         return 3;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack)
                 || stack.getItem() instanceof SwordItem
@@ -41,6 +45,7 @@ public class TetheringEnchantment extends SBEnchantment {
                 || EnchantmentTarget.DIGGER.isAcceptableItem(stack.getItem());
     }
 
+    @Override
     public void onThrownTridentEntityHit(int level, TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){
         if(defender instanceof LivingEntity){
             tetherTarget(level, tridentEntity,(LivingEntity)defender);
@@ -48,6 +53,7 @@ public class TetheringEnchantment extends SBEnchantment {
         super.onThrownTridentEntityHit(level,tridentEntity,tridentItem,defender);
     }
 
+    @Override
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
         Spellbound.LOGGER.info("Tether Target Hit");
         if(target instanceof LivingEntity
@@ -58,6 +64,7 @@ public class TetheringEnchantment extends SBEnchantment {
         super.onTargetDamaged(user, target, level);
     }
 
+    @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other);
     }

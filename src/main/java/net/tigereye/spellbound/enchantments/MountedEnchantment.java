@@ -19,22 +19,27 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
         super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
+    @Override
     public int getMinPower(int level) {
         return (8 * level) - 3;
     }
 
+    @Override
     public int getMaxPower(int level) {
         return super.getMinPower(level) + 20;
     }
 
+    @Override
     public int getMaxLevel() {
         return 5;
     }
 
+    @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);
     }
 
+    @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
         if(attacker.hasVehicle()){
             return (SBConfig.MOUNTED_DAMAGE_PER_LEVEL * level) + SBConfig.MOUNTED_DAMAGE_BASE;
@@ -42,6 +47,7 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
         return 0;
     }
 
+    @Override
     public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
         if(attacker.getVehicle() != null){
             return damage * ((SBConfig.MOUNTED_PROJECTILE_PER_LEVEL * level) + SBConfig.MOUNTED_PROJECTILE_BASE);
@@ -49,12 +55,14 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
         return damage;
     }
 
+    @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other)
                 && other.canCombine(Enchantments.SHARPNESS)
                 && other.canCombine(Enchantments.POWER);
     }
 
+    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem
