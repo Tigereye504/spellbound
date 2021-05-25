@@ -22,7 +22,7 @@ public class ShieldsDown extends SBStatusEffect{
 
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         if(!(entity.world.isClient)){
-            int redAlert = SBEnchantmentHelper.countEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
+            int redAlert = SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
             if(redAlert > 0){
                 entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
                         SBConfig.SHIELD_DURATION_OFFSET+ RedAlertEnchantment.getModifiedRecoveryRate(entity,redAlert),
@@ -32,7 +32,7 @@ public class ShieldsDown extends SBStatusEffect{
     }
 
     public static StatusEffectInstance generateInstance(LivingEntity entity, int duration){
-        int redAlert = SBEnchantmentHelper.countEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
+        int redAlert = SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
         if(redAlert > 0) {
             int mrr = RedAlertEnchantment.getModifiedRecoveryRate(entity, redAlert);
             return new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN,
