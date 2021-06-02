@@ -53,6 +53,11 @@ public class LivingEntityMixin extends Entity{
         SBEnchantmentHelper.onDeath(source,(LivingEntity) (Object) this);
     }
 
+    @Inject(at = @At("TAIL"), method = "jump")
+    public void spellboundLivingEntityJumpMixin(CallbackInfo info){
+        SBEnchantmentHelper.onJump((LivingEntity)(Object)this);
+    }
+
     @Shadow
     protected void initDataTracker() {
 

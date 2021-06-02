@@ -10,6 +10,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -174,7 +175,7 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
 
     private boolean addTrophy(LivingEntity victim, LivingEntity killer, ItemStack stack,boolean isRanged){
         CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
-        if(!(victim instanceof PassiveEntity) || victim instanceof Angerable || victim instanceof Monster) {
+        if(!(victim instanceof PassiveEntity || victim instanceof WaterCreatureEntity) || victim instanceof Angerable || victim instanceof Monster) {
             if (!hasTrophy(victim, stack)) {
                 tag.putInt(UNIQUE_TROPHY_COUNT_KEY, tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + 1);
                 tag.putInt(victim.getType().toString(), 1);

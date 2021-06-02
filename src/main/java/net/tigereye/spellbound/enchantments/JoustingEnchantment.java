@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class JoustingEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
 
@@ -66,15 +67,7 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        CompoundTag tag = stack.getOrCreateSubTag(Spellbound.MODID+"Jousting");
-        tag.putDouble("x",tag.getDouble("preX"));
-        tag.putDouble("y",tag.getDouble("preY"));
-        tag.putDouble("z",tag.getDouble("preZ"));
-        tag.putLong("time",tag.getLong("pretime"));
-        tag.putDouble("preX",entity.getX());
-        tag.putDouble("preY",entity.getY());
-        tag.putDouble("preZ",entity.getZ());
-        tag.putLong("pretime",entity.world.getTime());
+        SpellboundUtil.setMotionTracker(stack,entity);
     }
 
     @Override
@@ -97,11 +90,6 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
     }
 
     private Vec3d getJoustingVelocity(LivingEntity attacker, ItemStack stack){
-        CompoundTag tag = stack.getOrCreateSubTag(Spellbound.MODID+"Jousting");
-        double x = tag.getDouble("x");
-        double y = tag.getDouble("y");
-        double z = tag.getDouble("z");
-        long time = tag.getLong("time");
-        return new Vec3d((attacker.getX()-x)/(attacker.world.getTime()-time),(attacker.getY()-y)/(attacker.world.getTime()-time),(attacker.getZ()-z)/(attacker.world.getTime()-time));
+        return SpellboundUtil.readMotionTracker(attacker,stack);
     }
 }

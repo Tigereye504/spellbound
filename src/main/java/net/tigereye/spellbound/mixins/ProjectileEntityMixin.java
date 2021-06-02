@@ -33,7 +33,7 @@ public class ProjectileEntityMixin  implements SpellboundProjectileEntity {
     protected void spellboundPersistentProjectileEntitySetOwnerMixin(Entity owner, CallbackInfo info){
         if(owner != null){
             if(owner instanceof LivingEntity){
-                source = ((LivingEntity)owner).getActiveItem();
+                source = ((LivingEntity) owner).getStackInHand(((LivingEntity)owner).getActiveHand());
             }
             else {
                 for (ItemStack stack : owner.getItemsHand()) {

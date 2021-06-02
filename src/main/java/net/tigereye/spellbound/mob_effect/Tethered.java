@@ -67,7 +67,7 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
                     return false;
                 }
                 tetheredInstance.anchor = world.getEntity(tetheredInstance.tetherUUID);
-                if(tetheredInstance.tetherUUID == null) {return false;}
+                if(tetheredInstance.anchor == null) {return false;}
             }
         }
         if(tetheredInstance.tetherUUID == null){

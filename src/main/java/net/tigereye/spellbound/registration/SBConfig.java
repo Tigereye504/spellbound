@@ -16,4 +16,6 @@ public class SBConfig {
     public static final float MOUNTED_DAMAGE_PER_LEVEL = 1.5f;
     public static final float MOUNTED_PROJECTILE_BASE = .5f;
     public static final float MOUNTED_PROJECTILE_PER_LEVEL = .3f;
+    public static final int ATTRACTION_RANGE = 5;
+    public static final double ATTRACTION_STRENGTH = .03;
 }

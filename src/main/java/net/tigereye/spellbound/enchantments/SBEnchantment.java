@@ -43,6 +43,9 @@ public class SBEnchantment extends Enchantment {
     //for when the user dies
     public void onDeath(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
 
+    //for when the user jumps
+    public void onJump(int level, ItemStack stack, LivingEntity entity){}
+
     //for every tick the enchanted item is equipped.
     // Careful, this will be called separately for every instance of the enchantment.
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){}

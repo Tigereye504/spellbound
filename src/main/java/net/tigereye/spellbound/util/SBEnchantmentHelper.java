@@ -74,6 +74,10 @@ public class SBEnchantmentHelper {
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onDeath(level, itemStack, source, killer, victim), victim.getItemsEquipped());
     }
 
+    public static void onJump(LivingEntity entity){
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment)enchantment).onJump(level, itemStack, entity), entity.getItemsEquipped());
+    }
+
     //called at the head of LivingEntity::applyArmor, before armor is actually applied.
     public static float onPreArmorDefense(DamageSource source, LivingEntity defender, Float amount){
         MutableFloat mutableFloat = new MutableFloat(amount);

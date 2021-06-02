@@ -57,7 +57,7 @@ public class TetheringEnchantment extends SBEnchantment {
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
         Spellbound.LOGGER.info("Tether Target Hit");
         if(target instanceof LivingEntity
-                && EnchantmentHelper.get(((LivingEntity) target).getMainHandStack()).containsKey(SBEnchantments.TETHERING)) {
+                /*&& EnchantmentHelper.get(((LivingEntity) target).getMainHandStack()).containsKey(SBEnchantments.TETHERING)*/) {
             tetherTarget(level, user, (LivingEntity) target);
         }
 
