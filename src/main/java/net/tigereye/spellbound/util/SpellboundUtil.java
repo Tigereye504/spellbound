@@ -1,14 +1,58 @@
 package net.tigereye.spellbound.util;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.registration.SBConfig;
+
+import java.util.List;
 
 public class SpellboundUtil {
+
+    public static void pushPullEntitiesPlayersInRange(double range, double strength, LivingEntity entity){
+        Vec3d position = entity.getPos();
+        List<Entity> entityList = entity.world.getNonSpectatingEntities(Entity.class,
+                new Box(position.x+ range,position.y+range,position.z+range,
+                        position.x-range,position.y-range,position.z-range));
+        for (Entity target:
+                entityList) {
+            if(target != entity) {
+                Vec3d forceVec = position.subtract(target.getPos()).normalize();
+                if (target instanceof LivingEntity) {
+                    forceVec = forceVec.multiply(strength * Math.max(0, 1 - ((LivingEntity) target).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)));
+                } else {
+                    forceVec = forceVec.multiply(strength);
+                }
+                target.addVelocity(forceVec.x, forceVec.y, forceVec.z);
+                target.velocityModified = true;
+            }
+        }
+        List<PlayerEntity> playerList = entity.world.getPlayers(TargetPredicate.DEFAULT,entity,
+                new Box(position.x+range,position.y+range,position.z+range,
+                        position.x-range,position.y-range,position.z-range));
+        for (Entity target:
+                playerList) {
+            if(target != entity) {
+                Vec3d forceVec = position.subtract(target.getPos()).normalize();
+                if (target instanceof LivingEntity) {
+                    forceVec = forceVec.multiply(strength * Math.max(0, 1 - ((LivingEntity) target).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)));
+                } else {
+                    forceVec = forceVec.multiply(strength);
+                }
+                target.addVelocity(forceVec.x, forceVec.y, forceVec.z);
+                target.velocityModified = true;
+            }
+        }
+    }
 
     public static boolean isPositionObstructed(World world, BlockPos pos){
         boolean feetBlocked = world.getBlockState(pos).isOpaque();

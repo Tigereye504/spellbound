@@ -23,6 +23,7 @@ import net.tigereye.spellbound.registration.SBConfig;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
+import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.List;
 
@@ -52,37 +53,7 @@ public class AttractiveEnchantment extends SBEnchantment implements UtilityEncha
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         World world = entity.getEntityWorld();
         if(!world.isClient()){
-            Vec3d position = entity.getPos();
-            List<Entity> entityList = world.getNonSpectatingEntities(Entity.class,
-                    new Box(position.x+SBConfig.ATTRACTION_RANGE,position.y+SBConfig.ATTRACTION_RANGE,position.z+SBConfig.ATTRACTION_RANGE,
-                            position.x-SBConfig.ATTRACTION_RANGE,position.y-SBConfig.ATTRACTION_RANGE,position.z-SBConfig.ATTRACTION_RANGE));
-            for (Entity target:
-                 entityList) {
-                Vec3d forceVec = position.subtract(target.getPos()).normalize();
-                if(target instanceof LivingEntity){
-                    forceVec = forceVec.multiply(SBConfig.ATTRACTION_STRENGTH*Math.max(0,1-((LivingEntity)target).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)));
-                }
-                else{
-                    forceVec = forceVec.multiply(SBConfig.ATTRACTION_STRENGTH);
-                }
-                target.addVelocity(forceVec.x,forceVec.y,forceVec.z);
-                target.velocityModified = true;
-            }
-            List<PlayerEntity> playerList = world.getPlayers(TargetPredicate.DEFAULT,entity,
-                    new Box(position.x+SBConfig.ATTRACTION_RANGE,position.y+SBConfig.ATTRACTION_RANGE,position.z+SBConfig.ATTRACTION_RANGE,
-                            position.x-SBConfig.ATTRACTION_RANGE,position.y-SBConfig.ATTRACTION_RANGE,position.z-SBConfig.ATTRACTION_RANGE));
-            for (Entity target:
-                    playerList) {
-                Vec3d forceVec = position.subtract(target.getPos()).normalize();
-                if(target instanceof LivingEntity){
-                    forceVec = forceVec.multiply(SBConfig.ATTRACTION_STRENGTH*Math.max(0,1-((LivingEntity)target).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)));
-                }
-                else{
-                    forceVec = forceVec.multiply(SBConfig.ATTRACTION_STRENGTH);
-                }
-                target.addVelocity(forceVec.x,forceVec.y,forceVec.z);
-                target.velocityModified = true;
-            }
+            SpellboundUtil.pushPullEntitiesPlayersInRange(SBConfig.ATTRACTION_RANGE,SBConfig.ATTRACTION_STRENGTH,entity);
         }
     }
 
