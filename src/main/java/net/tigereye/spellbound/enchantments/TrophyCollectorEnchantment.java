@@ -15,15 +15,11 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.registration.SBConfig;
-import net.tigereye.spellbound.registration.SBStatusEffects;
 
 import java.util.*;
 
@@ -83,7 +79,7 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
     @Override
     public void onActivate(int level, PlayerEntity player, ItemStack stack, Entity target) {
         if(!player.world.isClient && player.getPose() == EntityPose.CROUCHING){
-            CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
+            NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
             Set<String> keys = tag.getKeys();
 
             player.sendMessage(new LiteralText(""),false);
@@ -108,7 +104,7 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
         boolean isRanged = stack.getItem() instanceof RangedWeaponItem;
         List<Text> output = new ArrayList<>();
-        CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
+        NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
         Set<String> keys = tag.getKeys();
         Map<String,Integer> keyIntMap = new HashMap<>();
         keys.forEach((trophyKey) -> {
@@ -169,12 +165,12 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
     }
 
     private boolean hasTrophy(LivingEntity victim, ItemStack stack){
-        CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
+        NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
         return tag.contains(victim.getType().toString());
     }
 
     private boolean addTrophy(LivingEntity victim, LivingEntity killer, ItemStack stack,boolean isRanged){
-        CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
+        NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
         if(!(victim instanceof PassiveEntity || victim instanceof WaterCreatureEntity) || victim instanceof Angerable || victim instanceof Monster) {
             if (!hasTrophy(victim, stack)) {
                 tag.putInt(UNIQUE_TROPHY_COUNT_KEY, tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + 1);
@@ -219,12 +215,12 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
     }
 
     private int getUniqueTrophyCount(ItemStack stack){
-        CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
+        NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
         return tag.getInt(UNIQUE_TROPHY_COUNT_KEY);
     }
 
     private int getEntityTrophyCount(LivingEntity victim, ItemStack stack){
-        CompoundTag tag = stack.getOrCreateSubTag(TROPHY_COLLECTOR_KEY);
+        NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
         return tag.getInt(victim.getType().toString());
     }
 

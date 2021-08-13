@@ -11,7 +11,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -80,7 +80,7 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
     }
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context, int maxsize) {
         List<Text> output = new ArrayList<>();
-        CompoundTag tag = stack.getOrCreateSubTag(ROCK_COLLECTOR_KEY);
+        NbtCompound tag = stack.getOrCreateSubNbt(ROCK_COLLECTOR_KEY);
         Set<String> keys = tag.getKeys();
         Map<String,Integer> keyIntMap = new HashMap<>();
         keys.forEach((trophyKey) -> {
@@ -120,15 +120,15 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
     }
 
     private boolean hasRock(BlockState blockState, ItemStack stack){
-        CompoundTag tag = stack.getOrCreateSubTag(ROCK_COLLECTOR_KEY);
+        NbtCompound tag = stack.getOrCreateSubNbt(ROCK_COLLECTOR_KEY);
         return tag.contains(blockState.getBlock().getTranslationKey());
     }
 
     private boolean addRock(BlockState blockState, LivingEntity miner, ItemStack stack){
-        if(!stack.getItem().isEffectiveOn(blockState)){
+        if(!stack.getItem().isSuitableFor(blockState)){
             return false;
         }
-        CompoundTag tag = stack.getOrCreateSubTag(ROCK_COLLECTOR_KEY);
+        NbtCompound tag = stack.getOrCreateSubNbt(ROCK_COLLECTOR_KEY);
         if(!hasRock(blockState,stack)){
             tag.putInt(UNIQUE_ROCK_COUNT_KEY,tag.getInt(UNIQUE_ROCK_COUNT_KEY)+1);
             tag.putInt(blockState.getBlock().getTranslationKey(),1);
@@ -158,12 +158,12 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
     }
 
     private int getUniqueRockCount(ItemStack stack){
-        CompoundTag tag = stack.getOrCreateSubTag(ROCK_COLLECTOR_KEY);
+        NbtCompound tag = stack.getOrCreateSubNbt(ROCK_COLLECTOR_KEY);
         return tag.getInt(UNIQUE_ROCK_COUNT_KEY);
     }
 
     private int getBlockRockCount(BlockState blockState, ItemStack stack){
-        CompoundTag tag = stack.getOrCreateSubTag(ROCK_COLLECTOR_KEY);
+        NbtCompound tag = stack.getOrCreateSubNbt(ROCK_COLLECTOR_KEY);
         return tag.getInt(blockState.getBlock().getTranslationKey());
     }
 

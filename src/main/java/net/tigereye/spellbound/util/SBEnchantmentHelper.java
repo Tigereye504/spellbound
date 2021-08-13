@@ -13,8 +13,8 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -164,11 +164,11 @@ public class SBEnchantmentHelper {
 
     private static void forEachSpellboundEnchantment(SBEnchantmentHelper.Consumer consumer, ItemStack stack) {
         if (stack != null && !stack.isEmpty()) {
-            ListTag listTag = stack.getEnchantments();
+            NbtList NbtList = stack.getEnchantments();
 
-            for(int i = 0; i < listTag.size(); ++i) {
-                String string = listTag.getCompound(i).getString("id");
-                int j = listTag.getCompound(i).getInt("lvl");
+            for(int i = 0; i < NbtList.size(); ++i) {
+                String string = NbtList.getCompound(i).getString("id");
+                int j = NbtList.getCompound(i).getInt("lvl");
                 Registry.ENCHANTMENT.getOrEmpty(Identifier.tryParse(string)).ifPresent((enchantment) -> {
                     if(enchantment instanceof SBEnchantment) {
                         consumer.accept(enchantment, j, stack);
@@ -264,7 +264,7 @@ public class SBEnchantmentHelper {
     }
 
     public static UUID loadItemUUID(ItemStack stack){
-        CompoundTag tag = stack.getOrCreateTag();
+        NbtCompound tag = stack.getOrCreateNbt();
         UUID id;
         if(tag.contains(Spellbound.MODID+"ItemID")){
             id = tag.getUuid(Spellbound.MODID+"ItemID");

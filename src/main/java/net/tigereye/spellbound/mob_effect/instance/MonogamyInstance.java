@@ -3,7 +3,7 @@ package net.tigereye.spellbound.mob_effect.instance;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
 import java.util.UUID;
@@ -55,7 +55,7 @@ public class MonogamyInstance extends StatusEffectInstance{
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
+    public NbtCompound writeNbt(NbtCompound tag) {
         tag.putByte("Id", (byte)StatusEffect.getRawId(this.getEffectType()));
         tag.putByte("Amplifier", (byte)this.getAmplifier());
         tag.putInt("Duration", this.getDuration());
@@ -68,7 +68,7 @@ public class MonogamyInstance extends StatusEffectInstance{
         return tag;
     }
 
-    public static MonogamyInstance customFromTag(CompoundTag tag) {
+    public static MonogamyInstance customFromNbt(NbtCompound tag) {
         int amplifier = tag.getByte("Amplifier");
         int duration = tag.getInt("Duration");
         boolean ambient = tag.getBoolean("Ambient");

@@ -3,7 +3,7 @@ package net.tigereye.spellbound.mob_effect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectType;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.tigereye.spellbound.mob_effect.instance.PolygamyInstance;
 
 public class Polygamy extends SBStatusEffect implements CustomDataStatusEffect{
@@ -19,7 +19,7 @@ public class Polygamy extends SBStatusEffect implements CustomDataStatusEffect{
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {}
 
     @Override
-    public StatusEffectInstance getInstanceFromTag(CompoundTag tag) {
-        return PolygamyInstance.customFromTag(tag);
+    public StatusEffectInstance getInstanceFromTag(NbtCompound tag) {
+        return PolygamyInstance.customFromNbt(tag);
     }
 }

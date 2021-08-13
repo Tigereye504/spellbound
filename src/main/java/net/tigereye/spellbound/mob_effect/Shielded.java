@@ -29,10 +29,6 @@ public class Shielded extends SBStatusEffect{
             return amount;
         }
         else if(instance.getAmplifier() == 0){
-            StatusEffectInstance shieldsDown = ShieldsDown.generateInstance(defender,instance.getDuration()- SBConfig.SHIELD_DURATION_OFFSET);
-            if(shieldsDown != null) {
-                effectsToAdd.add(shieldsDown);
-            }
             effectsToRemove.add(SBStatusEffects.SHIELDED);
         }
         else{

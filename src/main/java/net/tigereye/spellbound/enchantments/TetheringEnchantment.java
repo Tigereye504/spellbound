@@ -55,7 +55,7 @@ public class TetheringEnchantment extends SBEnchantment {
 
     @Override
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
-        Spellbound.LOGGER.info("Tether Target Hit");
+        //Spellbound.LOGGER.info("Tether Target Hit");
         if(target instanceof LivingEntity
                 /*&& EnchantmentHelper.get(((LivingEntity) target).getMainHandStack()).containsKey(SBEnchantments.TETHERING)*/) {
             tetherTarget(level, user, (LivingEntity) target);
@@ -70,7 +70,7 @@ public class TetheringEnchantment extends SBEnchantment {
     }
 
     private void tetherTarget(int level, Entity anchor, LivingEntity target){
-        Spellbound.LOGGER.info("Applying Tethered");
+        //Spellbound.LOGGER.info("Applying Tethered");
         target.addStatusEffect(new TetheredInstance(anchor, 20+(20*level), 0));
     }
 

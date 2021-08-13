@@ -55,14 +55,14 @@ public class ImpersonalEnchantment extends SBEnchantment implements CustomCondit
         BlockState newPosBlock = user.world.getBlockState(newPos);
         if(!newPosBlock.isOpaque()) {
             user.teleport(newPos.getX(),newPos.getY(),newPos.getZ());
-            user.yaw = target.getHorizontalFacing().asRotation();
+            user.setYaw(target.getHorizontalFacing().asRotation());
         }
         else{
             newPos = newPos.add(0,1,0);
             newPosBlock = user.world.getBlockState(newPos);
             if(!newPosBlock.isOpaque()) {
                 user.teleport(newPos.getX(),newPos.getY(),newPos.getZ());
-                user.yaw = target.getHorizontalFacing().asRotation();
+                user.setYaw(target.getHorizontalFacing().asRotation());
             }
         }
         //TODO: insert warp sound effect here

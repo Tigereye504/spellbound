@@ -6,6 +6,7 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.SpellboundProjectileEntity;
@@ -33,7 +34,10 @@ public class ProjectileEntityMixin  implements SpellboundProjectileEntity {
     protected void spellboundPersistentProjectileEntitySetOwnerMixin(Entity owner, CallbackInfo info){
         if(owner != null){
             if(owner instanceof LivingEntity){
-                source = ((LivingEntity) owner).getStackInHand(((LivingEntity)owner).getActiveHand());
+                Hand hand = ((LivingEntity) owner).getActiveHand();
+                if(hand != null) {
+                    source = ((LivingEntity) owner).getStackInHand(hand);
+                }
             }
             else {
                 for (ItemStack stack : owner.getItemsHand()) {

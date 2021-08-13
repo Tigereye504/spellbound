@@ -3,9 +3,8 @@ package net.tigereye.spellbound.mob_effect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectType;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.mob_effect.instance.TetheredInstance;
@@ -23,7 +22,7 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
     }
 
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        Spellbound.LOGGER.info("Dragging Target");
+        //Spellbound.LOGGER.info("Dragging Target");
         if(!(entity.world.isClient)){
             StatusEffectInstance temp = entity.getStatusEffect(SBStatusEffects.TETHERED);
             if(temp instanceof TetheredInstance){
@@ -34,7 +33,7 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
                     return;
                 }
                 //if the anchor has been removed from the world, remove the tether
-                if(ti.anchor.removed){
+                if(ti.anchor.isRemoved()){
                     entity.removeStatusEffect(SBStatusEffects.TETHERED);
                     return;
                 }
@@ -49,8 +48,8 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
     }
 
     @Override
-    public StatusEffectInstance getInstanceFromTag(CompoundTag tag) {
-        return TetheredInstance.customFromTag(tag);
+    public StatusEffectInstance getInstanceFromTag(NbtCompound tag) {
+        return TetheredInstance.customFromNbt(tag);
     }
 
     public boolean fillMissingTetheredData(TetheredInstance tetheredInstance, LivingEntity entity){

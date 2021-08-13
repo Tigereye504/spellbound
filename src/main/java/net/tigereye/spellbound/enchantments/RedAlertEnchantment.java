@@ -40,21 +40,32 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        if(entity.hasStatusEffect(SBStatusEffects.SHIELDED)){
-            StatusEffectInstance shielded = entity.getStatusEffect(SBStatusEffects.SHIELDED);
-            if(shielded != null && shielded.getDuration() <= SBConfig.SHIELD_DURATION_OFFSET){
-                int redAlertCount = SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
-                if(redAlertCount > 0){
-                    entity.removeStatusEffect(SBStatusEffects.SHIELDED);
-                    entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
-                            SBConfig.SHIELD_DURATION_OFFSET+ RedAlertEnchantment.getModifiedRecoveryRate(entity,redAlertCount),
-                            Math.min(redAlertCount-1,shielded.getAmplifier()+1), false, false, true));
+        if(entity.hasStatusEffect(SBStatusEffects.SHIELDS_DOWN)){
+            StatusEffectInstance shields_down = entity.getStatusEffect(SBStatusEffects.SHIELDS_DOWN);
+            if(shields_down.getDuration() <= 2){
+                entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN, RedAlertEnchantment.getModifiedRecoveryRate(entity), 0, false, false, false));
+
+                //refresh shielded
+                if(entity.hasStatusEffect(SBStatusEffects.SHIELDED)){
+                    StatusEffectInstance shielded = entity.getStatusEffect(SBStatusEffects.SHIELDED);
+                    int redAlertCount = SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
+                    if(redAlertCount > 0){
+                        entity.removeStatusEffect(SBStatusEffects.SHIELDED);
+                        entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
+                                SBConfig.SHIELD_DURATION,
+                                Math.min(redAlertCount-1,shielded.getAmplifier()+1), false, false, true));
+                    }
+                }
+                else{
+                    entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,SBConfig.SHIELD_DURATION,0, false, false, true));
                 }
             }
         }
-        else if(!entity.hasStatusEffect(SBStatusEffects.SHIELDS_DOWN)) {
-            entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN, RedAlertEnchantment.getModifiedRecoveryRate(entity), 0, false, false, true));
+        else{
+            entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN, RedAlertEnchantment.getModifiedRecoveryRate(entity), 0, false, false, false));
         }
+
+
     }
 
     @Override

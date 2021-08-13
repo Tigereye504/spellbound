@@ -48,7 +48,7 @@ public class VectorUtil {
     }
 
     public static Vec3d findCollisionWithStepAssistOnLine(World world, Vec3d position, Vec3d direction, double length){
-        int remainingMaxIterations = (int)(length*2);
+        int remainingMaxIterations = (int)(length*2+1);
         BlockPos blockPos = new BlockPos(position);
         Vec3d unitVector = direction.normalize();
         Vec3d finalPosition = position.add(unitVector.multiply(length/*level*DISTANCE_PER_LEVEL*/));

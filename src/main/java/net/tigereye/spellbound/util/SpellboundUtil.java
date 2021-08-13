@@ -6,7 +6,7 @@ import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -62,7 +62,7 @@ public class SpellboundUtil {
 
     public static void setMotionTracker(ItemStack stack, LivingEntity entity){
         long time = entity.world.getTime();
-        CompoundTag tag = stack.getOrCreateSubTag(Spellbound.MODID+"MotionTracker");
+        NbtCompound tag = stack.getOrCreateSubNbt(Spellbound.MODID+"MotionTracker");
         long previousTime = tag.getLong("pretime");
         if(previousTime == time){
             return;
@@ -78,7 +78,7 @@ public class SpellboundUtil {
     }
 
     public static Vec3d readMotionTracker(LivingEntity entity, ItemStack stack){
-        CompoundTag tag = stack.getOrCreateSubTag(Spellbound.MODID+"MotionTracker");
+        NbtCompound tag = stack.getOrCreateSubNbt(Spellbound.MODID+"MotionTracker");
         double x = tag.getDouble("x");
         double y = tag.getDouble("y");
         double z = tag.getDouble("z");
