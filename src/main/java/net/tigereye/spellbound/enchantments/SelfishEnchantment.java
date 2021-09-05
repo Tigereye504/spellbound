@@ -38,7 +38,8 @@ public class SelfishEnchantment extends SBEnchantment{
 
     @Override
     public int getMaxLevel() {
-        return 1;
+        if(Spellbound.config.SELFISH_ENABLED) return 1;
+        else return 0;
     }
 
     @Override

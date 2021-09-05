@@ -6,12 +6,9 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.tigereye.spellbound.registration.SBConfig;
-import net.tigereye.spellbound.registration.SBStatusEffects;
+import net.tigereye.spellbound.Spellbound;
 
 public class MountedEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
 
@@ -31,7 +28,8 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
 
     @Override
     public int getMaxLevel() {
-        return 5;
+        if(Spellbound.config.MOUNTED_ENABLED) return 5;
+        else return 0;
     }
 
     @Override
@@ -42,7 +40,7 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
     @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
         if(attacker.hasVehicle()){
-            return (SBConfig.MOUNTED_DAMAGE_PER_LEVEL * level) + SBConfig.MOUNTED_DAMAGE_BASE;
+            return (Spellbound.config.MOUNTED_DAMAGE_PER_LEVEL * level) + Spellbound.config.MOUNTED_DAMAGE_BASE;
         }
         return 0;
     }
@@ -50,7 +48,7 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
     @Override
     public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
         if(attacker.getVehicle() != null){
-            return damage * ((SBConfig.MOUNTED_PROJECTILE_PER_LEVEL * level) + SBConfig.MOUNTED_PROJECTILE_BASE);
+            return damage * ((Spellbound.config.MOUNTED_PROJECTILE_PER_LEVEL * level) + Spellbound.config.MOUNTED_PROJECTILE_BASE);
         }
         return damage;
     }

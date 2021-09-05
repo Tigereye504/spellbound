@@ -43,7 +43,8 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
 
     @Override
     public int getMaxLevel() {
-        return 1;
+        if(Spellbound.config.TROPHY_COLLECTOR_ENABLED) return 1;
+        else return 0;
     }
 
     @Override

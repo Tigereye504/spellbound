@@ -41,7 +41,8 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
 
     @Override
     public int getMaxLevel() {
-        return 1;
+        if(Spellbound.config.ROCK_COLLECTOR_ENABLED) return 1;
+        else return 0;
     }
 
     @Override

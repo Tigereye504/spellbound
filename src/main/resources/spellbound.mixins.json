@@ -13,7 +13,8 @@
     "PersistentProjectileEntityMixin",
     "ProjectileEntityMixin",
     "StatusEffectInstanceMixin",
-    "TridentEntityMixin"
+    "TridentEntityMixin",
+    "WorldMixin"
   ],
   "client": [
     "ItemStackClientMixin"

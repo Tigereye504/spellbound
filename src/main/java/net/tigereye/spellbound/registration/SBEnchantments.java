@@ -6,49 +6,61 @@ import net.minecraft.util.registry.Registry;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SBEnchantments {
 
-    public static final Enchantment ATTRACTIVE = new AttractiveEnchantment();
-    public static final Enchantment CAVE_IN = new CaveInEnchantment();
-    public static final Enchantment DULLNESS = new DullnessEnchantment();
-    public static final Enchantment IMPERSONAL = new ImpersonalEnchantment();
-    public static final Enchantment JOUSTING = new JoustingEnchantment();
-    public static final Enchantment LAUNCHING = new LaunchingEnchantment();
-    public static final Enchantment LEGACY = new LegacyEnchantment();
+    public static List<SBEnchantment> SBEnchantmentList = new ArrayList<>();
+
+    public static final SBEnchantment ATTRACTIVE = new AttractiveEnchantment();
+    public static final SBEnchantment CAVE_IN = new CaveInEnchantment();
+    public static final SBEnchantment DULLNESS = new DullnessEnchantment();
+    public static final SBEnchantment HEARTY = new HeartyEnchantment();
+    public static final SBEnchantment IMPERSONAL = new ImpersonalEnchantment();
+    public static final SBEnchantment JOUSTING = new JoustingEnchantment();
+    public static final SBEnchantment LAUNCHING = new LaunchingEnchantment();
+    public static final SBEnchantment LEGACY = new LegacyEnchantment();
     //public static final Enchantment MOUNTED = new MountedEnchantment();
-    public static final Enchantment MONOGAMOUS = new MonogamousEnchantment();
-    public static final Enchantment PHASE_LEAP = new PhaseLeapEnchantment();
-    public static final Enchantment PHASE_STRAFE = new PhaseStrafeEnchantment();
-    public static final Enchantment POLYGAMOUS = new PolygamousEnchantment();
-    public static final Enchantment PRIMING = new PrimingEnchantment();
-    public static final Enchantment RAMPAGE = new RampageEnchantment();
-    public static final Enchantment RED_ALERT = new RedAlertEnchantment();
-    public static final Enchantment REPULSIVE = new RepulsiveEnchantment();
-    public static final Enchantment ROCK_COLLECTING = new RockCollectorEnchantment();
-    public static final Enchantment SELFISH = new SelfishEnchantment();
-    public static final Enchantment TETHERING = new TetheringEnchantment();
-    public static final Enchantment TROPHY_COLLECTING = new TrophyCollectorEnchantment();
+    public static final SBEnchantment MONOGAMOUS = new MonogamousEnchantment();
+    public static final SBEnchantment PHASE_LEAP = new PhaseLeapEnchantment();
+    public static final SBEnchantment PHASE_STRAFE = new PhaseStrafeEnchantment();
+    public static final SBEnchantment POLYGAMOUS = new PolygamousEnchantment();
+    public static final SBEnchantment PRIMING = new PrimingEnchantment();
+    public static final SBEnchantment RAMPAGE = new RampageEnchantment();
+    public static final SBEnchantment RED_ALERT = new RedAlertEnchantment();
+    public static final SBEnchantment REPULSIVE = new RepulsiveEnchantment();
+    public static final SBEnchantment ROCK_COLLECTING = new RockCollectorEnchantment();
+    public static final SBEnchantment SELFISH = new SelfishEnchantment();
+    public static final SBEnchantment TETHERING = new TetheringEnchantment();
+    public static final SBEnchantment TROPHY_COLLECTING = new TrophyCollectorEnchantment();
 
     public static void register(){
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "attractive"), ATTRACTIVE);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "cave_in"), CAVE_IN);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "dullness"), DULLNESS);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "impersonal"), IMPERSONAL);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "jousting"), JOUSTING);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "launching"), LAUNCHING);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "legacy"), LEGACY);
+        register("attractive", ATTRACTIVE);
+        register("cave_in", CAVE_IN);
+        register("dullness", DULLNESS);
+        register("hearty", HEARTY);
+        register("impersonal", IMPERSONAL);
+        register("jousting", JOUSTING);
+        register("launching", LAUNCHING);
+        register("legacy", LEGACY);
         //Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "mounted"), MOUNTED);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "monogamous"), MONOGAMOUS);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "phase_leap"), PHASE_LEAP);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "phase_strafe"), PHASE_STRAFE);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "polygamous"), POLYGAMOUS);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "priming"), PRIMING);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "rampage"), RAMPAGE);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "repulsive"), REPULSIVE);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "rock_collecting"), ROCK_COLLECTING);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "red_alert"), RED_ALERT);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "selfish"), SELFISH);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "tethering"), TETHERING);
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "trophy_collecting"), TROPHY_COLLECTING);
+        register("monogamous", MONOGAMOUS);
+        register("phase_leap", PHASE_LEAP);
+        register("phase_strafe", PHASE_STRAFE);
+        register("polygamous", POLYGAMOUS);
+        register("priming", PRIMING);
+        register("rampage", RAMPAGE);
+        register("repulsive", REPULSIVE);
+        register("rock_collecting", ROCK_COLLECTING);
+        register("red_alert", RED_ALERT);
+        register("selfish", SELFISH);
+        register("tethering", TETHERING);
+        register("trophy_collecting", TROPHY_COLLECTING);
+    }
+
+    public static void register(String name, SBEnchantment enchantment){
+        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, name), enchantment);
+        SBEnchantmentList.add(enchantment);
     }
 }

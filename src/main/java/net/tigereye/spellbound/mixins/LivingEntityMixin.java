@@ -41,6 +41,7 @@ public class LivingEntityMixin extends Entity{
 
     @Inject(at = @At("HEAD"), method = "baseTick")
     public void spellboundLivingEntityBaseTickMixin(CallbackInfo info){
+        SBEnchantmentHelper.onTickAlways((LivingEntity)(Object)this);
         SBEnchantmentHelper.onTickWhileEquipped((LivingEntity)(Object)this);
     }
 
@@ -49,7 +50,7 @@ public class LivingEntityMixin extends Entity{
     //  Lnet/minecraft/entity/LivingEntity;
     //)V
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onKilledBy(Lnet/minecraft/entity/LivingEntity;)V"), method = "onDeath")
-    public void spellboundLivingEntityOnKilledByMixin(DamageSource source, CallbackInfo info){
+    public void spellboundLivingEntityOnDeathMixin(DamageSource source, CallbackInfo info){
         SBEnchantmentHelper.onDeath(source,(LivingEntity) (Object) this);
     }
 
@@ -57,6 +58,11 @@ public class LivingEntityMixin extends Entity{
     public void spellboundLivingEntityJumpMixin(CallbackInfo info){
         SBEnchantmentHelper.onJump((LivingEntity)(Object)this);
     }
+
+
+
+
+
 
     @Shadow
     protected void initDataTracker() {

@@ -9,6 +9,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.SpellboundPlayerEntity;
 
 public class LaunchingEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
@@ -29,7 +30,8 @@ public class LaunchingEnchantment extends SBEnchantment implements CustomConditi
 
     @Override
     public int getMaxLevel() {
-        return 2;
+        if(Spellbound.config.LAUNCHING_ENABLED) return 2;
+        else return 0;
     }
 
     @Override

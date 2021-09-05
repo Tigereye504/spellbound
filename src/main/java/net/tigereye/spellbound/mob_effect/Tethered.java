@@ -8,7 +8,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.mob_effect.instance.TetheredInstance;
-import net.tigereye.spellbound.registration.SBConfig;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
 public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
@@ -39,9 +38,9 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
                 }
                 //otherwise, drag them in
                 Vec3d vec3d = new Vec3d(ti.anchor.getX() - entity.getX(), ti.anchor.getY() - entity.getY(), ti.anchor.getZ() - entity.getZ());
-                entity.setPos(entity.getX(), entity.getY() + vec3d.y * 0.015D * SBConfig.TETHER_ATTRACTION_FACTOR, entity.getZ());
+                entity.setPos(entity.getX(), entity.getY() + vec3d.y * 0.015D * Spellbound.config.TETHER_ATTRACTION_FACTOR, entity.getZ());
 
-                double d = 0.05D * SBConfig.TETHER_ATTRACTION_FACTOR;
+                double d = 0.05D * Spellbound.config.TETHER_ATTRACTION_FACTOR;
                 entity.setVelocity(entity.getVelocity().multiply(0.95D).add(vec3d.multiply(d)));
             }
         }

@@ -30,7 +30,7 @@ import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.TridentEntityItemAccessor;
 import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
 import net.tigereye.spellbound.mob_effect.instance.PolygamyInstance;
-import net.tigereye.spellbound.registration.SBConfig;
+import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -101,6 +101,12 @@ public class SBEnchantmentHelper {
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment)enchantment).onTickWhileEquipped(level, itemStack, entity),entity.getItemsEquipped());
     }
 
+    public static void onTickAlways(LivingEntity entity){
+        for (SBEnchantment enchantment:
+                SBEnchantments.SBEnchantmentList) {
+            enchantment.onTickAlways(entity);
+        }
+    }
 
     public static int getProtectionAmount(DamageSource source, LivingEntity target, int k, float amount) {
         MutableFloat mutableFloat = new MutableFloat();
@@ -120,6 +126,13 @@ public class SBEnchantmentHelper {
 
     public static void onBreakBlock(Block block, World world, BlockPos pos, BlockState state, PlayerEntity player) {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onBreakBlock(level, itemStack, world, pos, state, player), player.getMainHandStack());
+    }
+
+    //TODO: hook this in to a listener... see if one exists for armor specifically
+    public static void onEquipmentChange(LivingEntity entity){
+        //insert cleanup function here
+        //entity.
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onEquipmentChange(level,itemStack,entity),entity.getArmorItems());
     }
 
     public static void onToolBreak(ItemStack stack, PlayerEntity entity) {
@@ -158,7 +171,12 @@ public class SBEnchantmentHelper {
     }
 
     public static List<Text> addTooltip(ItemStack stack, List<Text> list, PlayerEntity player, TooltipContext context){
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> list.addAll(((SBEnchantment) enchantment).addTooltip(level, itemStack, player, context)), stack);
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
+            List<Text> tooltip = ((SBEnchantment) enchantment).addTooltip(level, itemStack, player, context);
+            if(tooltip != null) {
+                list.addAll(tooltip);
+            }
+        }, stack);
         return list;
     }
 
@@ -217,7 +235,7 @@ public class SBEnchantmentHelper {
             PolygamyInstance polygamy;
             if(!(status instanceof PolygamyInstance)) {
                 owner.removeStatusEffect(SBStatusEffects.POLYGAMY);
-                polygamy = new PolygamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true);
+                polygamy = new PolygamyInstance(id, Spellbound.config.INTIMACY_DURATION,0,false,false,true);
                 owner.addStatusEffect(polygamy);
             }
             else{
@@ -225,11 +243,11 @@ public class SBEnchantmentHelper {
                 owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
                 if(polygamy.itemUUID == null){
                     owner.removeStatusEffect(SBStatusEffects.POLYGAMY);
-                    owner.addStatusEffect(new PolygamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
+                    owner.addStatusEffect(new PolygamyInstance(id, Spellbound.config.INTIMACY_DURATION, 0, false, false, true));
                     return true;
                 }
                 if(polygamy.itemUUID.compareTo(id) != 0){
-                    polygamy = new PolygamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true);
+                    polygamy = new PolygamyInstance(id, Spellbound.config.INTIMACY_DURATION,0,false,false,true);
                     owner.addStatusEffect(polygamy);
                 }
             }
@@ -240,7 +258,7 @@ public class SBEnchantmentHelper {
             MonogamyInstance monogamy;
             if(!(status instanceof MonogamyInstance)) {
                 owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-                monogamy = new MonogamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true);
+                monogamy = new MonogamyInstance(id, Spellbound.config.INTIMACY_DURATION,0,false,false,true);
                 owner.addStatusEffect(monogamy);
                 return true;
             }
@@ -248,18 +266,18 @@ public class SBEnchantmentHelper {
                 monogamy = (MonogamyInstance)(status);
                 if(monogamy.itemUUID == null){
                     owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-                    owner.addStatusEffect(new MonogamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
+                    owner.addStatusEffect(new MonogamyInstance(id, Spellbound.config.INTIMACY_DURATION, 0, false, false, true));
                     return true;
                 }
                 if(monogamy.itemUUID.compareTo(id) != 0) {
                     owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-                    owner.addStatusEffect(new PolygamyInstance(id, SBConfig.INTIMACY_DURATION, 0, false, false, true));
+                    owner.addStatusEffect(new PolygamyInstance(id, Spellbound.config.INTIMACY_DURATION, 0, false, false, true));
                     return false;
                 }
             }
         }
         //owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-        owner.addStatusEffect(new MonogamyInstance(id, SBConfig.INTIMACY_DURATION,0,false,false,true));
+        owner.addStatusEffect(new MonogamyInstance(id, Spellbound.config.INTIMACY_DURATION,0,false,false,true));
         return true;
     }
 
@@ -275,6 +293,7 @@ public class SBEnchantmentHelper {
         }
         return id;
     }
+
 
 
     @FunctionalInterface

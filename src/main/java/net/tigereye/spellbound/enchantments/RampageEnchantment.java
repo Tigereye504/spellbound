@@ -1,18 +1,16 @@
 package net.tigereye.spellbound.enchantments;
 
-import net.minecraft.enchantment.DamageEnchantment;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
-import net.tigereye.spellbound.registration.SBConfig;
+import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
 public class RampageEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
@@ -33,7 +31,8 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
 
     @Override
     public int getMaxLevel() {
-        return 3;
+        if(Spellbound.config.RAMPAGE_ENABLED) return 3;
+        else return 0;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
         StatusEffectInstance greenSparkles = attacker.getStatusEffect(SBStatusEffects.GREEN_SPARKLES);
         if(greenSparkles != null){
-            return SBConfig.RAMPAGE_DAMAGE_BASE + (SBConfig.RAMPAGE_DAMAGE_PER_LEVEL * level);
+            return Spellbound.config.RAMPAGE_DAMAGE_BASE + (Spellbound.config.RAMPAGE_DAMAGE_PER_LEVEL * level);
         }
         return 0;
     }
@@ -55,7 +54,7 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
         if(attacker instanceof LivingEntity) {
             StatusEffectInstance greenSparkles = ((LivingEntity)attacker).getStatusEffect(SBStatusEffects.GREEN_SPARKLES);
             if (greenSparkles != null) {
-                return damage + SBConfig.RAMPAGE_DAMAGE_BASE + (SBConfig.RAMPAGE_DAMAGE_PER_LEVEL * level);
+                return damage + Spellbound.config.RAMPAGE_DAMAGE_BASE + (Spellbound.config.RAMPAGE_DAMAGE_PER_LEVEL * level);
             }
         }
         return damage;
@@ -64,7 +63,7 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
     @Override
     public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){
         killer.addStatusEffect(new StatusEffectInstance(SBStatusEffects.GREEN_SPARKLES,
-                SBConfig.RAMPAGE_DURATION_BASE +(SBConfig.RAMPAGE_DURATION_PER_LEVEL*level),
+                Spellbound.config.RAMPAGE_DURATION_BASE +(Spellbound.config.RAMPAGE_DURATION_PER_LEVEL*level),
                 level-1));
     }
 

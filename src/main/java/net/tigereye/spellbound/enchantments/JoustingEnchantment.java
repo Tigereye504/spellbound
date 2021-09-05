@@ -31,7 +31,9 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
 
     @Override
     public int getMaxLevel() {
-        return 3;
+
+        if(Spellbound.config.JOUSTING_ENABLED) return 3;
+        else return 0;
     }
 
     @Override

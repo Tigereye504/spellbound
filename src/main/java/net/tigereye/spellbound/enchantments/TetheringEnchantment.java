@@ -34,7 +34,8 @@ public class TetheringEnchantment extends SBEnchantment {
 
     @Override
     public int getMaxLevel() {
-        return 3;
+        if(Spellbound.config.TETHERING_ENABLED) return 3;
+        else return 0;
     }
 
     @Override

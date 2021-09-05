@@ -4,16 +4,15 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.FallingBlockEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.tigereye.spellbound.registration.SBConfig;
+import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.config.SBConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,8 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
 
     @Override
     public int getMaxLevel() {
-        return 5;
+        if(Spellbound.config.CAVE_IN_ENABLED) return 5;
+        else return 0;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
                         target = lowerCorner.add(x,y,z);
                         targetBlock = world.getBlockState(target);
                         blockBelowTarget = world.getBlockState(target.down());
-                        if(!targetBlock.isAir() && targetBlock.getBlock().getBlastResistance() <= SBConfig.CAVE_IN_MAX_BLAST_RES
+                        if(!targetBlock.isAir() && targetBlock.getBlock().getBlastResistance() <= Spellbound.config.CAVE_IN_MAX_BLAST_RES
                                 && world.getBlockEntity(target) == null
                                 && (fallingBlocks.contains(blockBelowTarget) || FallingBlock.canFallThrough(blockBelowTarget))){
                             FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(world,

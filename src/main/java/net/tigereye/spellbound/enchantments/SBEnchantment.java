@@ -34,11 +34,19 @@ public class SBEnchantment extends Enchantment {
         return 0;
     }
 
-    //for when the user is struck, before armor is applied
-    public float onPreArmorDefense(int level, ItemStack stack, DamageSource source, LivingEntity defender, float amount){return amount;}
+    public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack itemStack, BlockState block, float miningSpeed) {
+        return miningSpeed;
+    }
 
-    //for when the user kills
-    public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
+    public void onActivate(int level, PlayerEntity playerEntity, ItemStack itemStack, Entity target) {}
+
+    //for when equipment is changed
+    public void onEquipmentChange(int level, ItemStack stack, LivingEntity entity){}
+
+    //public void onArmorChangeEvenIfAbsent
+
+    public void onBreakBlock(int level, ItemStack itemStack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    }
 
     //for when the user dies
     public void onDeath(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
@@ -46,9 +54,15 @@ public class SBEnchantment extends Enchantment {
     //for when the user jumps
     public void onJump(int level, ItemStack stack, LivingEntity entity){}
 
-    //for every tick the enchanted item is equipped.
-    // Careful, this will be called separately for every instance of the enchantment.
-    public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){}
+    //for when the user kills
+    public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
+
+    //for when the user is struck, before armor is applied
+    public float onPreArmorDefense(int level, ItemStack stack, DamageSource source, LivingEntity defender, float amount){return amount;}
+
+    //for when a thrown trident strikes a target
+    //called before vanilla on-hit but after vanilla on-hurt
+    public void onThrownTridentEntityHit(int level, TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){}
 
     //for when a thrown trident strikes a target
     //called before vanilla on-hit but after vanilla on-hurt
@@ -59,28 +73,21 @@ public class SBEnchantment extends Enchantment {
         return 0;
     }
 
-    //for when a thrown trident strikes a target
-    //called before vanilla on-hit but after vanilla on-hurt
-    public void onThrownTridentEntityHit(int level, TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){}
+    //for every tick the enchanted item is equipped.
+    // Careful, this will be called separately for every instance of the enchantment.
+    public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){}
+
+    public void onTickAlways(LivingEntity entity){}
+
+    public void onToolBreak(int level, ItemStack itemStack, PlayerEntity entity) {
+    }
 
     public float getProtectionAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
         return 0;
     }
 
-    public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack itemStack, BlockState block, float miningSpeed) {
-        return miningSpeed;
-    }
-
-    public void onActivate(int level, PlayerEntity playerEntity, ItemStack itemStack, Entity target) {}
-
     public List<Text> addTooltip(int level, ItemStack itemStack, PlayerEntity player, TooltipContext context) {
         return new ArrayList<>();
-    }
-
-    public void onBreakBlock(int level, ItemStack itemStack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
-    }
-
-    public void onToolBreak(int level, ItemStack itemStack, PlayerEntity entity) {
     }
 
     public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity victim, float damage) {

@@ -12,7 +12,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.registration.SBConfig;
 
 import java.util.List;
 

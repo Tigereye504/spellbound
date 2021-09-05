@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.tigereye.spellbound.Spellbound;
 
 public class DullnessEnchantment extends SBEnchantment {
 
@@ -24,7 +25,8 @@ public class DullnessEnchantment extends SBEnchantment {
 
     @Override
     public int getMaxLevel() {
-        return 5;
+        if(Spellbound.config.DULLNESS_ENABLED) return 5;
+        else return 0;
     }
 
     @Override

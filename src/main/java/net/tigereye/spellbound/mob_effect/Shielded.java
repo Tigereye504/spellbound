@@ -5,7 +5,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectType;
-import net.tigereye.spellbound.registration.SBConfig;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
 import java.util.List;

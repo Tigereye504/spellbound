@@ -31,7 +31,8 @@ public class PhaseLeapEnchantment extends SBEnchantment implements UtilityEnchan
 
     @Override
     public int getMaxLevel() {
-        return 3;
+        if(Spellbound.config.PHASE_LEAP_ENABLED) return 3;
+        else return 0;
     }
 
     @Override

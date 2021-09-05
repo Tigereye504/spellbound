@@ -31,7 +31,8 @@ public class PhaseStrafeEnchantment extends SBEnchantment implements UtilityEnch
 
     @Override
     public int getMaxLevel() {
-        return 3;
+        if(Spellbound.config.PHASE_STRAFE_ENABLED) return 3;
+        else return 0;
     }
 
     @Override

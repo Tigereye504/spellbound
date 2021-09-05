@@ -14,12 +14,15 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/hellish-materials/icon.png",
+  "icon": "assets/spellbound/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
       "net.tigereye.spellbound.Spellbound"
+    ],
+    "modmenu": [
+      "net.tigereye.spellbound.config.SBModMenuIntegration"
     ]
   },
   "mixins": [

@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.registration.SBEnchantments;
 
 import java.util.Iterator;
@@ -30,7 +31,8 @@ public class LegacyEnchantment extends SBEnchantment{
     }
 
     public int getMaxLevel() {
-        return 1;
+        if(Spellbound.config.LEGACY_ENABLED) return 1;
+        else return 0;
     }
 
     public boolean isAcceptableItem(ItemStack stack) {

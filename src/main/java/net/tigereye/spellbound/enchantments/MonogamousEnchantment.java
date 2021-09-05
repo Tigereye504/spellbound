@@ -10,6 +10,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
+import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
@@ -32,7 +33,8 @@ public class MonogamousEnchantment extends SBEnchantment{
 
     @Override
     public int getMaxLevel() {
-        return 1;
+        if(Spellbound.config.MONOGAMOUS_ENABLED) return 1;
+        else return 0;
     }
 
     @Override

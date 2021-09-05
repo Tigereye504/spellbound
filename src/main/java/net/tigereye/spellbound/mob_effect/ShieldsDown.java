@@ -3,9 +3,9 @@ package net.tigereye.spellbound.mob_effect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectType;
+import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.RedAlertEnchantment;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
-import net.tigereye.spellbound.registration.SBConfig;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
@@ -25,7 +25,7 @@ public class ShieldsDown extends SBStatusEffect{
             int redAlert = SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
             if(redAlert > 0){
                 entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
-                        SBConfig.SHIELD_DURATION + RedAlertEnchantment.getModifiedRecoveryRate(entity,redAlert),
+                        Spellbound.config.SHIELD_DURATION + RedAlertEnchantment.getModifiedRecoveryRate(entity,redAlert),
                         0, false, false, true));
             }
         }
@@ -36,7 +36,7 @@ public class ShieldsDown extends SBStatusEffect{
         if(redAlert > 0) {
             int mrr = RedAlertEnchantment.getModifiedRecoveryRate(entity, redAlert);
             return new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN,
-                    Math.min(SBConfig.SHIELD_DURATION + mrr, duration),
+                    Math.min(Spellbound.config.SHIELD_DURATION + mrr, duration),
                     0);
         }
         return null;

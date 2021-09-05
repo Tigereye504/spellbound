@@ -29,7 +29,8 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
 
     @Override
     public int getMaxLevel() {
-        return 5;
+        if(Spellbound.config.PRIMING_ENABLED) return 5;
+        else return 0;
     }
 
     @Override

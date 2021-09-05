@@ -9,6 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.SpellboundPlayerEntity;
 
 public class ImpersonalEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
@@ -30,7 +31,9 @@ public class ImpersonalEnchantment extends SBEnchantment implements CustomCondit
 
     @Override
     public int getMaxLevel() {
-        return 1;
+
+        if(Spellbound.config.IMPERSONAL_ENABLED) return 1;
+        else return 0;
     }
 
     @Override
