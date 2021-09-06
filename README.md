@@ -42,7 +42,27 @@
 
  
 
-<b>Red Alert</b> is a protection enchantment that grants the user a shield every several seconds, which will negate the next source of damage. The user's maximum number of shields and generation speed vary with the number of enchanted items and their total Red Alert level. Appears on armor, compatible with shields, incompatible with other protection enchantments.
+**Attractive** is a utility enchantment that draws nearby entities closer to the wearer, perfect for keeping flighty foes from escaping and for magnetizing drops. Appears on chest armor, incompatible with other utility enchantments.
+
+ 
+
+**Hearty** is a protection enchantment that greatly increases the users maximum health. Appears on armor, compatible with shields, incompatible with other protection enchantments. 
+
+ 
+
+**Phase Leap** is a utility enchantment that lets the user warp forward small distances with every jump unless they crouch, enhancing travel speed and maneuverability. Appears on leg armor, incompatible with other utility enchantments.
+
+ 
+
+**Phase Strafe** is a utility enchantment that lets the user warp small distances in whatever direction they are moving with every jump unless they crouch, enhancing travel speed and maneuverability. Appears on leg armor, incompatible with other utility enchantments.
+
+ 
+
+**Red Alert** is a protection enchantment that grants the user a shield every several seconds, which will negate the next source of damage. The user's maximum number of shields and generation speed vary with the number of enchanted items and their total Red Alert level. Appears on armor, compatible with shields, incompatible with other protection enchantments.
+
+ 
+
+**Repulsive** is a utility enchantment that pushes nearby entities away from the wearer, perfect for keeping aggressive foes at bay and turning aside some projectiles. Appears on chest armor.
 
  
 
