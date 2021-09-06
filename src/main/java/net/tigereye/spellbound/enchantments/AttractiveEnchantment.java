@@ -2,6 +2,7 @@ package net.tigereye.spellbound.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -37,7 +38,9 @@ public class AttractiveEnchantment extends SBEnchantment implements UtilityEncha
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         World world = entity.getEntityWorld();
         if(!world.isClient()){
-            SpellboundUtil.pushPullEntitiesPlayersInRange(Spellbound.config.ATTRACTION_RANGE,Spellbound.config.ATTRACTION_STRENGTH,entity);
+            if(stack == entity.getEquippedStack(EquipmentSlot.CHEST)) {
+                SpellboundUtil.pushPullEntitiesPlayersInRange(Spellbound.config.ATTRACTION_RANGE, Spellbound.config.ATTRACTION_STRENGTH, entity);
+            }
         }
     }
 

@@ -53,9 +53,9 @@ public class HeartyEnchantment extends SBEnchantment implements CustomConditions
         EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if(att != null) {
             EntityAttributeModifier mod = new EntityAttributeModifier(HEARTY_ID, "SpellboundHeartyMaxHP",
-                    (SBEnchantmentHelper.getSpellboundEnchantmentAmount(entity.getItemsEquipped(),SBEnchantments.HEARTY)+
-                            SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(),SBEnchantments.HEARTY))
-                            * Spellbound.config.HEARTY_HEALTH_FACTOR_PER_LEVEL,EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+                    (SBEnchantmentHelper.getSpellboundEnchantmentAmount(entity.getItemsEquipped(),SBEnchantments.HEARTY)*Spellbound.config.HEARTY_HEALTH_FACTOR_PER_LEVEL)+
+                            (SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(),SBEnchantments.HEARTY)*Spellbound.config.HEARTY_HEALTH_FACTOR_BASE)
+                            ,EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
             ReplaceAttributeModifier(att, mod);
             if(entity.getHealth() > entity.getMaxHealth()){
                 entity.setHealth(entity.getMaxHealth());

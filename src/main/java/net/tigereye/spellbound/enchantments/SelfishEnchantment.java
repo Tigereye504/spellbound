@@ -94,7 +94,7 @@ public class SelfishEnchantment extends SBEnchantment{
     @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other)
-                && other != Enchantments.UNBREAKING
-                && other != Enchantments.MENDING;
+                && other.canCombine(Enchantments.UNBREAKING)
+                && other.canCombine(Enchantments.MENDING);
     }
 }

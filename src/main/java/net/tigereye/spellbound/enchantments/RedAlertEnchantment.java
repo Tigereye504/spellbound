@@ -53,12 +53,12 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
                     if(redAlertCount > 0){
                         entity.removeStatusEffect(SBStatusEffects.SHIELDED);
                         entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
-                                Spellbound.config.SHIELD_DURATION,
+                                Spellbound.config.RED_ALERT_SHIELD_DURATION,
                                 Math.min(redAlertCount-1,shielded.getAmplifier()+1), false, false, true));
                     }
                 }
                 else{
-                    entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,Spellbound.config.SHIELD_DURATION,0, false, false, true));
+                    entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,Spellbound.config.RED_ALERT_SHIELD_DURATION,0, false, false, true));
                 }
             }
         }
@@ -79,11 +79,11 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
     }
     public static int getModifiedRecoveryRate(LivingEntity entity, int redAlertCount){
         if(redAlertCount == 0){
-            return Spellbound.config.SHIELD_RECOVERY_RATE;
+            return Spellbound.config.RED_ALERT_RECOVERY_RATE;
         }
         int redAlertLevel = SBEnchantmentHelper.getSpellboundEnchantmentAmount(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
-        return Math.max(Spellbound.config.MINIMUM_SHIELD_RECOVERY_TIME,
-                Spellbound.config.SHIELD_RECOVERY_RATE-(Spellbound.config.SHIELD_RECOVERY_REDUCTION*Math.max(0,redAlertLevel-redAlertCount)/redAlertCount));
+        return Math.max(Spellbound.config.RED_ALERT_MINIMUM_RECOVERY_TIME,
+                Spellbound.config.RED_ALERT_RECOVERY_RATE -(Spellbound.config.RED_ALERT_RECOVERY_REDUCTION *Math.max(0,redAlertLevel-redAlertCount)/redAlertCount));
     }
 
     @Override

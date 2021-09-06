@@ -43,6 +43,9 @@ public class PhaseLeapEnchantment extends SBEnchantment implements UtilityEnchan
         if(entity.getPose() == EntityPose.CROUCHING){
             return;
         }
+        if(stack != entity.getEquippedStack(EquipmentSlot.LEGS)){
+            return;
+        }
         Vec3d position = entity.getPos().add(0,.5,0);
         Vec3d direction = entity.getRotationVector();
         direction = direction.multiply(1,0,1);

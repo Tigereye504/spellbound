@@ -21,10 +21,11 @@ public class SBEnchantments {
     public static final SBEnchantment JOUSTING = new JoustingEnchantment();
     public static final SBEnchantment LAUNCHING = new LaunchingEnchantment();
     public static final SBEnchantment LEGACY = new LegacyEnchantment();
-    //public static final Enchantment MOUNTED = new MountedEnchantment();
+    public static final SBEnchantment MOUNTED = new MountedEnchantment();
     public static final SBEnchantment MONOGAMOUS = new MonogamousEnchantment();
     public static final SBEnchantment PHASE_LEAP = new PhaseLeapEnchantment();
     public static final SBEnchantment PHASE_STRAFE = new PhaseStrafeEnchantment();
+    public static final SBEnchantment PHOTOSYNTHETIC = new PhotosyntheticEnchantment();
     public static final SBEnchantment POLYGAMOUS = new PolygamousEnchantment();
     public static final SBEnchantment PRIMING = new PrimingEnchantment();
     public static final SBEnchantment RAMPAGE = new RampageEnchantment();
@@ -44,10 +45,11 @@ public class SBEnchantments {
         register("jousting", JOUSTING);
         register("launching", LAUNCHING);
         register("legacy", LEGACY);
-        //Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, "mounted"), MOUNTED);
+        register("mounted", MOUNTED);
         register("monogamous", MONOGAMOUS);
         register("phase_leap", PHASE_LEAP);
         register("phase_strafe", PHASE_STRAFE);
+        register("photosynthetic", PHOTOSYNTHETIC);
         register("polygamous", POLYGAMOUS);
         register("priming", PRIMING);
         register("rampage", RAMPAGE);

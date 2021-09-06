@@ -200,7 +200,6 @@ public class SBEnchantmentHelper {
         for (ItemStack itemStack : stacks) {
             forEachSpellboundEnchantment(consumer, itemStack);
         }
-
     }
 
     public static int getSpellboundEnchantmentAmount(Iterable<ItemStack> equipment, Enchantment target) {

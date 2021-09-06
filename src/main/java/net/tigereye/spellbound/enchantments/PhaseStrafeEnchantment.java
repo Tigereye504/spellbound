@@ -43,6 +43,9 @@ public class PhaseStrafeEnchantment extends SBEnchantment implements UtilityEnch
         if(entity.getPose() == EntityPose.CROUCHING){
             return;
         }
+        if(stack != entity.getEquippedStack(EquipmentSlot.LEGS)){
+            return;
+        }
         Vec3d position = entity.getPos().add(0,.5,0);
         Vec3d direction;
         if(entity instanceof PlayerEntity){
