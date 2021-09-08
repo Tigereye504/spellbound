@@ -9,9 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 
-public class PhotosyntheticEnchantment extends SBEnchantment{
+public class SkotosyntheticEnchantment extends SBEnchantment{
 
-    public PhotosyntheticEnchantment() {
+    public SkotosyntheticEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
     }
 
@@ -27,7 +27,7 @@ public class PhotosyntheticEnchantment extends SBEnchantment{
 
     @Override
     public int getMaxLevel() {
-        if(Spellbound.config.PHOTOSYNTHETIC_ENABLED) return 1;
+        if(Spellbound.config.SKOTOSYNTHETIC_ENABLED) return 1;
         else return 0;
     }
 
@@ -41,11 +41,11 @@ public class PhotosyntheticEnchantment extends SBEnchantment{
         World world = entity.world;
         if(!world.isClient() && stack.isDamaged()){
             int light = world.getLightLevel(entity.getBlockPos());
-            if(light < Spellbound.config.PHOTOSYNTHETIC_LIGHT_MINIMUM){
+            if(light > Spellbound.config.SKOTOSYNTHETIC_LIGHT_MAXIMUM){
                 return;
             }
-            int periodMultiplier = Math.max(1,16 - light);
-            if(entity.world.getTime() % ((long) Spellbound.config.PHOTOSYNTHETIC_REPAIR_PERIOD*periodMultiplier) == 0){
+            int periodMultiplier = Math.max(1,light+1);
+            if(entity.world.getTime() % ((long) Spellbound.config.SKOTOSYNTHETIC_REPAIR_PERIOD*periodMultiplier) == 0){
                 stack.setDamage(stack.getDamage()-1);
             }
         }

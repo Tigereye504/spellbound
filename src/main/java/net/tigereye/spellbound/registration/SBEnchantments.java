@@ -33,6 +33,7 @@ public class SBEnchantments {
     public static final SBEnchantment REPULSIVE = new RepulsiveEnchantment();
     public static final SBEnchantment ROCK_COLLECTING = new RockCollectorEnchantment();
     public static final SBEnchantment SELFISH = new SelfishEnchantment();
+    public static final SBEnchantment SKOTOSYNTHETIC = new SkotosyntheticEnchantment();
     public static final SBEnchantment TETHERING = new TetheringEnchantment();
     public static final SBEnchantment TROPHY_COLLECTING = new TrophyCollectorEnchantment();
 
@@ -57,6 +58,7 @@ public class SBEnchantments {
         register("rock_collecting", ROCK_COLLECTING);
         register("red_alert", RED_ALERT);
         register("selfish", SELFISH);
+        register("skotosynthetic", SKOTOSYNTHETIC);
         register("tethering", TETHERING);
         register("trophy_collecting", TROPHY_COLLECTING);
     }

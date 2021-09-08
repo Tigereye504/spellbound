@@ -48,6 +48,8 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean SELFISH_ENABLED = true;
     @ConfigEntry.Category("inclusion")
+    public boolean SKOTOSYNTHETIC_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
     public boolean TETHERING_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean TROPHY_COLLECTOR_ENABLED = true;
@@ -73,7 +75,7 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("details")
     public float MOUNTED_PROJECTILE_PER_LEVEL = .3f;
     @ConfigEntry.Category("details")
-    public int PHOTOSYNTHETIC_LIGHT_CUTOFF = 8;
+    public int PHOTOSYNTHETIC_LIGHT_MINIMUM = 8;
     @ConfigEntry.Category("details")
     public int PHOTOSYNTHETIC_REPAIR_PERIOD = 40;
     @ConfigEntry.Category("details")
@@ -92,6 +94,10 @@ public class SBConfig implements ConfigData {
     public int RED_ALERT_SHIELD_DURATION = 600;
     @ConfigEntry.Category("details")
     public int RED_ALERT_MINIMUM_RECOVERY_TIME = 20; //in case enchantment levels get dumb
+    @ConfigEntry.Category("details")
+    public int SKOTOSYNTHETIC_LIGHT_MAXIMUM = 7;
+    @ConfigEntry.Category("details")
+    public int SKOTOSYNTHETIC_REPAIR_PERIOD = 40;
     @ConfigEntry.Category("details")
     public double TETHER_ATTRACTION_FACTOR = 1;
 }
