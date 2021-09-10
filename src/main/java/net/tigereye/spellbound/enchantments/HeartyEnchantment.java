@@ -24,6 +24,7 @@ public class HeartyEnchantment extends SBEnchantment implements CustomConditions
 
     public HeartyEnchantment() {
         super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
+        REQUIRES_PREFERRED_SLOT = true;
     }
 
     @Override
@@ -50,11 +51,14 @@ public class HeartyEnchantment extends SBEnchantment implements CustomConditions
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
+        if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
+            return;
+        }
         EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if(att != null) {
             EntityAttributeModifier mod = new EntityAttributeModifier(HEARTY_ID, "SpellboundHeartyMaxHP",
                     (SBEnchantmentHelper.getSpellboundEnchantmentAmount(entity.getItemsEquipped(),SBEnchantments.HEARTY)*Spellbound.config.HEARTY_HEALTH_FACTOR_PER_LEVEL)+
-                            (SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(),SBEnchantments.HEARTY)*Spellbound.config.HEARTY_HEALTH_FACTOR_BASE)
+                            (SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getItemsEquipped(),SBEnchantments.HEARTY,entity)*Spellbound.config.HEARTY_HEALTH_FACTOR_BASE)
                             ,EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
             ReplaceAttributeModifier(att, mod);
             if(entity.getHealth() > entity.getMaxHealth()){
@@ -64,7 +68,7 @@ public class HeartyEnchantment extends SBEnchantment implements CustomConditions
     }
 
     public void onTickAlways(LivingEntity entity){
-        if(SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(),SBEnchantments.HEARTY) == 0){
+        if(SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getItemsEquipped(),SBEnchantments.HEARTY,entity) == 0){
             EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
             if(att != null){
                 att.removeModifier(HEARTY_ID);

@@ -16,6 +16,7 @@ public class LaunchingEnchantment extends SBEnchantment implements CustomConditi
 
     public LaunchingEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override

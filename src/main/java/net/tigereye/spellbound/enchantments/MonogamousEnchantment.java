@@ -19,6 +19,7 @@ public class MonogamousEnchantment extends SBEnchantment{
 
     public MonogamousEnchantment() {
         super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.MAINHAND,EquipmentSlot.OFFHAND});
+        REQUIRES_PREFERRED_SLOT = true;
     }
 
     @Override

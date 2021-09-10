@@ -27,6 +27,7 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
     private static final String UNIQUE_ROCK_COUNT_KEY = Spellbound.MODID+"UniqueRockCount";
     public RockCollectorEnchantment() {
         super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = true;
     }
 
     @Override

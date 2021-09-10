@@ -16,6 +16,7 @@ public class AttractiveEnchantment extends SBEnchantment implements UtilityEncha
 
     public AttractiveEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.CHEST});
+        REQUIRES_PREFERRED_SLOT = true;
     }
 
     @Override
@@ -38,9 +39,10 @@ public class AttractiveEnchantment extends SBEnchantment implements UtilityEncha
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         World world = entity.getEntityWorld();
         if(!world.isClient()){
-            if(stack == entity.getEquippedStack(EquipmentSlot.CHEST)) {
-                SpellboundUtil.pushPullEntitiesPlayersInRange(Spellbound.config.ATTRACTION_RANGE, Spellbound.config.ATTRACTION_STRENGTH, entity);
+            if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
+                return;
             }
+            SpellboundUtil.pushPullEntitiesPlayersInRange(Spellbound.config.ATTRACTION_RANGE, Spellbound.config.ATTRACTION_STRENGTH, entity);
         }
     }
 

@@ -13,6 +13,7 @@ public class SkotosyntheticEnchantment extends SBEnchantment{
 
     public SkotosyntheticEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override

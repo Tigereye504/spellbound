@@ -17,6 +17,7 @@ public class PhaseStrafeEnchantment extends SBEnchantment implements UtilityEnch
 
     public PhaseStrafeEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});
+        REQUIRES_PREFERRED_SLOT = true;
     }
 
     @Override

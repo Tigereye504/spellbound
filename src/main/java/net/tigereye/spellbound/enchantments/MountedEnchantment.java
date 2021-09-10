@@ -14,6 +14,7 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
 
     public MountedEnchantment() {
         super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override

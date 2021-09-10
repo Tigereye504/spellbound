@@ -98,7 +98,14 @@ public class SBEnchantmentHelper {
 
     //called at the head of LivingEntity::tick
     public static void onTickWhileEquipped(LivingEntity entity){
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment)enchantment).onTickWhileEquipped(level, itemStack, entity),entity.getItemsEquipped());
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
+            if(((SBEnchantment)enchantment).requiresPreferredSlot()) {
+                if (entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) != itemStack) {
+                    return;
+                }
+            }
+            ((SBEnchantment)enchantment).onTickWhileEquipped(level, itemStack, entity);
+        },entity.getItemsEquipped());
     }
 
     public static void onTickAlways(LivingEntity entity){
@@ -225,7 +232,16 @@ public class SBEnchantmentHelper {
         }, equipment);
         return mutableInt.intValue();
     }
-
+    public static int countSpellboundEnchantmentInstancesCorrectlyWorn(Iterable<ItemStack> equipment, Enchantment target,LivingEntity entity) {
+        MutableInt mutableInt = new MutableInt();
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
+            if(enchantment == target &&
+                    doesPassPreferenceRequirement((SBEnchantment) enchantment,itemStack,entity)) {
+                mutableInt.add(1);
+            }
+        }, equipment);
+        return mutableInt.intValue();
+    }
     //returns false if they are pologamous, true if they are monogamous
     public static boolean testOwnerFaithfulness(ItemStack stack, LivingEntity owner){
         if(owner.world.isClient()){
@@ -281,6 +297,13 @@ public class SBEnchantmentHelper {
         }
         //owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
         owner.addStatusEffect(new MonogamyInstance(id, Spellbound.config.INTIMACY_DURATION,0,false,false,true));
+        return true;
+    }
+
+    public static boolean doesPassPreferenceRequirement(SBEnchantment enchantment, ItemStack itemStack, LivingEntity entity){
+        if(enchantment.requiresPreferredSlot()) {
+            return entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) != itemStack;
+        }
         return true;
     }
 

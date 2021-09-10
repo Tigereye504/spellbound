@@ -17,6 +17,7 @@ public class PhaseLeapEnchantment extends SBEnchantment implements UtilityEnchan
 
     public PhaseLeapEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});
+        REQUIRES_PREFERRED_SLOT = true;
     }
 
     @Override

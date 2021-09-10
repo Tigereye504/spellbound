@@ -21,6 +21,7 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
 
     public CaveInEnchantment() {
         super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override

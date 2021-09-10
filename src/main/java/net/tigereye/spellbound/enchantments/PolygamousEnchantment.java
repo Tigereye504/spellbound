@@ -19,6 +19,7 @@ public class PolygamousEnchantment extends SBEnchantment{
 
     public PolygamousEnchantment() {
         super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.MAINHAND,EquipmentSlot.OFFHAND});
+        REQUIRES_PREFERRED_SLOT = true;
     }
 
     @Override

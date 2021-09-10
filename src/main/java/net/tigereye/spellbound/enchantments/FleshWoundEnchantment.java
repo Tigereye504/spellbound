@@ -14,6 +14,7 @@ public class FleshWoundEnchantment extends SBEnchantment implements CustomCondit
 
     public FleshWoundEnchantment() {
         super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
+        REQUIRES_PREFERRED_SLOT = true;
     }
 
     @Override

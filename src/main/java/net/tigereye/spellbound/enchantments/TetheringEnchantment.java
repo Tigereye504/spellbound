@@ -20,6 +20,7 @@ public class TetheringEnchantment extends SBEnchantment {
 
     public TetheringEnchantment() {
         super(Rarity.UNCOMMON, EnchantmentTarget.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override

@@ -17,6 +17,7 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
 
     public RampageEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override

@@ -20,6 +20,7 @@ public class LegacyEnchantment extends SBEnchantment{
 
     public LegacyEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     public int getMinPower(int level) {

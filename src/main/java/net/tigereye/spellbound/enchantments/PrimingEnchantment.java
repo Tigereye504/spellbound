@@ -19,6 +19,7 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
 
     public PrimingEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override

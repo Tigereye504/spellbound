@@ -13,6 +13,7 @@ public class PhotosyntheticEnchantment extends SBEnchantment{
 
     public PhotosyntheticEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override

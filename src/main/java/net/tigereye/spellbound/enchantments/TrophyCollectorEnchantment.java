@@ -27,8 +27,10 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
 
     private static final String TROPHY_COLLECTOR_KEY = Spellbound.MODID+"TrophyCollector";
     private static final String UNIQUE_TROPHY_COUNT_KEY = Spellbound.MODID+"UniqueTrophyCount";
+
     public TrophyCollectorEnchantment() {
         super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = true;
     }
 
     @Override

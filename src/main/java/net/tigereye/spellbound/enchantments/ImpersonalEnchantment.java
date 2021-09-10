@@ -17,6 +17,7 @@ public class ImpersonalEnchantment extends SBEnchantment implements CustomCondit
     public ImpersonalEnchantment() {
         //EnchantmentTarget is vanishable because I'm handling that myself and so want a very permissive filter
         super(Rarity.RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override

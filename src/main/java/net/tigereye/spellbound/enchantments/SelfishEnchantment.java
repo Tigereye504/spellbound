@@ -24,6 +24,7 @@ public class SelfishEnchantment extends SBEnchantment{
 
     public SelfishEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override

@@ -17,6 +17,7 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
 
     public JoustingEnchantment() {
         super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override

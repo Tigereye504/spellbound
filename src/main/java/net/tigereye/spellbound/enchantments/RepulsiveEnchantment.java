@@ -15,6 +15,7 @@ public class RepulsiveEnchantment extends SBEnchantment implements UtilityEnchan
 
     public RepulsiveEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.CHEST});
+        REQUIRES_PREFERRED_SLOT = true;
     }
 
     @Override
@@ -37,6 +38,9 @@ public class RepulsiveEnchantment extends SBEnchantment implements UtilityEnchan
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         World world = entity.getEntityWorld();
         if(!world.isClient()){
+            if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
+                return;
+            }
             if(stack == entity.getEquippedStack(EquipmentSlot.CHEST)) {
                 SpellboundUtil.pushPullEntitiesPlayersInRange(Spellbound.config.ATTRACTION_RANGE, -Spellbound.config.ATTRACTION_STRENGTH, entity);
             }

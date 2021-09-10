@@ -5,7 +5,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -18,13 +17,13 @@ import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.mutable.MutableFloat;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class SBEnchantment extends Enchantment {
+    protected boolean REQUIRES_PREFERRED_SLOT = true;
+
     protected SBEnchantment(Rarity weight, EnchantmentTarget type, EquipmentSlot[] slotTypes) {
         super(weight, type, slotTypes);
     }
@@ -101,5 +100,9 @@ public class SBEnchantment extends Enchantment {
     }
 
     public void onRedHealthDamage(int level, ItemStack itemStack, LivingEntity entity, float amount) {
+    }
+
+    public boolean requiresPreferredSlot(){
+        return REQUIRES_PREFERRED_SLOT;
     }
 }

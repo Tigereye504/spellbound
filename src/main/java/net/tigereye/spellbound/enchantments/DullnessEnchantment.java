@@ -11,6 +11,7 @@ public class DullnessEnchantment extends SBEnchantment {
 
     public DullnessEnchantment() {
         super(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override
