@@ -99,4 +99,7 @@ public class SBEnchantment extends Enchantment {
 
     public void onProjectileBlockHit(int level, ItemStack itemStack, ProjectileEntity projectileEntity, BlockHitResult blockHitResult) {
     }
+
+    public void onRedHealthDamage(int level, ItemStack itemStack, LivingEntity entity, float amount) {
+    }
 }

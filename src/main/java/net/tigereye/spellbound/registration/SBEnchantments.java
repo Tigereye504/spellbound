@@ -16,6 +16,7 @@ public class SBEnchantments {
     public static final SBEnchantment ATTRACTIVE = new AttractiveEnchantment();
     public static final SBEnchantment CAVE_IN = new CaveInEnchantment();
     public static final SBEnchantment DULLNESS = new DullnessEnchantment();
+    public static final SBEnchantment FLESH_WOUND = new FleshWoundEnchantment();
     public static final SBEnchantment HEARTY = new HeartyEnchantment();
     public static final SBEnchantment IMPERSONAL = new ImpersonalEnchantment();
     public static final SBEnchantment JOUSTING = new JoustingEnchantment();
@@ -41,6 +42,7 @@ public class SBEnchantments {
         register("attractive", ATTRACTIVE);
         register("cave_in", CAVE_IN);
         register("dullness", DULLNESS);
+        register("flesh_wound", FLESH_WOUND);
         register("hearty", HEARTY);
         register("impersonal", IMPERSONAL);
         register("jousting", JOUSTING);

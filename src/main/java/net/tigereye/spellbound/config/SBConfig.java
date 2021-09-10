@@ -14,6 +14,8 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean DULLNESS_ENABLED = true;
     @ConfigEntry.Category("inclusion")
+    public boolean FLESH_WOUND_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
     public boolean HEARTY_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean IMPERSONAL_ENABLED = true;
@@ -60,6 +62,8 @@ public class SBConfig implements ConfigData {
     public double ATTRACTION_STRENGTH = .03;
     @ConfigEntry.Category("details")
     public int CAVE_IN_MAX_BLAST_RES = 99;
+    @ConfigEntry.Category("details")
+    public float FLESH_WOUND_ABSORPTION_PER_DAMAGE_PER_LEVEL = 0.125F;
     @ConfigEntry.Category("details")
     public float HEARTY_HEALTH_FACTOR_BASE = .1f;
     @ConfigEntry.Category("details")

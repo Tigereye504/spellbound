@@ -135,6 +135,10 @@ public class SBEnchantmentHelper {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onEquipmentChange(level,itemStack,entity),entity.getArmorItems());
     }
 
+    public static void onRedHealthDamage(DamageSource source, LivingEntity entity, float amount) {
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onRedHealthDamage(level,itemStack,entity,amount),entity.getItemsEquipped());
+    }
+
     public static void onToolBreak(ItemStack stack, PlayerEntity entity) {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onToolBreak(level, itemStack, entity), stack);
     }
@@ -292,7 +296,6 @@ public class SBEnchantmentHelper {
         }
         return id;
     }
-
 
 
     @FunctionalInterface

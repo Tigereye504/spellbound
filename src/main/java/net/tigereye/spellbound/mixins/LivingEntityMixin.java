@@ -30,6 +30,11 @@ public class LivingEntityMixin extends Entity{
         return SBStatusEffectHelper.onPreArmorDefense(source,(LivingEntity)(Object)this,amount);
     }
 
+    @Inject(at = @At(value="CONSTANT", args="floatValue=0",ordinal = 1), method = "applyDamage")
+    public void spellboundLivingEntityApplyDamagePostDamageMixin(DamageSource source, float amount, CallbackInfo info){
+        SBEnchantmentHelper.onRedHealthDamage(source,(LivingEntity)(Object)this,amount);
+    }
+
     //Lnet/minecraft/enchantment/EnchantmentHelper;getProtectionAmount(
     //  Ljava/lang/Iterable;
     //  Lnet/minecraft/entity/damage/DamageSource;
