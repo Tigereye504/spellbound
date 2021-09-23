@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.damage;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.Enchantment;
@@ -20,10 +20,12 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 
 import java.util.*;
 
-public class TrophyCollectorEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
+public class TrophyCollectorEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     private static final String TROPHY_COLLECTOR_KEY = Spellbound.MODID+"TrophyCollector";
     private static final String UNIQUE_TROPHY_COUNT_KEY = Spellbound.MODID+"UniqueTrophyCount";

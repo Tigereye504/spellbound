@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.damage;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
@@ -11,9 +11,11 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
-public class RampageEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
+public class RampageEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public RampageEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});

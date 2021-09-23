@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.utility;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
@@ -13,11 +13,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.config.SBConfig;
+import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CaveInEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
+public class CaveInEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public CaveInEnchantment() {
         super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});

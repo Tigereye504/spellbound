@@ -1,18 +1,20 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.protection;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.enchantment.ProtectionEnchantment;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.*;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 
-public class RedAlertEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
+public class RedAlertEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public RedAlertEnchantment() {
         super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
@@ -42,6 +44,9 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
+        if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
+            return;
+        }
         if(entity.hasStatusEffect(SBStatusEffects.SHIELDS_DOWN)){
             StatusEffectInstance shields_down = entity.getStatusEffect(SBStatusEffects.SHIELDS_DOWN);
             if(shields_down.getDuration() <= 2){
@@ -72,7 +77,8 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
 
     @Override
     public boolean canAccept(Enchantment other) {
-        return !(other instanceof ProtectionEnchantment) && super.canAccept(other);
+        return super.canAccept(other)
+            && other.canCombine(Enchantments.PROTECTION);
     }
 
     public static int getModifiedRecoveryRate(LivingEntity entity){

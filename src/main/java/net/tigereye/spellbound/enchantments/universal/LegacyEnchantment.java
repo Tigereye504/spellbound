@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.universal;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -11,12 +11,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
 
 import java.util.Iterator;
 import java.util.Map;
 
-public class LegacyEnchantment extends SBEnchantment{
+public class LegacyEnchantment extends SBEnchantment {
 
     public LegacyEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});

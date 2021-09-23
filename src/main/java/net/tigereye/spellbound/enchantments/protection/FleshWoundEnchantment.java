@@ -1,16 +1,21 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.protection;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.*;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.registration.SBStatusEffects;
 
-public class FleshWoundEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
+public class FleshWoundEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public FleshWoundEnchantment() {
         super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
@@ -48,16 +53,20 @@ public class FleshWoundEnchantment extends SBEnchantment implements CustomCondit
                 itemStack.getItem() == Items.LEATHER_CHESTPLATE ||
                 itemStack.getItem() == Items.LEATHER_LEGGINGS ||
                 itemStack.getItem() == Items.LEATHER_HELMET){
-            if(((DyeableArmorItem) itemStack.getItem()).getColor(itemStack) == 1908001) {
-                level *= 3;
-            }
+            //if(((DyeableArmorItem) itemStack.getItem()).getColor(itemStack) == 1908001) {
+            //    level *= 3;
+            //}
+            level *= 3;
         }
-        entity.setAbsorptionAmount(entity.getAbsorptionAmount()+(level*amount*Spellbound.config.FLESH_WOUND_ABSORPTION_PER_DAMAGE_PER_LEVEL));
+        float absorption = entity.getAbsorptionAmount();
+        entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.BRAVADOS, 1200, 0,false,false,false));
+        entity.setAbsorptionAmount(absorption+(level*amount*Spellbound.config.FLESH_WOUND_ABSORPTION_PER_DAMAGE_PER_LEVEL));
     }
 
     @Override
     public boolean canAccept(Enchantment other) {
-        return !(other instanceof ProtectionEnchantment) && super.canAccept(other);
+        return super.canAccept(other)
+                && other.canCombine(Enchantments.PROTECTION);
     }
 
     @Override

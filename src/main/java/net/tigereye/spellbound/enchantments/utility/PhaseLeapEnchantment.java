@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.utility;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
@@ -9,13 +9,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.UtilityEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
 import net.tigereye.spellbound.util.VectorUtil;
 
-public class PhaseStrafeEnchantment extends SBEnchantment implements UtilityEnchantment {
+public class PhaseLeapEnchantment extends SBEnchantment implements UtilityEnchantment {
 
-    public PhaseStrafeEnchantment() {
+    public PhaseLeapEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});
         REQUIRES_PREFERRED_SLOT = true;
     }
@@ -32,7 +33,7 @@ public class PhaseStrafeEnchantment extends SBEnchantment implements UtilityEnch
 
     @Override
     public int getMaxLevel() {
-        if(Spellbound.config.PHASE_STRAFE_ENABLED) return 3;
+        if(Spellbound.config.PHASE_LEAP_ENABLED) return 3;
         else return 0;
     }
 
@@ -48,28 +49,15 @@ public class PhaseStrafeEnchantment extends SBEnchantment implements UtilityEnch
             return;
         }
         Vec3d position = entity.getPos().add(0,.5,0);
-        Vec3d direction;
-        if(entity instanceof PlayerEntity){
-            direction = entity.getVelocity();
-        }
-        else {
-            direction = SpellboundUtil.readMotionTracker(entity, stack);
-        }
+        Vec3d direction = entity.getRotationVector();
         direction = direction.multiply(1,0,1);
         position = VectorUtil.findCollisionWithStepAssistOnLine(entity.getEntityWorld(),position,direction,level);
         if(position == null){return;}
         if(Spellbound.DEBUG) {
-            Spellbound.LOGGER.info("Phase Strafe teleporting from position [" + entity.getX() + "," + entity.getY() + "," + entity.getZ() + "]");
-            Spellbound.LOGGER.info("Phase Strafe teleporting to position [" + position.getX() + "," + position.getY() + "," + position.getZ() + "]");
+            Spellbound.LOGGER.info("Phase leap teleporting from position [" + entity.getX() + "," + entity.getY() + "," + entity.getZ() + "]");
+            Spellbound.LOGGER.info("Phase leap teleporting to position [" + position.getX() + "," + position.getY() + "," + position.getZ() + "]");
         }
         entity.updatePosition(position.x, position.y, position.z);
-    }
-
-    @Override
-    public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        if(!(entity instanceof PlayerEntity)) {
-            SpellboundUtil.setMotionTracker(stack, entity);
-        }
     }
 
     @Override

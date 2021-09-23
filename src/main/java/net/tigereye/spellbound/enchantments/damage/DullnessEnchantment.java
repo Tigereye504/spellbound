@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.damage;
 
 import net.minecraft.enchantment.*;
 import net.minecraft.entity.EntityGroup;
@@ -6,6 +6,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 
 public class DullnessEnchantment extends SBEnchantment {
 

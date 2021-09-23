@@ -30,6 +30,8 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean MOUNTED_ENABLED = false;
     @ConfigEntry.Category("inclusion")
+    public boolean OUTBURST_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
     public boolean PHASE_LEAP_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean PHASE_STRAFE_ENABLED = true;
@@ -78,6 +80,12 @@ public class SBConfig implements ConfigData {
     public float MOUNTED_PROJECTILE_BASE = .5f;
     @ConfigEntry.Category("details")
     public float MOUNTED_PROJECTILE_PER_LEVEL = .3f;
+    @ConfigEntry.Category("details")
+    public int OUTBURST_RAGE_PER_HIT = 2;
+    @ConfigEntry.Category("details")
+    public int OUTBURST_RAGE_THRESHOLD = 6;
+    @ConfigEntry.Category("details")
+    public float OUTBURST_SHOCKWAVE_POWER = 1.5f;
     @ConfigEntry.Category("details")
     public int PHOTOSYNTHETIC_LIGHT_MINIMUM = 8;
     @ConfigEntry.Category("details")

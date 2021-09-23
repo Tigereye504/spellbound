@@ -1,7 +1,8 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.protection;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -13,12 +14,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 
 import java.util.UUID;
 
-public class HeartyEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
+public class HeartyEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     private static final UUID HEARTY_ID = UUID.fromString("94e1b6fd-beb6-4163-9beb-904374c69857");
 
@@ -57,7 +60,7 @@ public class HeartyEnchantment extends SBEnchantment implements CustomConditions
         EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if(att != null) {
             EntityAttributeModifier mod = new EntityAttributeModifier(HEARTY_ID, "SpellboundHeartyMaxHP",
-                    (SBEnchantmentHelper.getSpellboundEnchantmentAmount(entity.getItemsEquipped(),SBEnchantments.HEARTY)*Spellbound.config.HEARTY_HEALTH_FACTOR_PER_LEVEL)+
+                    (SBEnchantmentHelper.getSpellboundEnchantmentAmountCorrectlyWorn(entity.getItemsEquipped(),SBEnchantments.HEARTY,entity)*Spellbound.config.HEARTY_HEALTH_FACTOR_PER_LEVEL)+
                             (SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getItemsEquipped(),SBEnchantments.HEARTY,entity)*Spellbound.config.HEARTY_HEALTH_FACTOR_BASE)
                             ,EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
             ReplaceAttributeModifier(att, mod);
@@ -81,7 +84,8 @@ public class HeartyEnchantment extends SBEnchantment implements CustomConditions
 
     @Override
     public boolean canAccept(Enchantment other) {
-        return !(other instanceof ProtectionEnchantment) && super.canAccept(other);
+        return super.canAccept(other)
+                && other.canCombine(Enchantments.PROTECTION);
     }
 
     @Override

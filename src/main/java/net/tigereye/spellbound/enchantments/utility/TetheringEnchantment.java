@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.utility;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -12,11 +12,13 @@ import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.interfaces.UtilityEnchantment;
 import net.tigereye.spellbound.mob_effect.instance.TetheredInstance;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
-public class TetheringEnchantment extends SBEnchantment {
+public class TetheringEnchantment extends SBEnchantment implements UtilityEnchantment {
 
     public TetheringEnchantment() {
         super(Rarity.UNCOMMON, EnchantmentTarget.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
@@ -68,7 +70,7 @@ public class TetheringEnchantment extends SBEnchantment {
 
     @Override
     public boolean canAccept(Enchantment other) {
-        return super.canAccept(other);
+        return super.canAccept(other) && !(other instanceof UtilityEnchantment);
     }
 
     private void tetherTarget(int level, Entity anchor, LivingEntity target){

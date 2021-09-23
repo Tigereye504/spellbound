@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.utility;
 
 import net.minecraft.enchantment.DamageEnchantment;
 import net.minecraft.enchantment.Enchantment;
@@ -11,8 +11,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.SpellboundPlayerEntity;
+import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 
-public class LaunchingEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
+public class LaunchingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public LaunchingEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});

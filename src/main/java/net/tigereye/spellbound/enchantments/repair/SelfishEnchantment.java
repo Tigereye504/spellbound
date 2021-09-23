@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.repair;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -15,12 +15,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
 
 import java.util.Iterator;
 import java.util.Random;
 
-public class SelfishEnchantment extends SBEnchantment{
+public class SelfishEnchantment extends SBEnchantment {
 
     public SelfishEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});

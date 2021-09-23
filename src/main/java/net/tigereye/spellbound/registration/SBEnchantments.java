@@ -1,10 +1,22 @@
 package net.tigereye.spellbound.registration;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.*;
+import net.tigereye.spellbound.enchantments.damage.*;
+import net.tigereye.spellbound.enchantments.efficiency.RockCollectorEnchantment;
+import net.tigereye.spellbound.enchantments.personality.MonogamousEnchantment;
+import net.tigereye.spellbound.enchantments.personality.PolygamousEnchantment;
+import net.tigereye.spellbound.enchantments.protection.FleshWoundEnchantment;
+import net.tigereye.spellbound.enchantments.protection.HeartyEnchantment;
+import net.tigereye.spellbound.enchantments.protection.RedAlertEnchantment;
+import net.tigereye.spellbound.enchantments.repair.PhotosyntheticEnchantment;
+import net.tigereye.spellbound.enchantments.repair.SelfishEnchantment;
+import net.tigereye.spellbound.enchantments.repair.SkotosyntheticEnchantment;
+import net.tigereye.spellbound.enchantments.retaliation.OutburstEnchantment;
+import net.tigereye.spellbound.enchantments.universal.LegacyEnchantment;
+import net.tigereye.spellbound.enchantments.utility.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +36,7 @@ public class SBEnchantments {
     public static final SBEnchantment LEGACY = new LegacyEnchantment();
     public static final SBEnchantment MOUNTED = new MountedEnchantment();
     public static final SBEnchantment MONOGAMOUS = new MonogamousEnchantment();
+    public static final SBEnchantment OUTBURST = new OutburstEnchantment();
     public static final SBEnchantment PHASE_LEAP = new PhaseLeapEnchantment();
     public static final SBEnchantment PHASE_STRAFE = new PhaseStrafeEnchantment();
     public static final SBEnchantment PHOTOSYNTHETIC = new PhotosyntheticEnchantment();
@@ -50,6 +63,7 @@ public class SBEnchantments {
         register("legacy", LEGACY);
         register("mounted", MOUNTED);
         register("monogamous", MONOGAMOUS);
+        register("outburst", OUTBURST);
         register("phase_leap", PHASE_LEAP);
         register("phase_strafe", PHASE_STRAFE);
         register("photosynthetic", PHOTOSYNTHETIC);

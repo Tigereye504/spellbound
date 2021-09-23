@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.damage;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
@@ -11,9 +11,11 @@ import net.minecraft.item.*;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
-public class JoustingEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
+public class JoustingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public JoustingEnchantment() {
         super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
@@ -55,11 +57,11 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
             String out;
             out = "Dot Product: " + dotP;
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
-            out = "Relative Velocity: " + relativeVelocity.toString();
+            out = "Relative Velocity: " + relativeVelocity;
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
             out = "Attacker Facing: " + attackerFacing.toString();
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
-            out = "Attacker Velocity: " + attackerVelocity.toString();
+            out = "Attacker Velocity: " + attackerVelocity;
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
             out = "Defender Velocity: " + defender.getVelocity().toString();
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);

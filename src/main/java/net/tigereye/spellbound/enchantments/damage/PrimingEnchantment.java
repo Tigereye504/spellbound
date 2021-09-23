@@ -1,8 +1,9 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.damage;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -12,10 +13,12 @@ import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.SBStatusEffect;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
-public class PrimingEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
+public class PrimingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public PrimingEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
@@ -55,7 +58,9 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
 
     @Override
     public boolean canAccept(Enchantment other) {
-        return super.canAccept(other);
+        return super.canAccept(other)
+                && other.canCombine(Enchantments.SHARPNESS)
+                && other.canCombine(Enchantments.POWER);
     }
 
     @Override

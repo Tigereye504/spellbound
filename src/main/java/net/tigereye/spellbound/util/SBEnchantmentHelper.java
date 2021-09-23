@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -223,6 +224,16 @@ public class SBEnchantmentHelper {
         return mutableInt.intValue();
     }
 
+    public static int getSpellboundEnchantmentAmountCorrectlyWorn(Iterable<ItemStack> equipment, Enchantment target, LivingEntity entity) {
+        MutableInt mutableInt = new MutableInt();
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
+            if(enchantment == target && entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) == itemStack) {
+                mutableInt.add(level);
+            }
+        }, equipment);
+        return mutableInt.intValue();
+    }
+
     public static int countSpellboundEnchantmentInstances(Iterable<ItemStack> equipment, Enchantment target) {
         MutableInt mutableInt = new MutableInt();
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
@@ -302,7 +313,7 @@ public class SBEnchantmentHelper {
 
     public static boolean doesPassPreferenceRequirement(SBEnchantment enchantment, ItemStack itemStack, LivingEntity entity){
         if(enchantment.requiresPreferredSlot()) {
-            return entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) != itemStack;
+            return entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) == itemStack;
         }
         return true;
     }

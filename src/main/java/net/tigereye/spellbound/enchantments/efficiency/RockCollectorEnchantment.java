@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments;
+package net.tigereye.spellbound.enchantments.efficiency;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
@@ -18,10 +18,12 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 
 import java.util.*;
 
-public class RockCollectorEnchantment extends SBEnchantment implements CustomConditionsEnchantment{
+public class RockCollectorEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     private static final String ROCK_COLLECTOR_KEY = Spellbound.MODID+"RockCollector";
     private static final String UNIQUE_ROCK_COUNT_KEY = Spellbound.MODID+"UniqueRockCount";
