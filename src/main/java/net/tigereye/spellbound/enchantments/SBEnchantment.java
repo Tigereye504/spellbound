@@ -112,4 +112,14 @@ public abstract class SBEnchantment extends Enchantment {
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack) && isEnabled();
     }
+
+    @Override
+    public boolean isAvailableForEnchantedBookOffer() {
+        return isEnabled();
+    }
+
+    @Override
+    public boolean isAvailableForRandomSelection() {
+        return isEnabled();
+    }
 }
