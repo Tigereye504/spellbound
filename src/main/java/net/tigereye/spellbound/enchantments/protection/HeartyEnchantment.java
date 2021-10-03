@@ -41,9 +41,13 @@ public class HeartyEnchantment extends SBEnchantment implements CustomConditions
     }
 
     @Override
-    public int getMaxLevel() {
+    public boolean isEnabled() {
+        return Spellbound.config.HEARTY_ENABLED;
+    }
 
-        if(Spellbound.config.HEARTY_ENABLED) return 4;
+    @Override
+    public int getMaxLevel() {
+        if(isEnabled()) return 4;
         else return 0;
     }
 

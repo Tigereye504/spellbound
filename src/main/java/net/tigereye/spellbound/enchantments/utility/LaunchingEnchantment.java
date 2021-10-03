@@ -32,8 +32,13 @@ public class LaunchingEnchantment extends SBEnchantment implements CustomConditi
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.LAUNCHING_ENABLED;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(Spellbound.config.LAUNCHING_ENABLED) return 2;
+        if(isEnabled()) return 2;
         else return 0;
     }
 

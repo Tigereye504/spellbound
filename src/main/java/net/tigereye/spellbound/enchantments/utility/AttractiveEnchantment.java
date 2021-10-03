@@ -31,8 +31,13 @@ public class AttractiveEnchantment extends SBEnchantment implements UtilityEncha
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.ATTRACTIVE_ENABLED;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(Spellbound.config.ATTRACTIVE_ENABLED) return 1;
+        if(isEnabled()) return 1;
         else return 0;
     }
 

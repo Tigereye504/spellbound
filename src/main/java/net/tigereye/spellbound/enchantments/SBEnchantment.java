@@ -21,12 +21,14 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SBEnchantment extends Enchantment {
+public abstract class SBEnchantment extends Enchantment {
     protected boolean REQUIRES_PREFERRED_SLOT = true;
 
     protected SBEnchantment(Rarity weight, EnchantmentTarget type, EquipmentSlot[] slotTypes) {
         super(weight, type, slotTypes);
     }
+
+    public abstract boolean isEnabled();
 
     //returned float is added to attack damage. Negatives work, the final damage floors at 0 though.
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
@@ -104,5 +106,10 @@ public class SBEnchantment extends Enchantment {
 
     public boolean requiresPreferredSlot(){
         return REQUIRES_PREFERRED_SLOT;
+    }
+
+    @Override
+    public boolean isAcceptableItem(ItemStack stack) {
+        return super.isAcceptableItem(stack) && isEnabled();
     }
 }

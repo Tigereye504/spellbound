@@ -23,6 +23,11 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.RAMPAGE_ENABLED;
+    }
+
+    @Override
     public int getMinPower(int level) {
         return 5 + (10 * level);
     }
@@ -34,7 +39,7 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
 
     @Override
     public int getMaxLevel() {
-        if(Spellbound.config.RAMPAGE_ENABLED) return 3;
+        if(isEnabled()) return 3;
         else return 0;
     }
 

@@ -42,8 +42,13 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.CAVE_IN_ENABLED;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(Spellbound.config.CAVE_IN_ENABLED) return 5;
+        if(isEnabled()) return 5;
         else return 0;
     }
 

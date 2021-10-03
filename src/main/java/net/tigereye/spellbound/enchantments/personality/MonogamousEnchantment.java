@@ -34,8 +34,13 @@ public class MonogamousEnchantment extends SBEnchantment {
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.MONOGAMOUS_ENABLED;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(Spellbound.config.MONOGAMOUS_ENABLED) return 1;
+        if(isEnabled()) return 1;
         else return 0;
     }
 

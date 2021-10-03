@@ -16,6 +16,11 @@ public class DullnessEnchantment extends SBEnchantment {
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.DULLNESS_ENABLED;
+    }
+
+    @Override
     public int getMinPower(int level) {
         return 1 + 8 * (level - 1);
     }
@@ -27,8 +32,7 @@ public class DullnessEnchantment extends SBEnchantment {
 
     @Override
     public int getMaxLevel() {
-        if(Spellbound.config.DULLNESS_ENABLED) return 5;
-        else return 0;
+        return 5;
     }
 
     @Override

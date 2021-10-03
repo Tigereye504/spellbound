@@ -36,8 +36,13 @@ public class TetheringEnchantment extends SBEnchantment implements UtilityEnchan
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.TETHERING_ENABLED;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(Spellbound.config.TETHERING_ENABLED) return 3;
+        if(isEnabled()) return 3;
         else return 0;
     }
 

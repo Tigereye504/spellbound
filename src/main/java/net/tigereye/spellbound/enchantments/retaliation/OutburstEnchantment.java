@@ -45,9 +45,13 @@ public class OutburstEnchantment extends SBEnchantment {
     }
 
     @Override
-    public int getMaxLevel() {
+    public boolean isEnabled() {
+        return Spellbound.config.OUTBURST_ENABLED;
+    }
 
-        if(Spellbound.config.OUTBURST_ENABLED) return 3;
+    @Override
+    public int getMaxLevel() {
+        if(isEnabled()) return 3;
         else return 0;
     }
 

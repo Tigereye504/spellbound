@@ -85,7 +85,7 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("details")
     public int OUTBURST_RAGE_THRESHOLD = 6;
     @ConfigEntry.Category("details")
-    public float OUTBURST_SHOCKWAVE_FORCE = 1f;
+    public float OUTBURST_SHOCKWAVE_FORCE = .5f;
     @ConfigEntry.Category("details")
     public float OUTBURST_SHOCKWAVE_POWER = 6f;
     @ConfigEntry.Category("details")

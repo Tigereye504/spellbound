@@ -30,8 +30,13 @@ public class RepulsiveEnchantment extends SBEnchantment implements UtilityEnchan
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.REPULSIVE_ENABLED;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(Spellbound.config.REPULSIVE_ENABLED) return 1;
+        if(isEnabled()) return 1;
         else return 0;
     }
 

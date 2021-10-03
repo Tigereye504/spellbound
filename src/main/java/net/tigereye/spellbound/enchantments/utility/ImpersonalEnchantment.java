@@ -33,9 +33,13 @@ public class ImpersonalEnchantment extends SBEnchantment implements CustomCondit
     }
 
     @Override
-    public int getMaxLevel() {
+    public boolean isEnabled() {
+        return Spellbound.config.IMPERSONAL_ENABLED;
+    }
 
-        if(Spellbound.config.IMPERSONAL_ENABLED) return 1;
+    @Override
+    public int getMaxLevel() {
+        if(isEnabled()) return 1;
         else return 0;
     }
 

@@ -26,6 +26,11 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.PRIMING_ENABLED;
+    }
+
+    @Override
     public int getMinPower(int level) { return (level*15); }
 
     @Override
@@ -33,7 +38,7 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
 
     @Override
     public int getMaxLevel() {
-        if(Spellbound.config.PRIMING_ENABLED) return 5;
+        if(isEnabled()) return 5;
         else return 0;
     }
 

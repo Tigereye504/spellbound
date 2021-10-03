@@ -36,6 +36,11 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.TROPHY_COLLECTOR_ENABLED;
+    }
+
+    @Override
     public int getMinPower(int level) {
         return 1;
     }
@@ -47,7 +52,7 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
 
     @Override
     public int getMaxLevel() {
-        if(Spellbound.config.TROPHY_COLLECTOR_ENABLED) return 1;
+        if(isEnabled()) return 1;
         else return 0;
     }
 

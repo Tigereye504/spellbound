@@ -32,8 +32,13 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.RED_ALERT_ENABLED;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(Spellbound.config.RED_ALERT_ENABLED) return 4;
+        if(isEnabled()) return 4;
         else return 0;
     }
 

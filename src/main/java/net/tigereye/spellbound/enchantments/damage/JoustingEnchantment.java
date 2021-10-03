@@ -23,6 +23,11 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.JOUSTING_ENABLED;
+    }
+
+    @Override
     public int getMinPower(int level) {
         return 5 + (level*10);
     }
@@ -34,8 +39,7 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
 
     @Override
     public int getMaxLevel() {
-
-        if(Spellbound.config.JOUSTING_ENABLED) return 3;
+        if(isEnabled()) return 3;
         else return 0;
     }
 

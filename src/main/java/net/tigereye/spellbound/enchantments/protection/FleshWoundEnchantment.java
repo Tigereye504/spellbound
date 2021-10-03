@@ -33,9 +33,13 @@ public class FleshWoundEnchantment extends SBEnchantment implements CustomCondit
     }
 
     @Override
-    public int getMaxLevel() {
+    public boolean isEnabled() {
+        return Spellbound.config.FLESH_WOUND_ENABLED;
+    }
 
-        if(Spellbound.config.FLESH_WOUND_ENABLED) return 4;
+    @Override
+    public int getMaxLevel() {
+        if(isEnabled()) return 4;
         else return 0;
     }
 
