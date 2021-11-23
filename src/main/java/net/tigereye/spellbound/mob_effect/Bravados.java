@@ -6,7 +6,7 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffectType;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.world.explosion.Explosion;
 import net.tigereye.spellbound.registration.SBStatusEffects;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class Bravados extends SBStatusEffect{
 
     public Bravados(){
-        super(StatusEffectType.NEUTRAL, 0x194212);
+        super(StatusEffectCategory.NEUTRAL, 0x194212);
     }
 
 

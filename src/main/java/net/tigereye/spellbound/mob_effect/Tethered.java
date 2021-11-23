@@ -2,7 +2,7 @@ package net.tigereye.spellbound.mob_effect;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffectType;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
@@ -12,7 +12,7 @@ import net.tigereye.spellbound.registration.SBStatusEffects;
 
 public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
     public Tethered(){
-        super(StatusEffectType.HARMFUL, 0xaaaaaa);
+        super(StatusEffectCategory.HARMFUL, 0xaaaaaa);
     }
 
 

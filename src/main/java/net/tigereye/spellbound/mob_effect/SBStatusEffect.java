@@ -4,14 +4,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffectType;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
 public class SBStatusEffect extends StatusEffect {
 
-    public SBStatusEffect(StatusEffectType type, int color) {
+    public SBStatusEffect(StatusEffectCategory type, int color) {
         super(type, color);
     }
 

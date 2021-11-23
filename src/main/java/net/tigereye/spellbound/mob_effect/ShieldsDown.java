@@ -2,7 +2,7 @@ package net.tigereye.spellbound.mob_effect;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffectType;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.protection.RedAlertEnchantment;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
@@ -12,7 +12,7 @@ import net.tigereye.spellbound.registration.SBStatusEffects;
 public class ShieldsDown extends SBStatusEffect{
 
     public ShieldsDown(){
-        super(StatusEffectType.NEUTRAL, 0x375159);
+        super(StatusEffectCategory.NEUTRAL, 0x375159);
     } //7CB5C6 for shields up
 
 

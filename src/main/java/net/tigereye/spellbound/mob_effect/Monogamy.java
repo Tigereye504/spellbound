@@ -2,13 +2,13 @@ package net.tigereye.spellbound.mob_effect;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffectType;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.nbt.NbtCompound;
 import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
 
 public class Monogamy extends SBStatusEffect implements CustomDataStatusEffect{
     public Monogamy(){
-        super(StatusEffectType.NEUTRAL, 0xaaaaaa);
+        super(StatusEffectCategory.NEUTRAL, 0xaaaaaa);
     }
 
 
