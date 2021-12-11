@@ -49,6 +49,7 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
 
     @Override
     public void onTargetDamaged(LivingEntity user, Entity target, int level) {
+        //TODO: changed primed to use a psudo-explosion like outburst does
         if(target instanceof LivingEntity) {
             int effectLevel = 0;
             StatusEffectInstance primedInstance = ((LivingEntity)target).getStatusEffect(SBStatusEffects.PRIMED);

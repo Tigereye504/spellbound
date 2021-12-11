@@ -62,7 +62,7 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
                     StatusEffectInstance shielded = entity.getStatusEffect(SBStatusEffects.SHIELDED);
                     int redAlertCount = SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
                     if(redAlertCount > 0){
-                        entity.removeStatusEffect(SBStatusEffects.SHIELDED);
+                        //entity.removeStatusEffect(SBStatusEffects.SHIELDED);
                         entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
                                 Spellbound.config.RED_ALERT_SHIELD_DURATION,
                                 Math.min(redAlertCount-1,shielded.getAmplifier()+1), false, false, true));

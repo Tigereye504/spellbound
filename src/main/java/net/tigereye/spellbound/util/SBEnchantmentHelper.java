@@ -16,6 +16,7 @@ import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -40,6 +41,20 @@ import java.util.List;
 import java.util.UUID;
 
 public class SBEnchantmentHelper {
+
+    //called after vanilla's getAttackDamage
+    public static int beforeDurabilityLoss(ItemStack stack, ServerPlayerEntity user, int loss){
+        MutableInt mutableInt = new MutableInt(loss);
+        if(Spellbound.DEBUG){
+            Spellbound.LOGGER.info(stack.getName() + "is taking " + loss + " damage before spellbound");
+        }
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableInt.setValue(((SBEnchantment)enchantment).beforeDurabilityLoss(level, stack, user, mutableInt.intValue())), stack);
+
+        if(Spellbound.DEBUG){
+            Spellbound.LOGGER.info(stack.getName().getString() + "is taking " + mutableInt.intValue() + " damage after spellbound");
+        }
+        return mutableInt.intValue();
+    }
 
     //called after vanilla's getAttackDamage
     public static float getAttackDamage(LivingEntity attacker, Entity defender){

@@ -78,7 +78,8 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
     @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other)
-                && other.canCombine(Enchantments.SHARPNESS);
+                && other.canCombine(Enchantments.SHARPNESS)
+                && other.canCombine(Enchantments.POWER);
     }
 
     @Override

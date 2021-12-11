@@ -182,6 +182,13 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
     }
 
     private int calculateBlockBonus(int count){
-        return (int)(Math.sqrt(count)/2);
+        int bonus = -1;
+        while(count > 4){
+            ++bonus;
+            count /= 4;
+        }
+        return Math.max(bonus,0);
+
+        //return (int)(Math.sqrt(count)/2);
     }
 }
