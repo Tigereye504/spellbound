@@ -13,6 +13,7 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -30,11 +31,17 @@ public abstract class SBEnchantment extends Enchantment {
 
     public abstract boolean isEnabled();
 
+    //triggers after unbreaking. Recieves remaining durability to be lost,
+    //and return value determines how much will actually be lost.
+    //Intended for unbreaking alternatives.
+    public int beforeDurabilityLoss(int level, ItemStack stack, ServerPlayerEntity user, int loss){return loss;}
+
     //returned float is added to attack damage. Negatives work, the final damage floors at 0 though.
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
         return 0;
     }
 
+    //called when a tool is used to dig. receives and returns mining speed
     public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack itemStack, BlockState block, float miningSpeed) {
         return miningSpeed;
     }

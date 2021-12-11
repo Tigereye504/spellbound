@@ -1,0 +1,10 @@
+{
+  "flavorID": "spellbound:bubbly",
+  "statusID": "spellbound:shielded",
+  "isDrawback": false,
+  "duration": 7200,
+  "magnitude": 5,
+  "weight": 300,
+  "value": 15,
+  "namePriority": 0
+}

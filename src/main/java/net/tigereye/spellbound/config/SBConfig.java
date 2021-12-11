@@ -20,6 +20,8 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean HEARTY_ENABLED = true;
     @ConfigEntry.Category("inclusion")
+    public boolean HUNGERING_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
     public boolean IMPERSONAL_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean JOUSTING_ENABLED = true;
@@ -52,6 +54,8 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean ROCK_COLLECTOR_ENABLED = true;
     @ConfigEntry.Category("inclusion")
+    public boolean SATURATED_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
     public boolean SELFISH_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean SKOTOSYNTHETIC_ENABLED = true;
@@ -74,6 +78,12 @@ public class SBConfig implements ConfigData {
     public float HEARTY_HEALTH_FACTOR_BASE = .1f;
     @ConfigEntry.Category("details")
     public float HEARTY_HEALTH_FACTOR_PER_LEVEL = .1f;
+    @ConfigEntry.Category("details")
+    public float HUNGERING_EXHAUSTION_COST = .15f;
+    @ConfigEntry.Category("details")
+    public int HUNGERING_FOOD_THRESHOLD = 18;
+    @ConfigEntry.Category("details")
+    public int HUNGERING_FOOD_THRESHOLD_REDUCTION_PER_LEVEL = 4;
     @ConfigEntry.Category("details")
     public int INTIMACY_DURATION = 12000;
     @ConfigEntry.Category("details")
@@ -114,6 +124,10 @@ public class SBConfig implements ConfigData {
     public int RED_ALERT_SHIELD_DURATION = 600;
     @ConfigEntry.Category("details")
     public int RED_ALERT_MINIMUM_RECOVERY_TIME = 20; //in case enchantment levels get dumb
+    @ConfigEntry.Category("details")
+    public float SATURATED_EXHAUSTION_COST = .4f;
+    @ConfigEntry.Category("details")
+    public int SATURATED_FOOD_THRESHOLD = 17;
     @ConfigEntry.Category("details")
     public int SKOTOSYNTHETIC_LIGHT_MAXIMUM = 7;
     @ConfigEntry.Category("details")

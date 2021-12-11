@@ -235,18 +235,24 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
     }
 
     private float getUniqueDamageBonus(int uniques){
-        return (float)Math.sqrt(uniques)/2;
+        return (float)Math.sqrt(uniques)/1.5f;
     }
 
     private int getEntityDamageBonus(int kills){
-        return (int) (Math.sqrt(kills) / 4);
+        int bonus = -1;
+        while(kills > 4){
+            ++bonus;
+            kills /= 4;
+        }
+        return Math.max(bonus,0);
+        //return (int) (Math.sqrt(kills) / 4);
     }
 
     private float getRangedUniqueDamageMultiple(int uniques){
-        return (float)Math.sqrt(uniques)*0.2f;
+        return (float)Math.sqrt(uniques)*0.25f;
     }
 
     private float getRangedEntityDamageMultiple(int kills){
-        return ((int)(Math.sqrt(kills)/4))*0.2f;
+        return (getEntityDamageBonus(kills))*0.25f;
     }
 }
