@@ -8,6 +8,8 @@ import net.tigereye.spellbound.Spellbound;
 @Config(name = Spellbound.MODID)
 public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
+    public boolean ACCELERATION_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
     public boolean ATTRACTIVE_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean CAVE_IN_ENABLED = true;
@@ -58,6 +60,8 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean TROPHY_COLLECTOR_ENABLED = true;
 
+    @ConfigEntry.Category("details")
+    public int ACCELERATION_TIMEOUT = 50;
     @ConfigEntry.Category("details")
     public int ATTRACTION_RANGE = 5;
     @ConfigEntry.Category("details")

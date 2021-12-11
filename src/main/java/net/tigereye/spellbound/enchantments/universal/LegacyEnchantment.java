@@ -54,7 +54,7 @@ public class LegacyEnchantment extends SBEnchantment {
     public void onToolBreak(int level, ItemStack itemStack, PlayerEntity entity) {
         ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
         Map<Enchantment,Integer> enchants = EnchantmentHelper.get(itemStack);
-        enchants.remove(SBEnchantments.LEGACY);
+        //enchants.remove(SBEnchantments.LEGACY);
         EnchantmentHelper.set(enchants,book);
         //TODO: onLegacyToolBreak(book,itemStack,entity) event
         if(!entity.giveItemStack(book)){
@@ -63,6 +63,7 @@ public class LegacyEnchantment extends SBEnchantment {
     }
 
     public boolean canAccept(Enchantment other) {
-        return super.canAccept(other);
+        return super.canAccept(other)
+                && other.canCombine(Enchantments.MENDING);
     }
 }

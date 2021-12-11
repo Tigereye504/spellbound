@@ -5,6 +5,7 @@ import net.minecraft.util.registry.Registry;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.*;
 import net.tigereye.spellbound.enchantments.damage.*;
+import net.tigereye.spellbound.enchantments.efficiency.AccelerationEnchantment;
 import net.tigereye.spellbound.enchantments.efficiency.RockCollectorEnchantment;
 import net.tigereye.spellbound.enchantments.personality.MonogamousEnchantment;
 import net.tigereye.spellbound.enchantments.personality.PolygamousEnchantment;
@@ -25,6 +26,7 @@ public class SBEnchantments {
 
     public static List<SBEnchantment> SBEnchantmentList = new ArrayList<>();
 
+    public static final SBEnchantment ACCELERATION = new AccelerationEnchantment();
     public static final SBEnchantment ATTRACTIVE = new AttractiveEnchantment();
     public static final SBEnchantment CAVE_IN = new CaveInEnchantment();
     public static final SBEnchantment DULLNESS = new DullnessEnchantment();
@@ -52,6 +54,7 @@ public class SBEnchantments {
     public static final SBEnchantment TROPHY_COLLECTING = new TrophyCollectorEnchantment();
 
     public static void register(){
+        register("acceleration", ACCELERATION);
         register("attractive", ATTRACTIVE);
         register("cave_in", CAVE_IN);
         register("dullness", DULLNESS);
