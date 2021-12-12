@@ -14,7 +14,6 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class AttractiveEnchantment extends SBEnchantment implements UtilityEnchantment {
 
-//TODO: exclude block entities and item frames in particular from this and repulsive
     public AttractiveEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.CHEST});
         REQUIRES_PREFERRED_SLOT = true;

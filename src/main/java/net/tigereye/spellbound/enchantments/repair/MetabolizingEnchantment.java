@@ -12,9 +12,9 @@ import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 
-public class SaturatedEnchantment extends SBEnchantment {
+public class MetabolizingEnchantment extends SBEnchantment {
 
-    public SaturatedEnchantment() {
+    public MetabolizingEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = false;
     }
@@ -53,8 +53,8 @@ public class SaturatedEnchantment extends SBEnchantment {
                 return;
             }
             HungerManager manager = ((PlayerEntity)entity).getHungerManager();
-            if(manager.getFoodLevel() > Spellbound.config.SATURATED_FOOD_THRESHOLD){
-                ((PlayerEntity) entity).addExhaustion(Spellbound.config.SATURATED_EXHAUSTION_COST);
+            if(manager.getFoodLevel() >= Spellbound.config.METABOLISING_FOOD_THRESHOLD){
+                ((PlayerEntity) entity).addExhaustion(Spellbound.config.METABOLISING_EXHAUSTION_COST);
                 stack.setDamage(stack.getDamage()-1);
             }
         }

@@ -13,7 +13,7 @@ import net.tigereye.spellbound.enchantments.protection.FleshWoundEnchantment;
 import net.tigereye.spellbound.enchantments.protection.HeartyEnchantment;
 import net.tigereye.spellbound.enchantments.protection.RedAlertEnchantment;
 import net.tigereye.spellbound.enchantments.repair.PhotosyntheticEnchantment;
-import net.tigereye.spellbound.enchantments.repair.SaturatedEnchantment;
+import net.tigereye.spellbound.enchantments.repair.MetabolizingEnchantment;
 import net.tigereye.spellbound.enchantments.repair.SelfishEnchantment;
 import net.tigereye.spellbound.enchantments.repair.SkotosyntheticEnchantment;
 import net.tigereye.spellbound.enchantments.retaliation.OutburstEnchantment;
@@ -51,7 +51,7 @@ public class SBEnchantments {
     public static final SBEnchantment RED_ALERT = new RedAlertEnchantment();
     public static final SBEnchantment REPULSIVE = new RepulsiveEnchantment();
     public static final SBEnchantment ROCK_COLLECTING = new RockCollectorEnchantment();
-    public static final SBEnchantment SATURATED = new SaturatedEnchantment();
+    public static final SBEnchantment SATURATED = new MetabolizingEnchantment();
     public static final SBEnchantment SELFISH = new SelfishEnchantment();
     public static final SBEnchantment SKOTOSYNTHETIC = new SkotosyntheticEnchantment();
     public static final SBEnchantment TETHERING = new TetheringEnchantment();

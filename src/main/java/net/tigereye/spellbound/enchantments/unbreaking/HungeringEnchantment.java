@@ -51,9 +51,8 @@ public class HungeringEnchantment extends SBEnchantment {
         World world = entity.world;
         if(!world.isClient()){
             HungerManager manager = entity.getHungerManager();
-            if(manager.getFoodLevel() >= Spellbound.config.HUNGERING_FOOD_THRESHOLD
-                    -(level*Spellbound.config.HUNGERING_FOOD_THRESHOLD_REDUCTION_PER_LEVEL)){
-                entity.addExhaustion(loss*Spellbound.config.HUNGERING_EXHAUSTION_COST/level);
+            if(manager.getFoodLevel() >= Spellbound.config.HUNGERING_FOOD_THRESHOLD){
+                entity.addExhaustion(loss*Spellbound.config.HUNGERING_EXHAUSTION_COST*2/(level+1));
                 return 0;
             }
         }
