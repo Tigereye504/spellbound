@@ -31,10 +31,14 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
     }
 
     @Override
-    public int getMinPower(int level) { return (level*15); }
+    public int getMinPower(int level) {
+        return 5 + (level*10);
+    }
 
     @Override
-    public int getMaxPower(int level) { return getMinPower(level)+15; }
+    public int getMaxPower(int level) {
+        return this.getMinPower(level)+15;
+    }
 
     @Override
     public int getMaxLevel() {
