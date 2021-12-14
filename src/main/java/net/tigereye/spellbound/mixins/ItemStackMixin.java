@@ -25,8 +25,6 @@ public class ItemStackMixin {
     @ModifyVariable(at = @At(value = "CONSTANT", args = "intValue=0", ordinal = 1),
             ordinal = 0, method = "damage")
     public int spellboundItemStackUnbreakingMixin(int amount, int alsoAmount, Random random, ServerPlayerEntity player){
-        Spellbound.LOGGER.info("amount = " + amount);
-        Spellbound.LOGGER.info("alsoAmount = " + alsoAmount);
         return SBEnchantmentHelper.beforeDurabilityLoss((ItemStack)(Object)this,player,amount);
     }
 

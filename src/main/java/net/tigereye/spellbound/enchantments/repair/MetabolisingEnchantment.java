@@ -12,9 +12,9 @@ import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 
-public class MetabolizingEnchantment extends SBEnchantment {
+public class MetabolisingEnchantment extends SBEnchantment {
 
-    public MetabolizingEnchantment() {
+    public MetabolisingEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = false;
     }
@@ -31,7 +31,7 @@ public class MetabolizingEnchantment extends SBEnchantment {
 
     @Override
     public boolean isEnabled() {
-        return Spellbound.config.SATURATED_ENABLED;
+        return Spellbound.config.METABOLISING_ENABLED;
     }
 
     @Override

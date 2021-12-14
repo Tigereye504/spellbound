@@ -13,11 +13,11 @@ import net.tigereye.spellbound.enchantments.protection.FleshWoundEnchantment;
 import net.tigereye.spellbound.enchantments.protection.HeartyEnchantment;
 import net.tigereye.spellbound.enchantments.protection.RedAlertEnchantment;
 import net.tigereye.spellbound.enchantments.repair.PhotosyntheticEnchantment;
-import net.tigereye.spellbound.enchantments.repair.MetabolizingEnchantment;
+import net.tigereye.spellbound.enchantments.repair.MetabolisingEnchantment;
 import net.tigereye.spellbound.enchantments.repair.SelfishEnchantment;
 import net.tigereye.spellbound.enchantments.repair.SkotosyntheticEnchantment;
 import net.tigereye.spellbound.enchantments.retaliation.OutburstEnchantment;
-import net.tigereye.spellbound.enchantments.unbreaking.HungeringEnchantment;
+import net.tigereye.spellbound.enchantments.unbreaking.SaturatedEnchantment;
 import net.tigereye.spellbound.enchantments.universal.LegacyEnchantment;
 import net.tigereye.spellbound.enchantments.utility.*;
 
@@ -34,7 +34,7 @@ public class SBEnchantments {
     public static final SBEnchantment DULLNESS = new DullnessEnchantment();
     public static final SBEnchantment FLESH_WOUND = new FleshWoundEnchantment();
     public static final SBEnchantment HEARTY = new HeartyEnchantment();
-    public static final SBEnchantment HUNGERING = new HungeringEnchantment();
+    public static final SBEnchantment SATURATED = new SaturatedEnchantment();
     public static final SBEnchantment IMPERSONAL = new ImpersonalEnchantment();
     public static final SBEnchantment JOUSTING = new JoustingEnchantment();
     public static final SBEnchantment LAUNCHING = new LaunchingEnchantment();
@@ -51,7 +51,7 @@ public class SBEnchantments {
     public static final SBEnchantment RED_ALERT = new RedAlertEnchantment();
     public static final SBEnchantment REPULSIVE = new RepulsiveEnchantment();
     public static final SBEnchantment ROCK_COLLECTING = new RockCollectorEnchantment();
-    public static final SBEnchantment SATURATED = new MetabolizingEnchantment();
+    public static final SBEnchantment METABOLISING = new MetabolisingEnchantment();
     public static final SBEnchantment SELFISH = new SelfishEnchantment();
     public static final SBEnchantment SKOTOSYNTHETIC = new SkotosyntheticEnchantment();
     public static final SBEnchantment TETHERING = new TetheringEnchantment();
@@ -64,11 +64,11 @@ public class SBEnchantments {
         register("dullness", DULLNESS);
         register("flesh_wound", FLESH_WOUND);
         register("hearty", HEARTY);
-        register("hungering", HUNGERING);
         register("impersonal", IMPERSONAL);
         register("jousting", JOUSTING);
         register("launching", LAUNCHING);
         register("legacy", LEGACY);
+        register("metabolising", METABOLISING);
         register("mounted", MOUNTED);
         register("monogamous", MONOGAMOUS);
         register("outburst", OUTBURST);

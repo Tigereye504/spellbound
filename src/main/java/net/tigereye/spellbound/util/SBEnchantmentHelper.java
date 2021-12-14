@@ -46,12 +46,12 @@ public class SBEnchantmentHelper {
     public static int beforeDurabilityLoss(ItemStack stack, ServerPlayerEntity user, int loss){
         MutableInt mutableInt = new MutableInt(loss);
         if(Spellbound.DEBUG){
-            Spellbound.LOGGER.info(stack.getName() + "is taking " + loss + " damage before spellbound");
+            Spellbound.LOGGER.info(stack.getName().getString() + " is taking " + loss + " damage before spellbound");
         }
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableInt.setValue(((SBEnchantment)enchantment).beforeDurabilityLoss(level, stack, user, mutableInt.intValue())), stack);
 
         if(Spellbound.DEBUG){
-            Spellbound.LOGGER.info(stack.getName().getString() + "is taking " + mutableInt.intValue() + " damage after spellbound");
+            Spellbound.LOGGER.info(stack.getName().getString() + " is taking " + mutableInt.intValue() + " damage after spellbound");
         }
         return mutableInt.intValue();
     }

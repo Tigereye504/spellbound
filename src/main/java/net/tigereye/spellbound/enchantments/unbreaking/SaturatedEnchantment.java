@@ -4,18 +4,16 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.HungerManager;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 
-public class HungeringEnchantment extends SBEnchantment {
+public class SaturatedEnchantment extends SBEnchantment {
 
-    public HungeringEnchantment() {
+    public SaturatedEnchantment() {
         super(Rarity.UNCOMMON, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = false;
     }
@@ -32,7 +30,7 @@ public class HungeringEnchantment extends SBEnchantment {
 
     @Override
     public boolean isEnabled() {
-        return Spellbound.config.HUNGERING_ENABLED;
+        return Spellbound.config.SATURATED_ENABLED;
     }
 
     @Override
@@ -51,8 +49,13 @@ public class HungeringEnchantment extends SBEnchantment {
         World world = entity.world;
         if(!world.isClient()){
             HungerManager manager = entity.getHungerManager();
-            if(manager.getFoodLevel() >= Spellbound.config.HUNGERING_FOOD_THRESHOLD){
-                entity.addExhaustion(loss*Spellbound.config.HUNGERING_EXHAUSTION_COST*2/(level+1));
+            if(manager.getFoodLevel() >= Spellbound.config.SATURATED_FOOD_THRESHOLD){
+                float cost = loss*Spellbound.config.SATURATED_EXHAUSTION_COST *2/(level+1);
+                entity.addExhaustion(loss*Spellbound.config.SATURATED_EXHAUSTION_COST *2/(level+1));
+                if(Spellbound.DEBUG){
+                    Spellbound.LOGGER.info("Hungering prevented "+loss+" durability loss for " +cost+" exhaustion");
+                    Spellbound.LOGGER.info(manager.getSaturationLevel() + " saturation remains with " + manager.getExhaustion() + " exhaustion");
+                }
                 return 0;
             }
         }
