@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments.unbreaking;
+package net.tigereye.spellbound.enchantments.repair;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
@@ -8,36 +8,35 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 
-public class HungeringEnchantment extends SBEnchantment {
+public class MetabolisingEnchantment extends SBEnchantment {
 
-    public HungeringEnchantment() {
-        super(Rarity.UNCOMMON, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+    public MetabolisingEnchantment() {
+        super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = false;
     }
 
     @Override
     public int getMinPower(int level) {
-        return 5 + (level - 1) * 8;
+        return 5;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return super.getMinPower(level) + 50;
+        return 51;
     }
 
     @Override
     public boolean isEnabled() {
-        return Spellbound.config.HUNGERING_ENABLED;
+        return Spellbound.config.METABOLISING_ENABLED;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 3;
+        if(isEnabled()) return 1;
         else return 0;
     }
 
@@ -47,17 +46,18 @@ public class HungeringEnchantment extends SBEnchantment {
     }
 
     @Override
-    public int beforeDurabilityLoss(int level, ItemStack stack, ServerPlayerEntity entity, int loss){
+    public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         World world = entity.world;
-        if(!world.isClient()){
-            HungerManager manager = entity.getHungerManager();
-            if(manager.getFoodLevel() >= Spellbound.config.HUNGERING_FOOD_THRESHOLD
-                    -(level*Spellbound.config.HUNGERING_FOOD_THRESHOLD_REDUCTION_PER_LEVEL)){
-                entity.addExhaustion(loss*Spellbound.config.HUNGERING_EXHAUSTION_COST/level);
-                return 0;
+        if(!world.isClient() && stack.isDamaged()){
+            if(!(entity instanceof PlayerEntity)){
+                return;
+            }
+            HungerManager manager = ((PlayerEntity)entity).getHungerManager();
+            if(manager.getFoodLevel() >= Spellbound.config.METABOLISING_FOOD_THRESHOLD){
+                ((PlayerEntity) entity).addExhaustion(Spellbound.config.METABOLISING_EXHAUSTION_COST);
+                stack.setDamage(stack.getDamage()-1);
             }
         }
-        return loss;
     }
 
     @Override
@@ -68,6 +68,6 @@ public class HungeringEnchantment extends SBEnchantment {
     @Override
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other)
-                && other.canCombine(Enchantments.UNBREAKING);
+                && other.canCombine(Enchantments.MENDING);
     }
 }

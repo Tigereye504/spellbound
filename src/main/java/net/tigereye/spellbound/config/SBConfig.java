@@ -8,6 +8,8 @@ import net.tigereye.spellbound.Spellbound;
 @Config(name = Spellbound.MODID)
 public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
+    public boolean ACCELERATION_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
     public boolean ATTRACTIVE_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean CAVE_IN_ENABLED = true;
@@ -18,7 +20,7 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean HEARTY_ENABLED = true;
     @ConfigEntry.Category("inclusion")
-    public boolean HUNGERING_ENABLED = true;
+    public boolean SATURATED_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean IMPERSONAL_ENABLED = true;
     @ConfigEntry.Category("inclusion")
@@ -52,7 +54,7 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean ROCK_COLLECTOR_ENABLED = true;
     @ConfigEntry.Category("inclusion")
-    public boolean SATURATED_ENABLED = true;
+    public boolean METABOLISING_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean SELFISH_ENABLED = true;
     @ConfigEntry.Category("inclusion")
@@ -62,6 +64,8 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean TROPHY_COLLECTOR_ENABLED = true;
 
+    @ConfigEntry.Category("details")
+    public int ACCELERATION_TIMEOUT = 50;
     @ConfigEntry.Category("details")
     public int ATTRACTION_RANGE = 5;
     @ConfigEntry.Category("details")
@@ -74,12 +78,6 @@ public class SBConfig implements ConfigData {
     public float HEARTY_HEALTH_FACTOR_BASE = .1f;
     @ConfigEntry.Category("details")
     public float HEARTY_HEALTH_FACTOR_PER_LEVEL = .1f;
-    @ConfigEntry.Category("details")
-    public float HUNGERING_EXHAUSTION_COST = .15f;
-    @ConfigEntry.Category("details")
-    public int HUNGERING_FOOD_THRESHOLD = 18;
-    @ConfigEntry.Category("details")
-    public int HUNGERING_FOOD_THRESHOLD_REDUCTION_PER_LEVEL = 4;
     @ConfigEntry.Category("details")
     public int INTIMACY_DURATION = 12000;
     @ConfigEntry.Category("details")
@@ -121,9 +119,13 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("details")
     public int RED_ALERT_MINIMUM_RECOVERY_TIME = 20; //in case enchantment levels get dumb
     @ConfigEntry.Category("details")
-    public float SATURATED_EXHAUSTION_COST = .4f;
+    public float SATURATED_EXHAUSTION_COST = 1.0f;
     @ConfigEntry.Category("details")
-    public int SATURATED_FOOD_THRESHOLD = 17;
+    public int SATURATED_FOOD_THRESHOLD = 20;
+    @ConfigEntry.Category("details")
+    public float METABOLISING_EXHAUSTION_COST = 3.0f;
+    @ConfigEntry.Category("details")
+    public int METABOLISING_FOOD_THRESHOLD = 18;
     @ConfigEntry.Category("details")
     public int SKOTOSYNTHETIC_LIGHT_MAXIMUM = 7;
     @ConfigEntry.Category("details")

@@ -57,9 +57,24 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
         Vec3d relativeVelocity = attackerVelocity.subtract(defender.getVelocity());
         Vec3d attackerFacing = attacker.getRotationVector().normalize();
         double dotP = relativeVelocity.dotProduct(attackerFacing);
+        float damage;
+        if(Math.abs(dotP) < .2){
+            damage = 0;
+        }
+        else {
+            damage = (float) (Math.log(((Math.abs(dotP)-.2) / .15) + 1) / Math.log(3)) * 3 * level;
+            if (damage != damage) {
+                damage = 0;
+            }
+            if (dotP < 0) {
+                damage = -damage;
+            }
+        }
         if(Spellbound.DEBUG && attacker instanceof PlayerEntity && !attacker.world.isClient){
             String out;
             out = "Dot Product: " + dotP;
+            ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
+            out = "Damage: " + damage;
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
             out = "Relative Velocity: " + relativeVelocity;
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
@@ -70,7 +85,8 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
             out = "Defender Velocity: " + defender.getVelocity().toString();
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
         }
-        return (float)dotP*10*level;
+        return damage;
+        //return (float)dotP*10*level;
     }
 
     @Override

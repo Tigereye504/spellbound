@@ -3,8 +3,12 @@
   "statusID": "spellbound:shielded",
   "isDrawback": false,
   "duration": 7200,
-  "magnitude": 5,
-  "weight": 300,
+  "magnitude": 4,
+  "weight": 30,
   "value": 15,
-  "namePriority": 0
+  "namePriority": 0,
+  "exclusions": [
+    "spellbound:extra_bubbly",
+    "spellbound:very_bubbly"
+  ]
 }
