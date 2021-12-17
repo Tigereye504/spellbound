@@ -37,7 +37,7 @@
     "enchantment.spellbound.trophy_collecting": "Trophy Collecting",
     "enchantment.spellbound.acceleration.desc": "Mining speed increases during use.",
     "enchantment.spellbound.attractive.desc": "Attracts nearby entities.",
-    "enchantment.spellbound.repulsive.desc": "Repulses nearby entities.",
+    "enchantment.spellbound.cave_in.desc": "Shot blocks fall to the ground",
     "enchantment.spellbound.dullness.desc": "Reduces damage done by tool.",
     "enchantment.spellbound.flesh_wound.desc": "Grants absorption hearts on non-absorption damage.",
     "enchantment.spellbound.hearty.desc": "Greatly increases max health.",
