@@ -46,6 +46,9 @@ public class SaturatedEnchantment extends SBEnchantment {
 
     @Override
     public int beforeDurabilityLoss(int level, ItemStack stack, ServerPlayerEntity entity, int loss){
+        if(entity == null){
+            return loss;
+        }
         World world = entity.world;
         if(!world.isClient()){
             HungerManager manager = entity.getHungerManager();
