@@ -91,10 +91,7 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
                         if(!targetBlock.isAir() && targetBlock.getBlock().getBlastResistance() <= Spellbound.config.CAVE_IN_MAX_BLAST_RES
                                 && world.getBlockEntity(target) == null
                                 && (fallingBlocks.contains(blockBelowTarget) || FallingBlock.canFallThrough(blockBelowTarget))){
-                            FallingBlockEntity fallingBlockEntity = new FallingBlockEntity(world,
-                                    target.getX() + 0.5D, target.getY(), target.getZ() + 0.5D,
-                                    targetBlock);
-                            world.spawnEntity(fallingBlockEntity);
+                            FallingBlockEntity.spawnFromBlock(world,target,targetBlock);
                             fallingBlocks.add(targetBlock);
                         }
                     }
