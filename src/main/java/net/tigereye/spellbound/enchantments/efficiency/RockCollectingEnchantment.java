@@ -22,6 +22,7 @@ import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class RockCollectingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
@@ -75,13 +76,13 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
         addRock(state,player,stack);
     }
 
-    @Override
+    /*@Override
     public void onActivate(int level, PlayerEntity player, ItemStack stack, Entity target) {
         if(!player.world.isClient && player.getPose() == EntityPose.CROUCHING) {
             List<Text> output = addTooltip(level, stack, player, null, 1000);
             output.forEach((line) -> player.sendMessage(line, false));
         }
-    }
+    }*/
 
     @Override
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
@@ -97,16 +98,26 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
                 keyIntMap.put(trophyKey,tag.getInt(trophyKey));
             }
         });
+        int rockCount = tag.getInt(UNIQUE_ROCK_COUNT_KEY);
         output.add(new LiteralText(
-                "--" + tag.getInt(UNIQUE_ROCK_COUNT_KEY) + " Unique Rocks (+"
+                "--" + rockCount + " Unique Rocks (+"
                         +String.format("%.1f", calculateUniversalBonus(getUniqueRockCount(stack)))+")--"));
-        keyIntMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(maxsize)
-                .forEach((entry) -> output.add(new LiteralText(
-                            entry.getValue() + " ")
-                            .append(new TranslatableText(entry.getKey()))
-                            .append(" (+" + calculateBlockBonus(entry.getValue()) + ")")));
+        Stream<Map.Entry<String, Integer>> stream = keyIntMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+        int scrollingSteps = Math.max(1,rockCount-Spellbound.config.COLLECTOR_WINDOW_SIZE+1);
+        if(scrollingSteps > 1) {
+            stream = stream.skip(player.world.getTime() % ((long) scrollingSteps * Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD)) / Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD));
+        }
+        stream = stream.limit(Spellbound.config.COLLECTOR_WINDOW_SIZE);
+        stream.forEach((entry) -> writeLineInTooltip(output,entry));
         output.add(new LiteralText("--------------------------"));
         return output;
+    }
+
+    private void writeLineInTooltip(List<Text> output, Map.Entry<String, Integer> entry){
+        output.add(new LiteralText(
+                entry.getValue() + " ")
+                .append(new TranslatableText(entry.getKey()))
+                .append(" (+" + calculateBlockBonus(entry.getValue()) + ")"));
     }
 
     @Override

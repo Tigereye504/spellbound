@@ -77,6 +77,10 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("details")
     public int CAVE_IN_MAX_BLAST_RES = 99;
     @ConfigEntry.Category("details")
+    public int COLLECTOR_DISPLAY_UPDATE_PERIOD = 20;
+    @ConfigEntry.Category("details")
+    public int COLLECTOR_WINDOW_SIZE = 10;
+    @ConfigEntry.Category("details")
     public float FISHER_OF_MEN_BASE_DAMAGE = 2F;
     @ConfigEntry.Category("details")
     public float FISHER_OF_MEN_DAMAGE_PER_LEVEL = 1.5F;

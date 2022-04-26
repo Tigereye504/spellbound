@@ -1,14 +1,10 @@
 package net.tigereye.spellbound.enchantments.damage;
 
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.Angerable;
-import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -24,6 +20,7 @@ import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class TrophyCollectingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
@@ -86,7 +83,7 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
         addTrophy(victim, killer, stack,stack.getItem() instanceof RangedWeaponItem);
     }
 
-    @Override
+    /*@Override
     public void onActivate(int level, PlayerEntity player, ItemStack stack, Entity target) {
         if(!player.world.isClient && player.getPose() == EntityPose.CROUCHING){
             NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
@@ -108,7 +105,7 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
                     "--" + tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + " Unique Trophies (+"+String.format("%.1f", Math.sqrt(getUniqueTrophyCount(stack))/2)+")--"
             ), false);
         }
-    }
+    }*/
 
     @Override
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
@@ -117,6 +114,7 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
         NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
         Set<String> keys = tag.getKeys();
         Map<String,Integer> keyIntMap = new HashMap<>();
+        int trophyCount = getUniqueTrophyCount(stack);
         keys.forEach((trophyKey) -> {
             if(!trophyKey.equals(UNIQUE_TROPHY_COUNT_KEY)) {
                 keyIntMap.put(trophyKey,tag.getInt(trophyKey));
@@ -124,7 +122,7 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
         });
         if(isRanged) {
             output.add(new LiteralText(
-                    "--" + getUniqueTrophyCount(stack) + " Unique Trophies (+"
+                    "--" + trophyCount + " Unique Trophies (+"
                             + String.format("%.2f", getRangedUniqueDamageMultiple(getUniqueTrophyCount(stack))) + "x)--"));
         }
         else{
@@ -132,23 +130,32 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
                     "--" + tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + " Unique Trophies (+"
                             + String.format("%.1f", getUniqueDamageBonus(getUniqueTrophyCount(stack))) + ")--"));
         }
-        keyIntMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(10)
-                .forEach((entry) -> {
-                    if(isRanged) {
-                        output.add(new LiteralText(
-                                entry.getValue() + " ")
-                                .append(new TranslatableText(entry.getKey()))
-                                .append(" (+" + String.format("%.1f", getRangedEntityDamageMultiple(entry.getValue())) + "x)"));
-                    }
-                    else{
-                        output.add(new LiteralText(
-                                entry.getValue() + " ")
-                                .append(new TranslatableText(entry.getKey()))
-                                .append(" (+" + getEntityDamageBonus(entry.getValue()) + ")"));
-                    }
-                });
+        Stream<Map.Entry<String, Integer>> stream = keyIntMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+        int scrollingSteps = Math.max(1,trophyCount-Spellbound.config.COLLECTOR_WINDOW_SIZE+1);
+        if(scrollingSteps > 1) {
+            stream = stream.skip(player.world.getTime() % ((long) scrollingSteps * Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD)) / Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD));
+        }
+        stream = stream.limit(Spellbound.config.COLLECTOR_WINDOW_SIZE);
+        stream.forEach((entry) -> {
+            writeLineInTooltip(output,entry,isRanged);
+        });
         output.add(new LiteralText("--------------------------"));
         return output;
+    }
+
+    private void writeLineInTooltip(List<Text> output, Map.Entry<String, Integer> entry, boolean isRanged){
+        if(isRanged) {
+            output.add(new LiteralText(
+                    entry.getValue() + " ")
+                    .append(new TranslatableText(entry.getKey()))
+                    .append(" (+" + String.format("%.1f", getRangedEntityDamageMultiple(entry.getValue())) + "x)"));
+        }
+        else{
+            output.add(new LiteralText(
+                    entry.getValue() + " ")
+                    .append(new TranslatableText(entry.getKey()))
+                    .append(" (+" + getEntityDamageBonus(entry.getValue()) + ")"));
+        }
     }
 
     @Override
