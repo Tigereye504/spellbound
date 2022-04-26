@@ -70,9 +70,4 @@ public class SaturatedEnchantment extends SBEnchantment {
         return false;
     }
 
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other)
-                && other.canCombine(Enchantments.UNBREAKING);
-    }
 }

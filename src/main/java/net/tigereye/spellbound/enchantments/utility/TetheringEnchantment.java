@@ -73,11 +73,6 @@ public class TetheringEnchantment extends SBEnchantment implements UtilityEnchan
         super.onTargetDamaged(user, target, level);
     }
 
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other) && !(other instanceof UtilityEnchantment);
-    }
-
     private void tetherTarget(int level, Entity anchor, LivingEntity target){
         //Spellbound.LOGGER.info("Applying Tethered");
         target.addStatusEffect(new TetheredInstance(anchor, 20+(20*level), 0));

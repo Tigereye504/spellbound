@@ -58,11 +58,6 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
     }
 
     @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other);
-    }
-
-    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof RangedWeaponItem
                 || stack.getItem() instanceof TridentItem
@@ -88,7 +83,8 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
                         target = lowerCorner.add(x,y,z);
                         targetBlock = world.getBlockState(target);
                         blockBelowTarget = world.getBlockState(target.down());
-                        if(!targetBlock.isAir() && targetBlock.getBlock().getBlastResistance() <= Spellbound.config.CAVE_IN_MAX_BLAST_RES
+                        if(!targetBlock.isAir() &&
+                                (targetBlock.getBlock().getBlastResistance() <= Spellbound.config.CAVE_IN_MAX_BLAST_RES || Spellbound.config.UNLIMITED_CAVE_IN)
                                 && world.getBlockEntity(target) == null
                                 && (fallingBlocks.contains(blockBelowTarget) || FallingBlock.canFallThrough(blockBelowTarget))){
                             FallingBlockEntity.spawnFromBlock(world,target,targetBlock);

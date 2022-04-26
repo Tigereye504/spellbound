@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:protection",
+    "spellbound:flesh_wound",
+    "spellbound:hearty",
+    "spellbound:red_alert"
+  ]
+}

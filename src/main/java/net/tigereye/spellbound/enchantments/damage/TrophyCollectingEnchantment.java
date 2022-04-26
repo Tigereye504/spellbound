@@ -25,12 +25,12 @@ import net.tigereye.spellbound.enchantments.SBEnchantment;
 
 import java.util.*;
 
-public class TrophyCollectorEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class TrophyCollectingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     private static final String TROPHY_COLLECTOR_KEY = Spellbound.MODID+"TrophyCollector";
     private static final String UNIQUE_TROPHY_COUNT_KEY = Spellbound.MODID+"UniqueTrophyCount";
 
-    public TrophyCollectorEnchantment() {
+    public TrophyCollectingEnchantment() {
         super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = true;
     }
@@ -156,15 +156,6 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
         return false;
     }
 
-    //I want to disallow damageEnchantments and anything else that disallows damageEnchantments
-    //as typically the later is trying to be another form of damage enchantment
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other)
-                && other.canCombine(Enchantments.SHARPNESS)
-                && other.canCombine(Enchantments.POWER);
-    }
-
     @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof SwordItem
@@ -181,7 +172,8 @@ public class TrophyCollectorEnchantment extends SBEnchantment implements CustomC
 
     private boolean addTrophy(LivingEntity victim, LivingEntity killer, ItemStack stack,boolean isRanged){
         NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
-        if(!(victim instanceof PassiveEntity || victim instanceof WaterCreatureEntity) || victim instanceof Angerable || victim instanceof Monster) {
+        if(Spellbound.config.TAKE_ANY_TROPHY ||
+                !(victim instanceof PassiveEntity || victim instanceof WaterCreatureEntity) || victim instanceof Angerable || victim instanceof Monster) {
             if (!hasTrophy(victim, stack)) {
                 tag.putInt(UNIQUE_TROPHY_COUNT_KEY, tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + 1);
                 tag.putInt(victim.getType().toString(), 1);

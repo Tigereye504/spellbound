@@ -1,0 +1,13 @@
+{
+    "replace": false,
+    "values": [
+      "minecraft:sharpness",
+      "minecraft:power",
+      "spellbound:dullness",
+      "spellbound:jousting",
+      "spellbound:mounted",
+      "spellbound:priming",
+      "spellbound:rampage",
+      "spellbound:trophy_collecting"
+    ]
+  }

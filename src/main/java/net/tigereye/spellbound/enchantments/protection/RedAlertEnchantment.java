@@ -80,12 +80,6 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
 
     }
 
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other)
-            && other.canCombine(Enchantments.PROTECTION);
-    }
-
     public static int getModifiedRecoveryRate(LivingEntity entity){
         return getModifiedRecoveryRate(entity,SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(),SBEnchantments.RED_ALERT));
     }

@@ -6,7 +6,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.tigereye.spellbound.SpellboundLivingEntity;
 import net.tigereye.spellbound.SpellboundPlayerEntity;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.mob_effect.SBStatusEffectHelper;
@@ -18,7 +20,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin extends Entity{
+public class LivingEntityMixin extends Entity implements SpellboundLivingEntity {
+
+    private Vec3d SB_OldPos;
+    private Vec3d SB_LastPos;
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -87,5 +92,16 @@ public class LivingEntityMixin extends Entity{
     @Shadow
     public Packet<?> createSpawnPacket() {
         return null;
+    }
+
+    @Override
+    public void updateMotionTracker(Vec3d pos) {
+        SB_OldPos = SB_LastPos;
+        SB_LastPos = pos;
+    }
+
+    @Override
+    public Vec3d readMotionTracker() {
+        return SB_OldPos;
     }
 }

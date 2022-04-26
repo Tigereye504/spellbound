@@ -62,13 +62,6 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
     }
 
     @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other)
-                && other.canCombine(Enchantments.SHARPNESS)
-                && other.canCombine(Enchantments.POWER);
-    }
-
-    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem

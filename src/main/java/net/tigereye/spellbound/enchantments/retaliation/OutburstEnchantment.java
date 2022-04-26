@@ -99,10 +99,4 @@ public class OutburstEnchantment extends SBEnchantment {
                 || super.isAcceptableItem(stack);
     }
 
-
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other)
-                && other.canCombine(Enchantments.THORNS);
-    }
 }

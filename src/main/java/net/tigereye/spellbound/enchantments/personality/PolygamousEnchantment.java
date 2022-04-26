@@ -93,11 +93,4 @@ public class PolygamousEnchantment extends SBEnchantment {
         return false;
     }
 
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other) && other != SBEnchantments.MONOGAMOUS;
-    }
-
-
-
 }

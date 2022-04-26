@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:mending",
+    "spellbound:legacy",
+    "spellbound:metabolising",
+    "spellbound:photosynthetic",
+    "spellbound:selfish",
+    "spellbound:skotosynthetic"
+  ]
+}

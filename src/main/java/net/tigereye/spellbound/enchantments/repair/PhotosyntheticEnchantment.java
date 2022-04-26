@@ -63,9 +63,4 @@ public class PhotosyntheticEnchantment extends SBEnchantment {
         return false;
     }
 
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other)
-                && other.canCombine(Enchantments.MENDING);
-    }
 }

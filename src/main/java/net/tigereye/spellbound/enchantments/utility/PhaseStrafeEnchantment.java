@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.SpellboundLivingEntity;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.UtilityEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -59,7 +60,7 @@ public class PhaseStrafeEnchantment extends SBEnchantment implements UtilityEnch
             direction = entity.getVelocity();
         }
         else {
-            direction = SpellboundUtil.readMotionTracker(entity, stack);
+            direction = ((SpellboundLivingEntity)entity).readMotionTracker();
         }
         direction = direction.multiply(1,0,1);
         position = VectorUtil.findCollisionWithStepAssistOnLine(entity.getEntityWorld(),position,direction,level);
@@ -74,12 +75,7 @@ public class PhaseStrafeEnchantment extends SBEnchantment implements UtilityEnch
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         if(!(entity instanceof PlayerEntity)) {
-            SpellboundUtil.setMotionTracker(stack, entity);
+            ((SpellboundLivingEntity)entity).updateMotionTracker(entity.getPos());
         }
-    }
-
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other) && !(other instanceof UtilityEnchantment);
     }
 }

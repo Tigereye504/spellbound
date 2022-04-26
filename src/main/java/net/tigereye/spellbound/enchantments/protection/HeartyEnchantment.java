@@ -87,12 +87,6 @@ public class HeartyEnchantment extends SBEnchantment implements CustomConditions
     }
 
     @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other)
-                && other.canCombine(Enchantments.PROTECTION);
-    }
-
-    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof ArmorItem
                 || stack.getItem() instanceof ShieldItem

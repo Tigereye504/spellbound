@@ -45,9 +45,4 @@ public class DullnessEnchantment extends SBEnchantment {
         return -1.5f - level;
     }
 
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return !(other instanceof DamageEnchantment)
-                && other.canCombine(Enchantments.SHARPNESS);
-    }
 }

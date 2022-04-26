@@ -50,9 +50,4 @@ public class AttractiveEnchantment extends SBEnchantment implements UtilityEncha
             SpellboundUtil.pushPullEntitiesPlayersInRange(Spellbound.config.ATTRACTION_RANGE, Spellbound.config.ATTRACTION_STRENGTH, entity);
         }
     }
-
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other) && !(other instanceof UtilityEnchantment);
-    }
 }

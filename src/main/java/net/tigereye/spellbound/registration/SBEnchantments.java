@@ -6,7 +6,8 @@ import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.*;
 import net.tigereye.spellbound.enchantments.damage.*;
 import net.tigereye.spellbound.enchantments.efficiency.AccelerationEnchantment;
-import net.tigereye.spellbound.enchantments.efficiency.RockCollectorEnchantment;
+import net.tigereye.spellbound.enchantments.efficiency.RockCollectingEnchantment;
+import net.tigereye.spellbound.enchantments.lure.FisherOfMenEnchantment;
 import net.tigereye.spellbound.enchantments.personality.MonogamousEnchantment;
 import net.tigereye.spellbound.enchantments.personality.PolygamousEnchantment;
 import net.tigereye.spellbound.enchantments.protection.FleshWoundEnchantment;
@@ -17,8 +18,9 @@ import net.tigereye.spellbound.enchantments.repair.MetabolisingEnchantment;
 import net.tigereye.spellbound.enchantments.repair.SelfishEnchantment;
 import net.tigereye.spellbound.enchantments.repair.SkotosyntheticEnchantment;
 import net.tigereye.spellbound.enchantments.retaliation.OutburstEnchantment;
+import net.tigereye.spellbound.enchantments.retaliation.SpikesEnchantment;
 import net.tigereye.spellbound.enchantments.unbreaking.SaturatedEnchantment;
-import net.tigereye.spellbound.enchantments.universal.LegacyEnchantment;
+import net.tigereye.spellbound.enchantments.repair.LegacyEnchantment;
 import net.tigereye.spellbound.enchantments.utility.*;
 
 import java.util.ArrayList;
@@ -32,9 +34,11 @@ public class SBEnchantments {
     public static final SBEnchantment ATTRACTIVE = new AttractiveEnchantment();
     public static final SBEnchantment CAVE_IN = new CaveInEnchantment();
     public static final SBEnchantment DULLNESS = new DullnessEnchantment();
+    public static final SBEnchantment FISHER_OF_MEN = new FisherOfMenEnchantment();
     public static final SBEnchantment FLESH_WOUND = new FleshWoundEnchantment();
     public static final SBEnchantment HEARTY = new HeartyEnchantment();
     public static final SBEnchantment SATURATED = new SaturatedEnchantment();
+    public static final SBEnchantment SPIKES = new SpikesEnchantment();
     public static final SBEnchantment IMPERSONAL = new ImpersonalEnchantment();
     public static final SBEnchantment JOUSTING = new JoustingEnchantment();
     public static final SBEnchantment LAUNCHING = new LaunchingEnchantment();
@@ -50,18 +54,19 @@ public class SBEnchantments {
     public static final SBEnchantment RAMPAGE = new RampageEnchantment();
     public static final SBEnchantment RED_ALERT = new RedAlertEnchantment();
     public static final SBEnchantment REPULSIVE = new RepulsiveEnchantment();
-    public static final SBEnchantment ROCK_COLLECTING = new RockCollectorEnchantment();
+    public static final SBEnchantment ROCK_COLLECTING = new RockCollectingEnchantment();
     public static final SBEnchantment METABOLISING = new MetabolisingEnchantment();
     public static final SBEnchantment SELFISH = new SelfishEnchantment();
     public static final SBEnchantment SKOTOSYNTHETIC = new SkotosyntheticEnchantment();
     public static final SBEnchantment TETHERING = new TetheringEnchantment();
-    public static final SBEnchantment TROPHY_COLLECTING = new TrophyCollectorEnchantment();
+    public static final SBEnchantment TROPHY_COLLECTING = new TrophyCollectingEnchantment();
 
     public static void register(){
         register("acceleration", ACCELERATION);
         register("attractive", ATTRACTIVE);
         register("cave_in", CAVE_IN);
         register("dullness", DULLNESS);
+        register("fisher_of_men", FISHER_OF_MEN);
         register("flesh_wound", FLESH_WOUND);
         register("hearty", HEARTY);
         register("impersonal", IMPERSONAL);
@@ -83,6 +88,7 @@ public class SBEnchantments {
         register("rock_collecting", ROCK_COLLECTING);
         register("saturated", SATURATED);
         register("selfish", SELFISH);
+        register("spikes", SPIKES);
         register("skotosynthetic", SKOTOSYNTHETIC);
         register("tethering", TETHERING);
         register("trophy_collecting", TROPHY_COLLECTING);

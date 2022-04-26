@@ -68,12 +68,6 @@ public class FleshWoundEnchantment extends SBEnchantment implements CustomCondit
     }
 
     @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other)
-                && other.canCombine(Enchantments.PROTECTION);
-    }
-
-    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof ArmorItem
                 || stack.getItem() instanceof ShieldItem

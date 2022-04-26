@@ -58,11 +58,6 @@ public class LaunchingEnchantment extends SBEnchantment implements CustomConditi
     }
 
     @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other);
-    }
-
-    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem

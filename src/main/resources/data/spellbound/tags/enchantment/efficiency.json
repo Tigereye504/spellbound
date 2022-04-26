@@ -1,0 +1,8 @@
+{
+    "replace": false,
+    "values": [
+      "minecraft:efficiency",
+      "spellbound:acceleration",
+      "spellbound:rock_collecting"
+    ]
+  }

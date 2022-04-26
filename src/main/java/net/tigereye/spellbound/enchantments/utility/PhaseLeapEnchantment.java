@@ -64,9 +64,4 @@ public class PhaseLeapEnchantment extends SBEnchantment implements UtilityEnchan
         }
         entity.updatePosition(position.x, position.y, position.z);
     }
-
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other) && !(other instanceof UtilityEnchantment);
-    }
 }

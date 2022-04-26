@@ -16,11 +16,15 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean DULLNESS_ENABLED = true;
     @ConfigEntry.Category("inclusion")
+    public boolean FISHER_OF_MEN_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
     public boolean FLESH_WOUND_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean HEARTY_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean SATURATED_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
+    public boolean SPIKES_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean IMPERSONAL_ENABLED = true;
     @ConfigEntry.Category("inclusion")
@@ -73,6 +77,10 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("details")
     public int CAVE_IN_MAX_BLAST_RES = 99;
     @ConfigEntry.Category("details")
+    public float FISHER_OF_MEN_BASE_DAMAGE = 2F;
+    @ConfigEntry.Category("details")
+    public float FISHER_OF_MEN_DAMAGE_PER_LEVEL = 1.5F;
+    @ConfigEntry.Category("details")
     public float FLESH_WOUND_ABSORPTION_PER_DAMAGE_PER_LEVEL = 0.125F;
     @ConfigEntry.Category("details")
     public float HEARTY_HEALTH_FACTOR_BASE = .1f;
@@ -123,6 +131,8 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("details")
     public int SATURATED_FOOD_THRESHOLD = 20;
     @ConfigEntry.Category("details")
+    public float SPIKES_DAMAGE_PER_LEVEL = .5f;
+    @ConfigEntry.Category("details")
     public float METABOLISING_EXHAUSTION_COST = 3.0f;
     @ConfigEntry.Category("details")
     public int METABOLISING_FOOD_THRESHOLD = 18;
@@ -132,4 +142,18 @@ public class SBConfig implements ConfigData {
     public int SKOTOSYNTHETIC_REPAIR_PERIOD = 40;
     @ConfigEntry.Category("details")
     public double TETHER_ATTRACTION_FACTOR = 1;
+
+
+    @ConfigEntry.Category("tomfoolery")
+    public boolean DISABLE_INCOMPATIBILITY = false;
+    @ConfigEntry.Category("tomfoolery")
+    public boolean DESTRUCTIVE_SHOCKWAVES = false;
+    @ConfigEntry.Category("tomfoolery")
+    public boolean UNLIMITED_CAVE_IN = false;
+    @ConfigEntry.Category("tomfoolery")
+    public boolean TAKE_ANY_TROPHY = false;
+    @ConfigEntry.Category("tomfoolery")
+    public boolean COLLECT_ANY_ROCK = false;
+    @ConfigEntry.Category("tomfoolery")
+    public boolean YANDERE_TOOLS = false;
 }

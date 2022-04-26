@@ -9,6 +9,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
@@ -18,8 +19,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.util.SBEnchantmentHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SBEnchantment extends Enchantment {
@@ -50,6 +52,9 @@ public abstract class SBEnchantment extends Enchantment {
 
     //for when equipment is changed
     public void onEquipmentChange(int level, ItemStack stack, LivingEntity entity){}
+
+    //for when you reel in a hooked entity
+    public void onPullHookedEntity(int level, FishingBobberEntity bobber, ItemStack stack, LivingEntity user, Entity target){}
 
     //public void onArmorChangeEvenIfAbsent
 
@@ -85,17 +90,18 @@ public abstract class SBEnchantment extends Enchantment {
     // Careful, this will be called separately for every instance of the enchantment.
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){}
 
+    public void onTickOnceWhileEquipped(int level, ItemStack stack, LivingEntity entity){}
+
     public void onTickAlways(LivingEntity entity){}
 
-    public void onToolBreak(int level, ItemStack itemStack, PlayerEntity entity) {
-    }
+    public void onToolBreak(int level, ItemStack itemStack, PlayerEntity entity) {}
 
     public float getProtectionAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
         return 0;
     }
 
     public List<Text> addTooltip(int level, ItemStack itemStack, PlayerEntity player, TooltipContext context) {
-        return new ArrayList<>();
+        return null;
     }
 
     public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity victim, float damage) {
@@ -128,5 +134,11 @@ public abstract class SBEnchantment extends Enchantment {
     @Override
     public boolean isAvailableForRandomSelection() {
         return isEnabled();
+    }
+
+    @Override
+    public boolean canAccept(Enchantment other) {
+        return super.canAccept(other) && (SBEnchantmentHelper.areNotInSameCategory(this,other)
+                || Spellbound.config.DISABLE_INCOMPATIBILITY);
     }
 }

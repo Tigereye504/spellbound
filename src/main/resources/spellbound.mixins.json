@@ -6,11 +6,12 @@
   "mixins": [
     "BlockMixin",
     "EnchantmentHelperMixin",
+    "FishingBobberEntityMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
     "MobEntityMixin",
-    "PlayerEntityMixin",
     "PersistentProjectileEntityMixin",
+    "PlayerEntityMixin",
     "ProjectileEntityMixin",
     "StatusEffectInstanceMixin",
     "TridentEntityMixin",

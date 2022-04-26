@@ -1,8 +1,6 @@
 package net.tigereye.spellbound.enchantments.damage;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -11,9 +9,9 @@ import net.minecraft.item.*;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.SpellboundLivingEntity;
 import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class JoustingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
@@ -53,7 +51,7 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
 
     @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
-        Vec3d attackerVelocity = getJoustingVelocity(attacker,stack);
+        Vec3d attackerVelocity = ((SpellboundLivingEntity)attacker).readMotionTracker();
         Vec3d relativeVelocity = attackerVelocity.subtract(defender.getVelocity());
         Vec3d attackerFacing = attacker.getRotationVector().normalize();
         double dotP = relativeVelocity.dotProduct(attackerFacing);
@@ -91,7 +89,7 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        SpellboundUtil.setMotionTracker(stack,entity);
+        ((SpellboundLivingEntity)entity).updateMotionTracker(entity.getPos());
     }
 
     @Override
@@ -99,21 +97,9 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
         return false;
     }
 
-    //I want to disallow damageEnchantments and anything else that disallows damageEnchantments
-    //as typically the later is trying to be another form of damage enchantment
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other)
-                && other.canCombine(Enchantments.SHARPNESS);
-    }
-
     @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof TridentItem
                 || stack.getItem() == Items.BOOK;
-    }
-
-    private Vec3d getJoustingVelocity(LivingEntity attacker, ItemStack stack){
-        return SpellboundUtil.readMotionTracker(attacker,stack);
     }
 }

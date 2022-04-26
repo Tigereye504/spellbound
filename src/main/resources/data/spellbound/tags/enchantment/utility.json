@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "spellbound:attractive",
+    "spellbound:cave_in",
+    "spellbound:impersonal",
+    "spellbound:launching",
+    "spellbound:phase_leap",
+    "spellbound:phase_strafe",
+    "spellbound:repulsive",
+    "spellbound:tethering"
+  ]
+}

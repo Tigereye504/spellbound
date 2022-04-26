@@ -80,11 +80,6 @@ public class ImpersonalEnchantment extends SBEnchantment implements CustomCondit
     }
 
     @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other);
-    }
-
-    @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem

@@ -107,13 +107,6 @@ public class AccelerationEnchantment extends SBEnchantment implements CustomCond
         return false;
     }
 
-    //I want to disallow efficiency and its knockoffs
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other)
-                && other.canCombine(Enchantments.EFFICIENCY);
-    }
-
     @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof PickaxeItem

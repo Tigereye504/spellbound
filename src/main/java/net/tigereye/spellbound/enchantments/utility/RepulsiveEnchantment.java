@@ -52,9 +52,4 @@ public class RepulsiveEnchantment extends SBEnchantment implements UtilityEnchan
             }
         }
     }
-
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other) && !(other instanceof UtilityEnchantment);
-    }
 }

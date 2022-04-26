@@ -10,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
@@ -17,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -24,6 +26,8 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.SpellboundPlayerEntity;
@@ -34,10 +38,13 @@ import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
 import net.tigereye.spellbound.mob_effect.instance.PolygamyInstance;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
+import net.tigereye.spellbound.registration.SBTags;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class SBEnchantmentHelper {
@@ -114,14 +121,20 @@ public class SBEnchantmentHelper {
 
     //called at the head of LivingEntity::tick
     public static void onTickWhileEquipped(LivingEntity entity){
+        List<SBEnchantment> checked = new LinkedList<>();
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
-            if(((SBEnchantment)enchantment).requiresPreferredSlot()) {
+            if(enchantment.requiresPreferredSlot()) {
                 if (entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) != itemStack) {
                     return;
                 }
             }
-            ((SBEnchantment)enchantment).onTickWhileEquipped(level, itemStack, entity);
+            if(!checked.contains(enchantment)){
+                checked.add(enchantment);
+                enchantment.onTickOnceWhileEquipped(level, itemStack, entity);
+            }
+            enchantment.onTickWhileEquipped(level, itemStack, entity);
         },entity.getItemsEquipped());
+
     }
 
     public static void onTickAlways(LivingEntity entity){
@@ -185,6 +198,13 @@ public class SBEnchantmentHelper {
         }
     }
 
+    public static void onPullHookedEntity(FishingBobberEntity bobber, ItemStack stack, Entity entity) {
+        Entity owner = bobber.getOwner();
+        if(owner instanceof LivingEntity) {
+            forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onPullHookedEntity(level, bobber, stack, (LivingEntity)owner, entity), stack);
+        }
+    }
+
     public static void onProjectileBlockHit(ProjectileEntity projectileEntity, BlockHitResult blockHitResult) {
         if(projectileEntity instanceof TridentEntity){
             forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult), ((TridentEntityItemAccessor)projectileEntity).spellbound_getTridentStack());
@@ -216,7 +236,7 @@ public class SBEnchantmentHelper {
                 int j = NbtList.getCompound(i).getInt("lvl");
                 Registry.ENCHANTMENT.getOrEmpty(Identifier.tryParse(string)).ifPresent((enchantment) -> {
                     if(enchantment instanceof SBEnchantment) {
-                        consumer.accept(enchantment, j, stack);
+                        consumer.accept((SBEnchantment)enchantment, j, stack);
                     }
                 });
             }
@@ -237,6 +257,10 @@ public class SBEnchantmentHelper {
             }
         }, equipment);
         return mutableInt.intValue();
+    }
+
+    public static int getSpellboundEnchantmentAmountCorrectlyWorn(Enchantment target, LivingEntity entity) {
+        return getSpellboundEnchantmentAmountCorrectlyWorn(entity.getItemsEquipped(),target,entity);
     }
 
     public static int getSpellboundEnchantmentAmountCorrectlyWorn(Iterable<ItemStack> equipment, Enchantment target, LivingEntity entity) {
@@ -346,9 +370,46 @@ public class SBEnchantmentHelper {
         return id;
     }
 
+    //This checks if the given enchantments are in the same enchantment tags and so are incompatible
+    //if either enchantment is not registered, return true to assume they are compatible.
+    //if any tag contains both enchantments, return false
+    //if a tag contains the first and the tag's parents are incompatible with the second, return false.
+    //      this is to improve support for other enchantment mods that haven't added spellbound enchantment tags.
+    //if all tags are checked and passed, return true.
+    public static boolean areNotInSameCategory(SBEnchantment first, Enchantment second) {
+        RegistryEntry<Enchantment> firstEntry = getEnchantmentRegistryKey(first);
+        RegistryEntry<Enchantment> secondEntry = getEnchantmentRegistryKey(second);
+        if(firstEntry == null || secondEntry == null){
+            return true;
+        }
+        for (TagKey<Enchantment> category : SBTags.ENCHANTMENT_CATEGORIES) {
+            if(firstEntry.isIn(category) && secondEntry.isIn(category)){
+                return false;
+            }
+            else if (SBTags.CATEGORY_PARENTS.containsKey(category) &&
+                    firstEntry.isIn(category) &&
+                    !(secondEntry instanceof SBEnchantment)){
+                for (Enchantment parent : SBTags.CATEGORY_PARENTS.get(category)) {
+                    if(!(second.canCombine(parent))){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private static RegistryEntry<Enchantment> getEnchantmentRegistryKey(Enchantment enchantment){
+        RegistryKey<Enchantment> key;
+        Optional<RegistryKey<Enchantment>> optional = Registry.ENCHANTMENT.getKey(enchantment);
+        if(optional.isPresent()) {key = optional.get();}
+        else {return null;}
+        Optional<RegistryEntry<Enchantment>> optional2 = Registry.ENCHANTMENT.getEntry(key);
+        return optional2.orElse(null);
+    }
 
     @FunctionalInterface
     interface Consumer {
-        void accept(Enchantment enchantment, int level, ItemStack itemStack);
+        void accept(SBEnchantment enchantment, int level, ItemStack itemStack);
     }
 }

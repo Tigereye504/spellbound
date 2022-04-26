@@ -23,11 +23,11 @@ import net.tigereye.spellbound.enchantments.SBEnchantment;
 
 import java.util.*;
 
-public class RockCollectorEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class RockCollectingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     private static final String ROCK_COLLECTOR_KEY = Spellbound.MODID+"RockCollector";
     private static final String UNIQUE_ROCK_COUNT_KEY = Spellbound.MODID+"UniqueRockCount";
-    public RockCollectorEnchantment() {
+    public RockCollectingEnchantment() {
         super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = true;
     }
@@ -114,13 +114,6 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
         return false;
     }
 
-    //I want to disallow efficiency and its knockoffs
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other)
-                && other.canCombine(Enchantments.EFFICIENCY);
-    }
-
     @Override
     public boolean isAcceptableAtTable(ItemStack stack) {
         return stack.getItem() instanceof PickaxeItem
@@ -134,36 +127,35 @@ public class RockCollectorEnchantment extends SBEnchantment implements CustomCon
     }
 
     private boolean addRock(BlockState blockState, LivingEntity miner, ItemStack stack){
-        if(!stack.getItem().isSuitableFor(blockState)){
-            return false;
-        }
-        NbtCompound tag = stack.getOrCreateSubNbt(ROCK_COLLECTOR_KEY);
-        if(!hasRock(blockState,stack)){
-            tag.putInt(UNIQUE_ROCK_COUNT_KEY,tag.getInt(UNIQUE_ROCK_COUNT_KEY)+1);
-            tag.putInt(blockState.getBlock().getTranslationKey(),1);
-            if(miner instanceof PlayerEntity){
-                String message = stack.getName().getString()
-                        + " acquired a "
-                        + new TranslatableText(blockState.getBlock().getTranslationKey()).getString()
-                        + " fragment";
-                ((PlayerEntity)miner).sendMessage(new LiteralText(message)
-                        , true);
+        if(stack.getItem().isSuitableFor(blockState) || Spellbound.config.COLLECT_ANY_ROCK) {
+            NbtCompound tag = stack.getOrCreateSubNbt(ROCK_COLLECTOR_KEY);
+            if (!hasRock(blockState, stack)) {
+                tag.putInt(UNIQUE_ROCK_COUNT_KEY, tag.getInt(UNIQUE_ROCK_COUNT_KEY) + 1);
+                tag.putInt(blockState.getBlock().getTranslationKey(), 1);
+                if (miner instanceof PlayerEntity) {
+                    String message = stack.getName().getString()
+                            + " acquired a "
+                            + new TranslatableText(blockState.getBlock().getTranslationKey()).getString()
+                            + " fragment";
+                    ((PlayerEntity) miner).sendMessage(new LiteralText(message)
+                            , true);
+                }
+                return true;
+            } else {
+                int newValue = tag.getInt(blockState.getBlock().getTranslationKey()) + 1;
+                tag.putInt(blockState.getBlock().getTranslationKey(), newValue);
+                if (calculateBlockBonus(newValue - 1) < (calculateBlockBonus(newValue))) {
+                    String message = stack.getName().getString()
+                            + "'s "
+                            + new TranslatableText(blockState.getBlock().getTranslationKey()).getString()
+                            + " fragment improved";
+                    ((PlayerEntity) miner).sendMessage(new LiteralText(message)
+                            , true);
+                }
+                return false;
             }
-            return true;
         }
-        else{
-            int newValue = tag.getInt(blockState.getBlock().getTranslationKey())+1;
-            tag.putInt(blockState.getBlock().getTranslationKey(),newValue);
-            if(calculateBlockBonus(newValue-1) < (calculateBlockBonus(newValue))){
-                String message = stack.getName().getString()
-                        + "'s "
-                        + new TranslatableText(blockState.getBlock().getTranslationKey()).getString()
-                        + " fragment improved";
-                ((PlayerEntity)miner).sendMessage(new LiteralText(message)
-                        , true);
-            }
-            return false;
-        }
+        return false;
     }
 
     private int getUniqueRockCount(ItemStack stack){

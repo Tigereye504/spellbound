@@ -62,10 +62,4 @@ public class SkotosyntheticEnchantment extends SBEnchantment {
     public boolean isTreasure() {
         return false;
     }
-
-    @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other)
-                && other.canCombine(Enchantments.MENDING);
-    }
 }
