@@ -10,11 +10,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.interfaces.UtilityEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
 import net.tigereye.spellbound.util.VectorUtil;
 
-public class PhaseLeapEnchantment extends SBEnchantment implements UtilityEnchantment {
+public class PhaseLeapEnchantment extends SBEnchantment {
 
     public PhaseLeapEnchantment() {
         super(Rarity.RARE, EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});

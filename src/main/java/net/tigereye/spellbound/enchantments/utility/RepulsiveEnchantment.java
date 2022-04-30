@@ -8,10 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.interfaces.UtilityEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
-public class RepulsiveEnchantment extends SBEnchantment implements UtilityEnchantment {
+public class RepulsiveEnchantment extends SBEnchantment{
 
 
     public RepulsiveEnchantment() {
