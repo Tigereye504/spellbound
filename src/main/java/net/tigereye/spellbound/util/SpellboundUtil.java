@@ -2,14 +2,11 @@ package net.tigereye.spellbound.util;
 
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectListIterator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.FallingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
@@ -20,7 +17,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -55,18 +51,15 @@ public class SpellboundUtil {
                 target.velocityModified = true;
             }
         }
+
         List<PlayerEntity> playerList = user.world.getPlayers(TargetPredicate.DEFAULT,user,
                 new Box(position.x+range,position.y+range,position.z+range,
                         position.x-range,position.y-range,position.z-range));
-        for (Entity target:
+        for (LivingEntity target:
                 playerList) {
             if(target != user) {
                 Vec3d forceVec = position.subtract(target.getPos()).normalize();
-                if (target instanceof LivingEntity) {
-                    forceVec = forceVec.multiply(strength * Math.max(0, 1 - ((LivingEntity) target).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)));
-                } else {
-                    forceVec = forceVec.multiply(strength);
-                }
+                forceVec = forceVec.multiply(strength * Math.max(0, 1 - (target).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)));
                 target.addVelocity(forceVec.x, forceVec.y, forceVec.z);
                 target.velocityModified = true;
             }
@@ -133,9 +126,7 @@ public class SpellboundUtil {
                                     LootContext.Builder builder = (new LootContext.Builder((ServerWorld)world)).random(world.random).parameter(LootContextParameters.ORIGIN, Vec3d.ofCenter(target)).parameter(LootContextParameters.TOOL, ItemStack.EMPTY).optionalParameter(LootContextParameters.BLOCK_ENTITY, blockEntity).optionalParameter(LootContextParameters.THIS_ENTITY, source);
                                     builder.parameter(LootContextParameters.EXPLOSION_RADIUS, strength/range);
 
-                                    targetBlock.getDroppedStacks(builder).forEach((stack) -> {
-                                        tryMergeStack(objectArrayList, stack, blockPos2);
-                                    });
+                                    targetBlock.getDroppedStacks(builder).forEach((stack) -> tryMergeStack(objectArrayList, stack, blockPos2));
                                 }
 
                                 world.setBlockState(target, Blocks.AIR.getDefaultState(), 3);
@@ -148,7 +139,7 @@ public class SpellboundUtil {
             }
 
             for (Pair<ItemStack, BlockPos> itemStackBlockPosPair : objectArrayList) {
-                Block.dropStack(world, (BlockPos) ((Pair<ItemStack, BlockPos>) (Pair) itemStackBlockPosPair).getSecond(), (ItemStack) ((Pair<ItemStack, BlockPos>) (Pair) itemStackBlockPosPair).getFirst());
+                Block.dropStack(world, itemStackBlockPosPair.getSecond(), itemStackBlockPosPair.getFirst());
             }
         }
 
@@ -159,11 +150,11 @@ public class SpellboundUtil {
         int i = stacks.size();
 
         for(int j = 0; j < i; ++j) {
-            Pair<ItemStack, BlockPos> pair = (Pair)stacks.get(j);
-            ItemStack itemStack = (ItemStack)pair.getFirst();
+            Pair<ItemStack, BlockPos> pair = stacks.get(j);
+            ItemStack itemStack = pair.getFirst();
             if (ItemEntity.canMerge(itemStack, stack)) {
                 ItemStack itemStack2 = ItemEntity.merge(itemStack, stack, 16);
-                stacks.set(j, Pair.of(itemStack2, (BlockPos)pair.getSecond()));
+                stacks.set(j, Pair.of(itemStack2, pair.getSecond()));
                 if (stack.isEmpty()) {
                     return;
                 }

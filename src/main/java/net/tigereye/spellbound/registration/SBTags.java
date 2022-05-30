@@ -58,6 +58,11 @@ public class SBTags {
         parentList = new ArrayList<>();
         parentList.add(Enchantments.UNBREAKING);
         CATEGORY_PARENTS.put(UNBREAKING_ENCHANTMENTS, parentList);
-        //utility enchantments have no parent
+        parentList = new ArrayList<>();
+        parentList.add(Enchantments.KNOCKBACK);
+        parentList.add(Enchantments.FROST_WALKER);
+        parentList.add(Enchantments.SOUL_SPEED);
+        parentList.add(Enchantments.AQUA_AFFINITY);
+        CATEGORY_PARENTS.put(UTILITY_ENCHANTMENTS, parentList);
     }
 }

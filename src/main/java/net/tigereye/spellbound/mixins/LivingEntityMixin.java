@@ -95,13 +95,13 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
     }
 
     @Override
-    public void updateMotionTracker(Vec3d pos) {
+    public void updatePositionTracker(Vec3d pos) {
         SB_OldPos = SB_LastPos;
         SB_LastPos = pos;
     }
 
     @Override
-    public Vec3d readMotionTracker() {
+    public Vec3d readPositionTracker() {
         return SB_OldPos;
     }
 }

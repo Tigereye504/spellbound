@@ -110,7 +110,7 @@
     "text.autoconfig.spellbound.option.ATTRACTION_STRENGTH": "Attraction/Repulsion Strength",
     "text.autoconfig.spellbound.option.CAVE_IN_MAX_BLAST_RES": "Cave In Max Blast Resistance",
     "text.autoconfig.spellbound.option.COLLECTOR_DISPLAY_UPDATE_PERIOD": "Collector Display Update Period",
-    "text.autoconfig.spellbound.option.COLECTOR_WINDOW_SIZE": "Entries Shown On Collector Tooltip",
+    "text.autoconfig.spellbound.option.COLLECTOR_WINDOW_SIZE": "Entries Shown On Collector Tooltip",
     "text.autoconfig.spellbound.option.FISHER_OF_MEN_BASE_DAMAGE": "Fisher Of Men Base Damage",
     "text.autoconfig.spellbound.option.FISHER_OF_MEN_DAMAGE_PER_LEVEL": "Fisher Of Men Damage Per Level",
     "text.autoconfig.spellbound.option.FLESH_WOUND_ABSORPTION_PER_DAMAGE_PER_LEVEL": "Flesh Wound Absorption/Rank/Dmg",

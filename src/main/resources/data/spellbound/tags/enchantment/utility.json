@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "minecraft:knockback",
     "spellbound:attractive",
     "spellbound:cave_in",
     "spellbound:impersonal",

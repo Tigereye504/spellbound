@@ -1,6 +1,5 @@
 package net.tigereye.spellbound.enchantments.utility;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EquipmentSlot;
@@ -11,7 +10,6 @@ import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.SpellboundLivingEntity;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.util.SpellboundUtil;
 import net.tigereye.spellbound.util.VectorUtil;
 
 public class PhaseStrafeEnchantment extends SBEnchantment {
@@ -59,7 +57,7 @@ public class PhaseStrafeEnchantment extends SBEnchantment {
             direction = entity.getVelocity();
         }
         else {
-            direction = ((SpellboundLivingEntity)entity).readMotionTracker();
+            direction = entity.getPos().subtract(((SpellboundLivingEntity)entity).readPositionTracker());
         }
         direction = direction.multiply(1,0,1);
         position = VectorUtil.findCollisionWithStepAssistOnLine(entity.getEntityWorld(),position,direction,level);
@@ -74,7 +72,7 @@ public class PhaseStrafeEnchantment extends SBEnchantment {
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         if(!(entity instanceof PlayerEntity)) {
-            ((SpellboundLivingEntity)entity).updateMotionTracker(entity.getPos());
+            ((SpellboundLivingEntity)entity).updatePositionTracker(entity.getPos());
         }
     }
 }

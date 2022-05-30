@@ -51,7 +51,7 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
 
     @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
-        Vec3d attackerVelocity = ((SpellboundLivingEntity)attacker).readMotionTracker();
+        Vec3d attackerVelocity = attacker.getPos().subtract(((SpellboundLivingEntity)attacker).readPositionTracker());
         Vec3d relativeVelocity = attackerVelocity.subtract(defender.getVelocity());
         Vec3d attackerFacing = attacker.getRotationVector().normalize();
         double dotP = relativeVelocity.dotProduct(attackerFacing);
@@ -76,11 +76,11 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
             out = "Relative Velocity: " + relativeVelocity;
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
-            out = "Attacker Facing: " + attackerFacing.toString();
+            out = "Attacker Facing: " + attackerFacing;
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
             out = "Attacker Velocity: " + attackerVelocity;
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
-            out = "Defender Velocity: " + defender.getVelocity().toString();
+            out = "Defender Velocity: " + defender.getVelocity();
             ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
         }
         return damage;
@@ -89,7 +89,7 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        ((SpellboundLivingEntity)entity).updateMotionTracker(entity.getPos());
+        ((SpellboundLivingEntity)entity).updatePositionTracker(entity.getPos());
     }
 
     @Override
