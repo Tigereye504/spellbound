@@ -5,6 +5,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.nbt.NbtCompound;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class PolygamyInstance extends StatusEffectInstance{
@@ -35,8 +36,8 @@ public class PolygamyInstance extends StatusEffectInstance{
         this.itemUUID = itemUUID;
     }
 
-    public PolygamyInstance(UUID itemUUID, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, StatusEffectInstance hiddenEffect) {
-        super(SBStatusEffects.POLYGAMY, duration, amplifier, ambient, showParticles, showIcon, hiddenEffect);
+    public PolygamyInstance(UUID itemUUID, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, StatusEffectInstance hiddenEffect, Optional<FactorCalculationData> factorCalculationData) {
+        super(SBStatusEffects.POLYGAMY, duration, amplifier, ambient, showParticles, showIcon, hiddenEffect, factorCalculationData);
         this.itemUUID = itemUUID;
     }
 
@@ -86,6 +87,6 @@ public class PolygamyInstance extends StatusEffectInstance{
         else{
             tetherUUID = new UUID(0,0);
         }
-        return new PolygamyInstance(tetherUUID,duration,amplifier,ambient,showParticles,showIcon,null);
+        return new PolygamyInstance(tetherUUID,duration,amplifier,ambient,showParticles,showIcon,null,Optional.empty());
     }
 }

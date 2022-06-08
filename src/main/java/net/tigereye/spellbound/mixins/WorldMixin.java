@@ -16,12 +16,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class WorldMixin {
 
 
-    @Inject(at = @At("HEAD"), method = "emitGameEvent")
-    public void spellboundWorldEmitGameEventMixin(@Nullable Entity entity, GameEvent gameEvent, BlockPos pos, int range, CallbackInfo info){
-        if(gameEvent == GameEvent.EQUIP && entity != null){
-            if(entity instanceof LivingEntity) {
-                SBEnchantmentHelper.onEquipmentChange((LivingEntity) entity);
-            }
-        }
-    }
+    //@Inject(at = @At("HEAD"), method = "emitGameEvent")
+    //public void spellboundWorldEmitGameEventMixin(@Nullable Entity entity, GameEvent gameEvent, BlockPos pos, int range, CallbackInfo info){
+    //    if(gameEvent == GameEvent.EQUIP && entity != null){
+    //        if(entity instanceof LivingEntity) {
+    //            SBEnchantmentHelper.onEquipmentChange((LivingEntity) entity);
+    //        }
+    //    }
+    //}
 }

@@ -44,7 +44,7 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
     //  Ljava/lang/Iterable;
     //  Lnet/minecraft/entity/damage/DamageSource;
     //)I
-    @ModifyVariable(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getProtectionAmount(Ljava/lang/Iterable;Lnet/minecraft/entity/damage/DamageSource;)I"), ordinal = 0, method = "applyEnchantmentsToDamage")
+    @ModifyVariable(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getProtectionAmount(Ljava/lang/Iterable;Lnet/minecraft/entity/damage/DamageSource;)I"), ordinal = 0, method = "modifyAppliedDamage")
     public int spellboundLivingEntityApplyEnchantmentsToDamageMixin(int k, DamageSource source, float amount){
         return SBEnchantmentHelper.getProtectionAmount(source,(LivingEntity)(Object)this,k,amount);
     }

@@ -12,9 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -89,19 +87,19 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
             NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
             Set<String> keys = tag.getKeys();
 
-            player.sendMessage(new LiteralText(""),false);
-            player.sendMessage(new LiteralText("----------------------------"),false);
+            player.sendMessage(Text.literal(""),false);
+            player.sendMessage(Text.literal("----------------------------"),false);
             keys.forEach((trophyKey) -> {
                 if(!trophyKey.equals(UNIQUE_TROPHY_COUNT_KEY)) {
-                    player.sendMessage(new LiteralText(
+                    player.sendMessage(Text.literal(
                             tag.getInt(trophyKey) + " ")
-                                    .append(new TranslatableText(trophyKey))
+                                    .append(Text.translatable(trophyKey))
                                     .append(" (+"+(int)(Math.sqrt(tag.getInt(trophyKey))/4)+")")
                     , false);
                 }
             });
 
-            player.sendMessage(new LiteralText(
+            player.sendMessage(Text.literal(
                     "--" + tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + " Unique Trophies (+"+String.format("%.1f", Math.sqrt(getUniqueTrophyCount(stack))/2)+")--"
             ), false);
         }
@@ -121,12 +119,12 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
             }
         });
         if(isRanged) {
-            output.add(new LiteralText(
+            output.add(Text.literal(
                     "--" + trophyCount + " Unique Trophies (+"
                             + String.format("%.2f", getRangedUniqueDamageMultiple(getUniqueTrophyCount(stack))) + "x)--"));
         }
         else{
-            output.add(new LiteralText(
+            output.add(Text.literal(
                     "--" + tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + " Unique Trophies (+"
                             + String.format("%.1f", getUniqueDamageBonus(getUniqueTrophyCount(stack))) + ")--"));
         }
@@ -139,21 +137,21 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
         stream.forEach((entry) -> {
             writeLineInTooltip(output,entry,isRanged);
         });
-        output.add(new LiteralText("--------------------------"));
+        output.add(Text.literal("--------------------------"));
         return output;
     }
 
     private void writeLineInTooltip(List<Text> output, Map.Entry<String, Integer> entry, boolean isRanged){
         if(isRanged) {
-            output.add(new LiteralText(
+            output.add(Text.literal(
                     entry.getValue() + " ")
-                    .append(new TranslatableText(entry.getKey()))
+                    .append(Text.translatable(entry.getKey()))
                     .append(" (+" + String.format("%.1f", getRangedEntityDamageMultiple(entry.getValue())) + "x)"));
         }
         else{
-            output.add(new LiteralText(
+            output.add(Text.literal(
                     entry.getValue() + " ")
-                    .append(new TranslatableText(entry.getKey()))
+                    .append(Text.translatable(entry.getKey()))
                     .append(" (+" + getEntityDamageBonus(entry.getValue()) + ")"));
         }
     }
@@ -187,9 +185,9 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
                 if (killer instanceof PlayerEntity) {
                     String message = stack.getName().getString()
                             + " acquired a "
-                            + new TranslatableText(victim.getType().toString()).getString()
+                            + Text.translatable(victim.getType().toString()).getString()
                             + " trophy";
-                    ((PlayerEntity) killer).sendMessage(new LiteralText(message)
+                    ((PlayerEntity) killer).sendMessage(Text.literal(message)
                             , true);
                 }
                 return true;
@@ -201,18 +199,18 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
                         if (getRangedEntityDamageMultiple(newValue - 1) < (getRangedEntityDamageMultiple(newValue))) {
                             String message = stack.getName().getString()
                                     + "'s "
-                                    + new TranslatableText(victim.getType().toString()).getString()
+                                    + Text.translatable(victim.getType().toString()).getString()
                                     + " trophy improved";
-                            ((PlayerEntity) killer).sendMessage(new LiteralText(message)
+                            ((PlayerEntity) killer).sendMessage(Text.literal(message)
                                     , true);
                         }
                     } else {
                         if (getEntityDamageBonus(newValue - 1) < (getEntityDamageBonus(newValue))) {
                             String message = stack.getName().getString()
                                     + "'s "
-                                    + new TranslatableText(victim.getType().toString()).getString()
+                                    + Text.translatable(victim.getType().toString()).getString()
                                     + " trophy improved";
-                            ((PlayerEntity) killer).sendMessage(new LiteralText(message)
+                            ((PlayerEntity) killer).sendMessage(Text.literal(message)
                                     , true);
                         }
                     }

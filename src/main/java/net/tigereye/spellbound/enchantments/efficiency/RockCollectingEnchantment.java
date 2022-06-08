@@ -2,19 +2,13 @@ package net.tigereye.spellbound.enchantments.efficiency;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
@@ -99,7 +93,7 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
             }
         });
         int rockCount = tag.getInt(UNIQUE_ROCK_COUNT_KEY);
-        output.add(new LiteralText(
+        output.add(Text.literal(
                 "--" + rockCount + " Unique Rocks (+"
                         +String.format("%.1f", calculateUniversalBonus(getUniqueRockCount(stack)))+")--"));
         Stream<Map.Entry<String, Integer>> stream = keyIntMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()));
@@ -109,14 +103,14 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
         }
         stream = stream.limit(Spellbound.config.COLLECTOR_WINDOW_SIZE);
         stream.forEach((entry) -> writeLineInTooltip(output,entry));
-        output.add(new LiteralText("--------------------------"));
+        output.add(Text.literal("--------------------------"));
         return output;
     }
 
     private void writeLineInTooltip(List<Text> output, Map.Entry<String, Integer> entry){
-        output.add(new LiteralText(
+        output.add(Text.literal(
                 entry.getValue() + " ")
-                .append(new TranslatableText(entry.getKey()))
+                .append(Text.translatable(entry.getKey()))
                 .append(" (+" + calculateBlockBonus(entry.getValue()) + ")"));
     }
 
@@ -146,9 +140,9 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
                 if (miner instanceof PlayerEntity) {
                     String message = stack.getName().getString()
                             + " acquired a "
-                            + new TranslatableText(blockState.getBlock().getTranslationKey()).getString()
+                            + Text.translatable(blockState.getBlock().getTranslationKey()).getString()
                             + " fragment";
-                    ((PlayerEntity) miner).sendMessage(new LiteralText(message)
+                    ((PlayerEntity) miner).sendMessage(Text.literal(message)
                             , true);
                 }
                 return true;
@@ -158,9 +152,9 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
                 if (calculateBlockBonus(newValue - 1) < (calculateBlockBonus(newValue))) {
                     String message = stack.getName().getString()
                             + "'s "
-                            + new TranslatableText(blockState.getBlock().getTranslationKey()).getString()
+                            + Text.translatable(blockState.getBlock().getTranslationKey()).getString()
                             + " fragment improved";
-                    ((PlayerEntity) miner).sendMessage(new LiteralText(message)
+                    ((PlayerEntity) miner).sendMessage(Text.literal(message)
                             , true);
                 }
                 return false;

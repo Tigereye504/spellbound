@@ -51,7 +51,7 @@ public abstract class SBEnchantment extends Enchantment {
     public void onActivate(int level, PlayerEntity playerEntity, ItemStack itemStack, Entity target) {}
 
     //for when equipment is changed
-    public void onEquipmentChange(int level, ItemStack stack, LivingEntity entity){}
+    //public void onEquipmentChange(int level, ItemStack stack, LivingEntity entity){}
 
     //for when you reel in a hooked entity
     public void onPullHookedEntity(int level, FishingBobberEntity bobber, ItemStack stack, LivingEntity user, Entity target){}

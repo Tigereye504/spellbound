@@ -6,6 +6,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.nbt.NbtCompound;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class TetheredInstance extends StatusEffectInstance{
@@ -42,14 +43,14 @@ public class TetheredInstance extends StatusEffectInstance{
         this.tetherUUID = anchor.getUuid();
     }
 
-    public TetheredInstance(Entity anchor, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, StatusEffectInstance hiddenEffect) {
-        super(SBStatusEffects.TETHERED, duration, amplifier, ambient, showParticles, showIcon, hiddenEffect);
+    public TetheredInstance(Entity anchor, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, StatusEffectInstance hiddenEffect, Optional<FactorCalculationData> factorCalculationData) {
+        super(SBStatusEffects.TETHERED, duration, amplifier, ambient, showParticles, showIcon, hiddenEffect, factorCalculationData);
         this.anchor = anchor;
         this.tetherUUID = anchor.getUuid();
     }
 
-    public TetheredInstance(UUID tetherUUID, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, StatusEffectInstance hiddenEffect) {
-        super(SBStatusEffects.TETHERED, duration, amplifier, ambient, showParticles, showIcon, hiddenEffect);
+    public TetheredInstance(UUID tetherUUID, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, StatusEffectInstance hiddenEffect, Optional<FactorCalculationData> factorCalculationData) {
+        super(SBStatusEffects.TETHERED, duration, amplifier, ambient, showParticles, showIcon, hiddenEffect, factorCalculationData);
         this.tetherUUID = tetherUUID;
     }
 
@@ -97,6 +98,6 @@ public class TetheredInstance extends StatusEffectInstance{
         if(tag.contains("TetherUUID")){
             tetherUUID = tag.getUuid("TetherUUID");
         }
-        return new TetheredInstance(tetherUUID,duration,amplifier,ambient,showParticles,showIcon,null);
+        return new TetheredInstance(tetherUUID,duration,amplifier,ambient,showParticles,showIcon,null,Optional.empty());
     }
 }

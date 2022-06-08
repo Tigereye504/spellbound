@@ -6,7 +6,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.SpellboundLivingEntity;
@@ -71,17 +71,17 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
         if(Spellbound.DEBUG && attacker instanceof PlayerEntity && !attacker.world.isClient){
             String out;
             out = "Dot Product: " + dotP;
-            ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
+            ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
             out = "Damage: " + damage;
-            ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
+            ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
             out = "Relative Velocity: " + relativeVelocity;
-            ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
+            ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
             out = "Attacker Facing: " + attackerFacing;
-            ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
+            ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
             out = "Attacker Velocity: " + attackerVelocity;
-            ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
+            ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
             out = "Defender Velocity: " + defender.getVelocity();
-            ((PlayerEntity)attacker).sendMessage(new LiteralText(out), false);
+            ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
         }
         return damage;
         //return (float)dotP*10*level;

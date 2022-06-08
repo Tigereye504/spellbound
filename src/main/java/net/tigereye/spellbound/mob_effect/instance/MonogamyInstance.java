@@ -6,6 +6,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.nbt.NbtCompound;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class MonogamyInstance extends StatusEffectInstance{
@@ -36,8 +37,8 @@ public class MonogamyInstance extends StatusEffectInstance{
         this.itemUUID = itemUUID;
     }
 
-    public MonogamyInstance(UUID itemUUID, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, StatusEffectInstance hiddenEffect) {
-        super(SBStatusEffects.MONOGAMY, duration, amplifier, ambient, showParticles, showIcon, hiddenEffect);
+    public MonogamyInstance(UUID itemUUID, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, StatusEffectInstance hiddenEffect, Optional<FactorCalculationData> factorCalculationData) {
+        super(SBStatusEffects.MONOGAMY, duration, amplifier, ambient, showParticles, showIcon, hiddenEffect, factorCalculationData);
         this.itemUUID = itemUUID;
     }
 
@@ -89,6 +90,6 @@ public class MonogamyInstance extends StatusEffectInstance{
         else{
             tetherUUID = new UUID(0,0);
         }
-        return new MonogamyInstance(tetherUUID,duration,amplifier,ambient,showParticles,showIcon,null);
+        return new MonogamyInstance(tetherUUID,duration,amplifier,ambient,showParticles,showIcon,null,Optional.empty());
     }
 }

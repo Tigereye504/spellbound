@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Block.class)
 public class BlockMixin {
     @Inject(at = @At(value="HEAD"), method = "onBreak")
-    public void spellboundItemStackGetTooltipMixin(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo info){
+    public void spellboundBlockOnBreakMixin(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo info){
         SBEnchantmentHelper.onBreakBlock((Block)(Object)this, world, pos, state, player);
     }
 }
