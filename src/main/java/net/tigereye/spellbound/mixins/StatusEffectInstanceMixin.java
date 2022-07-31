@@ -15,7 +15,7 @@ public class StatusEffectInstanceMixin {
     //  Lnet/minecraft/entity/effect/StatusEffect;
     //  Lnet/minecraft/nbt/NbtCompound;
     // )Lnet/minecraft/entity/effect/StatusEffectInstance;
-    @Inject(at = @At("HEAD"), method = "Lnet/minecraft/entity/effect/StatusEffectInstance;fromNbt(Lnet/minecraft/entity/effect/StatusEffect;Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/entity/effect/StatusEffectInstance;", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "fromNbt(Lnet/minecraft/entity/effect/StatusEffect;Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/entity/effect/StatusEffectInstance;", cancellable = true)
     private static void spellboundStatusEffectInstanceFromTagMixin(StatusEffect type, NbtCompound tag, CallbackInfoReturnable<StatusEffectInstance> info){
         if(type instanceof CustomDataStatusEffect){
             info.setReturnValue(((CustomDataStatusEffect)type).getInstanceFromTag(tag));

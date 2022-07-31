@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
-import net.tigereye.spellbound.SpellboundProjectileEntity;
+import net.tigereye.spellbound.interfaces.SpellboundProjectileEntity;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

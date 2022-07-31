@@ -1,4 +1,4 @@
-package net.tigereye.spellbound;
+package net.tigereye.spellbound.interfaces;
 
 public interface SpellboundPlayerEntity {
     void setIsMakingFullChargeAttack(boolean set);

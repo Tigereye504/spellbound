@@ -19,6 +19,7 @@ import net.tigereye.spellbound.enchantments.repair.SelfishEnchantment;
 import net.tigereye.spellbound.enchantments.repair.SkotosyntheticEnchantment;
 import net.tigereye.spellbound.enchantments.retaliation.OutburstEnchantment;
 import net.tigereye.spellbound.enchantments.retaliation.SpikesEnchantment;
+import net.tigereye.spellbound.enchantments.unbreaking.BufferedEnchantment;
 import net.tigereye.spellbound.enchantments.unbreaking.SaturatedEnchantment;
 import net.tigereye.spellbound.enchantments.repair.LegacyEnchantment;
 import net.tigereye.spellbound.enchantments.utility.*;
@@ -32,6 +33,7 @@ public class SBEnchantments {
 
     public static final SBEnchantment ACCELERATION = new AccelerationEnchantment();
     public static final SBEnchantment ATTRACTIVE = new AttractiveEnchantment();
+    public static final SBEnchantment BUFFERED = new BufferedEnchantment();
     public static final SBEnchantment CAVE_IN = new CaveInEnchantment();
     public static final SBEnchantment DULLNESS = new DullnessEnchantment();
     public static final SBEnchantment FISHER_OF_MEN = new FisherOfMenEnchantment();
@@ -64,6 +66,7 @@ public class SBEnchantments {
     public static void register(){
         register("acceleration", ACCELERATION);
         register("attractive", ATTRACTIVE);
+        register("buffered", BUFFERED);
         register("cave_in", CAVE_IN);
         register("dullness", DULLNESS);
         register("fisher_of_men", FISHER_OF_MEN);

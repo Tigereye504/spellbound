@@ -4,12 +4,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.tigereye.spellbound.SpellboundLivingEntity;
-import net.tigereye.spellbound.SpellboundPlayerEntity;
+import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.mob_effect.SBStatusEffectHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,9 +26,16 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
 
     private Vec3d SB_OldPos;
     private Vec3d SB_LastPos;
+    private static final TrackedData<Float> SB_DurabilityBuffer = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
+    private float SB_MaxDurabilityBuffer = 0;
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
+    }
+
+    @Inject(at = @At("TAIL"), method = "initDataTracker")
+    public void HellishMaterialsInitDataTrackerMixin(CallbackInfo info){
+        this.dataTracker.startTracking(SB_DurabilityBuffer,0f);
     }
 
     @ModifyVariable(at = @At("HEAD"), ordinal = 0, method = "applyArmorToDamage")
@@ -69,9 +78,37 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
         SBEnchantmentHelper.onJump((LivingEntity)(Object)this);
     }
 
+    @Override
+    public void updatePositionTracker(Vec3d pos) {
+        SB_OldPos = SB_LastPos;
+        SB_LastPos = pos;
+    }
+
+    @Override
+    public Vec3d readPositionTracker() {
+        return SB_OldPos;
+    }
 
 
+    @Override
+    public void setDurabilityBuffer(float buffer) {
+        this.dataTracker.set(SB_DurabilityBuffer,buffer);
+    }
 
+    @Override
+    public float getDurabilityBuffer() {
+        return this.dataTracker.get(SB_DurabilityBuffer);
+    }
+
+    @Override
+    public void setMaxDurabilityBuffer(float maxBuffer) {
+        SB_MaxDurabilityBuffer = maxBuffer;
+    }
+
+    @Override
+    public float getMaxDurabilityBuffer() {
+        return SB_MaxDurabilityBuffer;
+    }
 
 
     @Shadow
@@ -92,16 +129,5 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
     @Shadow
     public Packet<?> createSpawnPacket() {
         return null;
-    }
-
-    @Override
-    public void updatePositionTracker(Vec3d pos) {
-        SB_OldPos = SB_LastPos;
-        SB_LastPos = pos;
-    }
-
-    @Override
-    public Vec3d readPositionTracker() {
-        return SB_OldPos;
     }
 }

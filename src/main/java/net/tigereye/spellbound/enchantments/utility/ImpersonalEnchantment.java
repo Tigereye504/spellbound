@@ -1,7 +1,6 @@
 package net.tigereye.spellbound.enchantments.utility;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
@@ -10,7 +9,7 @@ import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.SpellboundPlayerEntity;
+import net.tigereye.spellbound.interfaces.SpellboundPlayerEntity;
 import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 

@@ -3,8 +3,10 @@ package net.tigereye.spellbound.enchantments.repair;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
@@ -44,9 +46,11 @@ public class PhotosyntheticEnchantment extends SBEnchantment {
     }
 
     @Override
-    public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        World world = entity.world;
+    public void onInventoryTick(int level, ItemStack stack, World world, Entity entity, int slot, boolean selected){
         if(!world.isClient() && stack.isDamaged()){
+            if(selected && entity instanceof PlayerEntity && ((PlayerEntity) entity).handSwinging){
+                return;
+            }
             int light = world.getLightLevel(entity.getBlockPos());
             if(light < Spellbound.config.PHOTOSYNTHETIC_LIGHT_MINIMUM){
                 return;

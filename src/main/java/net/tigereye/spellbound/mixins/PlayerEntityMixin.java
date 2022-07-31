@@ -7,7 +7,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.tigereye.spellbound.SpellboundPlayerEntity;
+import net.tigereye.spellbound.interfaces.SpellboundPlayerEntity;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -9,7 +9,7 @@ import net.minecraft.item.*;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.SpellboundLivingEntity;
+import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 

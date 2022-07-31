@@ -12,6 +12,8 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean ATTRACTIVE_ENABLED = true;
     @ConfigEntry.Category("inclusion")
+    public boolean BUFFERED_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
     public boolean CAVE_IN_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean DULLNESS_ENABLED = true;
@@ -74,6 +76,12 @@ public class SBConfig implements ConfigData {
     public int ATTRACTION_RANGE = 5;
     @ConfigEntry.Category("details")
     public double ATTRACTION_STRENGTH = .03;
+    @ConfigEntry.Category("details")
+    public double BUFFER_RECOVERY_RATE = 180;
+    @ConfigEntry.Category("details")
+    public double BUFFER_MAX_PER_RANK = 2;
+    @ConfigEntry.Category("details")
+    public String BUFFERED_DISPLAY = "bar";
     @ConfigEntry.Category("details")
     public int CAVE_IN_MAX_BLAST_RES = 99;
     @ConfigEntry.Category("details")

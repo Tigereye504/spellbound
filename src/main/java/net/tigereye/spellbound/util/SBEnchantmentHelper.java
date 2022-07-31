@@ -5,7 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -30,8 +29,8 @@ import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.SpellboundPlayerEntity;
-import net.tigereye.spellbound.SpellboundProjectileEntity;
+import net.tigereye.spellbound.interfaces.SpellboundPlayerEntity;
+import net.tigereye.spellbound.interfaces.SpellboundProjectileEntity;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.TridentEntityItemAccessor;
 import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
@@ -152,16 +151,16 @@ public class SBEnchantmentHelper {
 
     public static float getMiningSpeed(PlayerEntity playerEntity, BlockState block, float h) {
         MutableFloat mutableFloat = new MutableFloat(h);
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(((SBEnchantment) enchantment).getMiningSpeed(level, playerEntity, itemStack, block, mutableFloat.getValue())), playerEntity.getMainHandStack());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(enchantment.getMiningSpeed(level, playerEntity, itemStack, block, mutableFloat.getValue())), playerEntity.getMainHandStack());
         return mutableFloat.getValue();
     }
 
     public static void onActivate(PlayerEntity playerEntity, Entity target, Hand hand){
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onActivate(level, playerEntity, itemStack, target), playerEntity.getStackInHand(hand));
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onActivate(level, playerEntity, itemStack, target), playerEntity.getStackInHand(hand));
     }
 
     public static void onBreakBlock(Block block, World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onBreakBlock(level, itemStack, world, pos, state, player), player.getMainHandStack());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onBreakBlock(level, itemStack, world, pos, state, player), player.getMainHandStack());
     }
 
     //public static void onEquipmentChange(LivingEntity entity){
@@ -169,6 +168,11 @@ public class SBEnchantmentHelper {
     //    //entity.
     //    forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onEquipmentChange(level,itemStack,entity),entity.getArmorItems());
     //}
+
+
+    public static void onInventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        forEachSpellboundEnchantment((((enchantment, level, itemStack) -> enchantment.onInventoryTick(level,stack,world,entity,slot,selected))), stack);
+    }
 
     public static void onRedHealthDamage(DamageSource source, LivingEntity entity, float amount) {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onRedHealthDamage(level,itemStack,entity,amount),entity.getItemsEquipped());

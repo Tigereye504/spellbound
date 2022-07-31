@@ -64,6 +64,9 @@ public abstract class SBEnchantment extends Enchantment {
     //for when the user dies
     public void onDeath(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
 
+    //for every tick while the item is in a player's inventory
+    public void onInventoryTick(int level, ItemStack stack, World world, Entity entity, int slot, boolean selected){}
+
     //for when the user jumps
     public void onJump(int level, ItemStack stack, LivingEntity entity){}
 

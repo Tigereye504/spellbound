@@ -8,7 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.SpellboundLivingEntity;
+import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.VectorUtil;
 

@@ -1,4 +1,4 @@
-package net.tigereye.spellbound;
+package net.tigereye.spellbound.interfaces;
 
 import net.minecraft.item.ItemStack;
 
