@@ -13,6 +13,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
+import net.tigereye.spellbound.util.SBEnchantmentHelper;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -56,6 +57,7 @@ public class LegacyEnchantment extends SBEnchantment {
         Map<Enchantment,Integer> enchants = EnchantmentHelper.get(itemStack);
         EnchantmentHelper.set(enchants,book);
         //TODO: onLegacyToolBreak(book,itemStack,entity) event
+        SBEnchantmentHelper.onLegacyToolBreak(book,itemStack,entity);
         if(!entity.giveItemStack(book)){
             entity.dropStack(book,0.5f);
         }

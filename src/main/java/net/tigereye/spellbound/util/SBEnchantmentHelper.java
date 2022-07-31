@@ -175,18 +175,22 @@ public class SBEnchantmentHelper {
     }
 
     public static void onRedHealthDamage(DamageSource source, LivingEntity entity, float amount) {
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onRedHealthDamage(level,itemStack,entity,amount),entity.getItemsEquipped());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onRedHealthDamage(level,itemStack,entity,amount),entity.getItemsEquipped());
     }
 
     public static void onToolBreak(ItemStack stack, PlayerEntity entity) {
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onToolBreak(level, itemStack, entity), stack);
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onToolBreak(level, itemStack, entity), stack);
+    }
+
+    public static void onLegacyToolBreak(ItemStack book, ItemStack stack, PlayerEntity entity) {
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onLegacyToolBreak(level, book, itemStack, entity), stack);
     }
 
     public static int getProjectileDamage(PersistentProjectileEntity persistentProjectileEntity, EntityHitResult entityHitResult, int damage) {
         Entity entity = persistentProjectileEntity.getOwner();
         MutableFloat mutableFloat = new MutableFloat(damage);
         if(entity != null) {
-            forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(((SBEnchantment) enchantment).getProjectileDamage(level, itemStack, persistentProjectileEntity, entity, entityHitResult.getEntity(), mutableFloat.getValue())), ((SpellboundProjectileEntity)persistentProjectileEntity).getSource());
+            forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(enchantment.getProjectileDamage(level, itemStack, persistentProjectileEntity, entity, entityHitResult.getEntity(), mutableFloat.getValue())), ((SpellboundProjectileEntity)persistentProjectileEntity).getSource());
         }
         return mutableFloat.intValue();
     }
@@ -197,32 +201,32 @@ public class SBEnchantmentHelper {
             if(owner instanceof SpellboundPlayerEntity){
                 ((SpellboundPlayerEntity)owner).setIsMakingFullChargeAttack(true);
             }
-            forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onProjectileEntityHit(level, itemStack, persistentProjectileEntity, entity), ((SpellboundProjectileEntity)persistentProjectileEntity).getSource());
+            forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onProjectileEntityHit(level, itemStack, persistentProjectileEntity, entity), ((SpellboundProjectileEntity)persistentProjectileEntity).getSource());
         }
     }
 
     public static void onPullHookedEntity(FishingBobberEntity bobber, ItemStack stack, Entity entity) {
         Entity owner = bobber.getOwner();
         if(owner instanceof LivingEntity) {
-            forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onPullHookedEntity(level, bobber, stack, (LivingEntity)owner, entity), stack);
+            forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onPullHookedEntity(level, bobber, stack, (LivingEntity)owner, entity), stack);
         }
     }
 
     public static void onProjectileBlockHit(ProjectileEntity projectileEntity, BlockHitResult blockHitResult) {
         if(projectileEntity instanceof TridentEntity){
-            forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult), ((TridentEntityItemAccessor)projectileEntity).spellbound_getTridentStack());
+            forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult), ((TridentEntityItemAccessor)projectileEntity).spellbound_getTridentStack());
         }
         else {
             Entity owner = projectileEntity.getOwner();
             if (owner != null) {
-                forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult), ((SpellboundProjectileEntity)projectileEntity).getSource());
+                forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult), ((SpellboundProjectileEntity)projectileEntity).getSource());
             }
         }
     }
 
     public static List<Text> addTooltip(ItemStack stack, List<Text> list, PlayerEntity player, TooltipContext context){
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
-            List<Text> tooltip = ((SBEnchantment) enchantment).addTooltip(level, itemStack, player, context);
+            List<Text> tooltip = enchantment.addTooltip(level, itemStack, player, context);
             if(tooltip != null) {
                 list.addAll(tooltip);
             }

@@ -36,6 +36,8 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean LEGACY_ENABLED = true;
     @ConfigEntry.Category("inclusion")
+    public boolean METABOLISING_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
     public boolean MONOGAMOUS_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean MOUNTED_ENABLED = false;
@@ -59,8 +61,6 @@ public class SBConfig implements ConfigData {
     public boolean REPULSIVE_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean ROCK_COLLECTOR_ENABLED = true;
-    @ConfigEntry.Category("inclusion")
-    public boolean METABOLISING_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean SELFISH_ENABLED = true;
     @ConfigEntry.Category("inclusion")
@@ -154,7 +154,6 @@ public class SBConfig implements ConfigData {
     public int SKOTOSYNTHETIC_REPAIR_PERIOD = 40;
     @ConfigEntry.Category("details")
     public double TETHER_ATTRACTION_FACTOR = 1;
-
 
     @ConfigEntry.Category("tomfoolery")
     public boolean DISABLE_INCOMPATIBILITY = false;

@@ -14,14 +14,15 @@ import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.registration.SBItems;
 
 import java.util.*;
 import java.util.stream.Stream;
 
 public class RockCollectingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
-    private static final String ROCK_COLLECTOR_KEY = Spellbound.MODID+"RockCollector";
-    private static final String UNIQUE_ROCK_COUNT_KEY = Spellbound.MODID+"UniqueRockCount";
+    public static final String ROCK_COLLECTOR_KEY = Spellbound.MODID+"RockCollector";
+    public static final String UNIQUE_ROCK_COUNT_KEY = Spellbound.MODID+"UniqueRockCount";
     public RockCollectingEnchantment() {
         super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = true;
@@ -70,6 +71,15 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
         addRock(state,player,stack);
     }
 
+    @Override
+    public void onLegacyToolBreak(int level, ItemStack book, ItemStack itemStack, PlayerEntity entity) {
+        ItemStack bagOfRocks = new ItemStack(SBItems.BAG_OF_ROCKS);
+        bagOfRocks.setSubNbt(ROCK_COLLECTOR_KEY, itemStack.getSubNbt(ROCK_COLLECTOR_KEY));
+        if(!entity.giveItemStack(bagOfRocks)){
+            entity.dropStack(bagOfRocks,0.5f);
+        }
+    }
+
     /*@Override
     public void onActivate(int level, PlayerEntity player, ItemStack stack, Entity target) {
         if(!player.world.isClient && player.getPose() == EntityPose.CROUCHING) {
@@ -80,18 +90,12 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
 
     @Override
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
-        return addTooltip(level,stack,player,context,10);
+        return addTooltip(stack,player.world);
     }
-    public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context, int maxsize) {
+    public List<Text> addTooltip(ItemStack stack, World world) {
         List<Text> output = new ArrayList<>();
         NbtCompound tag = stack.getOrCreateSubNbt(ROCK_COLLECTOR_KEY);
-        Set<String> keys = tag.getKeys();
-        Map<String,Integer> keyIntMap = new HashMap<>();
-        keys.forEach((trophyKey) -> {
-            if(!trophyKey.equals(UNIQUE_ROCK_COUNT_KEY)) {
-                keyIntMap.put(trophyKey,tag.getInt(trophyKey));
-            }
-        });
+        Map<String,Integer> keyIntMap = getRockMap(stack);
         int rockCount = tag.getInt(UNIQUE_ROCK_COUNT_KEY);
         output.add(Text.literal(
                 "--" + rockCount + " Unique Rocks (+"
@@ -99,7 +103,7 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
         Stream<Map.Entry<String, Integer>> stream = keyIntMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()));
         int scrollingSteps = Math.max(1,rockCount-Spellbound.config.COLLECTOR_WINDOW_SIZE+1);
         if(scrollingSteps > 1) {
-            stream = stream.skip(player.world.getTime() % ((long) scrollingSteps * Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD)) / Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD));
+            stream = stream.skip(world.getTime() % ((long) scrollingSteps * Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD)) / Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD));
         }
         stream = stream.limit(Spellbound.config.COLLECTOR_WINDOW_SIZE);
         stream.forEach((entry) -> writeLineInTooltip(output,entry));
@@ -166,6 +170,18 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
     private int getUniqueRockCount(ItemStack stack){
         NbtCompound tag = stack.getOrCreateSubNbt(ROCK_COLLECTOR_KEY);
         return tag.getInt(UNIQUE_ROCK_COUNT_KEY);
+    }
+
+    public Map<String,Integer> getRockMap(ItemStack stack){
+        NbtCompound tag = stack.getOrCreateSubNbt(ROCK_COLLECTOR_KEY);
+        Set<String> keys = tag.getKeys();
+        Map<String,Integer> keyIntMap = new HashMap<>();
+        keys.forEach((trophyKey) -> {
+            if(!trophyKey.equals(UNIQUE_ROCK_COUNT_KEY)) {
+                keyIntMap.put(trophyKey,tag.getInt(trophyKey));
+            }
+        });
+        return keyIntMap;
     }
 
     private int getBlockRockCount(BlockState blockState, ItemStack stack){

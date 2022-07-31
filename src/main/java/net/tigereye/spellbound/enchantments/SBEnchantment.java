@@ -73,6 +73,10 @@ public abstract class SBEnchantment extends Enchantment {
     //for when the user kills
     public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
 
+    //for when an item breaks with Legacy
+    public void onLegacyToolBreak(int level, ItemStack book, ItemStack itemStack, PlayerEntity entity) {
+    }
+
     //for when the user is struck, before armor is applied
     public float onPreArmorDefense(int level, ItemStack stack, DamageSource source, LivingEntity defender, float amount){return amount;}
 

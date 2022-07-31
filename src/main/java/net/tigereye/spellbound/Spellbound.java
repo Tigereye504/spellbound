@@ -20,6 +20,7 @@ public class Spellbound implements ModInitializer{
         AutoConfig.register(SBConfig.class, GsonConfigSerializer::new);
         config = AutoConfig.getConfigHolder(SBConfig.class).getConfig();
 
+        SBItems.register();
         SBEnchantments.register();
         SBStatusEffects.register();
         SBTags.register();

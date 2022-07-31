@@ -56,12 +56,12 @@ public class SBEnchantments {
     public static final SBEnchantment RAMPAGE = new RampageEnchantment();
     public static final SBEnchantment RED_ALERT = new RedAlertEnchantment();
     public static final SBEnchantment REPULSIVE = new RepulsiveEnchantment();
-    public static final SBEnchantment ROCK_COLLECTING = new RockCollectingEnchantment();
+    public static final RockCollectingEnchantment ROCK_COLLECTING = new RockCollectingEnchantment();
     public static final SBEnchantment METABOLISING = new MetabolisingEnchantment();
     public static final SBEnchantment SELFISH = new SelfishEnchantment();
     public static final SBEnchantment SKOTOSYNTHETIC = new SkotosyntheticEnchantment();
     public static final SBEnchantment TETHERING = new TetheringEnchantment();
-    public static final SBEnchantment TROPHY_COLLECTING = new TrophyCollectingEnchantment();
+    public static final TrophyCollectingEnchantment TROPHY_COLLECTING = new TrophyCollectingEnchantment();
 
     public static void register(){
         register("acceleration", ACCELERATION);
