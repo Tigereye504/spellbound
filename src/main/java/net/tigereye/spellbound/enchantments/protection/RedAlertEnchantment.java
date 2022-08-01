@@ -10,6 +10,7 @@ import net.minecraft.item.*;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.mob_effect.SBStatusEffect;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
@@ -49,29 +50,28 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
     }
 
     @Override
-    public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
+    public void onTickOnceWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
             return;
         }
-        if(entity.hasStatusEffect(SBStatusEffects.SHIELDS_DOWN)){
+        int shieldedLevel = 0;
+        if(entity.hasStatusEffect(SBStatusEffects.SHIELDED)){
+            shieldedLevel = entity.getStatusEffect(SBStatusEffects.SHIELDED).getAmplifier()+1;
+        }
+        int redAlertCount = SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
+        if(redAlertCount >= shieldedLevel){
+            entity.removeStatusEffect(SBStatusEffects.SHIELDS_DOWN);
+            entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
+                    Spellbound.config.RED_ALERT_SHIELD_DURATION+1,
+                    redAlertCount-1, false, false, false));
+        }
+        else if(entity.hasStatusEffect(SBStatusEffects.SHIELDS_DOWN)){
             StatusEffectInstance shields_down = entity.getStatusEffect(SBStatusEffects.SHIELDS_DOWN);
             if(shields_down.getDuration() <= 2){
                 entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN, RedAlertEnchantment.getModifiedRecoveryRate(entity), 0, false, false, false));
-
-                //refresh shielded
-                if(entity.hasStatusEffect(SBStatusEffects.SHIELDED)){
-                    StatusEffectInstance shielded = entity.getStatusEffect(SBStatusEffects.SHIELDED);
-                    int redAlertCount = SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
-                    if(redAlertCount > 0){
-                        //entity.removeStatusEffect(SBStatusEffects.SHIELDED);
-                        entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
-                                Spellbound.config.RED_ALERT_SHIELD_DURATION,
-                                Math.min(redAlertCount-1,shielded.getAmplifier()+1), false, false, false));
-                    }
-                }
-                else{
-                    entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,Spellbound.config.RED_ALERT_SHIELD_DURATION,0, false, false, false));
-                }
+                entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDED,
+                        Spellbound.config.RED_ALERT_SHIELD_DURATION,
+                        Math.min(redAlertCount-1,shieldedLevel), false, false, false));
             }
         }
         else{
