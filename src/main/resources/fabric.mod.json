@@ -21,6 +21,9 @@
     "main": [
       "net.tigereye.spellbound.Spellbound"
     ],
+    "client": [
+      "net.tigereye.spellbound.SpellboundClient"
+    ],
     "modmenu": [
       "net.tigereye.spellbound.config.SBModMenuIntegration"
     ]

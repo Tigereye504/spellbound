@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments.utility;
+package net.tigereye.spellbound.enchantments.utility.chestplate;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;

@@ -23,6 +23,10 @@ import net.tigereye.spellbound.enchantments.unbreaking.BufferedEnchantment;
 import net.tigereye.spellbound.enchantments.unbreaking.SaturatedEnchantment;
 import net.tigereye.spellbound.enchantments.repair.LegacyEnchantment;
 import net.tigereye.spellbound.enchantments.utility.*;
+import net.tigereye.spellbound.enchantments.utility.chestplate.AttractiveEnchantment;
+import net.tigereye.spellbound.enchantments.utility.chestplate.RepulsiveEnchantment;
+import net.tigereye.spellbound.enchantments.utility.leggings.PhaseLeapEnchantment;
+import net.tigereye.spellbound.enchantments.utility.leggings.PhaseStrafeEnchantment;
 
 import java.util.ArrayList;
 import java.util.List;
