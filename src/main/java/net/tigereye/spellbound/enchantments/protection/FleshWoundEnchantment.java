@@ -14,11 +14,12 @@ import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBStatusEffects;
+import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class FleshWoundEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public FleshWoundEnchantment() {
-        super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.FLESH_WOUND_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
         REQUIRES_PREFERRED_SLOT = true;
     }
 

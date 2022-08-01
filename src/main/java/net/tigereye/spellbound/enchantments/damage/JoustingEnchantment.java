@@ -12,11 +12,12 @@ import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class JoustingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public JoustingEnchantment() {
-        super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.JOUSTING_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = false;
     }
 

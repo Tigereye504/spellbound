@@ -14,7 +14,7 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class AttractiveEnchantment extends SBEnchantment{
 
     public AttractiveEnchantment() {
-        super(Rarity.RARE, EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.CHEST});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.ATTRACTIVE_RARITY), EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.CHEST});
         REQUIRES_PREFERRED_SLOT = true;
     }
 

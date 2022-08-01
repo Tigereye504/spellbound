@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
+import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class BufferedEnchantment extends SBEnchantment {
 
@@ -23,7 +24,7 @@ public class BufferedEnchantment extends SBEnchantment {
     private static final int BUFFER_DULL_COLOR = 0x579ca2;
 
     public BufferedEnchantment() {
-        super(Rarity.UNCOMMON, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.BUFFERED_RARITY), EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = false;
     }
 
@@ -120,7 +121,7 @@ public class BufferedEnchantment extends SBEnchantment {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
 
-        switch (Spellbound.config.BUFFERED_DISPLAY){
+        switch (Spellbound.config.BUFFER_DISPLAY){
             case "Aura":
             case "aura":
                 renderBufferAsAura(level, durabilityBuffer, buffer, x, y);

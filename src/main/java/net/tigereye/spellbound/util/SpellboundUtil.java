@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -186,5 +187,19 @@ public class SpellboundUtil {
         }
 
         entity.damage(SBDamageSource.SB_INFIDELITY,damage);
+    }
+
+    public static Enchantment.Rarity rarityLookup(int configValue){
+        switch (configValue){
+            case 1:
+                return Enchantment.Rarity.COMMON;
+            case 2:
+                return Enchantment.Rarity.UNCOMMON;
+            case 3:
+                return Enchantment.Rarity.RARE;
+            case 4:
+            default:
+                return Enchantment.Rarity.VERY_RARE;
+        }
     }
 }

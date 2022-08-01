@@ -16,11 +16,12 @@ import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.instance.TetheredInstance;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
+import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class TetheringEnchantment extends SBEnchantment {
 
     public TetheringEnchantment() {
-        super(Rarity.UNCOMMON, EnchantmentTarget.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.TETHERING_RARITY), EnchantmentTarget.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = false;
     }
 

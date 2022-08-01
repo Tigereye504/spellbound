@@ -10,12 +10,13 @@ import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.util.SpellboundUtil;
 import net.tigereye.spellbound.util.VectorUtil;
 
 public class PhaseStrafeEnchantment extends SBEnchantment {
 
     public PhaseStrafeEnchantment() {
-        super(Rarity.RARE, EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.PHASE_STRAFE_RARITY), EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});
         REQUIRES_PREFERRED_SLOT = true;
     }
 

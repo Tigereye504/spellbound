@@ -18,6 +18,7 @@ import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBItems;
+import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -28,7 +29,7 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
     public static final String UNIQUE_TROPHY_COUNT_KEY = Spellbound.MODID+"UniqueTrophyCount";
 
     public TrophyCollectingEnchantment() {
-        super(Rarity.VERY_RARE, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.TROPHY_COLLECTOR_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = true;
     }
 

@@ -14,6 +14,7 @@ import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
+import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -21,7 +22,7 @@ import java.util.Map;
 public class LegacyEnchantment extends SBEnchantment {
 
     public LegacyEnchantment() {
-        super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.LEGACY_RARITY), EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = false;
     }
 

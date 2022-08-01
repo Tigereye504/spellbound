@@ -18,6 +18,7 @@ import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
+import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.UUID;
 
@@ -26,7 +27,7 @@ public class HeartyEnchantment extends SBEnchantment implements CustomConditions
     private static final UUID HEARTY_ID = UUID.fromString("94e1b6fd-beb6-4163-9beb-904374c69857");
 
     public HeartyEnchantment() {
-        super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.HEARTY_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
         REQUIRES_PREFERRED_SLOT = true;
     }
 

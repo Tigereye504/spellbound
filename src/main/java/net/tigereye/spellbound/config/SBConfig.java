@@ -70,6 +70,69 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean TROPHY_COLLECTOR_ENABLED = true;
 
+    @ConfigEntry.Category("rarity")
+    public int ACCELERATION_RARITY = 2;
+    @ConfigEntry.Category("rarity")
+    public int ATTRACTIVE_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int BUFFERED_RARITY = 2;
+    @ConfigEntry.Category("rarity")
+    public int CAVE_IN_RARITY = 4;
+    @ConfigEntry.Category("rarity")
+    public int DULLNESS_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int FISHER_OF_MEN_RARITY = 4;
+    @ConfigEntry.Category("rarity")
+    public int FLESH_WOUND_RARITY = 2;
+    @ConfigEntry.Category("rarity")
+    public int HEARTY_RARITY = 2;
+    @ConfigEntry.Category("rarity")
+    public int SATURATED_RARITY = 2;
+    @ConfigEntry.Category("rarity")
+    public int SPIKES_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int IMPERSONAL_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int JOUSTING_RARITY = 2;
+    @ConfigEntry.Category("rarity")
+    public int LAUNCHING_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int LEGACY_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int METABOLISING_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int MONOGAMOUS_RARITY = 4;
+    @ConfigEntry.Category("rarity")
+    public int MOUNTED_RARITY = 2;
+    @ConfigEntry.Category("rarity")
+    public int OUTBURST_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int PHASE_LEAP_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int PHASE_STRAFE_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int PHOTOSYNTHETIC_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int POLYGAMOUS_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int PRIMING_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int RAMPAGE_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int RED_ALERT_RARITY = 2;
+    @ConfigEntry.Category("rarity")
+    public int REPULSIVE_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int ROCK_COLLECTOR_RARITY = 4;
+    @ConfigEntry.Category("rarity")
+    public int SELFISH_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int SKOTOSYNTHETIC_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int TETHERING_RARITY = 2;
+    @ConfigEntry.Category("rarity")
+    public int TROPHY_COLLECTOR_RARITY = 4;
+    
     @ConfigEntry.Category("details")
     public int ACCELERATION_TIMEOUT = 50;
     @ConfigEntry.Category("details")
@@ -81,7 +144,7 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("details")
     public double BUFFER_MAX_PER_RANK = 2;
     @ConfigEntry.Category("details")
-    public String BUFFERED_DISPLAY = "bar";
+    public String BUFFER_DISPLAY = "aura";
     @ConfigEntry.Category("details")
     public int CAVE_IN_MAX_BLAST_RES = 99;
     @ConfigEntry.Category("details")

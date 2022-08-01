@@ -16,7 +16,7 @@ import net.tigereye.spellbound.util.VectorUtil;
 public class PhaseLeapEnchantment extends SBEnchantment {
 
     public PhaseLeapEnchantment() {
-        super(Rarity.RARE, EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.PHASE_LEAP_RARITY), EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});
         REQUIRES_PREFERRED_SLOT = true;
     }
 

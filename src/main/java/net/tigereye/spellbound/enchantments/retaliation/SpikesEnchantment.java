@@ -27,7 +27,7 @@ import java.util.Objects;
 public class SpikesEnchantment extends SBEnchantment {
 
     public SpikesEnchantment() {
-        super(Rarity.VERY_RARE, EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.SPIKES_RARITY), EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
         REQUIRES_PREFERRED_SLOT = true;
     }
 

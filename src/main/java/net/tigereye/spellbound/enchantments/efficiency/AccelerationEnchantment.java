@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.util.SpellboundUtil;
 
 
 public class AccelerationEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
@@ -19,7 +20,7 @@ public class AccelerationEnchantment extends SBEnchantment implements CustomCond
     private static final String ACCELERATION_STACKS_KEY = Spellbound.MODID+"SB_Acceleration_Stacks";
     private static final String ACCELERATION_TIME_KEY = Spellbound.MODID+"SB_Acceleration_Time";
     public AccelerationEnchantment() {
-        super(Rarity.UNCOMMON, EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.ACCELERATION_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = true;
     }
 

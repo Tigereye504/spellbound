@@ -31,7 +31,7 @@ public class OutburstEnchantment extends SBEnchantment {
     private static final String OUTBURST_RAGE_NBT_KEY = "SB_Rage";
 
     public OutburstEnchantment() {
-        super(Rarity.VERY_RARE, EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.OUTBURST_RARITY), EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
         REQUIRES_PREFERRED_SLOT = true;
     }
 

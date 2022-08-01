@@ -9,13 +9,14 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
+import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.Iterator;
 
 public class SelfishEnchantment extends SBEnchantment {
 
     public SelfishEnchantment() {
-        super(Rarity.RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.SELFISH_RARITY), EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = false;
     }
 

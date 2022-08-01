@@ -14,7 +14,7 @@ public class RepulsiveEnchantment extends SBEnchantment{
 
 
     public RepulsiveEnchantment() {
-        super(Rarity.RARE, EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.CHEST});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.REPULSIVE_RARITY), EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.CHEST});
         REQUIRES_PREFERRED_SLOT = true;
     }
 
