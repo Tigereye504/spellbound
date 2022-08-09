@@ -16,6 +16,8 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean CAVE_IN_ENABLED = true;
     @ConfigEntry.Category("inclusion")
+    public boolean DEMOLITION_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
     public boolean DULLNESS_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean FISHER_OF_MEN_ENABLED = true;
@@ -78,6 +80,8 @@ public class SBConfig implements ConfigData {
     public int BUFFERED_RARITY = 2;
     @ConfigEntry.Category("rarity")
     public int CAVE_IN_RARITY = 4;
+    @ConfigEntry.Category("rarity")
+    public int DEMOLITION_RARITY = 2;
     @ConfigEntry.Category("rarity")
     public int DULLNESS_RARITY = 3;
     @ConfigEntry.Category("rarity")
@@ -151,6 +155,10 @@ public class SBConfig implements ConfigData {
     public int COLLECTOR_DISPLAY_UPDATE_PERIOD = 20;
     @ConfigEntry.Category("details")
     public int COLLECTOR_WINDOW_SIZE = 10;
+    @ConfigEntry.Category("details")
+    public float DEMOLITION_BASE_POWER = 1;
+    @ConfigEntry.Category("details")
+    public float DEMOLITION_POWER_PER_RANK = 1;
     @ConfigEntry.Category("details")
     public float FISHER_OF_MEN_BASE_DAMAGE = 2F;
     @ConfigEntry.Category("details")

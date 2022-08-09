@@ -6,6 +6,7 @@ import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.*;
 import net.tigereye.spellbound.enchantments.damage.*;
 import net.tigereye.spellbound.enchantments.efficiency.AccelerationEnchantment;
+import net.tigereye.spellbound.enchantments.efficiency.DemolitionEnchantment;
 import net.tigereye.spellbound.enchantments.efficiency.RockCollectingEnchantment;
 import net.tigereye.spellbound.enchantments.lure.FisherOfMenEnchantment;
 import net.tigereye.spellbound.enchantments.personality.MonogamousEnchantment;
@@ -39,6 +40,7 @@ public class SBEnchantments {
     public static final SBEnchantment ATTRACTIVE = new AttractiveEnchantment();
     public static final SBEnchantment BUFFERED = new BufferedEnchantment();
     public static final SBEnchantment CAVE_IN = new CaveInEnchantment();
+    public static final SBEnchantment DEMOLITION = new DemolitionEnchantment();
     public static final SBEnchantment DULLNESS = new DullnessEnchantment();
     public static final SBEnchantment FISHER_OF_MEN = new FisherOfMenEnchantment();
     public static final SBEnchantment FLESH_WOUND = new FleshWoundEnchantment();
@@ -72,6 +74,7 @@ public class SBEnchantments {
         register("attractive", ATTRACTIVE);
         register("buffered", BUFFERED);
         register("cave_in", CAVE_IN);
+        register("demolition", DEMOLITION);
         register("dullness", DULLNESS);
         register("fisher_of_men", FISHER_OF_MEN);
         register("flesh_wound", FLESH_WOUND);

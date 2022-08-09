@@ -29,6 +29,7 @@ import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.interfaces.NextTickAction;
 import net.tigereye.spellbound.interfaces.SpellboundPlayerEntity;
 import net.tigereye.spellbound.interfaces.SpellboundProjectileEntity;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -47,7 +48,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class SBEnchantmentHelper {
-
     //called after vanilla's getAttackDamage
     public static int beforeDurabilityLoss(ItemStack stack, ServerPlayerEntity user, int loss){
         MutableInt mutableInt = new MutableInt(loss);
@@ -143,10 +143,16 @@ public class SBEnchantmentHelper {
         }
     }
 
+    public static int getArmorAmount(DamageSource source, LivingEntity target, int k, float amount) {
+        MutableFloat mutableFloat = new MutableFloat();
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add((enchantment).getArmorAmount(level, source, itemStack, target)), target.getArmorItems());
+        return k + Math.round(mutableFloat.floatValue());
+    }
+
     public static int getProtectionAmount(DamageSource source, LivingEntity target, int k, float amount) {
         MutableFloat mutableFloat = new MutableFloat();
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(((SBEnchantment) enchantment).getProtectionAmount(level, source, itemStack, target)), target.getArmorItems());
-        return k + mutableFloat.intValue();
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add((enchantment).getProtectionAmount(level, source, itemStack, target)), target.getArmorItems());
+        return k + Math.round(mutableFloat.floatValue());
     }
 
     public static float getMiningSpeed(PlayerEntity playerEntity, BlockState block, float h) {

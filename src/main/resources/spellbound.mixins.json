@@ -6,6 +6,7 @@
   "mixins": [
     "BlockMixin",
     "EnchantmentHelperMixin",
+    "ExplosionMixin",
     "FishingBobberEntityMixin",
     "ItemStackMixin",
     "LivingEntityMixin",

@@ -62,7 +62,9 @@ public class BufferedEnchantment extends SBEnchantment {
         World world = entity.world;
         if(!world.isClient()){
             float durabilityBuffer = getDurabilityBuffer(level, stack, entity.world);
-            Spellbound.LOGGER.info(stack.getName().getString() +" has "+ durabilityBuffer + " buffer");
+            if(Spellbound.DEBUG) {
+                Spellbound.LOGGER.info(stack.getName().getString() + " has " + durabilityBuffer + " buffer");
+            }
             if(durabilityBuffer >= 1){
                 int cost = (int)Math.min(loss,Math.floor(durabilityBuffer));
                 setDurabilityBuffer(level, stack, entity.world, durabilityBuffer-cost);
@@ -94,7 +96,7 @@ public class BufferedEnchantment extends SBEnchantment {
         return getDurabilityBuffer(level, time, world.getTime());
     }
 
-    public static float getDurabilityBuffer(ItemStack item, World world){
+    private static float getDurabilityBuffer(ItemStack item, World world){
         return getDurabilityBuffer(EnchantmentHelper.getLevel(SBEnchantments.BUFFERED,item),item,world);
     }
 

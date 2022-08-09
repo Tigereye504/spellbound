@@ -27,9 +27,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.interfaces.NextTickAction;
 import net.tigereye.spellbound.registration.SBDamageSource;
 import net.tigereye.spellbound.registration.SBEnchantments;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class SpellboundUtil {

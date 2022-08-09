@@ -11,6 +11,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.tigereye.spellbound.interfaces.NextTickAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.mob_effect.SBStatusEffectHelper;
@@ -21,6 +22,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin extends Entity implements SpellboundLivingEntity {
 
@@ -28,6 +32,11 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
     private Vec3d SB_LastPos;
     private static final TrackedData<Float> SB_DurabilityBuffer = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
     private float SB_MaxDurabilityBuffer = 0;
+    private final List<NextTickAction> nextTickActions = new LinkedList<>();
+
+    public void addNextTickAction(NextTickAction action){
+        nextTickActions.add(action);
+    }
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -60,6 +69,10 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
 
     @Inject(at = @At("HEAD"), method = "baseTick")
     public void spellboundLivingEntityBaseTickMixin(CallbackInfo info){
+        for (NextTickAction action : nextTickActions) {
+            action.act();
+        }
+        nextTickActions.clear();
         SBEnchantmentHelper.onTickAlways((LivingEntity)(Object)this);
         SBEnchantmentHelper.onTickWhileEquipped((LivingEntity)(Object)this);
     }
