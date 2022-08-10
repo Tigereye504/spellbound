@@ -57,7 +57,6 @@ public class LegacyEnchantment extends SBEnchantment {
         ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
         Map<Enchantment,Integer> enchants = EnchantmentHelper.get(itemStack);
         EnchantmentHelper.set(enchants,book);
-        //TODO: onLegacyToolBreak(book,itemStack,entity) event
         SBEnchantmentHelper.onLegacyToolBreak(book,itemStack,entity);
         if(!entity.giveItemStack(book)){
             entity.dropStack(book,0.5f);

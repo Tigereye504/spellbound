@@ -1,0 +1,8 @@
+{
+  "bonusOre": [
+    "minecraft:coal_ore",
+    "minecraft:deepslate_coal_ore"
+  ],
+  "treasure": "minecraft:coal",
+  "frequency": 0.0101
+}

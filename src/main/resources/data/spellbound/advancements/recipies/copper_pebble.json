@@ -1,0 +1,33 @@
+{
+    "parent": "minecraft:recipes/root",
+    "rewards": {
+      "recipes": [
+        "spellbound:raw_copper_from_pebbles",
+        "spellbound:pebbles_from_raw_copper"
+      ]
+    },
+    "criteria": {
+      "has_copper_pebble": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "spellbound:copper_pebble"
+            }
+          ]
+        }
+      },
+      "has_the_recipe": {
+        "trigger": "minecraft:recipe_unlocked",
+        "conditions": {
+          "recipe": "spellbound:raw_copper_from_pebbles"
+        }
+      }
+    },
+    "requirements": [
+      [
+        "has_copper_pebble",
+        "has_the_recipe"
+      ]
+    ]
+  }

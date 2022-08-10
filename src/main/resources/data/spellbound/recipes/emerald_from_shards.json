@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "###",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "spellbound:emerald_shard"
+        }
+    },
+    "result": {
+        "item": "minecraft:emerald",
+        "count": 1
+    }
+}

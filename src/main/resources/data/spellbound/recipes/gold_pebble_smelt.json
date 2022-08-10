@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:blasting",
+    "ingredient": {
+      "item": "spellbound:gold_pebble"
+    },
+    "result": "minecraft:gold_nugget",
+    "experience": 0.04,
+    "cookingtime": 11
+  }

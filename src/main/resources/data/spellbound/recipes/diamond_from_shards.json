@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "###",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "spellbound:diamond_shard"
+        }
+    },
+    "result": {
+        "item": "minecraft:diamond",
+        "count": 1
+    }
+}

@@ -78,7 +78,7 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
         BlockState targetBlock;
         BlockState blockBelowTarget;
         for(int y = 0; y < size; y++){
-            if(lowerCorner.getY()+y >= 0){
+            if(lowerCorner.getY()+y >= world.getBottomY() && lowerCorner.getY()+y <= world.getTopY()){
                 for(int x = 0; x < size; x++){
                     for(int z = 0; z < size; z++){
                         target = lowerCorner.add(x,y,z);

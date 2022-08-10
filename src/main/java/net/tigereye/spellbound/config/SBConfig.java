@@ -46,6 +46,8 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean OUTBURST_ENABLED = true;
     @ConfigEntry.Category("inclusion")
+    public boolean PROSPECTOR_ENABLED = true;
+    @ConfigEntry.Category("inclusion")
     public boolean PHASE_LEAP_ENABLED = true;
     @ConfigEntry.Category("inclusion")
     public boolean PHASE_STRAFE_ENABLED = true;
@@ -110,6 +112,8 @@ public class SBConfig implements ConfigData {
     public int MOUNTED_RARITY = 2;
     @ConfigEntry.Category("rarity")
     public int OUTBURST_RARITY = 3;
+    @ConfigEntry.Category("rarity")
+    public int PROSPECTOR_RARITY = 3;
     @ConfigEntry.Category("rarity")
     public int PHASE_LEAP_RARITY = 3;
     @ConfigEntry.Category("rarity")
@@ -193,6 +197,8 @@ public class SBConfig implements ConfigData {
     public int PHOTOSYNTHETIC_LIGHT_MINIMUM = 8;
     @ConfigEntry.Category("details")
     public int PHOTOSYNTHETIC_REPAIR_PERIOD = 40;
+    @ConfigEntry.Category("details")
+    public int PROSPECTOR_RADIUS = 3;
     @ConfigEntry.Category("details")
     public float RAMPAGE_DAMAGE_BASE = 5;
     @ConfigEntry.Category("details")

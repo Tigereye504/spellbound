@@ -33,9 +33,14 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
     private static final TrackedData<Float> SB_DurabilityBuffer = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
     private float SB_MaxDurabilityBuffer = 0;
     private final List<NextTickAction> nextTickActions = new LinkedList<>();
+    private final List<NextTickAction> nextTickActionsQueue = new LinkedList<>();
+    private boolean performingNextTickActions = false;
 
     public void addNextTickAction(NextTickAction action){
-        nextTickActions.add(action);
+        if (performingNextTickActions)
+            nextTickActionsQueue.add(action);
+        else
+            nextTickActions.add(action);
     }
 
     public LivingEntityMixin(EntityType<?> type, World world) {
@@ -69,10 +74,14 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
 
     @Inject(at = @At("HEAD"), method = "baseTick")
     public void spellboundLivingEntityBaseTickMixin(CallbackInfo info){
+        performingNextTickActions = true;
         for (NextTickAction action : nextTickActions) {
             action.act();
         }
         nextTickActions.clear();
+        nextTickActions.addAll(nextTickActionsQueue);
+        nextTickActionsQueue.clear();
+        performingNextTickActions = false;
         SBEnchantmentHelper.onTickAlways((LivingEntity)(Object)this);
         SBEnchantmentHelper.onTickWhileEquipped((LivingEntity)(Object)this);
     }

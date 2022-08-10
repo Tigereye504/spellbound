@@ -8,6 +8,7 @@ import net.tigereye.spellbound.enchantments.damage.*;
 import net.tigereye.spellbound.enchantments.efficiency.AccelerationEnchantment;
 import net.tigereye.spellbound.enchantments.efficiency.DemolitionEnchantment;
 import net.tigereye.spellbound.enchantments.efficiency.RockCollectingEnchantment;
+import net.tigereye.spellbound.enchantments.fortune.ProspectorEnchantment;
 import net.tigereye.spellbound.enchantments.lure.FisherOfMenEnchantment;
 import net.tigereye.spellbound.enchantments.personality.MonogamousEnchantment;
 import net.tigereye.spellbound.enchantments.personality.PolygamousEnchantment;
@@ -59,6 +60,7 @@ public class SBEnchantments {
     public static final SBEnchantment PHOTOSYNTHETIC = new PhotosyntheticEnchantment();
     public static final SBEnchantment POLYGAMOUS = new PolygamousEnchantment();
     public static final SBEnchantment PRIMING = new PrimingEnchantment();
+    public static final SBEnchantment PROSPECTOR = new ProspectorEnchantment();
     public static final SBEnchantment RAMPAGE = new RampageEnchantment();
     public static final SBEnchantment RED_ALERT = new RedAlertEnchantment();
     public static final SBEnchantment REPULSIVE = new RepulsiveEnchantment();
@@ -92,6 +94,7 @@ public class SBEnchantments {
         register("photosynthetic", PHOTOSYNTHETIC);
         register("polygamous", POLYGAMOUS);
         register("priming", PRIMING);
+        register("prospector", PROSPECTOR);
         register("rampage", RAMPAGE);
         register("red_alert", RED_ALERT);
         register("repulsive", REPULSIVE);

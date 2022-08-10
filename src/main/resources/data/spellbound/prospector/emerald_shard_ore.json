@@ -1,0 +1,8 @@
+{
+  "bonusOre": [
+    "minecraft:emerald_ore",
+    "minecraft:deepslate_emerald_ore"
+  ],
+  "treasure": "spellbound:emerald_shard",
+  "frequency": 0.0295
+}

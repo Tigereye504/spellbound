@@ -32,11 +32,11 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class DemolitionEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class DemolitionEnchantment extends SBEnchantment {
 
     public static final String DEMOLTION_LAST_BLAST_KEY = Spellbound.MODID+"Demolition_Last_Blast";
     public DemolitionEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.DEMOLITION_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.DEMOLITION_RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = true;
     }
 
@@ -84,23 +84,18 @@ public class DemolitionEnchantment extends SBEnchantment implements CustomCondit
         Long time = nbtCompound.getLong(DEMOLTION_LAST_BLAST_KEY);
         if(world.getTime() - time > 2){
             nbtCompound.putLong(DEMOLTION_LAST_BLAST_KEY,world.getTime());
-            ((SpellboundLivingEntity)player).addNextTickAction(new DemolitionAction(world, player, pos, level+1));
-            if(player instanceof ServerPlayerEntity) {
-                stack.damage(level * level, player.getRandom(), (ServerPlayerEntity) player);
-            }
+            ((SpellboundLivingEntity)player).addNextTickAction(new DemolitionAction(world, player, pos,
+                    Spellbound.config.DEMOLITION_BASE_POWER + (Spellbound.config.DEMOLITION_POWER_PER_RANK*level)));
+
+        }
+        else if(player instanceof ServerPlayerEntity) {
+            stack.damage(1, player.getRandom(), (ServerPlayerEntity) player);
         }
     }
 
     @Override
     public boolean isTreasure() {
         return false;
-    }
-
-    @Override
-    public boolean isAcceptableAtTable(ItemStack stack) {
-        return stack.getItem() instanceof PickaxeItem
-                || stack.getItem() instanceof ShovelItem
-                || stack.getItem() == Items.BOOK;
     }
 
     private class DemolitionAction implements NextTickAction{
@@ -127,7 +122,7 @@ public class DemolitionEnchantment extends SBEnchantment implements CustomCondit
                 List<BlockPos> explodedBlocks = explosion.getAffectedBlocks();
                 for (BlockPos position : explodedBlocks) {
                     BlockState state = world.getBlockState(position);
-                    SBEnchantmentHelper.onBreakBlock(state.getBlock(), world, pos, state, player);
+                    SBEnchantmentHelper.onBreakBlock(state.getBlock(), world, position, state, player);
                 }
                 explosion.affectWorld(true);
             }

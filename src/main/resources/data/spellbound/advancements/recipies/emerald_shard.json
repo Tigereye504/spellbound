@@ -1,0 +1,33 @@
+{
+    "parent": "minecraft:recipes/root",
+    "rewards": {
+      "recipes": [
+        "spellbound:emerald_from_shards",
+        "spellbound:shards_from_emerald"
+      ]
+    },
+    "criteria": {
+      "has_gold_pebble": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "spellbound:emerald_shard"
+            }
+          ]
+        }
+      },
+      "has_the_recipe": {
+        "trigger": "minecraft:recipe_unlocked",
+        "conditions": {
+          "recipe": "spellbound:emerald_from_shards"
+        }
+      }
+    },
+    "requirements": [
+      [
+        "has_emerald_shard",
+        "has_the_recipe"
+      ]
+    ]
+  }

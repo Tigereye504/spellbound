@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:blasting",
+    "ingredient": {
+      "item": "spellbound:iron_pebble"
+    },
+    "result": "minecraft:iron_nugget",
+    "experience": 0.04,
+    "cookingtime": 11
+  }

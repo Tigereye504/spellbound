@@ -15,12 +15,12 @@ import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 
-public class AccelerationEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class AccelerationEnchantment extends SBEnchantment{
 
     private static final String ACCELERATION_STACKS_KEY = Spellbound.MODID+"SB_Acceleration_Stacks";
     private static final String ACCELERATION_TIME_KEY = Spellbound.MODID+"SB_Acceleration_Time";
     public AccelerationEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.ACCELERATION_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(SpellboundUtil.rarityLookup(Spellbound.config.ACCELERATION_RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = true;
     }
 
@@ -43,12 +43,6 @@ public class AccelerationEnchantment extends SBEnchantment implements CustomCond
     public int getMaxLevel() {
         if(isEnabled()) return 5;
         else return 0;
-    }
-
-    @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return isAcceptableAtTable(stack)
-                ||EnchantmentTarget.DIGGER.isAcceptableItem(stack.getItem());
     }
 
     @Override
@@ -97,13 +91,5 @@ public class AccelerationEnchantment extends SBEnchantment implements CustomCond
     @Override
     public boolean isTreasure() {
         return false;
-    }
-
-    @Override
-    public boolean isAcceptableAtTable(ItemStack stack) {
-        return stack.getItem() instanceof PickaxeItem
-                || stack.getItem() instanceof ShovelItem
-                || stack.getItem() instanceof AxeItem
-                || stack.getItem() == Items.BOOK;
     }
 }
