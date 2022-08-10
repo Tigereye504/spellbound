@@ -32,8 +32,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ProspectorEnchantment extends SBEnchantment {
-    //TODO: implement Prospector
-    //TODO: create Prospector loot jsons and manager
 
     public static final String PROSPECTOR_LIST_KEY = Spellbound.MODID+"Prospector_List";
 

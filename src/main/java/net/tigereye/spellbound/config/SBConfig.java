@@ -162,7 +162,7 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("details")
     public float DEMOLITION_BASE_POWER = 1;
     @ConfigEntry.Category("details")
-    public float DEMOLITION_POWER_PER_RANK = 1;
+    public float DEMOLITION_POWER_PER_RANK = .5F;
     @ConfigEntry.Category("details")
     public float FISHER_OF_MEN_BASE_DAMAGE = 2F;
     @ConfigEntry.Category("details")
