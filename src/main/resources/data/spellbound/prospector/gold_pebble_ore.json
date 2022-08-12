@@ -1,8 +1,5 @@
 {
-  "bonusOre": [
-    "minecraft:gold_ore",
-    "minecraft:deepslate_gold_ore"
-  ],
-  "treasure": "spellbound:copper_pebble",
+  "material": "#minecraft:gold_ores",
+  "treasure": "spellbound:gold_pebble",
   "frequency": 0.0616
 }

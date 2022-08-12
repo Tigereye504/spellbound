@@ -21,23 +21,27 @@ public class PhaseStrafeEnchantment extends SBEnchantment {
     }
 
     @Override
-    public int getMinPower(int level) {
-        return 15*level;
-    }
-
-    @Override
-    public int getMaxPower(int level) {
-        return getMinPower(level)+30;
-    }
-
-    @Override
     public boolean isEnabled() {
         return Spellbound.config.PHASE_STRAFE_ENABLED;
     }
 
     @Override
+    public int getMinPower(int level) {
+        int power = (Spellbound.config.PHASE_STRAFE_POWER_PER_RANK * level) - Spellbound.config.PHASE_STRAFE_BASE_POWER;
+        if(level > Spellbound.config.PHASE_STRAFE_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
+    }
+
+    @Override
+    public int getMaxPower(int level) {
+        return super.getMinPower(level) + Spellbound.config.PHASE_STRAFE_POWER_RANGE;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 3;
+        if(isEnabled()) return Spellbound.config.PHASE_STRAFE_HARD_CAP;
         else return 0;
     }
 

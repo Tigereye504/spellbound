@@ -19,23 +19,27 @@ public class AttractiveEnchantment extends SBEnchantment{
     }
 
     @Override
+    public boolean isEnabled() {
+        return Spellbound.config.ATTRACTIVE_ENABLED;
+    }
+    
+    @Override
     public int getMinPower(int level) {
-        return 20;
+        int power = (Spellbound.config.ATTRACTIVE_POWER_PER_RANK * level) - Spellbound.config.ATTRACTIVE_BASE_POWER;
+        if(level > Spellbound.config.ATTRACTIVE_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return 50;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return Spellbound.config.ATTRACTIVE_ENABLED;
+        return super.getMinPower(level) + Spellbound.config.ATTRACTIVE_POWER_RANGE;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 1;
+        if(isEnabled()) return Spellbound.config.ATTRACTIVE_HARD_CAP;
         else return 0;
     }
 

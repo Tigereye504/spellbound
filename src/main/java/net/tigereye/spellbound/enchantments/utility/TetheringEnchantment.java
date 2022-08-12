@@ -26,23 +26,27 @@ public class TetheringEnchantment extends SBEnchantment {
     }
 
     @Override
-    public int getMinPower(int level) {
-        return 5+(level*10);
-    }
-
-    @Override
-    public int getMaxPower(int level) {
-        return getMinPower(level)+20;
-    }
-
-    @Override
     public boolean isEnabled() {
         return Spellbound.config.TETHERING_ENABLED;
     }
 
     @Override
+    public int getMinPower(int level) {
+        int power = (Spellbound.config.TETHERING_POWER_PER_RANK * level) - Spellbound.config.TETHERING_BASE_POWER;
+        if(level > Spellbound.config.TETHERING_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
+    }
+
+    @Override
+    public int getMaxPower(int level) {
+        return super.getMinPower(level) + Spellbound.config.TETHERING_POWER_RANGE;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 3;
+        if(isEnabled()) return Spellbound.config.TETHERING_HARD_CAP;
         else return 0;
     }
 

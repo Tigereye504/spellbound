@@ -19,23 +19,27 @@ public class LaunchingEnchantment extends SBEnchantment implements CustomConditi
     }
 
     @Override
-    public int getMinPower(int level) {
-        return 5 + (level - 1) * 20;
-    }
-
-    @Override
-    public int getMaxPower(int level) {
-        return getMinPower(level)+25;
-    }
-
-    @Override
     public boolean isEnabled() {
         return Spellbound.config.LAUNCHING_ENABLED;
     }
 
     @Override
+    public int getMinPower(int level) {
+        int power = (Spellbound.config.LAUNCHING_POWER_PER_RANK * level) - Spellbound.config.LAUNCHING_BASE_POWER;
+        if(level > Spellbound.config.LAUNCHING_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
+    }
+
+    @Override
+    public int getMaxPower(int level) {
+        return super.getMinPower(level) + Spellbound.config.LAUNCHING_POWER_RANGE;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 2;
+        if(isEnabled()) return Spellbound.config.LAUNCHING_HARD_CAP;
         else return 0;
     }
 

@@ -36,8 +36,6 @@ import java.util.Objects;
 
 public class FisherOfMenEnchantment extends SBEnchantment {
 
-    private static final String ACCELERATION_STACKS_KEY = Spellbound.MODID+"SB_Acceleration_Stacks";
-    private static final String ACCELERATION_TIME_KEY = Spellbound.MODID+"SB_Acceleration_Time";
     public FisherOfMenEnchantment() {
         super(SpellboundUtil.rarityLookup(Spellbound.config.FISHER_OF_MEN_RARITY), EnchantmentTarget.FISHING_ROD, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         REQUIRES_PREFERRED_SLOT = true;
@@ -50,17 +48,21 @@ public class FisherOfMenEnchantment extends SBEnchantment {
 
     @Override
     public int getMinPower(int level) {
-        return 15 + (level - 1) * 9;
+        int power = (Spellbound.config.FISHER_OF_MEN_POWER_PER_RANK * level) - Spellbound.config.FISHER_OF_MEN_BASE_POWER;
+        if(level > Spellbound.config.FISHER_OF_MEN_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return super.getMinPower(level) + 50;
+        return super.getMinPower(level) + Spellbound.config.FISHER_OF_MEN_POWER_RANGE;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 3;
+        if(isEnabled()) return Spellbound.config.FISHER_OF_MEN_HARD_CAP;
         else return 0;
     }
 

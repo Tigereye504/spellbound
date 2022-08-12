@@ -1,4 +1,5 @@
 {
   "treasure": "spellbound:diamond_shard",
+  "material": "#spellbound:base_overworld_blocks",
   "frequency": 0.0047
 }

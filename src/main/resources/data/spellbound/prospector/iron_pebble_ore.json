@@ -1,8 +1,5 @@
 {
-  "bonusOre": [
-    "minecraft:iron_ore",
-    "minecraft:deepslate_iron_ore"
-  ],
+  "material": "#minecraft:iron_ores",
   "treasure": "spellbound:iron_pebble",
   "frequency": 0.0478
 }

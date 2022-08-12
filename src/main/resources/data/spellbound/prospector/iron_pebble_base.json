@@ -1,4 +1,5 @@
 {
   "treasure": "spellbound:iron_pebble",
+  "material": "#spellbound:base_overworld_blocks",
   "frequency": 0.0205
 }

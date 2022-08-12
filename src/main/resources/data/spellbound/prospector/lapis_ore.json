@@ -1,8 +1,5 @@
 {
-  "bonusOre": [
-    "minecraft:lapis_ore",
-    "minecraft:deepslate_lapis_ore"
-  ],
+  "material": "#minecraft:lapis_ores",
   "treasure": "minecraft:lapis_lazuli",
   "frequency": 0.0377
 }

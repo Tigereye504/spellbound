@@ -23,23 +23,27 @@ public class ImpersonalEnchantment extends SBEnchantment implements CustomCondit
     }
 
     @Override
-    public int getMinPower(int level) {
-        return 20;
-    }
-
-    @Override
-    public int getMaxPower(int level) {
-        return 50;
-    }
-
-    @Override
     public boolean isEnabled() {
         return Spellbound.config.IMPERSONAL_ENABLED;
     }
 
     @Override
+    public int getMinPower(int level) {
+        int power = (Spellbound.config.IMPERSONAL_POWER_PER_RANK * level) - Spellbound.config.IMPERSONAL_BASE_POWER;
+        if(level > Spellbound.config.IMPERSONAL_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
+    }
+
+    @Override
+    public int getMaxPower(int level) {
+        return super.getMinPower(level) + Spellbound.config.IMPERSONAL_POWER_RANGE;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 1;
+        if(isEnabled()) return Spellbound.config.IMPERSONAL_HARD_CAP;
         else return 0;
     }
 

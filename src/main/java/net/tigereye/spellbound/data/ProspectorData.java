@@ -8,5 +8,6 @@ import java.util.List;
 public class ProspectorData {
     Identifier treasure;
     float frequency;
-    public List<Identifier> bonusOre;
+    Identifier material;
+    boolean materialIsTag;
 }

@@ -4,6 +4,6 @@ import com.google.gson.JsonArray;
 
 public class ProspectorJsonFormat {
     String treasure;
-    JsonArray bonusOre;
+    String material;
     float frequency;
 }

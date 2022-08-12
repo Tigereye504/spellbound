@@ -24,23 +24,27 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
     }
 
     @Override
-    public int getMinPower(int level) {
-        return (level*11)-10;
-    }
-
-    @Override
-    public int getMaxPower(int level) {
-        return this.getMinPower(level)+15;
-    }
-
-    @Override
     public boolean isEnabled() {
         return Spellbound.config.RED_ALERT_ENABLED;
     }
 
     @Override
+    public int getMinPower(int level) {
+        int power = (Spellbound.config.RED_ALERT_POWER_PER_RANK * level) - Spellbound.config.RED_ALERT_BASE_POWER;
+        if(level > Spellbound.config.RED_ALERT_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
+    }
+
+    @Override
+    public int getMaxPower(int level) {
+        return super.getMinPower(level) + Spellbound.config.RED_ALERT_POWER_RANGE;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 4;
+        if(isEnabled()) return Spellbound.config.RED_ALERT_HARD_CAP;
         else return 0;
     }
 

@@ -36,17 +36,21 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
 
     @Override
     public int getMinPower(int level) {
-        return 1;
+        int power = (Spellbound.config.ROCK_COLLECTOR_POWER_PER_RANK * level) - Spellbound.config.ROCK_COLLECTOR_BASE_POWER;
+        if(level > Spellbound.config.ROCK_COLLECTOR_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return 50;
+        return super.getMinPower(level) + Spellbound.config.ROCK_COLLECTOR_POWER_RANGE;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 1;
+        if(isEnabled()) return Spellbound.config.ROCK_COLLECTOR_HARD_CAP;
         else return 0;
     }
 

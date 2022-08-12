@@ -1,36 +1,27 @@
 package net.tigereye.spellbound.enchantments.efficiency;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.PickaxeItem;
-import net.minecraft.item.ShovelItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.NextTickAction;
 import net.tigereye.spellbound.interfaces.SpellboundExplosion;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
-import net.tigereye.spellbound.registration.SBItems;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class DemolitionEnchantment extends SBEnchantment {
 
@@ -47,22 +38,21 @@ public class DemolitionEnchantment extends SBEnchantment {
 
     @Override
     public int getMinPower(int level) {
-        if(level <= 5) {
-            return (10 * level) - 9;
+        int power = (Spellbound.config.DEMOLITION_POWER_PER_RANK * level) - Spellbound.config.DEMOLITION_BASE_POWER;
+        if(level > Spellbound.config.DEMOLITION_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }
-        else{
-            return (level * 15) - 15;
-        }
+        return power;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return super.getMinPower(level) + 50;
+        return super.getMinPower(level) + Spellbound.config.DEMOLITION_POWER_RANGE;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 10;
+        if(isEnabled()) return Spellbound.config.DEMOLITION_HARD_CAP;
         else return 0;
     }
 
@@ -81,11 +71,11 @@ public class DemolitionEnchantment extends SBEnchantment {
             return;
         }
         NbtCompound nbtCompound = stack.getOrCreateNbt();
-        Long time = nbtCompound.getLong(DEMOLTION_LAST_BLAST_KEY);
+        long time = nbtCompound.getLong(DEMOLTION_LAST_BLAST_KEY);
         if(world.getTime() - time > 2){
             nbtCompound.putLong(DEMOLTION_LAST_BLAST_KEY,world.getTime());
             ((SpellboundLivingEntity)player).addNextTickAction(new DemolitionAction(world, player, pos,
-                    Spellbound.config.DEMOLITION_BASE_POWER + (Spellbound.config.DEMOLITION_POWER_PER_RANK*level)));
+                    Spellbound.config.DEMOLITION_BASE_EXPLOSION_POWER + (Spellbound.config.DEMOLITION_EXPLOSION_POWER_PER_RANK *level)));
 
         }
         else if(player instanceof ServerPlayerEntity) {

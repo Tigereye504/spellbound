@@ -25,23 +25,27 @@ public class PolygamousEnchantment extends SBEnchantment {
     }
 
     @Override
-    public int getMinPower(int level) {
-        return 5;
-    }
-
-    @Override
-    public int getMaxPower(int level) {
-        return 51;
-    }
-
-    @Override
     public boolean isEnabled() {
         return Spellbound.config.POLYGAMOUS_ENABLED;
     }
 
     @Override
+    public int getMinPower(int level) {
+        int power = (Spellbound.config.POLYGAMOUS_POWER_PER_RANK * level) - Spellbound.config.POLYGAMOUS_BASE_POWER;
+        if(level > Spellbound.config.POLYGAMOUS_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
+    }
+
+    @Override
+    public int getMaxPower(int level) {
+        return super.getMinPower(level) + Spellbound.config.POLYGAMOUS_POWER_RANGE;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 1;
+        if(isEnabled()) return Spellbound.config.POLYGAMOUS_HARD_CAP;
         else return 0;
     }
 

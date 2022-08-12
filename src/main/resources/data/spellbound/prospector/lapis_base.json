@@ -1,4 +1,5 @@
 {
   "treasure": "minecraft:lapis_lazuli",
+  "material": "#spellbound:base_overworld_blocks",
   "frequency": 0.0034
 }

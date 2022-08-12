@@ -31,17 +31,21 @@ public class AccelerationEnchantment extends SBEnchantment{
 
     @Override
     public int getMinPower(int level) {
-        return 1 + 10 * (level - 1);
+        int power = (Spellbound.config.ACCELERATION_POWER_PER_RANK * level) - Spellbound.config.ACCELERATION_BASE_POWER;
+        if(level > Spellbound.config.ACCELERATION_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return super.getMinPower(level) + 50;
+        return super.getMinPower(level) + Spellbound.config.ACCELERATION_POWER_RANGE;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 5;
+        if(isEnabled()) return Spellbound.config.ACCELERATION_HARD_CAP;
         else return 0;
     }
 

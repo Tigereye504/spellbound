@@ -28,17 +28,21 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
 
     @Override
     public int getMinPower(int level) {
-        return 5 + (level*10);
+        int power = (Spellbound.config.JOUSTING_POWER_PER_RANK * level) - Spellbound.config.JOUSTING_BASE_POWER;
+        if(level > Spellbound.config.JOUSTING_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return this.getMinPower(level)+15;
+        return super.getMinPower(level) + Spellbound.config.JOUSTING_POWER_RANGE;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 3;
+        if(isEnabled()) return Spellbound.config.JOUSTING_HARD_CAP;
         else return 0;
     }
 

@@ -21,23 +21,27 @@ public class MetabolisingEnchantment extends SBEnchantment {
     }
 
     @Override
-    public int getMinPower(int level) {
-        return 5;
-    }
-
-    @Override
-    public int getMaxPower(int level) {
-        return 51;
-    }
-
-    @Override
     public boolean isEnabled() {
         return Spellbound.config.METABOLISING_ENABLED;
     }
 
     @Override
+    public int getMinPower(int level) {
+        int power = (Spellbound.config.METABOLISING_POWER_PER_RANK * level) - Spellbound.config.METABOLISING_BASE_POWER;
+        if(level > Spellbound.config.METABOLISING_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
+    }
+
+    @Override
+    public int getMaxPower(int level) {
+        return super.getMinPower(level) + Spellbound.config.METABOLISING_POWER_RANGE;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 1;
+        if(isEnabled()) return Spellbound.config.METABOLISING_HARD_CAP;
         else return 0;
     }
 

@@ -1,8 +1,5 @@
 {
-  "bonusOre": [
-    "minecraft:redstone_ore",
-    "minecraft:deepslate_redstone_ore"
-  ],
+  "material": "#minecraft:redstone_ores",
   "treasure": "minecraft:redstone",
   "frequency": 0.0079
 }

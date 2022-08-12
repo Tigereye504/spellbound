@@ -21,23 +21,27 @@ public class PhaseLeapEnchantment extends SBEnchantment {
     }
 
     @Override
-    public int getMinPower(int level) {
-        return 15*level;
-    }
-
-    @Override
-    public int getMaxPower(int level) {
-        return getMinPower(level)+30;
-    }
-
-    @Override
     public boolean isEnabled() {
         return Spellbound.config.PHASE_LEAP_ENABLED;
     }
 
     @Override
+    public int getMinPower(int level) {
+        int power = (Spellbound.config.PHASE_LEAP_POWER_PER_RANK * level) - Spellbound.config.PHASE_LEAP_BASE_POWER;
+        if(level > Spellbound.config.PHASE_LEAP_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
+    }
+
+    @Override
+    public int getMaxPower(int level) {
+        return super.getMinPower(level) + Spellbound.config.PHASE_LEAP_POWER_RANGE;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 3;
+        if(isEnabled()) return Spellbound.config.PHASE_LEAP_HARD_CAP;
         else return 0;
     }
 

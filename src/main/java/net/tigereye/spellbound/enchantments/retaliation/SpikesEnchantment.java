@@ -32,23 +32,27 @@ public class SpikesEnchantment extends SBEnchantment {
     }
 
     @Override
-    public int getMinPower(int level) {
-        return 10 + 20 * (level - 1);
-    }
-
-    @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + 50;
-    }
-
-    @Override
     public boolean isEnabled() {
         return Spellbound.config.SPIKES_ENABLED;
     }
 
     @Override
+    public int getMinPower(int level) {
+        int power = (Spellbound.config.SPIKES_POWER_PER_RANK * level) - Spellbound.config.SPIKES_BASE_POWER;
+        if(level > Spellbound.config.SPIKES_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
+    }
+
+    @Override
+    public int getMaxPower(int level) {
+        return super.getMinPower(level) + Spellbound.config.SPIKES_POWER_RANGE;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 3;
+        if(isEnabled()) return Spellbound.config.SPIKES_HARD_CAP;
         else return 0;
     }
 

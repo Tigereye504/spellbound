@@ -4,18 +4,15 @@ import com.google.gson.Gson;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.FallingBlock;
-import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,8 +23,9 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
 
     private static final String RESOURCE_LOCATION = "prospector";
     private final ProspectorSerializer SERIALIZER = new ProspectorSerializer();
-    private static Map<Identifier, Float> dropRateMap = new HashMap<>();
-    private static Map<Identifier, List<Pair<Identifier,Float>>> oreBonusMap = new HashMap<>();
+    private static final Map<Identifier, Float> baseDropRateMap = new HashMap<>();
+    private static final Map<Identifier, List<Pair<Identifier,Float>>> blockDropBonusMap = new HashMap<>();
+    private static final Map<TagKey<Block>, List<Pair<Identifier,Float>>> tagDropBonusMap = new HashMap<>();
 
     @Override
     public Identifier getFabricId() {
@@ -36,49 +34,61 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
 
     @Override
     public void reload(ResourceManager manager) {
-        dropRateMap.clear();
-        oreBonusMap.clear();
+        baseDropRateMap.clear();
+        blockDropBonusMap.clear();
         Spellbound.LOGGER.info("Loading Spellbound Prospector Treasures.");
         manager.findResources(RESOURCE_LOCATION, path -> path.getPath().endsWith(".json")).forEach((id,resource) -> {
             try(InputStream stream = resource.getInputStream()) {
                 Reader reader = new InputStreamReader(stream);
                 ProspectorData prospectorData = SERIALIZER.read(id,new Gson().fromJson(reader, ProspectorJsonFormat.class));
-                if(prospectorData.bonusOre.isEmpty()){
+                if(prospectorData.material == null){
                     //this is a universal drop rate
-                    if(dropRateMap.containsKey(prospectorData.treasure)){
-                        Spellbound.LOGGER.warn("Duplicate prospector entry " +prospectorData.treasure+ ".");
+                    if(baseDropRateMap.containsKey(prospectorData.treasure)){
+                        Spellbound.LOGGER.warn("Duplicate universal prospector entry " +prospectorData.treasure+ ".");
                     }
-                    dropRateMap.put(prospectorData.treasure, prospectorData.frequency);
+                    baseDropRateMap.put(prospectorData.treasure, prospectorData.frequency);
+                }
+                else if(prospectorData.materialIsTag) {
+                    List<Pair<Identifier,Float>> value;
+                    Pair<Identifier,Float> pair = new Pair<>(prospectorData.treasure,prospectorData.frequency);
+                    TagKey<Block> tag = TagKey.of(Registry.BLOCK_KEY,prospectorData.material);
+                    if(!tagDropBonusMap.containsKey(tag)){
+                        value = new LinkedList<>();
+                        tagDropBonusMap.put(tag,value);
+                    }
+                    else{
+                        value = tagDropBonusMap.get(tag);
+                    }
+                    value.add(pair);
                 }
                 else{
-                    for (Identifier ore: prospectorData.bonusOre) {
-                        List<Pair<Identifier,Float>> value;
-                        Pair<Identifier,Float> pair = new Pair<>(prospectorData.treasure,prospectorData.frequency);
-                        if(!oreBonusMap.containsKey(ore)){
-                            value = new LinkedList<>();
-                            oreBonusMap.put(ore,value);
-                        }
-                        else{
-                            value = oreBonusMap.get(ore);
-                        }
-
-                        value.add(pair);
+                    List<Pair<Identifier,Float>> value;
+                    Pair<Identifier,Float> pair = new Pair<>(prospectorData.treasure,prospectorData.frequency);
+                    if(!blockDropBonusMap.containsKey(prospectorData.material)){
+                        value = new LinkedList<>();
+                        blockDropBonusMap.put(prospectorData.material,value);
                     }
+                    else{
+                        value = blockDropBonusMap.get(prospectorData.material);
+                    }
+
+                    value.add(pair);
                 }
             } catch(Exception e) {
                 Spellbound.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
             }
         });
-        Spellbound.LOGGER.info("Loaded "+ dropRateMap.size()+" Prospector Treasures.");
-        Spellbound.LOGGER.info("Loaded "+ oreBonusMap.size()+" Prospector Bonus Ores.");
+        Spellbound.LOGGER.info("Loaded "+ baseDropRateMap.size()+" Prospector Treasures.");
+        Spellbound.LOGGER.info("Loaded "+ tagDropBonusMap.size()+" Prospector Tags.");
+        Spellbound.LOGGER.info("Loaded "+ blockDropBonusMap.size()+" Prospector Blocks.");
     }
 
-    public static Map<Identifier, Float> getDropRateMap(){
-        return dropRateMap;
+    public static Map<Identifier, Float> getBaseDropRateMap(){
+        return baseDropRateMap;
     }
 
     public static Map<Identifier, Float> getDropRateMapWithBonuses(World world, ItemStack tool, BlockPos center, int radius){
-        Map<Identifier, Float> output = new HashMap<>(dropRateMap);
+        Map<Identifier, Float> output = new HashMap<>(baseDropRateMap);
         Set<Block> foundBlocks = new HashSet<>();
         BlockPos lowerCorner = center.add(-radius,-radius,-radius);
         int size = (radius*2)+1;
@@ -95,10 +105,24 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
                 }
             }
         }
+
+        Set<TagKey<Block>> tagsLeft = new HashSet<>(tagDropBonusMap.keySet());
         for (Block block: foundBlocks) {
             Identifier id = Registry.BLOCK.getId(block);
-            if(oreBonusMap.containsKey(id)){
-                for (Pair<Identifier,Float> pair: oreBonusMap.get(id)) {
+            //see if any tags are fulfilled
+            Iterator<TagKey<Block>> iter = tagsLeft.iterator();
+            while(iter.hasNext()){
+                TagKey<Block> tag = iter.next();
+                if(block.getRegistryEntry().isIn(tag)){
+                    for (Pair<Identifier,Float> pair: tagDropBonusMap.get(tag)) {
+                        output.put(pair.getLeft(),output.getOrDefault(pair.getLeft(),0f) + pair.getRight());
+                    }
+                    iter.remove();
+                }
+            }
+            //see if any block bonuses are had
+            if(blockDropBonusMap.containsKey(id)){
+                for (Pair<Identifier,Float> pair: blockDropBonusMap.get(id)) {
                     output.put(pair.getLeft(),output.getOrDefault(pair.getLeft(),0f) + pair.getRight());
                 }
             }

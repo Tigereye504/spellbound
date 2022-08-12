@@ -47,17 +47,21 @@ public class ProspectorEnchantment extends SBEnchantment {
 
     @Override
     public int getMinPower(int level) {
-        return 15 + (level - 1) * 9;
+        int power = (Spellbound.config.PROSPECTOR_POWER_PER_RANK * level) - Spellbound.config.PROSPECTOR_BASE_POWER;
+        if(level > Spellbound.config.PROSPECTOR_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return super.getMinPower(level) + 50;
+        return super.getMinPower(level) + Spellbound.config.PROSPECTOR_POWER_RANGE;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 3;
+        if(isEnabled()) return Spellbound.config.PROSPECTOR_HARD_CAP;
         else return 0;
     }
 
@@ -112,7 +116,7 @@ public class ProspectorEnchantment extends SBEnchantment {
         }
         @Override
         public void act() {
-            world.spawnEntity(new ItemEntity(world,pos.getX(),pos.getY(),pos.getZ(),stack));
+            world.spawnEntity(new ItemEntity(world,pos.getX()+.5,pos.getY()+.5,pos.getZ()+.5,stack));
         }
     }
 }

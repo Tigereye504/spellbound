@@ -140,6 +140,340 @@ public class SBConfig implements ConfigData {
     public int TETHERING_RARITY = 2;
     @ConfigEntry.Category("rarity")
     public int TROPHY_COLLECTOR_RARITY = 4;
+
+    @ConfigEntry.Category("level_caps")
+    public int ACCELERATION_SOFT_CAP = 5;
+    @ConfigEntry.Category("level_caps")
+    public int ACCELERATION_HARD_CAP = 5;
+    @ConfigEntry.Category("level_caps")
+    public int ATTRACTIVE_SOFT_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int ATTRACTIVE_HARD_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int BUFFERED_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int BUFFERED_HARD_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int CAVE_IN_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int CAVE_IN_HARD_CAP = 5;
+    @ConfigEntry.Category("level_caps")
+    public int DEMOLITION_SOFT_CAP = 5;
+    @ConfigEntry.Category("level_caps")
+    public int DEMOLITION_HARD_CAP = 8;
+    @ConfigEntry.Category("level_caps")
+    public int DULLNESS_SOFT_CAP = 5;
+    @ConfigEntry.Category("level_caps")
+    public int DULLNESS_HARD_CAP = 5;
+    @ConfigEntry.Category("level_caps")
+    public int FISHER_OF_MEN_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int FISHER_OF_MEN_HARD_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int FLESH_WOUND_SOFT_CAP = 4;
+    @ConfigEntry.Category("level_caps")
+    public int FLESH_WOUND_HARD_CAP = 4;
+    @ConfigEntry.Category("level_caps")
+    public int HEARTY_SOFT_CAP = 4;
+    @ConfigEntry.Category("level_caps")
+    public int HEARTY_HARD_CAP = 4;
+    @ConfigEntry.Category("level_caps")
+    public int SATURATED_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int SATURATED_HARD_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int SPIKES_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int SPIKES_HARD_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int IMPERSONAL_SOFT_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int IMPERSONAL_HARD_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int JOUSTING_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int JOUSTING_HARD_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int LAUNCHING_SOFT_CAP = 2;
+    @ConfigEntry.Category("level_caps")
+    public int LAUNCHING_HARD_CAP = 2;
+    @ConfigEntry.Category("level_caps")
+    public int LEGACY_SOFT_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int LEGACY_HARD_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int METABOLISING_SOFT_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int METABOLISING_HARD_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int MONOGAMOUS_SOFT_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int MONOGAMOUS_HARD_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int MOUNTED_SOFT_CAP = 5;
+    @ConfigEntry.Category("level_caps")
+    public int MOUNTED_HARD_CAP = 5;
+    @ConfigEntry.Category("level_caps")
+    public int OUTBURST_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int OUTBURST_HARD_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int PROSPECTOR_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int PROSPECTOR_HARD_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int PHASE_LEAP_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int PHASE_LEAP_HARD_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int PHASE_STRAFE_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int PHASE_STRAFE_HARD_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int PHOTOSYNTHETIC_SOFT_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int PHOTOSYNTHETIC_HARD_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int POLYGAMOUS_SOFT_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int POLYGAMOUS_HARD_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int PRIMING_SOFT_CAP = 5;
+    @ConfigEntry.Category("level_caps")
+    public int PRIMING_HARD_CAP = 5;
+    @ConfigEntry.Category("level_caps")
+    public int RAMPAGE_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int RAMPAGE_HARD_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int RED_ALERT_SOFT_CAP = 4;
+    @ConfigEntry.Category("level_caps")
+    public int RED_ALERT_HARD_CAP = 4;
+    @ConfigEntry.Category("level_caps")
+    public int REPULSIVE_SOFT_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int REPULSIVE_HARD_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int ROCK_COLLECTOR_SOFT_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int ROCK_COLLECTOR_HARD_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int SELFISH_SOFT_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int SELFISH_HARD_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int SKOTOSYNTHETIC_SOFT_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int SKOTOSYNTHETIC_HARD_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int TETHERING_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int TETHERING_HARD_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int TROPHY_COLLECTOR_SOFT_CAP = 1;
+    @ConfigEntry.Category("level_caps")
+    public int TROPHY_COLLECTOR_HARD_CAP = 1;
+
+    @ConfigEntry.Category("enchanting_power")
+    public int ACCELERATION_BASE_POWER = -9;
+    @ConfigEntry.Category("enchanting_power")
+    public int ACCELERATION_POWER_PER_RANK = 10;
+    @ConfigEntry.Category("enchanting_power")
+    public int ACCELERATION_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int ATTRACTIVE_BASE_POWER = 0;
+    @ConfigEntry.Category("enchanting_power")
+    public int ATTRACTIVE_POWER_PER_RANK = 20;
+    @ConfigEntry.Category("enchanting_power")
+    public int ATTRACTIVE_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int BUFFERED_BASE_POWER = -3;
+    @ConfigEntry.Category("enchanting_power")
+    public int BUFFERED_POWER_PER_RANK = 8;
+    @ConfigEntry.Category("enchanting_power")
+    public int BUFFERED_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int CAVE_IN_BASE_POWER = 0;
+    @ConfigEntry.Category("enchanting_power")
+    public int CAVE_IN_POWER_PER_RANK = 10;
+    @ConfigEntry.Category("enchanting_power")
+    public int CAVE_IN_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int DEMOLITION_BASE_POWER = -9;
+    @ConfigEntry.Category("enchanting_power")
+    public int DEMOLITION_POWER_PER_RANK = 10;
+    @ConfigEntry.Category("enchanting_power")
+    public int DEMOLITION_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int DULLNESS_BASE_POWER = -7;
+    @ConfigEntry.Category("enchanting_power")
+    public int DULLNESS_POWER_PER_RANK = 8;
+    @ConfigEntry.Category("enchanting_power")
+    public int DULLNESS_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int FISHER_OF_MEN_BASE_POWER = -1;
+    @ConfigEntry.Category("enchanting_power")
+    public int FISHER_OF_MEN_POWER_PER_RANK = 10;
+    @ConfigEntry.Category("enchanting_power")
+    public int FISHER_OF_MEN_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int FLESH_WOUND_BASE_POWER = -10;
+    @ConfigEntry.Category("enchanting_power")
+    public int FLESH_WOUND_POWER_PER_RANK = 11;
+    @ConfigEntry.Category("enchanting_power")
+    public int FLESH_WOUND_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int HEARTY_BASE_POWER = -10;
+    @ConfigEntry.Category("enchanting_power")
+    public int HEARTY_POWER_PER_RANK = 11;
+    @ConfigEntry.Category("enchanting_power")
+    public int HEARTY_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int SATURATED_BASE_POWER = -3;
+    @ConfigEntry.Category("enchanting_power")
+    public int SATURATED_POWER_PER_RANK = 8;
+    @ConfigEntry.Category("enchanting_power")
+    public int SATURATED_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int SPIKES_BASE_POWER = -10;
+    @ConfigEntry.Category("enchanting_power")
+    public int SPIKES_POWER_PER_RANK = 20;
+    @ConfigEntry.Category("enchanting_power")
+    public int SPIKES_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int IMPERSONAL_BASE_POWER = 0;
+    @ConfigEntry.Category("enchanting_power")
+    public int IMPERSONAL_POWER_PER_RANK = 20;
+    @ConfigEntry.Category("enchanting_power")
+    public int IMPERSONAL_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int JOUSTING_BASE_POWER = -15;
+    @ConfigEntry.Category("enchanting_power")
+    public int JOUSTING_POWER_PER_RANK = 16;
+    @ConfigEntry.Category("enchanting_power")
+    public int JOUSTING_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int LAUNCHING_BASE_POWER = -15;
+    @ConfigEntry.Category("enchanting_power")
+    public int LAUNCHING_POWER_PER_RANK = 20;
+    @ConfigEntry.Category("enchanting_power")
+    public int LAUNCHING_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int LEGACY_BASE_POWER = 10;
+    @ConfigEntry.Category("enchanting_power")
+    public int LEGACY_POWER_PER_RANK = 0;
+    @ConfigEntry.Category("enchanting_power")
+    public int LEGACY_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int METABOLISING_BASE_POWER = 15;
+    @ConfigEntry.Category("enchanting_power")
+    public int METABOLISING_POWER_PER_RANK = 10;
+    @ConfigEntry.Category("enchanting_power")
+    public int METABOLISING_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int MONOGAMOUS_BASE_POWER = -10;
+    @ConfigEntry.Category("enchanting_power")
+    public int MONOGAMOUS_POWER_PER_RANK = 20;
+    @ConfigEntry.Category("enchanting_power")
+    public int MONOGAMOUS_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int MOUNTED_BASE_POWER = -7;
+    @ConfigEntry.Category("enchanting_power")
+    public int MOUNTED_POWER_PER_RANK = 8;
+    @ConfigEntry.Category("enchanting_power")
+    public int MOUNTED_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int OUTBURST_BASE_POWER = -10;
+    @ConfigEntry.Category("enchanting_power")
+    public int OUTBURST_POWER_PER_RANK = 20;
+    @ConfigEntry.Category("enchanting_power")
+    public int OUTBURST_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int PROSPECTOR_BASE_POWER = 6;
+    @ConfigEntry.Category("enchanting_power")
+    public int PROSPECTOR_POWER_PER_RANK = 9;
+    @ConfigEntry.Category("enchanting_power")
+    public int PROSPECTOR_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int PHASE_LEAP_BASE_POWER = 0;
+    @ConfigEntry.Category("enchanting_power")
+    public int PHASE_LEAP_POWER_PER_RANK = 15;
+    @ConfigEntry.Category("enchanting_power")
+    public int PHASE_LEAP_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int PHASE_STRAFE_BASE_POWER = 0;
+    @ConfigEntry.Category("enchanting_power")
+    public int PHASE_STRAFE_POWER_PER_RANK = 15;
+    @ConfigEntry.Category("enchanting_power")
+    public int PHASE_STRAFE_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int PHOTOSYNTHETIC_BASE_POWER = 15;
+    @ConfigEntry.Category("enchanting_power")
+    public int PHOTOSYNTHETIC_POWER_PER_RANK = 10;
+    @ConfigEntry.Category("enchanting_power")
+    public int PHOTOSYNTHETIC_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int POLYGAMOUS_BASE_POWER = -10;
+    @ConfigEntry.Category("enchanting_power")
+    public int POLYGAMOUS_POWER_PER_RANK = 20;
+    @ConfigEntry.Category("enchanting_power")
+    public int POLYGAMOUS_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int PRIMING_BASE_POWER = 5;
+    @ConfigEntry.Category("enchanting_power")
+    public int PRIMING_POWER_PER_RANK = 5;
+    @ConfigEntry.Category("enchanting_power")
+    public int PRIMING_POWER_RANGE = 20;
+    @ConfigEntry.Category("enchanting_power")
+    public int RAMPAGE_BASE_POWER = -15;
+    @ConfigEntry.Category("enchanting_power")
+    public int RAMPAGE_POWER_PER_RANK = 16;
+    @ConfigEntry.Category("enchanting_power")
+    public int RAMPAGE_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int RED_ALERT_BASE_POWER = -10;
+    @ConfigEntry.Category("enchanting_power")
+    public int RED_ALERT_POWER_PER_RANK = 11;
+    @ConfigEntry.Category("enchanting_power")
+    public int RED_ALERT_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int REPULSIVE_BASE_POWER = 0;
+    @ConfigEntry.Category("enchanting_power")
+    public int REPULSIVE_POWER_PER_RANK = 20;
+    @ConfigEntry.Category("enchanting_power")
+    public int REPULSIVE_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int ROCK_COLLECTOR_BASE_POWER = -19;
+    @ConfigEntry.Category("enchanting_power")
+    public int ROCK_COLLECTOR_POWER_PER_RANK = 20;
+    @ConfigEntry.Category("enchanting_power")
+    public int ROCK_COLLECTOR_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int SELFISH_BASE_POWER = 15;
+    @ConfigEntry.Category("enchanting_power")
+    public int SELFISH_POWER_PER_RANK = 10;
+    @ConfigEntry.Category("enchanting_power")
+    public int SELFISH_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int SKOTOSYNTHETIC_BASE_POWER = 15;
+    @ConfigEntry.Category("enchanting_power")
+    public int SKOTOSYNTHETIC_POWER_PER_RANK = 10;
+    @ConfigEntry.Category("enchanting_power")
+    public int SKOTOSYNTHETIC_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int TETHERING_BASE_POWER = 5;
+    @ConfigEntry.Category("enchanting_power")
+    public int TETHERING_POWER_PER_RANK = 10;
+    @ConfigEntry.Category("enchanting_power")
+    public int TETHERING_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int TROPHY_COLLECTOR_BASE_POWER = -19;
+    @ConfigEntry.Category("enchanting_power")
+    public int TROPHY_COLLECTOR_POWER_PER_RANK = 20;
+    @ConfigEntry.Category("enchanting_power")
+    public int TROPHY_COLLECTOR_POWER_RANGE = 50;
+    @ConfigEntry.Category("enchanting_power")
+    public int POWER_TO_EXCEED_SOFT_CAP = 20;
     
     @ConfigEntry.Category("details")
     public int ACCELERATION_TIMEOUT = 50;
@@ -160,9 +494,9 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("details")
     public int COLLECTOR_WINDOW_SIZE = 10;
     @ConfigEntry.Category("details")
-    public float DEMOLITION_BASE_POWER = 1;
+    public float DEMOLITION_BASE_EXPLOSION_POWER = 1;
     @ConfigEntry.Category("details")
-    public float DEMOLITION_POWER_PER_RANK = .5F;
+    public float DEMOLITION_EXPLOSION_POWER_PER_RANK = .5F;
     @ConfigEntry.Category("details")
     public float FISHER_OF_MEN_BASE_DAMAGE = 2F;
     @ConfigEntry.Category("details")

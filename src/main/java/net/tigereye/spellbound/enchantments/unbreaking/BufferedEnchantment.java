@@ -29,23 +29,27 @@ public class BufferedEnchantment extends SBEnchantment {
     }
 
     @Override
-    public int getMinPower(int level) {
-        return 5 + (level - 1) * 8;
-    }
-
-    @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + 50;
-    }
-
-    @Override
     public boolean isEnabled() {
         return Spellbound.config.BUFFERED_ENABLED;
     }
 
     @Override
+    public int getMinPower(int level) {
+        int power = (Spellbound.config.BUFFERED_POWER_PER_RANK * level) - Spellbound.config.BUFFERED_BASE_POWER;
+        if(level > Spellbound.config.BUFFERED_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
+    }
+
+    @Override
+    public int getMaxPower(int level) {
+        return super.getMinPower(level) + Spellbound.config.BUFFERED_POWER_RANGE;
+    }
+
+    @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 3;
+        if(isEnabled()) return Spellbound.config.BUFFERED_HARD_CAP;
         else return 0;
     }
 
@@ -178,10 +182,10 @@ public class BufferedEnchantment extends SBEnchantment {
     private static void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int red, int green, int blue, int alpha) {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        buffer.vertex((double)(x + 0), (double)(y + 0), 0.0D).color(red, green, blue, alpha).next();
-        buffer.vertex((double)(x + 0), (double)(y + height), 0.0D).color(red, green, blue, alpha).next();
-        buffer.vertex((double)(x + width), (double)(y + height), 0.0D).color(red, green, blue, alpha).next();
-        buffer.vertex((double)(x + width), (double)(y + 0), 0.0D).color(red, green, blue, alpha).next();
+        buffer.vertex(x, y, 0.0D).color(red, green, blue, alpha).next();
+        buffer.vertex(x, y, 0.0D).color(red, green, blue, alpha).next();
+        buffer.vertex(x + width, y + height, 0.0D).color(red, green, blue, alpha).next();
+        buffer.vertex(x + width, y + 0, 0.0D).color(red, green, blue, alpha).next();
         BufferRenderer.drawWithShader(buffer.end());
     }
 

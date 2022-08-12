@@ -30,17 +30,21 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
 
     @Override
     public int getMinPower(int level) {
-        return 5 + (10 * level);
+        int power = (Spellbound.config.RAMPAGE_POWER_PER_RANK * level) - Spellbound.config.RAMPAGE_BASE_POWER;
+        if(level > Spellbound.config.RAMPAGE_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return super.getMinPower(level) + 15;
+        return super.getMinPower(level) + Spellbound.config.RAMPAGE_POWER_RANGE;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 3;
+        if(isEnabled()) return Spellbound.config.RAMPAGE_HARD_CAP;
         else return 0;
     }
 

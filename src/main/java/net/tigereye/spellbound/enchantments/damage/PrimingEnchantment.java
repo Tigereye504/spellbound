@@ -33,17 +33,21 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
 
     @Override
     public int getMinPower(int level) {
-        return 5 + (level*10);
+        int power = (Spellbound.config.PRIMING_POWER_PER_RANK * level) - Spellbound.config.PRIMING_BASE_POWER;
+        if(level > Spellbound.config.PRIMING_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return this.getMinPower(level)+15;
+        return super.getMinPower(level) + Spellbound.config.PRIMING_POWER_RANGE;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 5;
+        if(isEnabled()) return Spellbound.config.PRIMING_HARD_CAP;
         else return 0;
     }
 

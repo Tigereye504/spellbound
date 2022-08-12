@@ -23,17 +23,22 @@ public class DullnessEnchantment extends SBEnchantment {
 
     @Override
     public int getMinPower(int level) {
-        return 1 + 8 * (level - 1);
+        int power = (Spellbound.config.DULLNESS_POWER_PER_RANK * level) - Spellbound.config.DULLNESS_BASE_POWER;
+        if(level > Spellbound.config.DULLNESS_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return super.getMinPower(level) + 20;
+        return super.getMinPower(level) + Spellbound.config.DULLNESS_POWER_RANGE;
     }
 
     @Override
     public int getMaxLevel() {
-        return 5;
+        if(isEnabled()) return Spellbound.config.DULLNESS_HARD_CAP;
+        else return 0;
     }
 
     @Override

@@ -23,11 +23,15 @@ public class ProspectorSerializer {
         prospectorData.treasure = new Identifier(prospectorJson.treasure);
         prospectorData.frequency = prospectorJson.frequency;
 
-        prospectorData.bonusOre = new LinkedList<>();
-        if (prospectorJson.bonusOre != null){
-            for (JsonElement bonusOre : prospectorJson.bonusOre) {
-                prospectorData.bonusOre.add(new Identifier(bonusOre.getAsString()));
+        if (prospectorJson.material != null){
+            if(prospectorJson.material.charAt(0) == '#'){
+                prospectorData.materialIsTag = true;
+                prospectorJson.material = prospectorJson.material.substring(1);
             }
+            else{
+                prospectorData.materialIsTag = false;
+            }
+            prospectorData.material = new Identifier(prospectorJson.material);
         }
 
         return prospectorData;

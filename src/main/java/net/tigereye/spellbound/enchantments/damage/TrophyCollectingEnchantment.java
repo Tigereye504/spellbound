@@ -40,17 +40,21 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
 
     @Override
     public int getMinPower(int level) {
-        return 1;
+        int power = (Spellbound.config.TROPHY_COLLECTOR_POWER_PER_RANK * level) - Spellbound.config.TROPHY_COLLECTOR_BASE_POWER;
+        if(level > Spellbound.config.TROPHY_COLLECTOR_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return 50;
+        return super.getMinPower(level) + Spellbound.config.TROPHY_COLLECTOR_POWER_RANGE;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 1;
+        if(isEnabled()) return Spellbound.config.TROPHY_COLLECTOR_HARD_CAP;
         else return 0;
     }
 
@@ -120,9 +124,7 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
             stream = stream.skip(world.getTime() % ((long) scrollingSteps * Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD)) / Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD));
         }
         stream = stream.limit(Spellbound.config.COLLECTOR_WINDOW_SIZE);
-        stream.forEach((entry) -> {
-            writeLineInTooltip(output,entry,isRanged);
-        });
+        stream.forEach((entry) -> writeLineInTooltip(output,entry,isRanged));
         output.add(Text.literal("--------------------------"));
         return output;
     }

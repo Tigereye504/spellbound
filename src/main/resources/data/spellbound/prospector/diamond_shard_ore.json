@@ -1,8 +1,6 @@
 {
-  "bonusOre": [
-    "minecraft:diamond_ore",
-    "minecraft:deepslate_diamond_ore"
-  ],
+
+  "material": "#minecraft:diamond_ores",
   "treasure": "spellbound:diamond_shard",
   "frequency": 0.0516
 }

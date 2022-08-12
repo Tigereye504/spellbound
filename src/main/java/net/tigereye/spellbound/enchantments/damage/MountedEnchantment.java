@@ -27,17 +27,21 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
 
     @Override
     public int getMinPower(int level) {
-        return (8 * level) - 3;
+        int power = (Spellbound.config.MOUNTED_POWER_PER_RANK * level) - Spellbound.config.MOUNTED_BASE_POWER;
+        if(level > Spellbound.config.MOUNTED_SOFT_CAP) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
     }
 
     @Override
     public int getMaxPower(int level) {
-        return super.getMinPower(level) + 20;
+        return super.getMinPower(level) + Spellbound.config.MOUNTED_POWER_RANGE;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return 5;
+        if(isEnabled()) return Spellbound.config.MOUNTED_HARD_CAP;
         else return 0;
     }
 
