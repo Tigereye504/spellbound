@@ -11,6 +11,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.interfaces.NextTickAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
