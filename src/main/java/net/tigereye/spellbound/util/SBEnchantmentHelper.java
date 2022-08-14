@@ -1,5 +1,7 @@
 package net.tigereye.spellbound.util;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
@@ -29,11 +31,8 @@ import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.interfaces.NextTickAction;
-import net.tigereye.spellbound.interfaces.SpellboundPlayerEntity;
-import net.tigereye.spellbound.interfaces.SpellboundProjectileEntity;
+import net.tigereye.spellbound.interfaces.*;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.interfaces.TridentEntityItemAccessor;
 import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
 import net.tigereye.spellbound.mob_effect.instance.PolygamyInstance;
 import net.tigereye.spellbound.registration.SBEnchantments;
@@ -98,6 +97,20 @@ public class SBEnchantmentHelper {
 
     public static void onJump(LivingEntity entity){
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment)enchantment).onJump(level, itemStack, entity), entity.getItemsEquipped());
+    }
+
+
+    public static void onMidairJump(SpellboundClientPlayerEntity sbPlayer, PlayerEntity player, boolean isJumping) {
+        if (player.isOnGround() || player.isClimbing() || player.isSwimming()) {
+            sbPlayer.setJumpReleased(false);
+        }
+        else if(!isJumping){
+            sbPlayer.setJumpReleased(true);
+        }
+        else if(sbPlayer.getJumpReleased() && !player.getAbilities().flying && !player.hasVehicle()){
+            sbPlayer.setJumpReleased(false);
+            SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> (enchantment).onMidairJump(level, itemStack, player), player.getItemsEquipped());
+        }
     }
 
     //called at the head of LivingEntity::applyArmor, before armor is actually applied.

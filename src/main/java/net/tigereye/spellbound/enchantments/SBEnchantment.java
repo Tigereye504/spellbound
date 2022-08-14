@@ -70,6 +70,9 @@ public abstract class SBEnchantment extends Enchantment {
     //for when the user jumps
     public void onJump(int level, ItemStack stack, LivingEntity entity){}
 
+    //for when the user double jumps
+    public void onMidairJump(int level, ItemStack stack, LivingEntity entity){}
+
     //for when the user kills
     public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
 

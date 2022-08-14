@@ -183,9 +183,9 @@ public class BufferedEnchantment extends SBEnchantment {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         buffer.vertex(x, y, 0.0D).color(red, green, blue, alpha).next();
-        buffer.vertex(x, y, 0.0D).color(red, green, blue, alpha).next();
+        buffer.vertex(x, y + height, 0.0D).color(red, green, blue, alpha).next();
         buffer.vertex(x + width, y + height, 0.0D).color(red, green, blue, alpha).next();
-        buffer.vertex(x + width, y + 0, 0.0D).color(red, green, blue, alpha).next();
+        buffer.vertex(x + width, y, 0.0D).color(red, green, blue, alpha).next();
         BufferRenderer.drawWithShader(buffer.end());
     }
 

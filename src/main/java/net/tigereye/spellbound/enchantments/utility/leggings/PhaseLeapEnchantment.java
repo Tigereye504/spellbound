@@ -7,6 +7,9 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -14,6 +17,8 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 import net.tigereye.spellbound.util.VectorUtil;
 
 public class PhaseLeapEnchantment extends SBEnchantment {
+
+    private static final String HAS_PHASED_KEY = Spellbound.MODID+"HasPhased";
 
     public PhaseLeapEnchantment() {
         super(SpellboundUtil.rarityLookup(Spellbound.config.PHASE_LEAP_RARITY), EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});
@@ -46,25 +51,42 @@ public class PhaseLeapEnchantment extends SBEnchantment {
     }
 
     @Override
-    public void onJump(int level, ItemStack stack, LivingEntity entity){
-        if(!entity.world.isClient && entity instanceof PlayerEntity){
+    public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
+        //if the user has landed since phasing, reset
+        NbtCompound tag = stack.getOrCreateNbt();
+        if(tag.contains(HAS_PHASED_KEY) && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming())){
+            tag.remove(HAS_PHASED_KEY);
+        }
+    }
+
+    @Override
+    public void onMidairJump(int level, ItemStack stack, LivingEntity entity){
+
+        if(entity.isSwimming() ||
+        stack != entity.getEquippedStack(EquipmentSlot.LEGS)){
             return;
         }
-        if(entity.getPose() == EntityPose.CROUCHING){
+        NbtCompound tag = stack.getOrCreateNbt();
+        if(tag.contains(HAS_PHASED_KEY)){
             return;
         }
-        if(stack != entity.getEquippedStack(EquipmentSlot.LEGS)){
-            return;
-        }
-        Vec3d position = entity.getPos().add(0,.5,0);
+
+        Vec3d position = entity.getPos();
         Vec3d direction = entity.getRotationVector();
         direction = direction.multiply(1,0,1);
-        position = VectorUtil.findCollisionWithStepAssistOnLine(entity.getEntityWorld(),position,direction,level);
+        Vec3d boundingBoxOffset = VectorUtil.getEntityBoundingBoxOffset(direction,entity.getBoundingBox(entity.getPose()));
+        if(Spellbound.DEBUG) {
+            Spellbound.LOGGER.info("Bounding box offset: [" + boundingBoxOffset.getX() + "," + boundingBoxOffset.getY() + "," + boundingBoxOffset.getZ() + "]");
+        }
+        position = VectorUtil.findCollisionWithStepAssistOnLine(entity.getEntityWorld(),position.add(boundingBoxOffset),direction,level);
         if(position == null){return;}
+        position = position.subtract(boundingBoxOffset);
         if(Spellbound.DEBUG) {
             Spellbound.LOGGER.info("Phase leap teleporting from position [" + entity.getX() + "," + entity.getY() + "," + entity.getZ() + "]");
             Spellbound.LOGGER.info("Phase leap teleporting to position [" + position.getX() + "," + position.getY() + "," + position.getZ() + "]");
         }
         entity.updatePosition(position.x, position.y, position.z);
+        tag.putBoolean(HAS_PHASED_KEY,true);
+        entity.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT,1.0F, 1.0F);
     }
 }

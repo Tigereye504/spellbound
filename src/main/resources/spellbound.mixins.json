@@ -19,6 +19,7 @@
     "WorldMixin"
   ],
   "client": [
+    "ClientPlayerEntityMixin",
     "ItemRendererMixin",
     "ItemStackClientMixin"
   ],
