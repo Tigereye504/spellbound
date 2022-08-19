@@ -106,7 +106,7 @@ public abstract class SBEnchantment extends Enchantment {
 
     public void onToolBreak(int level, ItemStack itemStack, PlayerEntity entity) {}
 
-    public float getArmorAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
+    public float getArmorAmount(int level, ItemStack stack, LivingEntity entity) {
         return 0;
     }
 

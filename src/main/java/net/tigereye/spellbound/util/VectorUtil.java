@@ -1,5 +1,6 @@
 package net.tigereye.spellbound.util;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
@@ -7,6 +8,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.Collections;
 
 public class VectorUtil {
@@ -117,6 +119,23 @@ public class VectorUtil {
             return null;
         }
         return position;
+    }
+
+
+    public static Vec3d backtrackToUsableSpace(World world, LivingEntity entity, Box boundingBox, Vec3d position) {
+        Vec3d moveVector = position.subtract(entity.getPos());
+        Vec3d moveVectorNorm = moveVector.normalize();
+        Box newBounds = Box.of(boundingBox.getCenter().add(moveVector),boundingBox.getXLength(),boundingBox.getYLength(),boundingBox.getZLength());
+        double length = moveVector.length();
+        while(!world.isSpaceEmpty(newBounds)){
+            if(length < .5){
+                return null;
+            }
+            length -= .5;
+            newBounds = Box.of(entity.getPos().add(moveVectorNorm.multiply(length)),
+                    boundingBox.getXLength(),boundingBox.getYLength(),boundingBox.getZLength());
+        }
+        return entity.getPos().add(moveVectorNorm.multiply(length));
     }
 
     public static Vec3d roundVectorAxis(Vec3d pos,Direction.Axis axis){

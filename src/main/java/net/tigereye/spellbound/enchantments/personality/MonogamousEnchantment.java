@@ -55,12 +55,12 @@ public class MonogamousEnchantment extends SBEnchantment {
     }
 
     @Override
-    public float getArmorAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
-        SBEnchantmentHelper.testOwnerFaithfulness(stack,target);
-        if(target.hasStatusEffect(SBStatusEffects.MONOGAMY)){
-            return 4;
+    public float getArmorAmount(int level, ItemStack stack, LivingEntity entity) {
+        SBEnchantmentHelper.testOwnerFaithfulness(stack,entity);
+        if(entity.hasStatusEffect(SBStatusEffects.MONOGAMY)){
+            return 2;
         }
-        return -8;
+        return -4;
     }
 
     @Override

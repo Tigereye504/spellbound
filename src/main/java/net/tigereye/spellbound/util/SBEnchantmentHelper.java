@@ -156,10 +156,10 @@ public class SBEnchantmentHelper {
         }
     }
 
-    public static int getArmorAmount(DamageSource source, LivingEntity target, int k, float amount) {
+    public static int getArmorAmount(LivingEntity entity) {
         MutableFloat mutableFloat = new MutableFloat();
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add((enchantment).getArmorAmount(level, source, itemStack, target)), target.getArmorItems());
-        return k + Math.round(mutableFloat.floatValue());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add((enchantment).getArmorAmount(level, itemStack, entity)), entity.getArmorItems());
+        return Math.round(mutableFloat.floatValue());
     }
 
     public static int getProtectionAmount(DamageSource source, LivingEntity target, int k, float amount) {

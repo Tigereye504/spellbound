@@ -60,4 +60,5 @@ public class PlayerEntityMixin implements SpellboundPlayerEntity {
     public void spellboundPlayerEntityInteractMixin(Entity entity, Hand hand, CallbackInfoReturnable<ActionResult> info){
         SBEnchantmentHelper.onActivate((PlayerEntity)(Object)this, entity, hand);
     }
+
 }

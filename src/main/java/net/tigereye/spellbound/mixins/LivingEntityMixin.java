@@ -7,8 +7,11 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
@@ -22,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +55,12 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
     @Inject(at = @At("TAIL"), method = "initDataTracker")
     public void HellishMaterialsInitDataTrackerMixin(CallbackInfo info){
         this.dataTracker.startTracking(SB_DurabilityBuffer,0f);
+    }
+
+
+    @Inject(at = @At(value = "RETURN"),method = "getArmor", cancellable = true)
+    public void spellboundLivingEntityGetArmorMixin(CallbackInfoReturnable<Integer> info){
+        info.setReturnValue(info.getReturnValueI() + SBEnchantmentHelper.getArmorAmount((LivingEntity)(Object)this));
     }
 
     @ModifyVariable(at = @At("HEAD"), ordinal = 0, method = "applyArmorToDamage")

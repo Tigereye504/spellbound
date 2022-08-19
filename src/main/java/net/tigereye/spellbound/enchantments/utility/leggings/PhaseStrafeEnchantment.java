@@ -12,6 +12,7 @@ import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.util.NetworkingUtil;
 import net.tigereye.spellbound.util.SpellboundUtil;
 import net.tigereye.spellbound.util.VectorUtil;
 
@@ -90,11 +91,13 @@ public class PhaseStrafeEnchantment extends SBEnchantment {
         position = VectorUtil.findCollisionWithStepAssistOnLine(entity.getEntityWorld(),position.add(boundingBoxOffset),direction,level);
         if(position == null){return;}
         position = position.subtract(boundingBoxOffset);
+        position = VectorUtil.backtrackToUsableSpace(entity.getWorld(), entity, entity.getBoundingBox(),position);
+        if(position == null){return;}
         if(Spellbound.DEBUG) {
             Spellbound.LOGGER.info("Phase Strafe teleporting from position [" + entity.getX() + "," + entity.getY() + "," + entity.getZ() + "]");
             Spellbound.LOGGER.info("Phase Strafe teleporting to position [" + position.getX() + "," + position.getY() + "," + position.getZ() + "]");
         }
-        entity.updatePosition(position.x, position.y, position.z);
+        NetworkingUtil.sendTeleportRequestPacket(position);
         tag.putBoolean(HAS_PHASED_KEY,true);
         entity.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT,1.0F, 1.0F);
     }

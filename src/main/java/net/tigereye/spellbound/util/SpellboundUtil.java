@@ -43,7 +43,7 @@ public class SpellboundUtil {
                         position.x-range,position.y-range,position.z-range));
         for (Entity target:
                 entityList) {
-            if(target != user && !(target instanceof AbstractDecorationEntity)) {
+            if(target != user && (target instanceof LivingEntity || target instanceof ItemEntity)) {
                 Vec3d forceVec = position.subtract(target.getPos()).normalize();
                 if (target instanceof LivingEntity) {
                     forceVec = forceVec.multiply(strength * Math.max(0, 1 - ((LivingEntity) target).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)));

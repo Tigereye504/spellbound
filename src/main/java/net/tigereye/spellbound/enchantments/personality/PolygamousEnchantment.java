@@ -55,12 +55,12 @@ public class PolygamousEnchantment extends SBEnchantment {
     }
 
     @Override
-    public float getArmorAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
-        SBEnchantmentHelper.testOwnerFaithfulness(stack,target);
-        if(target.hasStatusEffect(SBStatusEffects.POLYGAMY)){
-            return 1;
+    public float getArmorAmount(int level, ItemStack stack, LivingEntity entity) {
+        SBEnchantmentHelper.testOwnerFaithfulness(stack,entity);
+        if(entity.hasStatusEffect(SBStatusEffects.POLYGAMY)){
+            return .5f;
         }
-        return -2;
+        return -1;
     }
 
     @Override
