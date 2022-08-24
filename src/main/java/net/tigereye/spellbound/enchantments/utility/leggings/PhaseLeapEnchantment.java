@@ -56,7 +56,7 @@ public class PhaseLeapEnchantment extends SBEnchantment {
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         //if the user has landed since phasing, reset
         NbtCompound tag = stack.getOrCreateNbt();
-        if(tag.contains(HAS_PHASED_KEY) && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming())){
+        if(tag.contains(HAS_PHASED_KEY) && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming() || entity.isTouchingWater())){
             tag.remove(HAS_PHASED_KEY);
         }
     }
@@ -64,8 +64,9 @@ public class PhaseLeapEnchantment extends SBEnchantment {
     @Override
     public void onMidairJump(int level, ItemStack stack, LivingEntity entity){
 
-        if(entity.isSwimming() ||
-        stack != entity.getEquippedStack(EquipmentSlot.LEGS) || entity.isSubmergedInWater()){
+        if(entity.isSwimming()
+        || entity.isTouchingWater()
+        || stack != entity.getEquippedStack(EquipmentSlot.LEGS)){
             return;
         }
         NbtCompound tag = stack.getOrCreateNbt();
