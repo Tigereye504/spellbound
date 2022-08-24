@@ -1,4 +1,4 @@
-<b>Empower and expand your arsenal with 32 new enchantments. 8 for weapons, 9 for armor, 6 for tools, and 9 for your entire kit.</b>
+### <b>Empower and expand your arsenal with 32 new enchantments. 8 for weapons, 9 for armor, 6 for tools, and 9 for your entire kit.</b>
 
 ### Weapon Enchantments
 
