@@ -1,6 +1,7 @@
 {
     "replace": false,
     "values": [
-      "#spellbound:damage"
+      "#spellbound:damage",
+      "spellbound:death_wish"
     ]
   }

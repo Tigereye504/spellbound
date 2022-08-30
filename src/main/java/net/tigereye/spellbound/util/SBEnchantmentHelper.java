@@ -92,13 +92,16 @@ public class SBEnchantmentHelper {
             }
         }
 
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onDeath(level, itemStack, source, killer, victim), victim.getItemsEquipped());
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDeath(level, itemStack, source, killer, victim), victim.getItemsEquipped());
     }
 
     public static void onJump(LivingEntity entity){
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment)enchantment).onJump(level, itemStack, entity), entity.getItemsEquipped());
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onJump(level, itemStack, entity), entity.getItemsEquipped());
     }
 
+    public static void onFireProjectile(Entity entity, ItemStack source, ProjectileEntity projectile){
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onFireProjectile(level, itemStack, entity, projectile), source);
+    }
 
     public static void onMidairJump(SpellboundClientPlayerEntity sbPlayer, PlayerEntity player, boolean isJumping) {
         if (player.isOnGround() || player.isClimbing() || player.isSwimming()) {
@@ -129,6 +132,10 @@ public class SBEnchantmentHelper {
 
     public static void onThrownTridentEntityHit(TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment)enchantment).onThrownTridentEntityHit(level, tridentEntity, itemStack, defender), tridentItem);
+    }
+
+    public static void onThrowTrident(Entity entity, ItemStack source, TridentEntity projectile){
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onThrowTrident(level, itemStack, entity, projectile), source);
     }
 
     //called at the head of LivingEntity::tick

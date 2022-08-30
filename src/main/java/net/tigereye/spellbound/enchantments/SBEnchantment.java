@@ -58,11 +58,13 @@ public abstract class SBEnchantment extends Enchantment {
 
     //public void onArmorChangeEvenIfAbsent
 
-    public void onBreakBlock(int level, ItemStack itemStack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
-    }
+    public void onBreakBlock(int level, ItemStack itemStack, World world, BlockPos pos, BlockState state, PlayerEntity player) {}
 
     //for when the user dies
     public void onDeath(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
+
+    //for when arrows are fired
+    public void onFireProjectile(int level, ItemStack itemStack, Entity entity, ProjectileEntity projectile){}
 
     //for every tick while the item is in a player's inventory
     public void onInventoryTick(int level, ItemStack stack, World world, Entity entity, int slot, boolean selected){}
@@ -77,8 +79,7 @@ public abstract class SBEnchantment extends Enchantment {
     public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
 
     //for when an item breaks with Legacy
-    public void onLegacyToolBreak(int level, ItemStack book, ItemStack itemStack, PlayerEntity entity) {
-    }
+    public void onLegacyToolBreak(int level, ItemStack book, ItemStack itemStack, PlayerEntity entity) {}
 
     //for when the user is struck, before armor is applied
     public float onPreArmorDefense(int level, ItemStack stack, DamageSource source, LivingEntity defender, float amount){return amount;}
@@ -95,6 +96,9 @@ public abstract class SBEnchantment extends Enchantment {
         }
         return 0;
     }
+
+    //for when trident thrown
+    public void onThrowTrident(int level, ItemStack itemStack, Entity entity, TridentEntity projectile){}
 
     //for every tick the enchanted item is equipped.
     // Careful, this will be called separately for every instance of the enchantment.

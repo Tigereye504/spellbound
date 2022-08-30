@@ -12,6 +12,7 @@ import net.tigereye.spellbound.enchantments.fortune.ProspectorEnchantment;
 import net.tigereye.spellbound.enchantments.lure.FisherOfMenEnchantment;
 import net.tigereye.spellbound.enchantments.personality.MonogamousEnchantment;
 import net.tigereye.spellbound.enchantments.personality.PolygamousEnchantment;
+import net.tigereye.spellbound.enchantments.protection.DeathWishEnchantment;
 import net.tigereye.spellbound.enchantments.protection.FleshWoundEnchantment;
 import net.tigereye.spellbound.enchantments.protection.HeartyEnchantment;
 import net.tigereye.spellbound.enchantments.protection.RedAlertEnchantment;
@@ -38,9 +39,11 @@ public class SBEnchantments {
     public static List<SBEnchantment> SBEnchantmentList = new ArrayList<>();
 
     public static final SBEnchantment ACCELERATION = new AccelerationEnchantment();
+    public static final SBEnchantment AIRLINE = new AirlineEnchantment();
     public static final SBEnchantment ATTRACTIVE = new AttractiveEnchantment();
     public static final SBEnchantment BUFFERED = new BufferedEnchantment();
     public static final SBEnchantment CAVE_IN = new CaveInEnchantment();
+    public static final SBEnchantment DEATH_WISH = new DeathWishEnchantment();
     public static final SBEnchantment DEMOLITION = new DemolitionEnchantment();
     public static final SBEnchantment DULLNESS = new DullnessEnchantment();
     public static final SBEnchantment FISHER_OF_MEN = new FisherOfMenEnchantment();
@@ -73,9 +76,11 @@ public class SBEnchantments {
 
     public static void register(){
         register("acceleration", ACCELERATION);
+        register("airline", AIRLINE);
         register("attractive", ATTRACTIVE);
         register("buffered", BUFFERED);
         register("cave_in", CAVE_IN);
+        register("death_wish", DEATH_WISH);
         register("demolition", DEMOLITION);
         register("dullness", DULLNESS);
         register("fisher_of_men", FISHER_OF_MEN);

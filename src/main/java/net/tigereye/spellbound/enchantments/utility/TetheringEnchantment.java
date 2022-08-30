@@ -78,7 +78,7 @@ public class TetheringEnchantment extends SBEnchantment {
     }
 
     private void tetherTarget(int level, Entity anchor, LivingEntity target){
-        //Spellbound.LOGGER.info("Applying Tethered");
+        target.removeStatusEffect(SBStatusEffects.TETHERED);
         target.addStatusEffect(new TetheredInstance(anchor, 20+(20*level), 0));
     }
 
