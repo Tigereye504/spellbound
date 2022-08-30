@@ -32,7 +32,7 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("inclusion")
     public boolean AIRLINE_ENABLED = true;
     @ConfigEntry.Category("rarity")
-    public int AIRLINE_RARITY = 4;
+    public int AIRLINE_RARITY = 3;
     @ConfigEntry.Category("level_caps")
     public int AIRLINE_SOFT_CAP = 3;
     @ConfigEntry.Category("level_caps")
