@@ -1,5 +1,7 @@
 package net.tigereye.spellbound.registration;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.effect.StatusEffect;
@@ -16,7 +18,7 @@ public class SBNetworking {
     public static final Identifier GRACE_DATA_PACKET_ID = new Identifier(Spellbound.MODID,"grace_data");
     public static final Identifier REQUEST_STATUS_EFFECT_PACKET_ID = new Identifier(Spellbound.MODID,"status_effect_request");
 
-    public static void register(){
+    public static void register() {
         ServerPlayNetworking.registerGlobalReceiver(TELEPORT_REQUEST_PACKET_ID, (server, client, handler, buf, responseSender) -> {
             double x = buf.readDouble();
             double y = buf.readDouble();
@@ -26,7 +28,7 @@ public class SBNetworking {
                 flags.add(PlayerPositionLookS2CPacket.Flag.X);
                 flags.add(PlayerPositionLookS2CPacket.Flag.Y);
                 flags.add(PlayerPositionLookS2CPacket.Flag.Z);
-                client.networkHandler.requestTeleport(x,y,z, client.getYaw(), client.getPitch(), flags);
+                client.networkHandler.requestTeleport(x, y, z, client.getYaw(), client.getPitch(), flags);
 
             });
         });
@@ -37,15 +39,17 @@ public class SBNetworking {
             int rawId = buf.readInt();
             server.execute(() -> {
                 StatusEffect effect = StatusEffect.byRawId(rawId);
-                if(effect == null){
+                if (effect == null) {
                     Spellbound.LOGGER.error("Nonexistant status effect requested by client " + client.getEntityName());
-                }
-                else{
-                    client.addStatusEffect(new StatusEffectInstance(effect,duration,magnitude));
+                } else {
+                    client.addStatusEffect(new StatusEffectInstance(effect, duration, magnitude));
                 }
             });
         });
+    }
 
+    @Environment(EnvType.CLIENT)
+    public static void registerClient(){
         ClientPlayNetworking.registerGlobalReceiver((GRACE_DATA_PACKET_ID),(client, handler, buf, responseSender) -> {
             float magnitude = buf.readFloat();
             int ticks = buf.readInt();

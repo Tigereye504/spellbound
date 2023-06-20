@@ -205,7 +205,7 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("enchanting_power")
     public int GRACE_POWER_RANGE = 50;
     @ConfigEntry.Category("details")
-    public int GRACE_IFRAME_TICKS_PER_LEVEL = 4;
+    public int GRACE_IFRAME_TICKS_PER_LEVEL = 3;
     @ConfigEntry.Category("details")
     public float GRACE_IFRAME_MAGNITUDE_PER_LEVEL = .15F;
 
@@ -245,7 +245,7 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("details")
     public int HOVER_DURATION_BASE = 0;
     @ConfigEntry.Category("details")
-    public int HOVER_DURATION_PER_LEVEL = 40;
+    public int HOVER_DURATION_PER_LEVEL = 10;
     
     @ConfigEntry.Category("inclusion")
     public boolean IMPERSONAL_ENABLED = true;
