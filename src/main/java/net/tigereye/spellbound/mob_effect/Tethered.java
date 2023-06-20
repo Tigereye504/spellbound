@@ -1,11 +1,9 @@
 package net.tigereye.spellbound.mob_effect;
 
-import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
@@ -26,9 +24,8 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         //Spellbound.LOGGER.info("Dragging Target");
         StatusEffectInstance temp = entity.getStatusEffect(SBStatusEffects.TETHERED);
-        if(temp instanceof TetheredInstance){
-            TetheredInstance ti = (TetheredInstance)temp;
-            //attempt to get any missing data. Remove the debuff if if fails because we can't use it.
+        if(temp instanceof TetheredInstance ti){
+            //attempt to get any missing data. Remove the debuff if it fails because we can't use it.
             if(!fillMissingTetheredData(ti,entity)){
                 entity.removeStatusEffect(SBStatusEffects.TETHERED);
                 return;

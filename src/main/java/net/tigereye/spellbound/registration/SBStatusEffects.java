@@ -10,6 +10,7 @@ public class SBStatusEffects {
 
     public static StatusEffect BRAVADOS = new Bravados();
     public static StatusEffect GREEN_SPARKLES = new GreenSparkles();
+    public static StatusEffect HOVERING = new Hovering();
     public static StatusEffect MONOGAMY = new Monogamy();
     public static StatusEffect POLYGAMY = new Polygamy();
     public static StatusEffect PRIMED = new Primed();
@@ -22,6 +23,7 @@ public class SBStatusEffects {
     public static void register(){
         Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "bravados"), BRAVADOS);
         Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "green_sparkles"), GREEN_SPARKLES);
+        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "hovering"), HOVERING);
         Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "monogamy"), MONOGAMY);
         Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "polygamy"), POLYGAMY);
         Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "primed"), PRIMED);

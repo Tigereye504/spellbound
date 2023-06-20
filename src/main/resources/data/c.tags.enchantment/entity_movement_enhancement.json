@@ -2,6 +2,7 @@
     "replace": false,
     "values": [
       "spellbound:phase_leap",
-      "spellbound:phase_strafe"
+      "spellbound:phase_strafe",
+      "spellbound:airline"
     ]
   }

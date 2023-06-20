@@ -24,10 +24,6 @@ public class SBConfig implements ConfigData {
     public int ACCELERATION_POWER_RANGE = 50;
     @ConfigEntry.Category("details")
     public int ACCELERATION_TIMEOUT = 50;
-    @ConfigEntry.Category("details")
-    public int ATTRACTION_RANGE = 5;
-    @ConfigEntry.Category("details")
-    public double ATTRACTION_STRENGTH = .03;
 
     @ConfigEntry.Category("inclusion")
     public boolean AIRLINE_ENABLED = true;
@@ -62,6 +58,10 @@ public class SBConfig implements ConfigData {
     public int ATTRACTIVE_POWER_PER_RANK = 20;
     @ConfigEntry.Category("enchanting_power")
     public int ATTRACTIVE_POWER_RANGE = 50;
+    @ConfigEntry.Category("details")
+    public int ATTRACTION_RANGE = 5;
+    @ConfigEntry.Category("details")
+    public double ATTRACTION_STRENGTH = .03;
 
     @ConfigEntry.Category("inclusion")
     public boolean BUFFERED_ENABLED = true;
@@ -191,6 +191,25 @@ public class SBConfig implements ConfigData {
     public int FLESH_WOUND_POWER_RANGE = 50;
 
     @ConfigEntry.Category("inclusion")
+    public boolean GRACE_ENABLED = true;
+    @ConfigEntry.Category("rarity")
+    public int GRACE_RARITY = 2;
+    @ConfigEntry.Category("level_caps")
+    public int GRACE_SOFT_CAP = 4;
+    @ConfigEntry.Category("level_caps")
+    public int GRACE_HARD_CAP = 4;
+    @ConfigEntry.Category("enchanting_power")
+    public int GRACE_BASE_POWER = -10;
+    @ConfigEntry.Category("enchanting_power")
+    public int GRACE_POWER_PER_RANK = 11;
+    @ConfigEntry.Category("enchanting_power")
+    public int GRACE_POWER_RANGE = 50;
+    @ConfigEntry.Category("details")
+    public int GRACE_IFRAME_TICKS_PER_LEVEL = 4;
+    @ConfigEntry.Category("details")
+    public float GRACE_IFRAME_MAGNITUDE_PER_LEVEL = .15F;
+
+    @ConfigEntry.Category("inclusion")
     public boolean HEARTY_ENABLED = true;
     @ConfigEntry.Category("rarity")
     public int HEARTY_RARITY = 2;
@@ -209,6 +228,25 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("details")
     public float HEARTY_HEALTH_FACTOR_PER_LEVEL = .1f;
 
+    @ConfigEntry.Category("inclusion")
+    public boolean HOVER_ENABLED = true;
+    @ConfigEntry.Category("rarity")
+    public int HOVER_RARITY = 3;
+    @ConfigEntry.Category("level_caps")
+    public int HOVER_SOFT_CAP = 3;
+    @ConfigEntry.Category("level_caps")
+    public int HOVER_HARD_CAP = 3;
+    @ConfigEntry.Category("enchanting_power")
+    public int HOVER_BASE_POWER = 0;
+    @ConfigEntry.Category("enchanting_power")
+    public int HOVER_POWER_PER_RANK = 15;
+    @ConfigEntry.Category("enchanting_power")
+    public int HOVER_POWER_RANGE = 50;
+    @ConfigEntry.Category("details")
+    public int HOVER_DURATION_BASE = 0;
+    @ConfigEntry.Category("details")
+    public int HOVER_DURATION_PER_LEVEL = 40;
+    
     @ConfigEntry.Category("inclusion")
     public boolean IMPERSONAL_ENABLED = true;
     @ConfigEntry.Category("rarity")

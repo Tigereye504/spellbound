@@ -4,26 +4,19 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.interfaces.NextTickAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
+import net.tigereye.spellbound.util.NetworkingUtil;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.mob_effect.SBStatusEffectHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -33,13 +26,14 @@ import java.util.List;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin extends Entity implements SpellboundLivingEntity {
 
+    @Shadow protected float lastDamageTaken;
     private Vec3d SB_OldPos;
     private Vec3d SB_LastPos;
-    private static final TrackedData<Float> SB_DurabilityBuffer = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
-    private float SB_MaxDurabilityBuffer = 0;
     private final List<NextTickAction> nextTickActions = new LinkedList<>();
     private final List<NextTickAction> nextTickActionsQueue = new LinkedList<>();
     private boolean performingNextTickActions = false;
+    private int graceTicks = 0;
+    private float graceMagnitude = 0;
 
     public void addNextTickAction(NextTickAction action){
         if (performingNextTickActions)
@@ -52,15 +46,27 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
         super(type, world);
     }
 
-    @Inject(at = @At("TAIL"), method = "initDataTracker")
-    public void HellishMaterialsInitDataTrackerMixin(CallbackInfo info){
-        this.dataTracker.startTracking(SB_DurabilityBuffer,0f);
-    }
+    //@Inject(at = @At("TAIL"), method = "initDataTracker")
+    //public void HellishMaterialsInitDataTrackerMixin(CallbackInfo info){
+    //    this.dataTracker.startTracking(SB_DurabilityBuffer,0f);
+    //}
 
 
     @Inject(at = @At(value = "RETURN"),method = "getArmor", cancellable = true)
     public void spellboundLivingEntityGetArmorMixin(CallbackInfoReturnable<Integer> info){
         info.setReturnValue(info.getReturnValueI() + SBEnchantmentHelper.getArmorAmount((LivingEntity)(Object)this));
+    }
+
+    @ModifyConstant(method = "damage", constant = @Constant(intValue = 20))
+    public int spellboundLivingEntityApplyIFramesDurationMixin(int frames, DamageSource source, float amount){
+
+        this.lastDamageTaken = SBEnchantmentHelper.onApplyIFrameMagnitude(this.lastDamageTaken, source, amount, (LivingEntity)(Object)this);
+        int duration = SBEnchantmentHelper.onApplyIFrameDuration(frames, source, amount, (LivingEntity)(Object)this);
+        if(!this.world.isClient && ((LivingEntity)(Object)this) instanceof ServerPlayerEntity entity){
+            NetworkingUtil.sendGraceDataPacket(this.lastDamageTaken,duration-10,entity);
+        }
+        return duration;
+
     }
 
     @ModifyVariable(at = @At("HEAD"), ordinal = 0, method = "applyArmorToDamage")
@@ -95,6 +101,9 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
         performingNextTickActions = false;
         SBEnchantmentHelper.onTickAlways((LivingEntity)(Object)this);
         SBEnchantmentHelper.onTickWhileEquipped((LivingEntity)(Object)this);
+        if(graceTicks > 0){
+            --graceTicks;
+        }
     }
 
     //@Inject(at = @At("HEAD"), method = "onKilledBy")
@@ -122,27 +131,19 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
         return SB_OldPos;
     }
 
-
-    @Override
-    public void setDurabilityBuffer(float buffer) {
-        this.dataTracker.set(SB_DurabilityBuffer,buffer);
+    public float getGraceMagnitude(){
+        return graceMagnitude;
+    }
+    public int getGraceTicks(){
+        return graceTicks;
+    }
+    public void setGraceMagnitude(float lastDamageTaken){
+        this.graceMagnitude = lastDamageTaken;
     }
 
-    @Override
-    public float getDurabilityBuffer() {
-        return this.dataTracker.get(SB_DurabilityBuffer);
+    public void setGraceTicks(int iFrameTicks){
+        graceTicks = iFrameTicks;
     }
-
-    @Override
-    public void setMaxDurabilityBuffer(float maxBuffer) {
-        SB_MaxDurabilityBuffer = maxBuffer;
-    }
-
-    @Override
-    public float getMaxDurabilityBuffer() {
-        return SB_MaxDurabilityBuffer;
-    }
-
 
     @Shadow
     protected void initDataTracker() {

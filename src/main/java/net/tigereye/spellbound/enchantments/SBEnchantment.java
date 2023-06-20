@@ -159,4 +159,12 @@ public abstract class SBEnchantment extends Enchantment {
         return super.canAccept(other) && (SBEnchantmentHelper.areNotInSameCategory(this,other)
                 || Spellbound.config.DISABLE_INCOMPATIBILITY);
     }
+
+    public int getIFrameAmount(int level, int frames, DamageSource source, float damageAmount, ItemStack itemStack, LivingEntity defender) {
+        return frames;
+    }
+
+    public float getIFrameMagnitude(int level, float magnitude, DamageSource source, float damageAmount, ItemStack itemStack, LivingEntity defender) {
+        return magnitude;
+    }
 }

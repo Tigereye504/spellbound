@@ -78,7 +78,7 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
                 Spellbound.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
             }
         });
-        Spellbound.LOGGER.info("Loaded "+ baseDropRateMap.size()+" Prospector Treasures.");
+        Spellbound.LOGGER.info("Loaded "+ baseDropRateMap.size()+" Prospector Universal Drops.");
         Spellbound.LOGGER.info("Loaded "+ tagDropBonusMap.size()+" Prospector Tags.");
         Spellbound.LOGGER.info("Loaded "+ blockDropBonusMap.size()+" Prospector Blocks.");
     }

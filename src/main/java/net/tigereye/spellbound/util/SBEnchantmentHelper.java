@@ -1,7 +1,5 @@
 package net.tigereye.spellbound.util;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
@@ -53,7 +51,7 @@ public class SBEnchantmentHelper {
         if(Spellbound.DEBUG){
             Spellbound.LOGGER.info(stack.getName().getString() + " is taking " + loss + " damage before spellbound");
         }
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableInt.setValue(((SBEnchantment)enchantment).beforeDurabilityLoss(level, stack, user, mutableInt.intValue())), stack);
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableInt.setValue(enchantment.beforeDurabilityLoss(level, stack, user, mutableInt.intValue())), stack);
 
         if(Spellbound.DEBUG){
             Spellbound.LOGGER.info(stack.getName().getString() + " is taking " + mutableInt.intValue() + " damage after spellbound");
@@ -65,7 +63,7 @@ public class SBEnchantmentHelper {
     public static float getAttackDamage(LivingEntity attacker, Entity defender){
         MutableFloat mutableFloat = new MutableFloat();
         ItemStack weapon = attacker.getMainHandStack();
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(((SBEnchantment)enchantment).getAttackDamage(level, weapon, attacker, defender)), weapon);
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(enchantment.getAttackDamage(level, weapon, attacker, defender)), weapon);
         return mutableFloat.floatValue();
     }
 
@@ -84,11 +82,11 @@ public class SBEnchantmentHelper {
         }
         if(killer != null) {
             if (projectileSource != null) {
-                SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onKill(level, itemStack, source, killer, victim), killer.getArmorItems());
-                SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onKill(level, itemStack, source, killer, victim), projectileSource);
+                SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onKill(level, itemStack, source, killer, victim), killer.getArmorItems());
+                SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onKill(level, itemStack, source, killer, victim), projectileSource);
             }
             else{
-                SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment) enchantment).onKill(level, itemStack, source, killer, victim), killer.getItemsEquipped());
+                SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onKill(level, itemStack, source, killer, victim), killer.getItemsEquipped());
             }
         }
 
@@ -101,6 +99,24 @@ public class SBEnchantmentHelper {
 
     public static void onFireProjectile(Entity entity, ItemStack source, ProjectileEntity projectile){
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onFireProjectile(level, itemStack, entity, projectile), source);
+    }
+
+    public static int onApplyIFrameDuration(int frames, DamageSource source, float damageAmount, LivingEntity defender) {
+        MutableInt mutableInt = new MutableInt(frames);
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableInt.setValue((enchantment).getIFrameAmount(level, mutableInt.intValue(), source, damageAmount, itemStack, defender)), defender.getArmorItems());
+        if(Spellbound.DEBUG && frames != mutableInt.intValue()) {
+            Spellbound.LOGGER.info(defender.getName() + "'s Grace Ticks: " + mutableInt.intValue());
+        }
+        return mutableInt.intValue();
+    }
+
+    public static float onApplyIFrameMagnitude(float magnitude, DamageSource source, float damageAmount, LivingEntity defender) {
+        MutableFloat mutableFloat = new MutableFloat(magnitude);
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue((enchantment).getIFrameMagnitude(level, mutableFloat.floatValue(), source, damageAmount, itemStack, defender)), defender.getArmorItems());
+        if(Spellbound.DEBUG && magnitude != mutableFloat.floatValue()) {
+            Spellbound.LOGGER.info(defender.getName() + "'s Grace Magnitude: " + mutableFloat.floatValue());
+        }
+        return mutableFloat.floatValue();
     }
 
     public static void onMidairJump(SpellboundClientPlayerEntity sbPlayer, PlayerEntity player, boolean isJumping) {
@@ -119,19 +135,19 @@ public class SBEnchantmentHelper {
     //called at the head of LivingEntity::applyArmor, before armor is actually applied.
     public static float onPreArmorDefense(DamageSource source, LivingEntity defender, Float amount){
         MutableFloat mutableFloat = new MutableFloat(amount);
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(((SBEnchantment)enchantment).onPreArmorDefense(level, itemStack, source, defender, mutableFloat.floatValue())), defender.getItemsEquipped());
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(enchantment.onPreArmorDefense(level, itemStack, source, defender, mutableFloat.floatValue())), defender.getItemsEquipped());
         return mutableFloat.floatValue();
     }
 
     //called right after TridentEntity calls getdamage
     public static float getThrownTridentDamage(TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){
         MutableFloat mutableFloat = new MutableFloat();
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(((SBEnchantment)enchantment).getThrownTridentDamage(level, tridentEntity, itemStack, defender)), tridentItem);
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(enchantment.getThrownTridentDamage(level, tridentEntity, itemStack, defender)), tridentItem);
         return mutableFloat.getValue();
     }
 
     public static void onThrownTridentEntityHit(TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> ((SBEnchantment)enchantment).onThrownTridentEntityHit(level, tridentEntity, itemStack, defender), tridentItem);
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onThrownTridentEntityHit(level, tridentEntity, itemStack, defender), tridentItem);
     }
 
     public static void onThrowTrident(Entity entity, ItemStack source, TridentEntity projectile){
@@ -165,13 +181,13 @@ public class SBEnchantmentHelper {
 
     public static int getArmorAmount(LivingEntity entity) {
         MutableFloat mutableFloat = new MutableFloat();
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add((enchantment).getArmorAmount(level, itemStack, entity)), entity.getArmorItems());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(enchantment.getArmorAmount(level, itemStack, entity)), entity.getArmorItems());
         return Math.round(mutableFloat.floatValue());
     }
 
     public static int getProtectionAmount(DamageSource source, LivingEntity target, int k, float amount) {
         MutableFloat mutableFloat = new MutableFloat();
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add((enchantment).getProtectionAmount(level, source, itemStack, target)), target.getArmorItems());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(enchantment.getProtectionAmount(level, source, itemStack, target)), target.getArmorItems());
         return k + Math.round(mutableFloat.floatValue());
     }
 
@@ -319,7 +335,7 @@ public class SBEnchantmentHelper {
         MutableInt mutableInt = new MutableInt();
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
             if(enchantment == target &&
-                    doesPassPreferenceRequirement((SBEnchantment) enchantment,itemStack,entity)) {
+                    doesPassPreferenceRequirement(enchantment,itemStack,entity)) {
                 mutableInt.add(1);
             }
         }, equipment);
