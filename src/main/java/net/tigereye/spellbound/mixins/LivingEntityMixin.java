@@ -57,16 +57,14 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
         info.setReturnValue(info.getReturnValueI() + SBEnchantmentHelper.getArmorAmount((LivingEntity)(Object)this));
     }
 
-    @ModifyConstant(method = "damage", constant = @Constant(intValue = 20))
-    public int spellboundLivingEntityApplyIFramesDurationMixin(int frames, DamageSource source, float amount){
-
+    @Inject(method = "damage", at = @At(value = "INVOKE", target="Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V",ordinal = 1))
+    public void spellboundLivingEntityApplyIFramesDurationMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
         this.lastDamageTaken = SBEnchantmentHelper.onApplyIFrameMagnitude(this.lastDamageTaken, source, amount, (LivingEntity)(Object)this);
-        int duration = SBEnchantmentHelper.onApplyIFrameDuration(frames, source, amount, (LivingEntity)(Object)this);
+        int duration = SBEnchantmentHelper.onApplyIFrameDuration(this.timeUntilRegen, source, amount, (LivingEntity)(Object)this);
         if(!this.world.isClient && ((LivingEntity)(Object)this) instanceof ServerPlayerEntity entity){
             NetworkingUtil.sendGraceDataPacket(this.lastDamageTaken,duration-10,entity);
         }
-        return duration;
-
+        this.timeUntilRegen = duration;
     }
 
     @ModifyVariable(at = @At("HEAD"), ordinal = 0, method = "applyArmorToDamage")

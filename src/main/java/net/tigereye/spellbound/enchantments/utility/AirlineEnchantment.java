@@ -1,6 +1,8 @@
 package net.tigereye.spellbound.enchantments.utility;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -12,6 +14,7 @@ import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.instance.TetheredInstance;
 import net.tigereye.spellbound.registration.SBStatusEffects;
+import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class AirlineEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
@@ -77,5 +80,9 @@ public class AirlineEnchantment extends SBEnchantment implements CustomCondition
         target.addStatusEffect(new TetheredInstance(anchor, Spellbound.config.AIRLINE_BASE_DURATION + (Spellbound.config.AIRLINE_DURATION_PER_RANK*level), 0));
     }
 
+    @Override
+    public boolean canAccept(Enchantment other) {
+        return super.canAccept(other) && other != Enchantments.RIPTIDE;
+    }
     //doesn't support bows/crossbows because arrows usually dont survive impact
 }
