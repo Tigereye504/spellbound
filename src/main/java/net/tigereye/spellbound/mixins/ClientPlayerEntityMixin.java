@@ -12,6 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPlayerEntityMixin implements SpellboundClientPlayerEntity {
     private boolean jumpReleased = false;
 
+    private boolean hasMidairJumped = false;
+
 
     @Inject(method = "tickMovement", at = @At("HEAD"))
     private void SpellboundTickMovementMidairJumpMixin(CallbackInfo info) {
@@ -22,9 +24,16 @@ public class ClientPlayerEntityMixin implements SpellboundClientPlayerEntity {
     public void setJumpReleased(boolean set) {
         jumpReleased = set;
     }
-
     @Override
     public boolean getJumpReleased() {
         return jumpReleased;
+    }
+    @Override
+    public void setHasMidairJumped(boolean set) {
+        hasMidairJumped = set;
+    }
+    @Override
+    public boolean hasMidairJumped() {
+        return hasMidairJumped;
     }
 }

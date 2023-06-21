@@ -13,14 +13,13 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.interfaces.SpellboundClientPlayerEntity;
 import net.tigereye.spellbound.registration.SBNetworking;
 import net.tigereye.spellbound.util.NetworkingUtil;
 import net.tigereye.spellbound.util.SpellboundUtil;
 import net.tigereye.spellbound.util.VectorUtil;
 
 public class PhaseLeapEnchantment extends SBEnchantment {
-
-    private static final String HAS_PHASED_KEY = Spellbound.MODID+"HasPhased";
 
     public PhaseLeapEnchantment() {
         super(SpellboundUtil.rarityLookup(Spellbound.config.PHASE_LEAP_RARITY), EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});
@@ -55,22 +54,25 @@ public class PhaseLeapEnchantment extends SBEnchantment {
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         //if the user has landed since phasing, reset
-        NbtCompound tag = stack.getOrCreateNbt();
-        if(tag.contains(HAS_PHASED_KEY) && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming() || entity.isTouchingWater())){
-            tag.remove(HAS_PHASED_KEY);
+        if(entity instanceof SpellboundClientPlayerEntity player) {
+            if (player.hasMidairJumped() && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming() || entity.isTouchingWater())) {
+                player.setHasMidairJumped(false);
+            }
         }
     }
 
     @Override
     public void onMidairJump(int level, ItemStack stack, LivingEntity entity){
-
         if(entity.isSwimming()
         || entity.isTouchingWater()
         || stack != entity.getEquippedStack(EquipmentSlot.LEGS)){
             return;
         }
+        if(!(entity instanceof SpellboundClientPlayerEntity player)) {
+            return;
+        }
         NbtCompound tag = stack.getOrCreateNbt();
-        if(tag.contains(HAS_PHASED_KEY)){
+        if(player.hasMidairJumped()){
             return;
         }
 
@@ -91,7 +93,7 @@ public class PhaseLeapEnchantment extends SBEnchantment {
             Spellbound.LOGGER.info("Phase leap teleporting to position [" + position.getX() + "," + position.getY() + "," + position.getZ() + "]");
         }
         NetworkingUtil.sendTeleportRequestPacket(position);
-        tag.putBoolean(HAS_PHASED_KEY,true);
+        player.setHasMidairJumped(true);
         entity.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT,1.0F, 1.0F);
     }
 }

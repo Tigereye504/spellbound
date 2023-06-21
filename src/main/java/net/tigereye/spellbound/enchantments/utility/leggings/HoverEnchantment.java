@@ -8,14 +8,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.interfaces.SpellboundClientPlayerEntity;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
+import net.tigereye.spellbound.mixins.ClientPlayerEntityMixin;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.NetworkingUtil;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class HoverEnchantment extends SBEnchantment {
-
-    private static final String HAS_PHASED_KEY = Spellbound.MODID+"HasPhased";
 
     public HoverEnchantment() {
         super(SpellboundUtil.rarityLookup(Spellbound.config.HOVER_RARITY), EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});
@@ -50,13 +50,10 @@ public class HoverEnchantment extends SBEnchantment {
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         //if the user has landed since phasing, reset
-        NbtCompound tag = stack.getOrCreateNbt();
-        if(tag.contains(HAS_PHASED_KEY) && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming() || entity.isTouchingWater())){
-            tag.remove(HAS_PHASED_KEY);
-        }
-        //track Position
-        if(!(entity instanceof PlayerEntity)) {
-            ((SpellboundLivingEntity)entity).updatePositionTracker(entity.getPos());
+        if(entity instanceof SpellboundClientPlayerEntity player) {
+            if (player.hasMidairJumped() && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming() || entity.isTouchingWater())) {
+                player.setHasMidairJumped(false);
+            }
         }
     }
 
@@ -68,14 +65,15 @@ public class HoverEnchantment extends SBEnchantment {
         || stack != entity.getEquippedStack(EquipmentSlot.LEGS)){
             return;
         }
-        NbtCompound tag = stack.getOrCreateNbt();
-        if(tag.contains(HAS_PHASED_KEY)){
-            entity.removeStatusEffect(SBStatusEffects.HOVERING);
-            return;
+        if(entity instanceof SpellboundClientPlayerEntity player) {
+            if (player.hasMidairJumped()) {
+                entity.removeStatusEffect(SBStatusEffects.HOVERING);
+                return;
+            }
+            player.setHasMidairJumped(true);
+            NetworkingUtil.sendStatusEffectRequestPacket(
+                    Spellbound.config.HOVER_DURATION_BASE + Spellbound.config.HOVER_DURATION_PER_LEVEL * level, 0,
+                    SBStatusEffects.HOVERING);
         }
-        tag.putBoolean(HAS_PHASED_KEY,true);
-        NetworkingUtil.sendStatusEffectRequestPacket(
-                Spellbound.config.HOVER_DURATION_BASE + Spellbound.config.HOVER_DURATION_PER_LEVEL*level, 0,
-                SBStatusEffects.HOVERING);
     }
 }
