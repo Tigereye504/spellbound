@@ -35,7 +35,6 @@ import net.tigereye.spellbound.interfaces.*;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
 import net.tigereye.spellbound.mob_effect.instance.PolygamyInstance;
-import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.registration.SBTags;
 import org.apache.commons.lang3.mutable.MutableFloat;
@@ -94,9 +93,8 @@ public class SBEnchantmentHelper {
 
     public static void onEquipmentChange(LivingEntity livingEntity, EquipmentSlot equipmentSlot, ItemStack previousStack, ItemStack currentStack){
         Map<SBEnchantment,Pair<Integer,Integer>> enchantmentsToCheck = new HashMap<>();
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
-            enchantmentsToCheck.put(enchantment, new Pair<>(level,0));
-        },previousStack);
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) ->
+                enchantmentsToCheck.put(enchantment, new Pair<>(level,0)),previousStack);
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
             if(enchantmentsToCheck.containsKey(enchantment)) {
                 enchantmentsToCheck.put(enchantment, new Pair<>(enchantmentsToCheck.get(enchantment).getLeft(),level));
@@ -105,9 +103,8 @@ public class SBEnchantmentHelper {
                 enchantmentsToCheck.put(enchantment, new Pair<>(0,level));
             }
         },currentStack);
-        enchantmentsToCheck.forEach((enchantment,levels) -> {
-            enchantment.onEquipmentChange(levels.getLeft(),levels.getRight(),previousStack,currentStack,livingEntity);
-        });
+        enchantmentsToCheck.forEach((enchantment,levels) ->
+                enchantment.onEquipmentChange(levels.getLeft(),levels.getRight(),previousStack,currentStack,livingEntity));
     }
 
     public static void onJump(LivingEntity entity){
@@ -190,10 +187,10 @@ public class SBEnchantmentHelper {
     }
 
     public static void onTickAlways(LivingEntity entity){
-        for (SBEnchantment enchantment:
+        /*for (SBEnchantment enchantment:
                 SBEnchantments.SBEnchantmentList) {
             enchantment.onTickAlways(entity);
-        }
+        }*/ //disabled for now, currently unused
     }
 
     public static int getArmorAmount(LivingEntity entity) {

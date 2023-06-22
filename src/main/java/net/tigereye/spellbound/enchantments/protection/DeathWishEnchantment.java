@@ -59,10 +59,7 @@ public class DeathWishEnchantment extends SBEnchantment implements CustomConditi
     }
 
     @Override
-    public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
-            return;
-        }
+    public void onEquipmentChange(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){
         EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         if(att != null) {
             EntityAttributeModifier mod = new EntityAttributeModifier(DEATH_WISH_ID, "SpellboundDeathWishDamage",
@@ -72,18 +69,6 @@ public class DeathWishEnchantment extends SBEnchantment implements CustomConditi
             ReplaceAttributeModifier(att, mod);
             if(entity.getHealth() > entity.getMaxHealth()){
                 entity.setHealth(entity.getMaxHealth());
-            }
-        }
-    }
-
-    public void onTickAlways(LivingEntity entity){
-        if(SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getItemsEquipped(),SBEnchantments.DEATH_WISH,entity) == 0){
-            EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-            if(att != null){
-                att.removeModifier(DEATH_WISH_ID);
-                if(entity.getHealth() > entity.getMaxHealth()){
-                    entity.setHealth(entity.getMaxHealth());
-                }
             }
         }
     }
