@@ -108,6 +108,8 @@ public abstract class SBEnchantment extends Enchantment {
 
     public void onTickAlways(LivingEntity entity){}
 
+    public void onEquipmentChange(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){}
+
     public void onToolBreak(int level, ItemStack itemStack, PlayerEntity entity) {}
 
     public float getArmorAmount(int level, ItemStack stack, LivingEntity entity) {

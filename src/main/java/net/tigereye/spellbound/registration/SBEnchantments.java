@@ -1,5 +1,6 @@
 package net.tigereye.spellbound.registration;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.tigereye.spellbound.Spellbound;

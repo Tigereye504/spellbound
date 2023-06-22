@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -21,6 +22,7 @@ import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -39,10 +41,7 @@ import net.tigereye.spellbound.registration.SBTags;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class SBEnchantmentHelper {
     //called after vanilla's getAttackDamage
@@ -91,6 +90,24 @@ public class SBEnchantmentHelper {
         }
 
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDeath(level, itemStack, source, killer, victim), victim.getItemsEquipped());
+    }
+
+    public static void onEquipmentChange(LivingEntity livingEntity, EquipmentSlot equipmentSlot, ItemStack previousStack, ItemStack currentStack){
+        Map<SBEnchantment,Pair<Integer,Integer>> enchantmentsToCheck = new HashMap<>();
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
+            enchantmentsToCheck.put(enchantment, new Pair<>(level,0));
+        },previousStack);
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
+            if(enchantmentsToCheck.containsKey(enchantment)) {
+                enchantmentsToCheck.put(enchantment, new Pair<>(enchantmentsToCheck.get(enchantment).getLeft(),level));
+            }
+            else {
+                enchantmentsToCheck.put(enchantment, new Pair<>(0,level));
+            }
+        },currentStack);
+        enchantmentsToCheck.forEach((enchantment,levels) -> {
+            enchantment.onEquipmentChange(levels.getLeft(),levels.getRight(),previousStack,currentStack,livingEntity);
+        });
     }
 
     public static void onJump(LivingEntity entity){

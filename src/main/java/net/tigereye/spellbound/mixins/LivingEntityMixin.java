@@ -2,8 +2,10 @@ package net.tigereye.spellbound.mixins;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -19,9 +21,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin extends Entity implements SpellboundLivingEntity {
@@ -111,6 +115,11 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onKilledBy(Lnet/minecraft/entity/LivingEntity;)V"), method = "onDeath")
     public void spellboundLivingEntityOnDeathMixin(DamageSource source, CallbackInfo info){
         SBEnchantmentHelper.onDeath(source,(LivingEntity) (Object) this);
+    }
+
+    @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"), locals = LocalCapture.CAPTURE_FAILHARD)
+    private void spellboundLivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir, Map<EquipmentSlot, ItemStack> changes, EquipmentSlot[] slots, int slotsSize, int slotIndex, EquipmentSlot equipmentSlot, ItemStack previousStack, ItemStack currentStack) {
+        SBEnchantmentHelper.onEquipmentChange((LivingEntity) (Object) this, equipmentSlot, previousStack, currentStack);
     }
 
     @Inject(at = @At("TAIL"), method = "jump")

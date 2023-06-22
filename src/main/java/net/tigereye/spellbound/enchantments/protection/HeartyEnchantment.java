@@ -62,10 +62,7 @@ public class HeartyEnchantment extends SBEnchantment implements CustomConditions
     }
 
     @Override
-    public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
-            return;
-        }
+    public void onEquipmentChange(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){
         EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if(att != null) {
             EntityAttributeModifier mod = new EntityAttributeModifier(HEARTY_ID, "SpellboundHeartyMaxHP",
@@ -75,18 +72,6 @@ public class HeartyEnchantment extends SBEnchantment implements CustomConditions
             ReplaceAttributeModifier(att, mod);
             if(entity.getHealth() > entity.getMaxHealth()){
                 entity.setHealth(entity.getMaxHealth());
-            }
-        }
-    }
-
-    public void onTickAlways(LivingEntity entity){
-        if(SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getItemsEquipped(),SBEnchantments.HEARTY,entity) == 0){
-            EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
-            if(att != null){
-                att.removeModifier(HEARTY_ID);
-                if(entity.getHealth() > entity.getMaxHealth()){
-                    entity.setHealth(entity.getMaxHealth());
-                }
             }
         }
     }

@@ -66,6 +66,9 @@ public class SBTags {
         CATEGORY_PARENTS.put(UNBREAKING_ENCHANTMENTS, parentList);
         parentList = new ArrayList<>();
         parentList.add(Enchantments.KNOCKBACK);
+        parentList.add(Enchantments.PUNCH);
+        parentList.add(Enchantments.RIPTIDE);
+        parentList.add(Enchantments.CHANNELING);
         parentList.add(Enchantments.FROST_WALKER);
         parentList.add(Enchantments.SOUL_SPEED);
         parentList.add(Enchantments.AQUA_AFFINITY);
