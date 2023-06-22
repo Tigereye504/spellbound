@@ -7,28 +7,19 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraft.world.explosion.Explosion;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.data.ProspectorManager;
-import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.NextTickAction;
-import net.tigereye.spellbound.interfaces.SpellboundExplosion;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
-import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
-import java.util.List;
 import java.util.Map;
 
 public class ProspectorEnchantment extends SBEnchantment {
@@ -74,6 +65,9 @@ public class ProspectorEnchantment extends SBEnchantment {
         if(state.getBlock().getHardness() == 0){
             return;
         }
+        if(detectAbuse(stack, world, pos)){
+            return;
+        }
         Map<Identifier,Float> rates = ProspectorManager.getDropRateMapWithBonuses(world,stack,pos,Spellbound.config.PROSPECTOR_RADIUS);
         Random random = player.getRandom();
         for (Map.Entry<Identifier,Float> entry: rates.entrySet()){
@@ -89,7 +83,7 @@ public class ProspectorEnchantment extends SBEnchantment {
                             count++;
                         }
                     }
-                    ((SpellboundLivingEntity)player).addNextTickAction(new ProspectorAction(world, pos, new ItemStack(treasure,count)));
+                    ((SpellboundLivingEntity)player).addNextTickAction(new ProspectorAction(world, pos, new ItemStack(treasure, count)));
                 }
                 else{
                     Spellbound.LOGGER.error(player.getName().getString() + "'s Prospector is looking for " + entry.getKey() + ", but cannot find it in the item registry!");
@@ -98,12 +92,32 @@ public class ProspectorEnchantment extends SBEnchantment {
         }
     }
 
+    private boolean detectAbuse(ItemStack stack, World world, BlockPos pos){
+        NbtCompound tag = stack.getOrCreateSubNbt(PROSPECTOR_LIST_KEY);
+
+        long lastAccessTime = tag.getLong("lastAccessTime");
+        if(world.getTime() - lastAccessTime > Spellbound.config.PROSPECTOR_ABUSE_MEMORY){
+            tag = new NbtCompound();
+            stack.setSubNbt(PROSPECTOR_LIST_KEY,tag);
+        }
+        tag.putLong("lastAccessTime",world.getTime());
+
+        String encodedPosition = pos.getX()+"_"+pos.getY()+"_"+pos.getZ();
+        int samePosDigs = tag.getInt(encodedPosition);
+        if(samePosDigs > Spellbound.config.PROSPECTOR_ABUSE_THRESHOLD){
+            return true;
+        }
+        else{
+            tag.putInt(encodedPosition,samePosDigs+1);
+            return false;
+        }
+    }
     @Override
     public boolean isTreasure() {
         return false;
     }
 
-    private class ProspectorAction implements NextTickAction{
+    private static class ProspectorAction implements NextTickAction{
 
         World world;
         BlockPos pos;

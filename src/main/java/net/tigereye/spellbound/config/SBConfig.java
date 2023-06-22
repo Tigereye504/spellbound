@@ -454,8 +454,6 @@ public class SBConfig implements ConfigData {
     public int POLYGAMOUS_POWER_PER_RANK = 20;
     @ConfigEntry.Category("enchanting_power")
     public int POLYGAMOUS_POWER_RANGE = 50;
-    @ConfigEntry.Category("details")
-    public int PROSPECTOR_RADIUS = 3;
 
     @ConfigEntry.Category("inclusion")
     public boolean PRIMING_ENABLED = true;
@@ -486,6 +484,12 @@ public class SBConfig implements ConfigData {
     public int PROSPECTOR_POWER_PER_RANK = 9;
     @ConfigEntry.Category("enchanting_power")
     public int PROSPECTOR_POWER_RANGE = 50;
+    @ConfigEntry.Category("details")
+    public int PROSPECTOR_RADIUS = 3;
+    @ConfigEntry.Category("details")
+    public int PROSPECTOR_ABUSE_MEMORY = 1200;
+    @ConfigEntry.Category("details")
+    public int PROSPECTOR_ABUSE_THRESHOLD = 1;
 
     @ConfigEntry.Category("inclusion")
     public boolean RAMPAGE_ENABLED = true;

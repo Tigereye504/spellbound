@@ -399,6 +399,8 @@
     "text.autoconfig.spellbound.option.OUTBURST_SHOCKWAVE_RANGE": "Outburst Shockwave Range",
     "text.autoconfig.spellbound.option.PHOTOSYNTHETIC_LIGHT_MINIMUM": "Photosynthetic Light Minimum",
     "text.autoconfig.spellbound.option.PHOTOSYNTHETIC_REPAIR_PERIOD": "Photosynthetic Repair Period",
+    "text.autoconfig.spellbound.option.PROSPECTOR_ABUSE_MEMORY": "Prospector Abuse Memory Duration",
+    "text.autoconfig.spellbound.option.PROSPECTOR_ABUSE_THRESHOLD": "Prospector Abuse Threshold",
     "text.autoconfig.spellbound.option.PROSPECTOR_RADIUS": "Prospector Ore Detection Radius",
     "text.autoconfig.spellbound.option.RAMPAGE_DAMAGE_BASE": "Rampage Base Damage",
     "text.autoconfig.spellbound.option.RAMPAGE_DAMAGE_PER_LEVEL": "Rampage Damage Per Level",
