@@ -38,7 +38,7 @@ public class ProspectorEnchantment extends SBEnchantment {
 
     @Override
     public int getMinPower(int level) {
-        int power = (Spellbound.config.PROSPECTOR_POWER_PER_RANK * level) - Spellbound.config.PROSPECTOR_BASE_POWER;
+        int power = (Spellbound.config.PROSPECTOR_POWER_PER_RANK * level) + Spellbound.config.PROSPECTOR_BASE_POWER;
         if(level > Spellbound.config.PROSPECTOR_SOFT_CAP) {
             power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }

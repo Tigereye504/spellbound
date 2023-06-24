@@ -38,7 +38,7 @@ public class HeartyEnchantment extends SBEnchantment implements CustomConditions
 
     @Override
     public int getMinPower(int level) {
-        int power = (Spellbound.config.HEARTY_POWER_PER_RANK * level) - Spellbound.config.HEARTY_BASE_POWER;
+        int power = (Spellbound.config.HEARTY_POWER_PER_RANK * level) + Spellbound.config.HEARTY_BASE_POWER;
         if(level > Spellbound.config.HEARTY_SOFT_CAP) {
             power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }

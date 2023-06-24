@@ -27,7 +27,7 @@ public class MetabolisingEnchantment extends SBEnchantment {
 
     @Override
     public int getMinPower(int level) {
-        int power = (Spellbound.config.METABOLISING_POWER_PER_RANK * level) - Spellbound.config.METABOLISING_BASE_POWER;
+        int power = (Spellbound.config.METABOLISING_POWER_PER_RANK * level) + Spellbound.config.METABOLISING_BASE_POWER;
         if(level > Spellbound.config.METABOLISING_SOFT_CAP) {
             power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }

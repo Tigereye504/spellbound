@@ -109,7 +109,7 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
         Set<TagKey<Block>> tagsLeft = new HashSet<>(tagDropBonusMap.keySet());
         for (Block block: foundBlocks) {
             Identifier id = Registry.BLOCK.getId(block);
-            //see if any tags are fulfilled
+            //see if any tag bonuses are had
             Iterator<TagKey<Block>> iter = tagsLeft.iterator();
             while(iter.hasNext()){
                 TagKey<Block> tag = iter.next();

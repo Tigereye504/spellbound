@@ -25,7 +25,7 @@ public class RepulsiveEnchantment extends SBEnchantment{
 
     @Override
     public int getMinPower(int level) {
-        int power = (Spellbound.config.REPULSIVE_POWER_PER_RANK * level) - Spellbound.config.REPULSIVE_BASE_POWER;
+        int power = (Spellbound.config.REPULSIVE_POWER_PER_RANK * level) + Spellbound.config.REPULSIVE_BASE_POWER;
         if(level > Spellbound.config.REPULSIVE_SOFT_CAP) {
             power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }

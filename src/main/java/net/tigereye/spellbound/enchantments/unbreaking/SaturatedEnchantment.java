@@ -26,7 +26,7 @@ public class SaturatedEnchantment extends SBEnchantment {
 
     @Override
     public int getMinPower(int level) {
-        int power = (Spellbound.config.SATURATED_POWER_PER_RANK * level) - Spellbound.config.SATURATED_BASE_POWER;
+        int power = (Spellbound.config.SATURATED_POWER_PER_RANK * level) + Spellbound.config.SATURATED_BASE_POWER;
         if(level > Spellbound.config.SATURATED_SOFT_CAP) {
             power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }

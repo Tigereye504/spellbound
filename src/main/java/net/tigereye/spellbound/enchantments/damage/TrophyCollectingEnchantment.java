@@ -40,7 +40,7 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
 
     @Override
     public int getMinPower(int level) {
-        int power = (Spellbound.config.TROPHY_COLLECTOR_POWER_PER_RANK * level) - Spellbound.config.TROPHY_COLLECTOR_BASE_POWER;
+        int power = (Spellbound.config.TROPHY_COLLECTOR_POWER_PER_RANK * level) + Spellbound.config.TROPHY_COLLECTOR_BASE_POWER;
         if(level > Spellbound.config.TROPHY_COLLECTOR_SOFT_CAP) {
             power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }

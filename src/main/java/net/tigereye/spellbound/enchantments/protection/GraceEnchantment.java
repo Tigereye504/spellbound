@@ -38,7 +38,7 @@ public class GraceEnchantment extends SBEnchantment implements CustomConditionsE
 
     @Override
     public int getMinPower(int level) {
-        int power = (Spellbound.config.GRACE_POWER_PER_RANK * level) - Spellbound.config.GRACE_BASE_POWER;
+        int power = (Spellbound.config.GRACE_POWER_PER_RANK * level) + Spellbound.config.GRACE_BASE_POWER;
         if(level > Spellbound.config.GRACE_SOFT_CAP) {
             power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }

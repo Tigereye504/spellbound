@@ -31,7 +31,7 @@ public class AirlineEnchantment extends SBEnchantment implements CustomCondition
 
     @Override
     public int getMinPower(int level) {
-        int power = (Spellbound.config.AIRLINE_POWER_PER_RANK * level) - Spellbound.config.AIRLINE_BASE_POWER;
+        int power = (Spellbound.config.AIRLINE_POWER_PER_RANK * level) + Spellbound.config.AIRLINE_BASE_POWER;
         if(level > Spellbound.config.AIRLINE_SOFT_CAP) {
             power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }
@@ -63,6 +63,7 @@ public class AirlineEnchantment extends SBEnchantment implements CustomCondition
 
     @Override
     public void onFireProjectile(int level, ItemStack itemStack, Entity entity, ProjectileEntity projectile){
+        //TODO: require user to be grounded
         if(entity instanceof LivingEntity livingEntity){
             tetherTarget(level,projectile,livingEntity);
         }

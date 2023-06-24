@@ -34,7 +34,7 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
 
     @Override
     public int getMinPower(int level) {
-        int power = (Spellbound.config.CAVE_IN_POWER_PER_RANK * level) - Spellbound.config.CAVE_IN_BASE_POWER;
+        int power = (Spellbound.config.CAVE_IN_POWER_PER_RANK * level) + Spellbound.config.CAVE_IN_BASE_POWER;
         if(level > Spellbound.config.CAVE_IN_SOFT_CAP) {
             power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }

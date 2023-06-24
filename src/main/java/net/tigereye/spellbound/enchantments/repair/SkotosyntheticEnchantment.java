@@ -27,7 +27,7 @@ public class SkotosyntheticEnchantment extends SBEnchantment {
 
     @Override
     public int getMinPower(int level) {
-        int power = (Spellbound.config.SKOTOSYNTHETIC_POWER_PER_RANK * level) - Spellbound.config.SKOTOSYNTHETIC_BASE_POWER;
+        int power = (Spellbound.config.SKOTOSYNTHETIC_POWER_PER_RANK * level) + Spellbound.config.SKOTOSYNTHETIC_BASE_POWER;
         if(level > Spellbound.config.SKOTOSYNTHETIC_SOFT_CAP) {
             power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }
