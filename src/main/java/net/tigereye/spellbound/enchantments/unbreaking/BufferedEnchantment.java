@@ -115,16 +115,9 @@ public class BufferedEnchantment extends SBEnchantment {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
 
-        switch (Spellbound.config.buffered.DISPLAY){
-            case "Aura":
-            case "aura":
-                renderBufferAsAura(level, durabilityBuffer, buffer, x, y);
-                break;
-            case "Bar":
-            case "bar":
-            default:
-                renderBufferAsBar(level, durabilityBuffer, buffer, x, y);
-                break;
+        switch (Spellbound.config.buffered.DISPLAY) {
+            case "Aura", "aura" -> renderBufferAsAura(level, durabilityBuffer, buffer, x, y);
+            default -> renderBufferAsBar(level, durabilityBuffer, buffer, x, y);
         }
 
         //RenderSystem.enableBlend();

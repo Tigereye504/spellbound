@@ -33,15 +33,4 @@ public class ShieldsDown extends SBStatusEffect{
             }
         }
     }
-
-    public static StatusEffectInstance generateInstance(LivingEntity entity, int duration){
-        int redAlert = SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
-        if(redAlert > 0) {
-            int mrr = RedAlertEnchantment.getModifiedRecoveryRate(entity, redAlert);
-            return new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN,
-                    Math.min(Spellbound.config.redAlert.SHIELD_DURATION + mrr, duration),
-                    0);
-        }
-        return null;
-    }
 }

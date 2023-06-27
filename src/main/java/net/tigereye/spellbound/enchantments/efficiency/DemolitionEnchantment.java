@@ -75,7 +75,7 @@ public class DemolitionEnchantment extends SBEnchantment {
         return false;
     }
 
-    private class DemolitionAction implements NextTickAction{
+    private static class DemolitionAction implements NextTickAction{
 
         World world;
         PlayerEntity player;

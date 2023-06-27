@@ -14,7 +14,6 @@ import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.instance.TetheredInstance;
 import net.tigereye.spellbound.registration.SBStatusEffects;
-import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class AirlineEnchantment extends SBEnchantment implements CustomConditionsEnchantment {

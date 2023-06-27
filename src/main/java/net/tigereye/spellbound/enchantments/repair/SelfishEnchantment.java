@@ -4,14 +4,12 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.util.SpellboundUtil;
-
-import java.util.Iterator;
 
 public class SelfishEnchantment extends SBEnchantment {
 
@@ -43,30 +41,18 @@ public class SelfishEnchantment extends SBEnchantment {
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         if(!entity.world.isClient() && stack.isDamaged()){
-            Iterator<ItemStack> i = entity.getItemsEquipped().iterator();
             ItemStack target;
             int targetSlot = (int) (entity.world.getTime() % 7);
-            switch(targetSlot){
-                case 0:
-                    target = entity.getEquippedStack(EquipmentSlot.MAINHAND);
-                    break;
-                case 1:
-                    target = entity.getEquippedStack(EquipmentSlot.OFFHAND);
-                    break;
-                case 2:
-                    target = entity.getEquippedStack(EquipmentSlot.HEAD);
-                    break;
-                case 3:
-                    target = entity.getEquippedStack(EquipmentSlot.CHEST);
-                    break;
-                case 4:
-                    target = entity.getEquippedStack(EquipmentSlot.LEGS);
-                    break;
-                case 5:
-                    target = entity.getEquippedStack(EquipmentSlot.FEET);
-                    break;
-                default:
+            switch (targetSlot) {
+                case 0 -> target = entity.getEquippedStack(EquipmentSlot.MAINHAND);
+                case 1 -> target = entity.getEquippedStack(EquipmentSlot.OFFHAND);
+                case 2 -> target = entity.getEquippedStack(EquipmentSlot.HEAD);
+                case 3 -> target = entity.getEquippedStack(EquipmentSlot.CHEST);
+                case 4 -> target = entity.getEquippedStack(EquipmentSlot.LEGS);
+                case 5 -> target = entity.getEquippedStack(EquipmentSlot.FEET);
+                default -> {
                     return;
+                }
             }
             if(target.isDamageable()
                         && target.getDamage() < target.getMaxDamage() - 1

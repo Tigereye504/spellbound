@@ -1,15 +1,9 @@
 package net.tigereye.spellbound.mob_effect;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.explosion.Explosion;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.util.SpellboundUtil;
-
-import java.util.Optional;
 
 public class Primed extends SBStatusEffect{
 

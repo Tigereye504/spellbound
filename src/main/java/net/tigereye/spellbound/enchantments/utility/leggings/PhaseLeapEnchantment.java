@@ -4,7 +4,6 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
@@ -59,7 +58,6 @@ public class PhaseLeapEnchantment extends SBEnchantment {
         if(!(entity instanceof SpellboundClientPlayerEntity player)) {
             return;
         }
-        NbtCompound tag = stack.getOrCreateNbt();
         if(player.hasMidairJumped()){
             return;
         }

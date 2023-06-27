@@ -91,7 +91,6 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
         boolean isRanged = stack.getItem() instanceof RangedWeaponItem;
         List<Text> output = new ArrayList<>();
         NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
-        Set<String> keys = tag.getKeys();
         Map<String,Integer> keyIntMap = getTrophyMap(stack);
         int trophyCount = getUniqueTrophyCount(stack);
         if(isRanged) {

@@ -1,18 +1,16 @@
 package net.tigereye.spellbound.enchantments.utility.leggings;
 
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.SpellboundClientPlayerEntity;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
-import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.NetworkingUtil;
 import net.tigereye.spellbound.util.SpellboundUtil;
 import net.tigereye.spellbound.util.VectorUtil;
@@ -45,7 +43,6 @@ public class PhaseStrafeEnchantment extends SBEnchantment {
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         //if the user has landed since phasing, reset
-        NbtCompound tag = stack.getOrCreateNbt();
         if(entity instanceof SpellboundClientPlayerEntity player) {
             if (player.hasMidairJumped() && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming() || entity.isTouchingWater())) {
                 player.setHasMidairJumped(false);
@@ -68,7 +65,6 @@ public class PhaseStrafeEnchantment extends SBEnchantment {
         if(!(entity instanceof SpellboundClientPlayerEntity player)) {
             return;
         }
-        NbtCompound tag = stack.getOrCreateNbt();
         if(player.hasMidairJumped()){
             return;
         }

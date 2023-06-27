@@ -25,7 +25,7 @@ import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import java.util.List;
 
 public abstract class SBEnchantment extends Enchantment {
-    protected boolean REQUIRES_PREFERRED_SLOT = true;
+    protected boolean REQUIRES_PREFERRED_SLOT;
 
     protected SBEnchantment(Rarity weight, EnchantmentTarget type, EquipmentSlot[] slotTypes,boolean requiresPreferedSlot) {
         super(weight, type, slotTypes);
