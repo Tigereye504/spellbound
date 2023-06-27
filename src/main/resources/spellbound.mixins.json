@@ -16,6 +16,7 @@
     "ProjectileEntityMixin",
     "StatusEffectInstanceMixin",
     "TridentEntityMixin",
+    "WorldChunkMixin",
     "WorldMixin"
   ],
   "client": [

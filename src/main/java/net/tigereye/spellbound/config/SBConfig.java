@@ -449,8 +449,7 @@ public class SBConfig implements ConfigData {
         public int POWER_PER_RANK = 9;
         public int POWER_RANGE = 50;
         public int RADIUS = 3;
-        public int ABUSE_MEMORY = 1200;
-        public int ABUSE_THRESHOLD = 1;
+        public boolean DETECT_ABUSE = true;
     }
 
     @ConfigEntry.Category("enchantment")

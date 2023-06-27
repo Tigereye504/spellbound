@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -26,6 +26,7 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
     private static final Map<Identifier, Float> baseDropRateMap = new HashMap<>();
     private static final Map<Identifier, List<Pair<Identifier,Float>>> blockDropBonusMap = new HashMap<>();
     private static final Map<TagKey<Block>, List<Pair<Identifier,Float>>> tagDropBonusMap = new HashMap<>();
+    private static TouchedBlocksPersistentState tbpState;
 
     @Override
     public Identifier getFabricId() {
@@ -87,8 +88,8 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
         return baseDropRateMap;
     }
 
-    public static Map<Identifier, Float> getDropRateMapWithBonuses(World world, ItemStack tool, BlockPos center, int radius){
-        Map<Identifier, Float> output = new HashMap<>(baseDropRateMap);
+    public static Map<Identifier, Float> getDropRateMapWithBonuses(World world, BlockPos center, int radius){
+        Map<Identifier, Float> output = new HashMap<>(getBaseDropRateMap());
         Set<Block> foundBlocks = new HashSet<>();
         BlockPos lowerCorner = center.add(-radius,-radius,-radius);
         int size = (radius*2)+1;
@@ -100,7 +101,11 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
                     for(int z = 0; z < size; z++){
                         target = lowerCorner.add(x,y,z);
                         targetBlock = world.getBlockState(target);
-                        foundBlocks.add(targetBlock.getBlock());
+                        if(!foundBlocks.contains(targetBlock.getBlock())) {
+                            if(!detectTouchedBlock(world,target)) { //this is kinda expensive, so it is checked last
+                                foundBlocks.add(targetBlock.getBlock());
+                            }
+                        }
                     }
                 }
             }
@@ -128,5 +133,18 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
             }
         }
         return output;
+    }
+
+    public static boolean detectTouchedBlock(World world, BlockPos pos){
+        if(Spellbound.config.prospector.DETECT_ABUSE) {
+            MinecraftServer server = world.getServer();
+            if (server != null) {
+                if (tbpState == null) {
+                    tbpState = TouchedBlocksPersistentState.getTouchedBlocksPersistentState(server);
+                }
+                return tbpState.isBlockTouched(pos);
+            }
+        }
+        return false;
     }
 }

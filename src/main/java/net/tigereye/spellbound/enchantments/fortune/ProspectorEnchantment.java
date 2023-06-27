@@ -5,8 +5,9 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -23,8 +24,6 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 import java.util.Map;
 
 public class ProspectorEnchantment extends SBEnchantment {
-
-    public static final String PROSPECTOR_LIST_KEY = Spellbound.MODID+"Prospector_List";
 
     public ProspectorEnchantment() {
         super(SpellboundUtil.rarityLookup(Spellbound.config.prospector.RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
@@ -54,10 +53,10 @@ public class ProspectorEnchantment extends SBEnchantment {
         if(state.getBlock().getHardness() == 0){
             return;
         }
-        if(detectAbuse(stack, world, pos)){
+        if(ProspectorManager.detectTouchedBlock(world, pos)){
             return;
         }
-        Map<Identifier,Float> rates = ProspectorManager.getDropRateMapWithBonuses(world,stack,pos,Spellbound.config.prospector.RADIUS);
+        Map<Identifier,Float> rates = ProspectorManager.getDropRateMapWithBonuses(world, pos,Spellbound.config.prospector.RADIUS);
         Random random = player.getRandom();
         for (Map.Entry<Identifier,Float> entry: rates.entrySet()){
             if(entry.getValue() > 0) {
@@ -78,27 +77,6 @@ public class ProspectorEnchantment extends SBEnchantment {
                     Spellbound.LOGGER.error(player.getName().getString() + "'s Prospector is looking for " + entry.getKey() + ", but cannot find it in the item registry!");
                 }
             }
-        }
-    }
-
-    private boolean detectAbuse(ItemStack stack, World world, BlockPos pos){
-        NbtCompound tag = stack.getOrCreateSubNbt(PROSPECTOR_LIST_KEY);
-
-        long lastAccessTime = tag.getLong("lastAccessTime");
-        if(world.getTime() - lastAccessTime > Spellbound.config.prospector.ABUSE_MEMORY){
-            tag = new NbtCompound();
-            stack.setSubNbt(PROSPECTOR_LIST_KEY,tag);
-        }
-        tag.putLong("lastAccessTime",world.getTime());
-
-        String encodedPosition = pos.getX()+"_"+pos.getY()+"_"+pos.getZ();
-        int samePosDigs = tag.getInt(encodedPosition);
-        if(samePosDigs > Spellbound.config.prospector.ABUSE_THRESHOLD){
-            return true;
-        }
-        else{
-            tag.putInt(encodedPosition,samePosDigs+1);
-            return false;
         }
     }
 
