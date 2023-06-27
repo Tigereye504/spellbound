@@ -27,35 +27,24 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class GraceEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
     public static final Identifier GRACE_ARMOR = new Identifier(Spellbound.MODID,"textures/gui/grace_armor.png");
     public GraceEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.GRACE_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
-        REQUIRES_PREFERRED_SLOT = true;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.grace.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND},true);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.GRACE_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.grace.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.GRACE_POWER_PER_RANK * level) + Spellbound.config.GRACE_BASE_POWER;
-        if(level > Spellbound.config.GRACE_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.grace.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.GRACE_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.grace.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.GRACE_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.grace.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.grace.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.grace.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.grace.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.grace.IS_FOR_SALE;}
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);
@@ -63,12 +52,12 @@ public class GraceEnchantment extends SBEnchantment implements CustomConditionsE
 
     @Override
     public int getIFrameAmount(int level, int frames, DamageSource source, float damageAmount, ItemStack itemStack, LivingEntity defender) {
-        return frames + (level*Spellbound.config.GRACE_IFRAME_TICKS_PER_LEVEL);
+        return frames + (level*Spellbound.config.grace.IFRAME_TICKS_PER_LEVEL);
     }
 
     @Override
     public float getIFrameMagnitude(int level, float magnitude, DamageSource source, float damageAmount, ItemStack itemStack, LivingEntity defender) {
-        return magnitude * (1+(level*Spellbound.config.GRACE_IFRAME_MAGNITUDE_PER_LEVEL));
+        return magnitude * (1+(level*Spellbound.config.grace.IFRAME_MAGNITUDE_PER_LEVEL));
     }
 
     @Override
@@ -103,7 +92,7 @@ public class GraceEnchantment extends SBEnchantment implements CustomConditionsE
                 int r = Math.max(10 - (q - 2), 3);
                 int s = o - (q - 1) * r - 10;
                 int x;
-                int fadeLevel = Math.min(Math.max(3 - ((graceTicks-1) / (Spellbound.config.GRACE_IFRAME_TICKS_PER_LEVEL*5)), 0),3);
+                int fadeLevel = Math.min(Math.max(3 - ((graceTicks-1) / (Spellbound.config.grace.IFRAME_TICKS_PER_LEVEL*5)), 0),3);
                 for (int w = 0; w < 10; ++w) {
                     x = m + w * 8;
                     if (w * 2 + 1 < graceAmount) {

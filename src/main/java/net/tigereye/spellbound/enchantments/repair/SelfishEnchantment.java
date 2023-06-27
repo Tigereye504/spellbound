@@ -16,34 +16,24 @@ import java.util.Iterator;
 public class SelfishEnchantment extends SBEnchantment {
 
     public SelfishEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.SELFISH_RARITY), EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = false;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.selfish.RARITY), EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.SELFISH_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.selfish.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.SELFISH_POWER_PER_RANK * level) + Spellbound.config.SELFISH_BASE_POWER;
-        if(level > Spellbound.config.SELFISH_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.selfish.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.SELFISH_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.selfish.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.SELFISH_HARD_CAP;
-        else return 0;
-    }
+    public int getBasePower(){return Spellbound.config.selfish.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.selfish.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.selfish.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.selfish.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.selfish.IS_FOR_SALE;}
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
@@ -87,11 +77,6 @@ public class SelfishEnchantment extends SBEnchantment {
                 stack.setDamage(stack.getDamage()-1);
             }
         }
-    }
-
-    @Override
-    public boolean isTreasure() {
-        return false;
     }
 
 }

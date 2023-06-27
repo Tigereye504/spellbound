@@ -41,10 +41,10 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
             Vec3d pullVector = new Vec3d(ti.anchor.getX() - entity.getX(), ti.anchor.getY() - entity.getY(), ti.anchor.getZ() - entity.getZ());
 
             if(!(entity.world.isClient)) {
-                if (pullVector.length() >= Spellbound.config.TETHER_LEASH_LENGTH) {
-                    entity.setPos(entity.getX(), entity.getY() + pullVector.y * 0.015D * Spellbound.config.TETHER_ATTRACTION_FACTOR, entity.getZ());
+                if (pullVector.length() >= Spellbound.config.tethering.LEASH_LENGTH) {
+                    entity.setPos(entity.getX(), entity.getY() + pullVector.y * 0.015D * Spellbound.config.tethering.ATTRACTION_FACTOR, entity.getZ());
 
-                    double d = 0.05D * Spellbound.config.TETHER_ATTRACTION_FACTOR;
+                    double d = 0.05D * Spellbound.config.tethering.ATTRACTION_FACTOR;
                     Vec3d impulseVector = pullVector.multiply(d).subtract(entity.getVelocity().multiply(0.15D));
                     entity.addVelocity(impulseVector.x, impulseVector.y, impulseVector.z);
                     entity.velocityModified = true;

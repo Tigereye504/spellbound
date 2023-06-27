@@ -24,34 +24,27 @@ public class BufferedEnchantment extends SBEnchantment {
     private static final int BUFFER_DULL_COLOR = 0x579ca2;
 
     public BufferedEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.BUFFERED_RARITY), EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = false;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.buffered.RARITY), EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
 
     @Override
     public boolean isEnabled() {
-        return Spellbound.config.BUFFERED_ENABLED;
+        return Spellbound.config.buffered.ENABLED;
     }
-
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.BUFFERED_POWER_PER_RANK * level) + Spellbound.config.BUFFERED_BASE_POWER;
-        if(level > Spellbound.config.BUFFERED_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.buffered.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.BUFFERED_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.buffered.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.BUFFERED_HARD_CAP;
-        else return 0;
-    }
+    public int getBasePower(){return Spellbound.config.buffered.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.buffered.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.buffered.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.buffered.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.buffered.IS_FOR_SALE;}
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
@@ -82,15 +75,10 @@ public class BufferedEnchantment extends SBEnchantment {
         return loss;
     }
 
-    @Override
-    public boolean isTreasure() {
-        return false;
-    }
-
     private static float getDurabilityBuffer(int level, Long itemTime, Long currentTime){
         long timeDiff = currentTime - itemTime;
-        return (float) (Math.min(Spellbound.config.BUFFER_MAX_PER_RANK,
-                timeDiff / Spellbound.config.BUFFER_RECOVERY_RATE)
+        return (float) (Math.min(Spellbound.config.buffered.MAX_PER_RANK,
+                timeDiff / Spellbound.config.buffered.RECOVERY_RATE)
                 * level);
     }
 
@@ -106,7 +94,7 @@ public class BufferedEnchantment extends SBEnchantment {
 
     private static void setDurabilityBuffer(int level, ItemStack item, World world, float buffer){
         NbtCompound nbtCompound = item.getOrCreateNbt();
-        long timeDiff = (long) (buffer * Spellbound.config.BUFFER_RECOVERY_RATE)/level;
+        long timeDiff = (long) (buffer * Spellbound.config.buffered.RECOVERY_RATE)/level;
         nbtCompound.putLong(BUFFER_TIME_KEY,world.getTime()-timeDiff);
     }
 
@@ -127,7 +115,7 @@ public class BufferedEnchantment extends SBEnchantment {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
 
-        switch (Spellbound.config.BUFFER_DISPLAY){
+        switch (Spellbound.config.buffered.DISPLAY){
             case "Aura":
             case "aura":
                 renderBufferAsAura(level, durabilityBuffer, buffer, x, y);
@@ -173,7 +161,7 @@ public class BufferedEnchantment extends SBEnchantment {
     private static void renderBufferAsBar(int level, float durability, BufferBuilder buffer, int x, int y){
         int color = durability >= 1 ? BUFFER_COLOR : BUFFER_DULL_COLOR;
         int alpha = 255;//durabilityBuffer >= 1 ? 255 : 100;
-        int width = (int) Math.ceil(Math.min(13, 13 * durability / (level * (float) Spellbound.config.BUFFER_MAX_PER_RANK)));
+        int width = (int) Math.ceil(Math.min(13, 13 * durability / (level * (float) Spellbound.config.buffered.MAX_PER_RANK)));
 
         renderGuiQuad(buffer, x + 2, y + 14, width, 1, color >> 16 & 255, color >> 8 & 255, color & 255, alpha);
     }

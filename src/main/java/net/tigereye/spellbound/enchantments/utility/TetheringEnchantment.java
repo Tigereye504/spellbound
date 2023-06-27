@@ -1,12 +1,9 @@
 package net.tigereye.spellbound.enchantments.utility;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
@@ -14,41 +11,30 @@ import net.minecraft.item.SwordItem;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.instance.TetheredInstance;
-import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class TetheringEnchantment extends SBEnchantment {
 
     public TetheringEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.TETHERING_RARITY), EnchantmentTarget.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = false;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.tethering.RARITY), EnchantmentTarget.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.TETHERING_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.tethering.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.TETHERING_POWER_PER_RANK * level) + Spellbound.config.TETHERING_BASE_POWER;
-        if(level > Spellbound.config.TETHERING_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.tethering.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.TETHERING_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.tethering.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.TETHERING_HARD_CAP;
-        else return 0;
-    }
+    public int getBasePower(){return Spellbound.config.tethering.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.tethering.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.tethering.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.tethering.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.tethering.IS_FOR_SALE;}
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {

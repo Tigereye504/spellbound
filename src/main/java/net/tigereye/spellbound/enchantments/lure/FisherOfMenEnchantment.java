@@ -37,48 +37,32 @@ import java.util.Objects;
 public class FisherOfMenEnchantment extends SBEnchantment {
 
     public FisherOfMenEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.FISHER_OF_MEN_RARITY), EnchantmentTarget.FISHING_ROD, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = true;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.fisherOfMen.RARITY), EnchantmentTarget.FISHING_ROD, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.FISHER_OF_MEN_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.fisherOfMen.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.FISHER_OF_MEN_POWER_PER_RANK * level) + Spellbound.config.FISHER_OF_MEN_BASE_POWER;
-        if(level > Spellbound.config.FISHER_OF_MEN_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.fisherOfMen.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.FISHER_OF_MEN_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.fisherOfMen.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.FISHER_OF_MEN_HARD_CAP;
-        else return 0;
-    }
+    public int getBasePower(){return Spellbound.config.fisherOfMen.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.fisherOfMen.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.fisherOfMen.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.fisherOfMen.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.fisherOfMen.IS_FOR_SALE;}
 
     @Override
     public void onPullHookedEntity(int level, FishingBobberEntity bobber, ItemStack stack, LivingEntity user, Entity target){
         target.damage(DamageSource.thrownProjectile(bobber,user),
-                Spellbound.config.FISHER_OF_MEN_BASE_DAMAGE + (Spellbound.config.FISHER_OF_MEN_DAMAGE_PER_LEVEL * level));
+                Spellbound.config.fisherOfMen.BASE_DAMAGE + (Spellbound.config.fisherOfMen.DAMAGE_PER_LEVEL * level));
         if(!target.isAlive() && !bobber.world.isClient()){
             spawnFishingLoot(bobber, stack, user, target);
         }
-    }
-
-
-    @Override
-    public boolean isTreasure() {
-        return false;
     }
 
     private void spawnFishingLoot(FishingBobberEntity bobber, ItemStack stack, LivingEntity user, Entity target){

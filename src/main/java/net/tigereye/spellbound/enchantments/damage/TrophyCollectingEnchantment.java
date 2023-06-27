@@ -29,35 +29,21 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
     public static final String UNIQUE_TROPHY_COUNT_KEY = Spellbound.MODID+"UniqueTrophyCount";
 
     public TrophyCollectingEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.TROPHY_COLLECTOR_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = true;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.trophyCollector.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
 
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.TROPHY_COLLECTOR_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.trophyCollector.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.TROPHY_COLLECTOR_POWER_PER_RANK * level) + Spellbound.config.TROPHY_COLLECTOR_BASE_POWER;
-        if(level > Spellbound.config.TROPHY_COLLECTOR_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.trophyCollector.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.TROPHY_COLLECTOR_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.trophyCollector.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.TROPHY_COLLECTOR_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.trophyCollector.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.trophyCollector.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.trophyCollector.POWER_RANGE;}
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);

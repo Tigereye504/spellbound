@@ -1,8 +1,6 @@
 package net.tigereye.spellbound.enchantments.damage;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -16,34 +14,21 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class MountedEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public MountedEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.MOUNTED_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = false;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.mounted.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
 
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.MOUNTED_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.mounted.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.MOUNTED_POWER_PER_RANK * level) + Spellbound.config.MOUNTED_BASE_POWER;
-        if(level > Spellbound.config.MOUNTED_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.mounted.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.MOUNTED_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.mounted.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.MOUNTED_HARD_CAP;
-        else return 0;
-    }
+    public int getBasePower(){return Spellbound.config.mounted.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.mounted.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.mounted.POWER_RANGE;}
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
@@ -53,7 +38,7 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
     @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
         if(attacker.hasVehicle()){
-            return (Spellbound.config.MOUNTED_DAMAGE_PER_LEVEL * level) + Spellbound.config.MOUNTED_DAMAGE_BASE;
+            return (Spellbound.config.mounted.DAMAGE_PER_LEVEL * level) + Spellbound.config.mounted.DAMAGE_BASE;
         }
         return 0;
     }
@@ -61,7 +46,7 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
     @Override
     public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
         if(attacker.getVehicle() != null){
-            return damage * ((Spellbound.config.MOUNTED_PROJECTILE_PER_LEVEL * level) + Spellbound.config.MOUNTED_PROJECTILE_BASE);
+            return damage * ((Spellbound.config.mounted.PROJECTILE_PER_LEVEL * level) + Spellbound.config.mounted.PROJECTILE_BASE);
         }
         return damage;
     }

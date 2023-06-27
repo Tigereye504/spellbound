@@ -1,11 +1,8 @@
 package net.tigereye.spellbound.enchantments.repair;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -16,35 +13,24 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class SkotosyntheticEnchantment extends SBEnchantment {
 
     public SkotosyntheticEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.SKOTOSYNTHETIC_RARITY), EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = false;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.skotosynthetic.RARITY), EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.SKOTOSYNTHETIC_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.skotosynthetic.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.SKOTOSYNTHETIC_POWER_PER_RANK * level) + Spellbound.config.SKOTOSYNTHETIC_BASE_POWER;
-        if(level > Spellbound.config.SKOTOSYNTHETIC_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.skotosynthetic.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.SKOTOSYNTHETIC_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.skotosynthetic.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.SKOTOSYNTHETIC_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.skotosynthetic.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.skotosynthetic.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.skotosynthetic.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.skotosynthetic.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.skotosynthetic.IS_FOR_SALE;}
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack);
@@ -57,18 +43,13 @@ public class SkotosyntheticEnchantment extends SBEnchantment {
                 return;
             }
             int light = world.getLightLevel(entity.getBlockPos());
-            if(light > Spellbound.config.SKOTOSYNTHETIC_LIGHT_MAXIMUM){
+            if(light > Spellbound.config.skotosynthetic.LIGHT_MAXIMUM){
                 return;
             }
             int periodMultiplier = Math.max(1,light+1);
-            if(entity.world.getTime() % ((long) Spellbound.config.SKOTOSYNTHETIC_REPAIR_PERIOD*periodMultiplier) == 0){
+            if(entity.world.getTime() % ((long) Spellbound.config.skotosynthetic.REPAIR_PERIOD*periodMultiplier) == 0){
                 stack.setDamage(stack.getDamage()-1);
             }
         }
-    }
-
-    @Override
-    public boolean isTreasure() {
-        return false;
     }
 }

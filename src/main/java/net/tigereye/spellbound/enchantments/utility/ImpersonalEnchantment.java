@@ -18,35 +18,24 @@ public class ImpersonalEnchantment extends SBEnchantment implements CustomCondit
 
     public ImpersonalEnchantment() {
         //EnchantmentTarget is vanishable because I'm handling that myself and so want a very permissive filter
-        super(SpellboundUtil.rarityLookup(Spellbound.config.IMPERSONAL_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = false;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.impersonal.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.IMPERSONAL_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.impersonal.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.IMPERSONAL_POWER_PER_RANK * level) + Spellbound.config.IMPERSONAL_BASE_POWER;
-        if(level > Spellbound.config.IMPERSONAL_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.impersonal.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.IMPERSONAL_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.impersonal.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.IMPERSONAL_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.impersonal.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.impersonal.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.impersonal.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.impersonal.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.impersonal.IS_FOR_SALE;}
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);

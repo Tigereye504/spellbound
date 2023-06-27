@@ -18,35 +18,27 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class HoverEnchantment extends SBEnchantment {
 
     public HoverEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.HOVER_RARITY), EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});
-        REQUIRES_PREFERRED_SLOT = true;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.hover.RARITY), EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS},true);
     }
 
     @Override
     public boolean isEnabled() {
-        return Spellbound.config.HOVER_ENABLED;
+        return Spellbound.config.hover.ENABLED;
     }
-
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.HOVER_POWER_PER_RANK * level) - Spellbound.config.HOVER_BASE_POWER;
-        if(level > Spellbound.config.HOVER_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.hover.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.HOVER_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.hover.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.HOVER_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.hover.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.hover.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.hover.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.hover.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.hover.IS_FOR_SALE;}
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         //if the user has landed since phasing, reset
@@ -72,7 +64,7 @@ public class HoverEnchantment extends SBEnchantment {
             }
             player.setHasMidairJumped(true);
             NetworkingUtil.sendStatusEffectRequestPacket(
-                    Spellbound.config.HOVER_DURATION_BASE + Spellbound.config.HOVER_DURATION_PER_LEVEL * level, 0,
+                    Spellbound.config.hover.DURATION_BASE + Spellbound.config.hover.DURATION_PER_LEVEL * level, 0,
                     SBStatusEffects.HOVERING);
         }
     }

@@ -1,20 +1,15 @@
 package net.tigereye.spellbound.enchantments.utility.leggings;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.SpellboundClientPlayerEntity;
-import net.tigereye.spellbound.registration.SBNetworking;
 import net.tigereye.spellbound.util.NetworkingUtil;
 import net.tigereye.spellbound.util.SpellboundUtil;
 import net.tigereye.spellbound.util.VectorUtil;
@@ -22,34 +17,27 @@ import net.tigereye.spellbound.util.VectorUtil;
 public class PhaseLeapEnchantment extends SBEnchantment {
 
     public PhaseLeapEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.PHASE_LEAP_RARITY), EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS});
-        REQUIRES_PREFERRED_SLOT = true;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.phaseLeap.RARITY), EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS},true);
     }
 
     @Override
     public boolean isEnabled() {
-        return Spellbound.config.PHASE_LEAP_ENABLED;
+        return Spellbound.config.phaseLeap.ENABLED;
     }
-
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.PHASE_LEAP_POWER_PER_RANK * level) - Spellbound.config.PHASE_LEAP_BASE_POWER;
-        if(level > Spellbound.config.PHASE_LEAP_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.phaseLeap.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.PHASE_LEAP_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.phaseLeap.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.PHASE_LEAP_HARD_CAP;
-        else return 0;
-    }
+    public int getBasePower(){return Spellbound.config.phaseLeap.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.phaseLeap.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.phaseLeap.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.phaseLeap.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.phaseLeap.IS_FOR_SALE;}
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){

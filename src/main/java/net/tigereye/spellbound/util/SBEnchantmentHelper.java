@@ -367,7 +367,7 @@ public class SBEnchantmentHelper {
             PolygamyInstance polygamy;
             if(!(status instanceof PolygamyInstance)) {
                 owner.removeStatusEffect(SBStatusEffects.POLYGAMY);
-                polygamy = new PolygamyInstance(id, Spellbound.config.INTIMACY_DURATION,0,false,false,true);
+                polygamy = new PolygamyInstance(id, Spellbound.config.polygamous.DURATION,0,false,false,true);
                 owner.addStatusEffect(polygamy);
             }
             else{
@@ -375,11 +375,11 @@ public class SBEnchantmentHelper {
                 owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
                 if(polygamy.itemUUID == null){
                     owner.removeStatusEffect(SBStatusEffects.POLYGAMY);
-                    owner.addStatusEffect(new PolygamyInstance(id, Spellbound.config.INTIMACY_DURATION, 0, false, false, true));
+                    owner.addStatusEffect(new PolygamyInstance(id, Spellbound.config.polygamous.DURATION, 0, false, false, true));
                     return true;
                 }
                 if(polygamy.itemUUID.compareTo(id) != 0){
-                    polygamy = new PolygamyInstance(id, Spellbound.config.INTIMACY_DURATION,0,false,false,true);
+                    polygamy = new PolygamyInstance(id, Spellbound.config.polygamous.DURATION,0,false,false,true);
                     owner.addStatusEffect(polygamy);
                 }
             }
@@ -390,7 +390,7 @@ public class SBEnchantmentHelper {
             MonogamyInstance monogamy;
             if(!(status instanceof MonogamyInstance)) {
                 owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-                monogamy = new MonogamyInstance(id, Spellbound.config.INTIMACY_DURATION,0,false,false,true);
+                monogamy = new MonogamyInstance(id, Spellbound.config.monogamous.DURATION,0,false,false,true);
                 owner.addStatusEffect(monogamy);
                 return true;
             }
@@ -398,18 +398,18 @@ public class SBEnchantmentHelper {
                 monogamy = (MonogamyInstance)(status);
                 if(monogamy.itemUUID == null){
                     owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-                    owner.addStatusEffect(new MonogamyInstance(id, Spellbound.config.INTIMACY_DURATION, 0, false, false, true));
+                    owner.addStatusEffect(new MonogamyInstance(id, Spellbound.config.monogamous.DURATION, 0, false, false, true));
                     return true;
                 }
                 if(monogamy.itemUUID.compareTo(id) != 0) {
                     owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-                    owner.addStatusEffect(new PolygamyInstance(id, Spellbound.config.INTIMACY_DURATION, 0, false, false, true));
+                    owner.addStatusEffect(new PolygamyInstance(id, Spellbound.config.polygamous.DURATION, 0, false, false, true));
                     return false;
                 }
             }
         }
         //owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-        owner.addStatusEffect(new MonogamyInstance(id, Spellbound.config.INTIMACY_DURATION,0,false,false,true));
+        owner.addStatusEffect(new MonogamyInstance(id, Spellbound.config.monogamous.DURATION,0,false,false,true));
         return true;
     }
 

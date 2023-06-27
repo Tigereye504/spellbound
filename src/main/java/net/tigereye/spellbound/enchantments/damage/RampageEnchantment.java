@@ -1,8 +1,6 @@
 package net.tigereye.spellbound.enchantments.damage;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -19,35 +17,21 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class RampageEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public RampageEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.RAMPAGE_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = false;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.rampage.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
 
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.RAMPAGE_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.rampage.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.RAMPAGE_POWER_PER_RANK * level) + Spellbound.config.RAMPAGE_BASE_POWER;
-        if(level > Spellbound.config.RAMPAGE_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.rampage.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.RAMPAGE_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.rampage.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.RAMPAGE_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.rampage.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.rampage.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.rampage.POWER_RANGE;}
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);
@@ -57,7 +41,7 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
         StatusEffectInstance greenSparkles = attacker.getStatusEffect(SBStatusEffects.GREEN_SPARKLES);
         if(greenSparkles != null){
-            return Spellbound.config.RAMPAGE_DAMAGE_BASE + (Spellbound.config.RAMPAGE_DAMAGE_PER_LEVEL * level);
+            return Spellbound.config.rampage.DAMAGE_BASE + (Spellbound.config.rampage.DAMAGE_PER_LEVEL * level);
         }
         return 0;
     }
@@ -67,7 +51,7 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
         if(attacker instanceof LivingEntity) {
             StatusEffectInstance greenSparkles = ((LivingEntity)attacker).getStatusEffect(SBStatusEffects.GREEN_SPARKLES);
             if (greenSparkles != null) {
-                return damage + Spellbound.config.RAMPAGE_DAMAGE_BASE + (Spellbound.config.RAMPAGE_DAMAGE_PER_LEVEL * level);
+                return damage + Spellbound.config.rampage.DAMAGE_BASE + (Spellbound.config.rampage.DAMAGE_PER_LEVEL * level);
             }
         }
         return damage;
@@ -76,7 +60,7 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
     @Override
     public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){
         killer.addStatusEffect(new StatusEffectInstance(SBStatusEffects.GREEN_SPARKLES,
-                Spellbound.config.RAMPAGE_DURATION_BASE +(Spellbound.config.RAMPAGE_DURATION_PER_LEVEL*level),
+                Spellbound.config.rampage.DURATION_BASE +(Spellbound.config.rampage.DURATION_PER_LEVEL*level),
                 level-1));
     }
 

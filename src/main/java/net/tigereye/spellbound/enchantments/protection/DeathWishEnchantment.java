@@ -24,35 +24,24 @@ public class DeathWishEnchantment extends SBEnchantment implements CustomConditi
     private static final UUID DEATH_WISH_ID = UUID.fromString("d25ab5b2-455f-4825-9424-776e3f054b41");
 
     public DeathWishEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.DEATH_WISH_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
-        REQUIRES_PREFERRED_SLOT = true;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.deathWish.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND},true);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.DEATH_WISH_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.deathWish.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.DEATH_WISH_POWER_PER_RANK * level) + Spellbound.config.DEATH_WISH_BASE_POWER;
-        if(level > Spellbound.config.DEATH_WISH_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.deathWish.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.DEATH_WISH_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.deathWish.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.DEATH_WISH_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.deathWish.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.deathWish.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.deathWish.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.deathWish.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.deathWish.IS_FOR_SALE;}
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);
@@ -63,8 +52,8 @@ public class DeathWishEnchantment extends SBEnchantment implements CustomConditi
         EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         if(att != null) {
             EntityAttributeModifier mod = new EntityAttributeModifier(DEATH_WISH_ID, "SpellboundDeathWishDamage",
-                    (SBEnchantmentHelper.getSpellboundEnchantmentAmountCorrectlyWorn(entity.getItemsEquipped(),SBEnchantments.DEATH_WISH,entity)*Spellbound.config.DEATH_WISH_DAMAGE_FACTOR_PER_LEVEL)+
-                            (SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getItemsEquipped(),SBEnchantments.DEATH_WISH,entity)*Spellbound.config.DEATH_WISH_DAMAGE_FACTOR_BASE)
+                    (SBEnchantmentHelper.getSpellboundEnchantmentAmountCorrectlyWorn(entity.getItemsEquipped(),SBEnchantments.DEATH_WISH,entity)*Spellbound.config.deathWish.DAMAGE_FACTOR_PER_LEVEL)+
+                            (SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getItemsEquipped(),SBEnchantments.DEATH_WISH,entity)*Spellbound.config.deathWish.DAMAGE_FACTOR_BASE)
                             ,EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
             ReplaceAttributeModifier(att, mod);
             if(entity.getHealth() > entity.getMaxHealth()){

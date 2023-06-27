@@ -27,7 +27,7 @@ public class Primed extends SBStatusEffect{
             SpellboundUtil.psudeoExplosion(entity, false, entity.getPos()
                     , ((amplifier*amplifier)+1)
                     ,(amplifier+1)*2
-                    ,(amplifier+1)*Spellbound.config.OUTBURST_SHOCKWAVE_FORCE);
+                    ,(amplifier+1)*Spellbound.config.outburst.SHOCKWAVE_FORCE);
         }
     }
 }

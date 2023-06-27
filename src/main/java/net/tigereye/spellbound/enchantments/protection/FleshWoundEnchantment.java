@@ -1,9 +1,6 @@
 package net.tigereye.spellbound.enchantments.protection;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
@@ -19,35 +16,24 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class FleshWoundEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public FleshWoundEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.FLESH_WOUND_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND});
-        REQUIRES_PREFERRED_SLOT = true;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.fleshWound.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND},true);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.FLESH_WOUND_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.fleshWound.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.FLESH_WOUND_POWER_PER_RANK * level) + Spellbound.config.FLESH_WOUND_BASE_POWER;
-        if(level > Spellbound.config.FLESH_WOUND_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.fleshWound.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.FLESH_WOUND_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.fleshWound.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.FLESH_WOUND_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.fleshWound.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.fleshWound.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.fleshWound.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.fleshWound.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.fleshWound.IS_FOR_SALE;}
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);
@@ -69,7 +55,7 @@ public class FleshWoundEnchantment extends SBEnchantment implements CustomCondit
         }
         float absorption = entity.getAbsorptionAmount();
         entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.BRAVADOS, 1200, 0,false,false,false));
-        entity.setAbsorptionAmount(absorption+(level*amount*Spellbound.config.FLESH_WOUND_ABSORPTION_PER_DAMAGE_PER_LEVEL));
+        entity.setAbsorptionAmount(absorption+(level*amount*Spellbound.config.fleshWound.ABSORPTION_PER_DAMAGE_PER_LEVEL));
     }
 
     @Override
@@ -77,12 +63,5 @@ public class FleshWoundEnchantment extends SBEnchantment implements CustomCondit
         return stack.getItem() instanceof ArmorItem
                 || stack.getItem() instanceof ShieldItem
                 || stack.getItem() == Items.BOOK;
-    }
-
-    private static void ReplaceAttributeModifier(EntityAttributeInstance att, EntityAttributeModifier mod)
-    {
-        //removes any existing mod and replaces it with the updated one.
-        att.removeModifier(mod);
-        att.addPersistentModifier(mod);
     }
 }

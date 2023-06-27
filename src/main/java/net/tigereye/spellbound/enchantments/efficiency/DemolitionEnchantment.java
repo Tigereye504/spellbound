@@ -27,34 +27,21 @@ public class DemolitionEnchantment extends SBEnchantment {
 
     public static final String DEMOLTION_LAST_BLAST_KEY = Spellbound.MODID+"Demolition_Last_Blast";
     public DemolitionEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.DEMOLITION_RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = true;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.demolition.RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
 
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.DEMOLITION_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.demolition.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.DEMOLITION_POWER_PER_RANK * level) + Spellbound.config.DEMOLITION_BASE_POWER;
-        if(level > Spellbound.config.DEMOLITION_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.demolition.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.DEMOLITION_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.demolition.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.DEMOLITION_HARD_CAP;
-        else return 0;
-    }
+    public int getBasePower(){return Spellbound.config.demolition.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.demolition.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.demolition.POWER_RANGE;}
 
     @Override
     public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack stack, BlockState block, float miningSpeed) {
@@ -75,7 +62,7 @@ public class DemolitionEnchantment extends SBEnchantment {
         if(world.getTime() - time > 2){
             nbtCompound.putLong(DEMOLTION_LAST_BLAST_KEY,world.getTime());
             ((SpellboundLivingEntity)player).addNextTickAction(new DemolitionAction(world, player, pos,
-                    Spellbound.config.DEMOLITION_BASE_EXPLOSION_POWER + (Spellbound.config.DEMOLITION_EXPLOSION_POWER_PER_RANK *level)));
+                    Spellbound.config.demolition.BASE_EXPLOSION_POWER + (Spellbound.config.demolition.EXPLOSION_POWER_PER_RANK *level)));
 
         }
         else if(player instanceof ServerPlayerEntity) {

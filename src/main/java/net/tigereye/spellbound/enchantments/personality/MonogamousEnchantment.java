@@ -20,35 +20,24 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class MonogamousEnchantment extends SBEnchantment {
 
     public MonogamousEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.MONOGAMOUS_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.MAINHAND,EquipmentSlot.OFFHAND});
-        REQUIRES_PREFERRED_SLOT = true;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.monogamous.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.MAINHAND,EquipmentSlot.OFFHAND},true);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.MONOGAMOUS_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.monogamous.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.MONOGAMOUS_POWER_PER_RANK * level) + Spellbound.config.MONOGAMOUS_BASE_POWER;
-        if(level > Spellbound.config.MONOGAMOUS_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.monogamous.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.MONOGAMOUS_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.monogamous.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.MONOGAMOUS_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.monogamous.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.monogamous.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.monogamous.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.monogamous.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.monogamous.IS_FOR_SALE;}
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack);
@@ -91,11 +80,6 @@ public class MonogamousEnchantment extends SBEnchantment {
             return miningSpeed*1.4f;
         }
         return miningSpeed*.5f;
-    }
-
-    @Override
-    public boolean isTreasure() {
-        return false;
     }
 
 }

@@ -20,35 +20,24 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class AirlineEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public AirlineEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.AIRLINE_RARITY), EnchantmentTarget.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = false;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.airline.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.AIRLINE_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.airline.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.AIRLINE_POWER_PER_RANK * level) + Spellbound.config.AIRLINE_BASE_POWER;
-        if(level > Spellbound.config.AIRLINE_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.airline.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.AIRLINE_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.airline.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.AIRLINE_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.airline.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.airline.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.airline.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.airline.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.airline.IS_FOR_SALE;}
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);
@@ -78,7 +67,7 @@ public class AirlineEnchantment extends SBEnchantment implements CustomCondition
 
     private void tetherTarget(int level, Entity anchor, LivingEntity target){
         target.removeStatusEffect(SBStatusEffects.TETHERED);
-        target.addStatusEffect(new TetheredInstance(anchor, Spellbound.config.AIRLINE_BASE_DURATION + (Spellbound.config.AIRLINE_DURATION_PER_RANK*level), 0));
+        target.addStatusEffect(new TetheredInstance(anchor, Spellbound.config.airline.BASE_DURATION + (Spellbound.config.airline.DURATION_PER_RANK*level), 0));
     }
 
     @Override

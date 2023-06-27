@@ -27,11 +27,36 @@ import java.util.List;
 public abstract class SBEnchantment extends Enchantment {
     protected boolean REQUIRES_PREFERRED_SLOT = true;
 
-    protected SBEnchantment(Rarity weight, EnchantmentTarget type, EquipmentSlot[] slotTypes) {
+    protected SBEnchantment(Rarity weight, EnchantmentTarget type, EquipmentSlot[] slotTypes,boolean requiresPreferedSlot) {
         super(weight, type, slotTypes);
+        REQUIRES_PREFERRED_SLOT = requiresPreferedSlot;
+    }
+    public abstract boolean isEnabled();
+    public abstract int getSoftLevelCap();
+    public abstract int getHardLevelCap();
+    public abstract int getBasePower();
+    public abstract int getPowerPerRank();
+    public abstract int getPowerRange();
+
+    @Override
+    public int getMinPower(int level) {
+        int power = (getPowerPerRank() * level) + getBasePower();
+        if(level > getSoftLevelCap()) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
+        }
+        return power;
     }
 
-    public abstract boolean isEnabled();
+    @Override
+    public int getMaxPower(int level) {
+        return super.getMinPower(level) + getPowerRange();
+    }
+
+    @Override
+    public int getMaxLevel() {
+        if(isEnabled()) return getHardLevelCap();
+        else return 0;
+    }
 
     //triggers after unbreaking. Recieves remaining durability to be lost,
     //and return value determines how much will actually be lost.

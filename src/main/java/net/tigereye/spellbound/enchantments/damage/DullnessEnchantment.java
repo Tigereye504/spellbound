@@ -12,34 +12,25 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class DullnessEnchantment extends SBEnchantment {
 
     public DullnessEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.DULLNESS_RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = false;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.dullness.RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND}, false);
     }
 
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.DULLNESS_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.dullness.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.DULLNESS_POWER_PER_RANK * level) + Spellbound.config.DULLNESS_BASE_POWER;
-        if(level > Spellbound.config.DULLNESS_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.dullness.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.DULLNESS_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.dullness.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.DULLNESS_HARD_CAP;
-        else return 0;
-    }
+    public int getBasePower(){return Spellbound.config.dullness.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.dullness.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.dullness.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.dullness.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.dullness.IS_FOR_SALE;}
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {

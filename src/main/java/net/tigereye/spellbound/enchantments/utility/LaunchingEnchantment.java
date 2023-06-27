@@ -14,35 +14,24 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class LaunchingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public LaunchingEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.LAUNCHING_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = false;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.launching.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.LAUNCHING_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.launching.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.LAUNCHING_POWER_PER_RANK * level) + Spellbound.config.LAUNCHING_BASE_POWER;
-        if(level > Spellbound.config.LAUNCHING_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.launching.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.LAUNCHING_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.launching.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.LAUNCHING_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.launching.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.launching.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.launching.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.launching.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.launching.IS_FOR_SALE;}
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack);

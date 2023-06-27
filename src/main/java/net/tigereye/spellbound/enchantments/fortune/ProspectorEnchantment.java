@@ -27,35 +27,24 @@ public class ProspectorEnchantment extends SBEnchantment {
     public static final String PROSPECTOR_LIST_KEY = Spellbound.MODID+"Prospector_List";
 
     public ProspectorEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.PROSPECTOR_RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = true;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.prospector.RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.PROSPECTOR_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.prospector.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.PROSPECTOR_POWER_PER_RANK * level) + Spellbound.config.PROSPECTOR_BASE_POWER;
-        if(level > Spellbound.config.PROSPECTOR_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.prospector.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.PROSPECTOR_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.prospector.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.PROSPECTOR_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.prospector.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.prospector.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.prospector.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.prospector.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.prospector.IS_FOR_SALE;}
     @Override
     public void onBreakBlock(int level, ItemStack stack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
         //TODO: Populate and check the anti-abuse list
@@ -68,7 +57,7 @@ public class ProspectorEnchantment extends SBEnchantment {
         if(detectAbuse(stack, world, pos)){
             return;
         }
-        Map<Identifier,Float> rates = ProspectorManager.getDropRateMapWithBonuses(world,stack,pos,Spellbound.config.PROSPECTOR_RADIUS);
+        Map<Identifier,Float> rates = ProspectorManager.getDropRateMapWithBonuses(world,stack,pos,Spellbound.config.prospector.RADIUS);
         Random random = player.getRandom();
         for (Map.Entry<Identifier,Float> entry: rates.entrySet()){
             if(entry.getValue() > 0) {
@@ -96,7 +85,7 @@ public class ProspectorEnchantment extends SBEnchantment {
         NbtCompound tag = stack.getOrCreateSubNbt(PROSPECTOR_LIST_KEY);
 
         long lastAccessTime = tag.getLong("lastAccessTime");
-        if(world.getTime() - lastAccessTime > Spellbound.config.PROSPECTOR_ABUSE_MEMORY){
+        if(world.getTime() - lastAccessTime > Spellbound.config.prospector.ABUSE_MEMORY){
             tag = new NbtCompound();
             stack.setSubNbt(PROSPECTOR_LIST_KEY,tag);
         }
@@ -104,17 +93,13 @@ public class ProspectorEnchantment extends SBEnchantment {
 
         String encodedPosition = pos.getX()+"_"+pos.getY()+"_"+pos.getZ();
         int samePosDigs = tag.getInt(encodedPosition);
-        if(samePosDigs > Spellbound.config.PROSPECTOR_ABUSE_THRESHOLD){
+        if(samePosDigs > Spellbound.config.prospector.ABUSE_THRESHOLD){
             return true;
         }
         else{
             tag.putInt(encodedPosition,samePosDigs+1);
             return false;
         }
-    }
-    @Override
-    public boolean isTreasure() {
-        return false;
     }
 
     private static class ProspectorAction implements NextTickAction{

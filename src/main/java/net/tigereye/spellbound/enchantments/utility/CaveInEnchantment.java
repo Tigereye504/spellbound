@@ -23,34 +23,24 @@ import java.util.List;
 public class CaveInEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
 
     public CaveInEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.CAVE_IN_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = false;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.caveIn.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.CAVE_IN_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.caveIn.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.CAVE_IN_POWER_PER_RANK * level) + Spellbound.config.CAVE_IN_BASE_POWER;
-        if(level > Spellbound.config.CAVE_IN_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.caveIn.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.CAVE_IN_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.caveIn.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.CAVE_IN_HARD_CAP;
-        else return 0;
-    }
+    public int getBasePower(){return Spellbound.config.caveIn.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.caveIn.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.caveIn.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.caveIn.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.caveIn.IS_FOR_SALE;}
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
@@ -84,7 +74,7 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
                         targetBlock = world.getBlockState(target);
                         blockBelowTarget = world.getBlockState(target.down());
                         if(!targetBlock.isAir() &&
-                                (targetBlock.getBlock().getBlastResistance() <= Spellbound.config.CAVE_IN_MAX_BLAST_RES || Spellbound.config.UNLIMITED_CAVE_IN)
+                                (targetBlock.getBlock().getBlastResistance() <= Spellbound.config.caveIn.MAX_BLAST_RES || Spellbound.config.UNLIMITED_CAVE_IN)
                                 && world.getBlockEntity(target) == null
                                 && (fallingBlocks.contains(blockBelowTarget) || FallingBlock.canFallThrough(blockBelowTarget))){
                             FallingBlockEntity.spawnFromBlock(world,target,targetBlock);

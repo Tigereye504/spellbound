@@ -20,35 +20,24 @@ public class AccelerationEnchantment extends SBEnchantment{
     private static final String ACCELERATION_STACKS_KEY = Spellbound.MODID+"SB_Acceleration_Stacks";
     private static final String ACCELERATION_TIME_KEY = Spellbound.MODID+"SB_Acceleration_Time";
     public AccelerationEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.ACCELERATION_RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = true;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.acceleration.RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.ACCELERATION_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.acceleration.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.ACCELERATION_POWER_PER_RANK * level) + Spellbound.config.ACCELERATION_BASE_POWER;
-        if(level > Spellbound.config.ACCELERATION_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.acceleration.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.ACCELERATION_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.acceleration.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.ACCELERATION_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.acceleration.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.acceleration.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.acceleration.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.acceleration.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.acceleration.IS_FOR_SALE;}
     @Override
     public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack stack, BlockState block, float miningSpeed) {
         NbtCompound tag = stack.getOrCreateNbt();
@@ -75,7 +64,7 @@ public class AccelerationEnchantment extends SBEnchantment{
         NbtCompound tag = stack.getOrCreateNbt();
         if(tag.contains(ACCELERATION_TIME_KEY)){
             long time = tag.getLong(ACCELERATION_TIME_KEY);
-            if(entity.getWorld().getTime() - time > Spellbound.config.ACCELERATION_TIMEOUT){
+            if(entity.getWorld().getTime() - time > Spellbound.config.acceleration.TIMEOUT){
                 if(entity.handSwinging){
                     if (Spellbound.DEBUG){
                         Spellbound.LOGGER.info("Acceleration in overtime");
@@ -92,8 +81,5 @@ public class AccelerationEnchantment extends SBEnchantment{
         }
     }
 
-    @Override
-    public boolean isTreasure() {
-        return false;
-    }
+
 }

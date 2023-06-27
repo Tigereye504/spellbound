@@ -25,35 +25,24 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
     public static final String ROCK_COLLECTOR_KEY = Spellbound.MODID+"RockCollector";
     public static final String UNIQUE_ROCK_COUNT_KEY = Spellbound.MODID+"UniqueRockCount";
     public RockCollectingEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.ROCK_COLLECTOR_RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
-        REQUIRES_PREFERRED_SLOT = true;
+        super(SpellboundUtil.rarityLookup(Spellbound.config.rockCollector.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
-
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.ROCK_COLLECTOR_ENABLED;
-    }
-
+    public boolean isEnabled() {return Spellbound.config.rockCollector.ENABLED;}
     @Override
-    public int getMinPower(int level) {
-        int power = (Spellbound.config.ROCK_COLLECTOR_POWER_PER_RANK * level) + Spellbound.config.ROCK_COLLECTOR_BASE_POWER;
-        if(level > Spellbound.config.ROCK_COLLECTOR_SOFT_CAP) {
-            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
-        }
-        return power;
-    }
-
+    public int getSoftLevelCap(){return Spellbound.config.rockCollector.SOFT_CAP;}
     @Override
-    public int getMaxPower(int level) {
-        return super.getMinPower(level) + Spellbound.config.ROCK_COLLECTOR_POWER_RANGE;
-    }
-
+    public int getHardLevelCap(){return Spellbound.config.rockCollector.HARD_CAP;}
     @Override
-    public int getMaxLevel() {
-        if(isEnabled()) return Spellbound.config.ROCK_COLLECTOR_HARD_CAP;
-        else return 0;
-    }
-
+    public int getBasePower(){return Spellbound.config.rockCollector.BASE_POWER;}
+    @Override
+    public int getPowerPerRank(){return Spellbound.config.rockCollector.POWER_PER_RANK;}
+    @Override
+    public int getPowerRange(){return Spellbound.config.rockCollector.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.rockCollector.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.rockCollector.IS_FOR_SALE;}
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
         return isAcceptableAtTable(stack)
@@ -121,11 +110,6 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
                 entry.getValue() + " ")
                 .append(Text.translatable(entry.getKey()))
                 .append(" (+" + calculateBlockBonus(entry.getValue()) + ")"));
-    }
-
-    @Override
-    public boolean isTreasure() {
-        return false;
     }
 
     @Override
