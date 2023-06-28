@@ -21,7 +21,7 @@ public class TouchedBlocksPersistentState extends PersistentState {
     private final Map<ChunkPos, Set<Long>> touchedBlocks = new HashMap<>();
 
     public boolean isBlockTouched(BlockPos pos){
-        Set<Long> chunkSet = touchedBlocks.get(ChunkPos.fromRegion(pos.getX(),pos.getZ()));
+        Set<Long> chunkSet = touchedBlocks.get(new ChunkPos(pos.getX() >> 4,pos.getZ() >> 4));
         boolean touched = chunkSet != null && chunkSet.contains(pos.asLong());
         if(Spellbound.DEBUG){
             if(touched){
@@ -35,7 +35,7 @@ public class TouchedBlocksPersistentState extends PersistentState {
     }
 
     public void TouchBlock(BlockPos pos){
-        ChunkPos chunkPos = ChunkPos.fromRegion(pos.getX(),pos.getZ());
+        ChunkPos chunkPos = new ChunkPos(pos.getX() >> 4,pos.getZ() >> 4);
         Set<Long> blockSet = touchedBlocks.getOrDefault(chunkPos,new HashSet<>());
         if (!blockSet.contains(pos.asLong())) {
             if(Spellbound.DEBUG) {
