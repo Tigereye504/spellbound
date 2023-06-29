@@ -1,6 +1,5 @@
 package net.tigereye.spellbound.registration;
 
-import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.tag.TagKey;
@@ -18,6 +17,7 @@ public class SBTags {
     public static final TagKey<Enchantment> DAMAGE_ENCHANTMENTS = TagKey.of(Registry.ENCHANTMENT_KEY, new Identifier(Spellbound.MODID,"damage"));
     public static final TagKey<Enchantment> EFFICIENCY_ENCHANTMENTS = TagKey.of(Registry.ENCHANTMENT_KEY, new Identifier(Spellbound.MODID,"efficiency"));
     public static final TagKey<Enchantment> FORTUNE_ENCHANTMENTS = TagKey.of(Registry.ENCHANTMENT_KEY, new Identifier(Spellbound.MODID,"fortune"));
+    public static final TagKey<Enchantment> LOOTING_ENCHANTMENTS = TagKey.of(Registry.ENCHANTMENT_KEY, new Identifier(Spellbound.MODID,"looting"));
     public static final TagKey<Enchantment> LURE_ENCHANTMENTS = TagKey.of(Registry.ENCHANTMENT_KEY, new Identifier(Spellbound.MODID,"lure"));
     public static final TagKey<Enchantment> PERSONALITY_ENCHANTMENTS = TagKey.of(Registry.ENCHANTMENT_KEY, new Identifier(Spellbound.MODID,"personality"));
     public static final TagKey<Enchantment> PROTECTION_ENCHANTMENTS = TagKey.of(Registry.ENCHANTMENT_KEY, new Identifier(Spellbound.MODID,"protection"));
@@ -31,6 +31,7 @@ public class SBTags {
         ENCHANTMENT_CATEGORIES.add(EFFICIENCY_ENCHANTMENTS);
         ENCHANTMENT_CATEGORIES.add(FORTUNE_ENCHANTMENTS);
         ENCHANTMENT_CATEGORIES.add(LURE_ENCHANTMENTS);
+        ENCHANTMENT_CATEGORIES.add(LOOTING_ENCHANTMENTS);
         ENCHANTMENT_CATEGORIES.add(PERSONALITY_ENCHANTMENTS);
         ENCHANTMENT_CATEGORIES.add(PROTECTION_ENCHANTMENTS);
         ENCHANTMENT_CATEGORIES.add(REPAIR_ENCHANTMENTS);
@@ -51,6 +52,9 @@ public class SBTags {
         parentList = new ArrayList<>();
         parentList.add(Enchantments.LURE);
         CATEGORY_PARENTS.put(LURE_ENCHANTMENTS, parentList);
+        parentList = new ArrayList<>();
+        parentList.add(Enchantments.LOOTING);
+        CATEGORY_PARENTS.put(LOOTING_ENCHANTMENTS, parentList);
         //personality enchantments have no parents
         parentList = new ArrayList<>();
         parentList.add(Enchantments.PROTECTION);

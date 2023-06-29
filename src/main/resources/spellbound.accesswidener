@@ -1,0 +1,3 @@
+accessWidener	v1	named
+
+accessible    method    net/minecraft/entity/LivingEntity    getLootContextBuilder    (ZLnet/minecraft/entity/damage/DamageSource;)Lnet/minecraft/loot/context/LootContext$Builder;

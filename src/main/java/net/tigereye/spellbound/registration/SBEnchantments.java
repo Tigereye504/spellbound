@@ -1,28 +1,24 @@
 package net.tigereye.spellbound.registration;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.enchantments.*;
+import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.enchantments.damage.*;
 import net.tigereye.spellbound.enchantments.efficiency.AccelerationEnchantment;
 import net.tigereye.spellbound.enchantments.efficiency.DemolitionEnchantment;
 import net.tigereye.spellbound.enchantments.efficiency.RockCollectingEnchantment;
 import net.tigereye.spellbound.enchantments.fortune.ProspectorEnchantment;
+import net.tigereye.spellbound.enchantments.looting.ScalpingEnchantment;
 import net.tigereye.spellbound.enchantments.lure.FisherOfMenEnchantment;
 import net.tigereye.spellbound.enchantments.personality.MonogamousEnchantment;
 import net.tigereye.spellbound.enchantments.personality.PolygamousEnchantment;
 import net.tigereye.spellbound.enchantments.protection.*;
-import net.tigereye.spellbound.enchantments.repair.PhotosyntheticEnchantment;
-import net.tigereye.spellbound.enchantments.repair.MetabolisingEnchantment;
-import net.tigereye.spellbound.enchantments.repair.SelfishEnchantment;
-import net.tigereye.spellbound.enchantments.repair.SkotosyntheticEnchantment;
+import net.tigereye.spellbound.enchantments.repair.*;
 import net.tigereye.spellbound.enchantments.retaliation.OutburstEnchantment;
 import net.tigereye.spellbound.enchantments.retaliation.SpikesEnchantment;
 import net.tigereye.spellbound.enchantments.unbreaking.BufferedEnchantment;
 import net.tigereye.spellbound.enchantments.unbreaking.SaturatedEnchantment;
-import net.tigereye.spellbound.enchantments.repair.LegacyEnchantment;
 import net.tigereye.spellbound.enchantments.utility.*;
 import net.tigereye.spellbound.enchantments.utility.chestplate.AttractiveEnchantment;
 import net.tigereye.spellbound.enchantments.utility.chestplate.RepulsiveEnchantment;
@@ -69,6 +65,7 @@ public class SBEnchantments {
     public static final SBEnchantment REPULSIVE = new RepulsiveEnchantment();
     public static final RockCollectingEnchantment ROCK_COLLECTING = new RockCollectingEnchantment();
     public static final SBEnchantment SATURATED = new SaturatedEnchantment();
+    public static final SBEnchantment SCALPING = new ScalpingEnchantment();
     public static final SBEnchantment SELFISH = new SelfishEnchantment();
     public static final SBEnchantment SKOTOSYNTHETIC = new SkotosyntheticEnchantment();
     public static final SBEnchantment SPIKES = new SpikesEnchantment();
@@ -108,6 +105,7 @@ public class SBEnchantments {
         register("repulsive", REPULSIVE);
         register("rock_collecting", ROCK_COLLECTING);
         register("saturated", SATURATED);
+        register("scalping", SCALPING);
         register("selfish", SELFISH);
         register("spikes", SPIKES);
         register("skotosynthetic", SKOTOSYNTHETIC);

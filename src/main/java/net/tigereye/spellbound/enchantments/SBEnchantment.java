@@ -162,6 +162,9 @@ public abstract class SBEnchantment extends Enchantment {
     public void onRedHealthDamage(int level, ItemStack itemStack, LivingEntity entity, float amount) {
     }
 
+    public void onDoRedHealthDamage(int level, ItemStack itemStack, LivingEntity attacker, LivingEntity victim, DamageSource source, float amount) {
+    }
+
     public boolean requiresPreferredSlot(){
         return REQUIRES_PREFERRED_SLOT;
     }

@@ -234,6 +234,10 @@ public class SBEnchantmentHelper {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onRedHealthDamage(level,itemStack,entity,amount),entity.getItemsEquipped());
     }
 
+    public static void onDoRedHealthDamage(LivingEntity attacker, DamageSource source, LivingEntity victim, float amount) {
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDoRedHealthDamage(level,itemStack,attacker,victim,source,amount),attacker.getItemsEquipped());
+    }
+
     public static void onToolBreak(ItemStack stack, PlayerEntity entity) {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onToolBreak(level, itemStack, entity), stack);
     }

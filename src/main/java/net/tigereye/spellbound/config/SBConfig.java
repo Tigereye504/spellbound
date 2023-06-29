@@ -135,7 +135,7 @@ public class SBConfig implements ConfigData {
         public boolean IS_FOR_SALE = true;
         public int RARITY = 3;
         public int SOFT_CAP = 5;
-        public int HARD_CAP = 5;
+        public int HARD_CAP = 10;
         public int BASE_POWER = -7;
         public int POWER_PER_RANK = 8;
         public int POWER_RANGE = 50;
@@ -429,7 +429,7 @@ public class SBConfig implements ConfigData {
         public boolean IS_FOR_SALE = true;
         public int RARITY = 3;
         public int SOFT_CAP = 5;
-        public int HARD_CAP = 5;
+        public int HARD_CAP = 8;
         public int BASE_POWER = 5;
         public int POWER_PER_RANK = 5;
         public int POWER_RANGE = 20;
@@ -537,6 +537,23 @@ public class SBConfig implements ConfigData {
         public int POWER_RANGE = 50;
         public float EXHAUSTION_COST = 1.0f;
         public int FOOD_THRESHOLD = 20;
+    }
+
+    @ConfigEntry.Category("enchantment")
+    @ConfigEntry.Gui.CollapsibleObject
+    public ScalpingConfig scalping = new ScalpingConfig();
+    public static class ScalpingConfig {
+        public boolean ENABLED = true;
+        public boolean IS_TREASURE = false;
+        public boolean IS_FOR_SALE = true;
+        public int RARITY = 3;
+        public int SOFT_CAP = 3;
+        public int HARD_CAP = 3;
+        public int BASE_POWER = 6;
+        public int POWER_PER_RANK = 9;
+        public int POWER_RANGE = 50;
+        public float DROP_FACTOR_PER_LEVEL = .3333f;
+        public float CARRYOVER_DECAY = .5f;
     }
 
     @ConfigEntry.Category("enchantment")
