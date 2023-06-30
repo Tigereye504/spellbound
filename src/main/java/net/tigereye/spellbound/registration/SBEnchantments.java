@@ -11,8 +11,9 @@ import net.tigereye.spellbound.enchantments.efficiency.RockCollectingEnchantment
 import net.tigereye.spellbound.enchantments.fortune.ProspectorEnchantment;
 import net.tigereye.spellbound.enchantments.looting.ScalpingEnchantment;
 import net.tigereye.spellbound.enchantments.lure.FisherOfMenEnchantment;
-import net.tigereye.spellbound.enchantments.personality.MonogamousEnchantment;
-import net.tigereye.spellbound.enchantments.personality.PolygamousEnchantment;
+import net.tigereye.spellbound.enchantments.meta.MonogamousEnchantment;
+import net.tigereye.spellbound.enchantments.meta.PolygamousEnchantment;
+import net.tigereye.spellbound.enchantments.meta.StoriedEnchantment;
 import net.tigereye.spellbound.enchantments.protection.*;
 import net.tigereye.spellbound.enchantments.repair.*;
 import net.tigereye.spellbound.enchantments.retaliation.OutburstEnchantment;
@@ -69,6 +70,7 @@ public class SBEnchantments {
     public static final SBEnchantment SELFISH = new SelfishEnchantment();
     public static final SBEnchantment SKOTOSYNTHETIC = new SkotosyntheticEnchantment();
     public static final SBEnchantment SPIKES = new SpikesEnchantment();
+    public static final SBEnchantment STORIED = new StoriedEnchantment();
     public static final SBEnchantment TETHERING = new TetheringEnchantment();
     public static final TrophyCollectingEnchantment TROPHY_COLLECTING = new TrophyCollectingEnchantment();
 
@@ -108,6 +110,7 @@ public class SBEnchantments {
         register("scalping", SCALPING);
         register("selfish", SELFISH);
         register("spikes", SPIKES);
+        register("storied", STORIED);
         register("skotosynthetic", SKOTOSYNTHETIC);
         register("tethering", TETHERING);
         register("trophy_collecting", TROPHY_COLLECTING);

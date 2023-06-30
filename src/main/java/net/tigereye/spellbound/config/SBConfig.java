@@ -606,6 +606,26 @@ public class SBConfig implements ConfigData {
 
     @ConfigEntry.Category("enchantment")
     @ConfigEntry.Gui.CollapsibleObject
+    public StoriedConfig storied = new StoriedConfig();
+    public static class StoriedConfig {
+        public boolean ENABLED = true;
+        public boolean IS_TREASURE = true;
+        public boolean IS_FOR_SALE = false;
+        public int RARITY = 1;
+        public int SOFT_CAP = 1;
+        public int HARD_CAP = 1;
+        public int BASE_POWER = 0;
+        public int POWER_PER_RANK = 0;
+        public int POWER_RANGE = 50;
+        public int WORDS_PER_LEVEL_BASE = 20;
+        public int WORDS_PER_LEVEL_FIRST_DEGREE = -60;
+        public int WORDS_PER_LEVEL_SECOND_DEGREE = 75;
+        public boolean ALLOW_NEW_PLOTHOOKS = true;
+        public int RARITY_OF_NEW_PLOTHOOKS = 2;
+    }
+
+    @ConfigEntry.Category("enchantment")
+    @ConfigEntry.Gui.CollapsibleObject
     public TetheringConfig tethering = new TetheringConfig();
     public static class TetheringConfig {
         public boolean ENABLED = true;
@@ -655,4 +675,6 @@ public class SBConfig implements ConfigData {
     public boolean COLLECT_ANY_ROCK = false;
     @ConfigEntry.Category("tomfoolery")
     public boolean YANDERE_TOOLS = false;
+    @ConfigEntry.Category("tomfoolery")
+    public boolean STORIED_WORLD = false;
 }

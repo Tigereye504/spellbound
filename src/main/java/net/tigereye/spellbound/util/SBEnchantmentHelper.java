@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -31,10 +32,14 @@ import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.interfaces.*;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.interfaces.SpellboundClientPlayerEntity;
+import net.tigereye.spellbound.interfaces.SpellboundPlayerEntity;
+import net.tigereye.spellbound.interfaces.SpellboundProjectileEntity;
+import net.tigereye.spellbound.interfaces.TridentEntityItemAccessor;
 import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
 import net.tigereye.spellbound.mob_effect.instance.PolygamyInstance;
+import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.registration.SBTags;
 import org.apache.commons.lang3.mutable.MutableFloat;
@@ -45,6 +50,11 @@ import java.util.*;
 public class SBEnchantmentHelper {
     //called after vanilla's getAttackDamage
     public static int beforeDurabilityLoss(ItemStack stack, ServerPlayerEntity user, int loss){
+        if(Spellbound.config.STORIED_WORLD && !stack.hasEnchantments()){
+            Map<Enchantment,Integer> enchantments = EnchantmentHelper.get(stack);
+            enchantments.put(SBEnchantments.STORIED, 1);
+            EnchantmentHelper.set(enchantments,stack);
+        }
         MutableInt mutableInt = new MutableInt(loss);
         if(Spellbound.DEBUG){
             Spellbound.LOGGER.info(stack.getName().getString() + " is taking " + loss + " damage before spellbound");

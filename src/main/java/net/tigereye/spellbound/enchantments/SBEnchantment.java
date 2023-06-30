@@ -145,6 +145,14 @@ public abstract class SBEnchantment extends Enchantment {
         return 0;
     }
 
+    public int getIFrameAmount(int level, int frames, DamageSource source, float damageAmount, ItemStack itemStack, LivingEntity defender) {
+        return frames;
+    }
+
+    public float getIFrameMagnitude(int level, float magnitude, DamageSource source, float damageAmount, ItemStack itemStack, LivingEntity defender) {
+        return magnitude;
+    }
+
     public List<Text> addTooltip(int level, ItemStack itemStack, PlayerEntity player, TooltipContext context) {
         return null;
     }
@@ -188,13 +196,5 @@ public abstract class SBEnchantment extends Enchantment {
     public boolean canAccept(Enchantment other) {
         return super.canAccept(other) && (SBEnchantmentHelper.areNotInSameCategory(this,other)
                 || Spellbound.config.DISABLE_INCOMPATIBILITY);
-    }
-
-    public int getIFrameAmount(int level, int frames, DamageSource source, float damageAmount, ItemStack itemStack, LivingEntity defender) {
-        return frames;
-    }
-
-    public float getIFrameMagnitude(int level, float magnitude, DamageSource source, float damageAmount, ItemStack itemStack, LivingEntity defender) {
-        return magnitude;
     }
 }

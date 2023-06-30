@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.enchantments.personality;
+package net.tigereye.spellbound.enchantments.meta;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentTarget;
