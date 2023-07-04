@@ -433,6 +433,7 @@ public class SBConfig implements ConfigData {
         public int BASE_POWER = 5;
         public int POWER_PER_RANK = 5;
         public int POWER_RANGE = 20;
+        public int DURATION = 60;
     }
 
     @ConfigEntry.Category("enchantment")
@@ -450,6 +451,7 @@ public class SBConfig implements ConfigData {
         public int POWER_RANGE = 50;
         public int RADIUS = 3;
         public boolean DETECT_ABUSE = true;
+        public int NEW_CHUNK_GRACE_PERIOD = 200;
     }
 
     @ConfigEntry.Category("enchantment")
@@ -505,6 +507,23 @@ public class SBConfig implements ConfigData {
         public int POWER_RANGE = 50;
         public int RANGE = 5;
         public double STRENGTH = .03;
+    }
+
+    @ConfigEntry.Category("enchantment")
+    @ConfigEntry.Gui.CollapsibleObject
+    public ResurfacingConfig resurfacing = new ResurfacingConfig();
+    public static class ResurfacingConfig {
+        public boolean ENABLED = true;
+        public boolean IS_TREASURE = true;
+        public boolean IS_FOR_SALE = true;
+        public int RARITY = 3;
+        public int SOFT_CAP = 1;
+        public int HARD_CAP = 1;
+        public int BASE_POWER = 10;
+        public int POWER_PER_RANK = 0;
+        public int POWER_RANGE = 50;
+        public int ATTEMPTS_PER_CHEST = 6;
+        public float CHANCE_PER_ATTEMPT = .35f;
     }
 
     @ConfigEntry.Category("enchantment")
@@ -618,8 +637,8 @@ public class SBConfig implements ConfigData {
         public int POWER_PER_RANK = 0;
         public int POWER_RANGE = 50;
         public int WORDS_PER_LEVEL_BASE = 20;
-        public int WORDS_PER_LEVEL_FIRST_DEGREE = -60;
-        public int WORDS_PER_LEVEL_SECOND_DEGREE = 75;
+        public int WORDS_PER_LEVEL_FIRST_DEGREE = -22;
+        public int WORDS_PER_LEVEL_SECOND_DEGREE = 22;
         public boolean ALLOW_NEW_PLOTHOOKS = true;
         public int RARITY_OF_NEW_PLOTHOOKS = 2;
     }

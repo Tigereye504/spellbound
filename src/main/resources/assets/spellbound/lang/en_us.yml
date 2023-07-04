@@ -1,0 +1,677 @@
+death.attack:
+    sbInfidelity: "%1$s died from possessiveness."
+    sbInfidelity.player: "%1$s was betrayed while fighting %2$s."
+
+effect.spellbound:
+    bravados: Bravados
+    green_sparkles: Green Sparkles
+    hovering: Hovering
+    monogamy: Monogamy
+    polygamy: Polygamy
+    primed: Primed
+    shielded: Shielded
+    shields_down: Shield Recovery
+    tethered: Tethered
+
+enchantment.spellbound:
+    acceleration: Acceleration
+    acceleration.desc: Type:Efficiency. Mining speed increases during use.
+
+    airline: Airline
+    airline.desc: Type:Utility. Drags the user behind fired projectile.
+
+    attractive: Attractive
+    attractive.desc: Type:Utility. Attracts nearby entities.
+
+    buffered: Buffered
+    buffered.desc: Type:Durability. Protects durability with regenerating buffer.
+
+    cave_in: Cave-In
+    cave_in.desc: Type:Utility. Shot blocks fall to the ground
+
+    death_wish: Death Wish
+    death_wish.desc: Type:Protection. Provides no protection. Greatly increases damage.
+
+    demolition: Demolition
+    demolition.desc: Type:Efficiency. Creates explosions when mining. Hard on your tool.
+
+    dullness: Dullness
+    dullness.desc: Type:Damage. Reduces damage done by tool.
+
+    fisher_of_men: Fisher Of Men
+    fisher_of_men.desc: Type:Lure. Deals damage to pulled entities and grants fish if lethal.
+
+    flesh_wound: Flesh Wound
+    flesh_wound.desc: Type:Protection. Grants absorption hearts on non-absorption damage.
+
+    grace: Grace
+    grace.desc: Type:Protection. Greatly extends and improves I-Frames.
+
+    hearty: Hearty
+    hearty.desc: Type:Protection. Greatly increases max health.
+
+    hover: Hover
+    hover.desc: Type:Utility. Hold elevation briefly upon midair jump.
+
+    impersonal: Impersonal
+    impersonal.desc: Type:Utility. Teleports user behind targets.
+
+    jousting: Jousting
+    jousting.desc: Type:Damage. Increase damage with relative velocity.
+
+    launching: Launching
+    launching.desc: Type:Utility. Knock targets skyward.
+
+    legacy: Legacy
+    legacy.desc: Type:Repair. Creates enchanted book when item breaks.
+
+    metabolising: Metabolising
+    metabolising.desc: Type:Repair. Consumes hunger to restore durability.
+
+    mounted: Mounted
+    mounted.desc: Type:Damage. Increase damage while mounted.
+
+    monogamous: Monogamous
+    monogamous.desc: Type:Personality. Increases power with no other bonded items.
+
+    outburst: Outburst
+    outburst.desc: Type:Retaliation. Burst free when hit multiple times.
+
+    phase_leap: Phase Leap
+    phase_leap.desc: Type:Utility. Phase forward upon midair jump.
+
+    phase_strafe: Phase Strafe
+    phase_strafe.desc: Type:Utility. Phase with your motion upon midair jump.
+
+    photosynthetic: Photosynthetic
+    photosynthetic.desc: Type:Repair. Restores itself in the light.
+
+    polygamous: Polygamous
+    polygamous.desc: Type:Personality. Increases power with other bonded items.
+
+    priming: Priming
+    priming.desc: Type:Damage. Sets target to explode. Multiple hits increase yield.
+
+    prospector: Prospector
+    prospector.desc: Type:Fortune. Find trace minerals in earth, more if near ore.
+
+    rampage: Rampage
+    rampage.desc: Type:Damage. Massive damage after kills.
+
+    red_alert: Red Alert
+    red_alert.desc: Type:Protection. Barriers negate next damage source.
+
+    repulsive: Repulsive
+    repulsive.desc: Type:Utility. Repulses nearby entities
+
+    resurfacing: Resurfacing
+    resurfacing.desc: Type:Repair. Returns as treasure when lost or broken.
+
+    rock_collecting: Rock Collecting
+    rock_collecting.desc: Type:Efficiency. Mining speed grows with unique rocks mined.
+
+    saturated: Saturated
+    saturated.desc: Type:Durability. Consumes saturation instead of durability.
+
+    scalping: Scalping
+    scalping.desc: Type:Looting. Attacks tear free bonus drops, scaling with damage.
+
+    selfish: Selfish
+    selfish.desc: Type:Durability/Repair. Takes durability from other equipment.
+
+    skotosynthetic: Skotosynthetic
+    skotosynthetic.desc: Type:Repair. Restores itself in the night.
+
+    spikes: Spikes
+    spikes.desc: Type:Retaliation. Damages very close entities.
+
+    storied: Storied
+    storied.desc: Type:Metamagic. Upgrades and adds enchantments as the item's story develops.
+
+    tethering: Tethering
+    tethering.desc: Type:Utility. Pulls target to weapon.
+
+    trophy_collecting: Trophy Collecting
+    trophy_collecting.desc: Type:Damage. Damage grows with unique foes slain.
+
+flavor.spellbound:
+    bubbly: Bubbly
+    extra_bubbly: Extra Bubbly
+    very_bubbly: Very Bubbly
+
+item.spellbound:
+    bag_of_rocks: Bag of Rocks
+    bag_of_trophies: Bag of Trophies
+    copper_pebble: Copper Pebble
+    iron_pebble: Iron Pebble
+    gold_pebble: Gold Pebble
+    diamond_shard: Diamond Shard
+    emerald_shard: Emerald Shard
+
+text.autoconfig.spellbound:
+    title: Spellbound Enchantments
+
+    category:
+        enchantment: Enchantment
+        other: Other
+        tomfoolery: Tomfoolery
+
+    option:
+        acceleration: Acceleration
+        acceleration.ENABLED: Enable
+        acceleration.IS_TREASURE: Is Treasure
+        acceleration.IS_FOR_SALE: Sold by Villagers
+        acceleration.RARITY: Rarity
+        acceleration.SOFT_CAP: Soft Cap
+        acceleration.HARD_CAP: Hard Cap
+        acceleration.BASE_POWER: Enchanting Base Power
+        acceleration.POWER_PER_RANK: Enchanting Power Per Rank
+        acceleration.POWER_RANGE: Power Range
+        acceleration.TIMEOUT: Timeout
+
+        airline: Airline
+        airline.ENABLED: Enable
+        airline.IS_TREASURE: Is Treasure
+        airline.IS_FOR_SALE: Sold by Villagers
+        airline.RARITY: Rarity
+        airline.SOFT_CAP: Soft Cap
+        airline.HARD_CAP: Hard Cap
+        airline.BASE_POWER: Enchanting Base Power
+        airline.POWER_PER_RANK: Enchanting Power Per Rank
+        airline.POWER_RANGE: Power Range
+        airline.BASE_DURATION: Base Duration
+        airline.DURATION_PER_RANK: Duration Per Rank
+
+        attractive: Attractive
+        attractive.ENABLED: Enable
+        attractive.IS_TREASURE: Is Treasure
+        attractive.IS_FOR_SALE: Sold by Villagers
+        attractive.RARITY: Rarity
+        attractive.SOFT_CAP: Soft Cap
+        attractive.HARD_CAP: Hard Cap
+        attractive.BASE_POWER: Enchanting Base Power
+        attractive.POWER_PER_RANK: Enchanting Power Per Rank
+        attractive.POWER_RANGE: Power Range
+        attractive.RANGE: Range
+        attractive.STRENGTH: Strength
+
+        buffered: Buffered
+        buffered.ENABLED: Enable
+        buffered.IS_TREASURE: Is Treasure
+        buffered.IS_FOR_SALE: Sold by Villagers
+        buffered.RARITY: Rarity
+        buffered.SOFT_CAP: Soft Cap
+        buffered.HARD_CAP: Hard Cap
+        buffered.BASE_POWER: Enchanting Base Power
+        buffered.POWER_PER_RANK: Enchanting Power Per Rank
+        buffered.POWER_RANGE: Power Range
+        buffered.RECOVERY_RATE: Recovery Rate
+        buffered.MAX_PER_RANK: Max Per Rank
+        buffered.DISPLAY: Display Mode
+
+        caveIn: Cave-In
+        caveIn.ENABLED: Enable
+        caveIn.IS_TREASURE: Is Treasure
+        caveIn.IS_FOR_SALE: Sold by Villagers
+        caveIn.RARITY: Rarity
+        caveIn.SOFT_CAP: Soft Cap
+        caveIn.HARD_CAP: Hard Cap
+        caveIn.BASE_POWER: Enchanting Base Power
+        caveIn.POWER_PER_RANK: Enchanting Power Per Rank
+        caveIn.POWER_RANGE: Enchanting Power Range
+        caveIn.MAX_BLAST_RES: Max Blast Resistance
+
+        deathWish: Death Wish
+        deathWish.ENABLED: Enable
+        deathWish.IS_TREASURE: Is Treasure
+        deathWish.IS_FOR_SALE: Sold by Villagers
+        deathWish.RARITY: Rarity
+        deathWish.SOFT_CAP: Soft Cap
+        deathWish.HARD_CAP: Hard Cap
+        deathWish.BASE_POWER: Enchanting Base Power
+        deathWish.POWER_PER_RANK: Enchanting Power Per Rank
+        deathWish.POWER_RANGE: Enchanting Power Range
+        deathWish.DAMAGE_FACTOR_BASE: Base Damage
+        deathWish.DAMAGE_FACTOR_PER_LEVEL: Damage Per Level
+
+        demolition: Demolition
+        demolition.ENABLED: Enable
+        demolition.IS_TREASURE: Is Treasure
+        demolition.IS_FOR_SALE: Sold by Villagers
+        demolition.RARITY: Rarity
+        demolition.SOFT_CAP: Soft Cap
+        demolition.HARD_CAP: Hard Cap
+        demolition.BASE_POWER: Enchanting Base Power
+        demolition.POWER_PER_RANK: Enchanting Power Per Rank
+        demolition.POWER_RANGE: Enchanting Power Range
+        demolition.BASE_EXPLOSION_POWER: Base Explosion Strength
+        demolition.EXPLOSION_POWER_PER_RANK: Explosion Strength Per Rank
+
+        dullness: Dullness
+        dullness.ENABLED: Enable
+        dullness.IS_TREASURE: Is Treasure
+        dullness.IS_FOR_SALE: Sold by Villagers
+        dullness.RARITY: Rarity
+        dullness.SOFT_CAP: Soft Cap
+        dullness.HARD_CAP: Hard Cap
+        dullness.BASE_POWER: Enchanting Base Power
+        dullness.POWER_PER_RANK: Enchanting Power Per Rank
+        dullness.POWER_RANGE: Enchanting Power Range
+
+        fisherOfMen: Fisher Of Men
+        fisherOfMen.ENABLED: Enable
+        fisherOfMen.IS_TREASURE: Is Treasure
+        fisherOfMen.IS_FOR_SALE: Sold by Villagers
+        fisherOfMen.RARITY: Rarity
+        fisherOfMen.SOFT_CAP: Soft cap
+        fisherOfMen.HARD_CAP: Hard cap
+        fisherOfMen.BASE_POWER: Enchanting Base Power
+        fisherOfMen.POWER_PER_RANK: Enchanting Power Per Rank
+        fisherOfMen.POWER_RANGE: Enchanting power Range
+        fisherOfMen.BASE_DAMAGE: Base Damage
+        fisherOfMen.DAMAGE_PER_LEVEL: Damage Per Level
+
+        fleshWound: Flesh Wound
+        fleshWound.ENABLED: Enable
+        fleshWound.IS_TREASURE: Is Treasure
+        fleshWound.IS_FOR_SALE: Sold by Villagers
+        fleshWound.RARITY: Rarity
+        fleshWound.SOFT_CAP: Soft Cap
+        fleshWound.HARD_CAP: Hard Cap
+        fleshWound.BASE_POWER: Enchanting Base Power
+        fleshWound.POWER_PER_RANK: Enchanting Power Per Rank
+        fleshWound.POWER_RANGE: Enchanting Power Range
+        fleshWound.ABSORPTION_PER_DAMAGE_PER_LEVEL: Absorption Per Rank Per Dmg
+        
+        grace: Grace
+        grace.ENABLED: Enable
+        grace.IS_TREASURE: Is Treasure
+        grace.IS_FOR_SALE: Sold by Villagers
+        grace.RARITY: Rarity
+        grace.SOFT_CAP: Soft Cap
+        grace.HARD_CAP: Hard Cap
+        grace.BASE_POWER: Enchanting Base Power
+        grace.POWER_PER_RANK: Enchanting Power Per Rank
+        grace.POWER_RANGE: Enchanting Power Range
+        grace.IFRAME_TICKS_PER_LEVEL: Bonus I-Frames Per Level
+        grace.IFRAME_MAGNITUDE_PER_LEVEL: I-Frame Strength Per Level
+
+        hearty: Hearty
+        hearty.ENABLED: Enable
+        hearty.IS_TREASURE: Is Treasure
+        hearty.IS_FOR_SALE: Sold by Villagers
+        hearty.RARITY: Rarity
+        hearty.SOFT_CAP: Soft Cap
+        hearty.HARD_CAP: Hard Cap
+        hearty.BASE_POWER: Enchanting Base Power
+        hearty.POWER_PER_RANK: Enchanting Power Per Rank
+        hearty.POWER_RANGE: Enchanting Power Range
+        hearty.HEALTH_FACTOR_BASE: Base Health
+        hearty.HEALTH_FACTOR_PER_LEVEL: Health Per Level
+
+        hover: Hover
+        hover.ENABLED: Enable
+        hover.IS_TREASURE: Is Treasure
+        hover.IS_FOR_SALE: Sold by Villagers
+        hover.RARITY: Rarity
+        hover.SOFT_CAP: Soft Cap
+        hover.HARD_CAP: Hard Cap
+        hover.BASE_POWER: Enchanting Base Power
+        hover.POWER_PER_RANK: Enchanting Power Per Rank
+        hover.POWER_RANGE: Enchanting Power Range
+        hover.DURATION_BASE: Base Duration
+        hover.DURATION_PER_LEVEL: Duration Per Level
+
+        impersonal: Impersonal
+        impersonal.ENABLED: Enable
+        impersonal.IS_TREASURE: Is Treasure
+        impersonal.IS_FOR_SALE: Sold by Villagers
+        impersonal.RARITY: Rarity
+        impersonal.SOFT_CAP: Soft Cap
+        impersonal.HARD_CAP: Hard Cap
+        impersonal.BASE_POWER: Enchanting Base Power
+        impersonal.POWER_PER_RANK: Enchanting Power Per Rank
+        impersonal.POWER_RANGE: Enchanting Power Range
+
+        jousting: Jousting
+        jousting.ENABLED: Enable
+        jousting.IS_TREASURE: Is Treasure
+        jousting.IS_FOR_SALE: Sold by Villagers
+        jousting.RARITY: Rarity
+        jousting.SOFT_CAP: Soft Cap
+        jousting.HARD_CAP: Hard Cap
+        jousting.BASE_POWER: Enchanting Base Power
+        jousting.POWER_PER_RANK: Enchanting Power Per Rank
+        jousting.POWER_RANGE: Enchanting Power Range
+
+        launching: Launching
+        launching.ENABLED: Enable
+        launching.IS_TREASURE: Is Treasure
+        launching.IS_FOR_SALE: Sold by Villagers
+        launching.RARITY: Rarity
+        launching.SOFT_CAP: Soft Cap
+        launching.HARD_CAP: Hard Cap
+        launching.BASE_POWER: Enchanting Base Power
+        launching.POWER_PER_RANK: Enchanting Power Per Rank
+        launching.POWER_RANGE: Enchanting Power Range
+
+        legacy: Legacy
+        legacy.ENABLED: Enable
+        legacy.IS_TREASURE: Is Treasure
+        legacy.IS_FOR_SALE: Sold by Villagers
+        legacy.RARITY: Rarity
+        legacy.SOFT_CAP: Soft Cap
+        legacy.HARD_CAP: Hard Cap
+        legacy.BASE_POWER: Enchanting Base Power
+        legacy.POWER_PER_RANK: Enchanting Power Per Rank
+        legacy.POWER_RANGE: Enchanting Power Range
+
+        metabolising: Metabolising
+        metabolising.ENABLED: Enable
+        metabolising.IS_TREASURE: Is Treasure
+        metabolising.IS_FOR_SALE: Sold by Villagers
+        metabolising.RARITY: Rarity
+        metabolising.SOFT_CAP: Soft Cap
+        metabolising.HARD_CAP: Hard Cap
+        metabolising.BASE_POWER: Enchanting Base Power
+        metabolising.POWER_PER_RANK: Enchanting Power Per Rank
+        metabolising.POWER_RANGE: Enchanting Power Range
+        metabolising.EXHAUSTION_COST: Exhaustion Per Durability
+        metabolising.FOOD_THRESHOLD: Food Threshold
+
+        monogamous: Monogamous
+        monogamous.ENABLED: Enable
+        monogamous.IS_TREASURE: Is Treasure
+        monogamous.IS_FOR_SALE: Sold by Villagers
+        monogamous.RARITY: Rarity
+        monogamous.SOFT_CAP: Soft Cap
+        monogamous.HARD_CAP: Hard Cap
+        monogamous.BASE_POWER: Enchanting Base Power
+        monogamous.POWER_PER_RANK: Enchanting Power Per Rank
+        monogamous.POWER_RANGE: Enchanting Power Range
+        monogamous.DURATION: Duration
+
+        mounted: Mounted
+        mounted.ENABLED: Enable
+        mounted.IS_TREASURE: Is Treasure
+        mounted.IS_FOR_SALE: Sold by Villagers
+        mounted.RARITY: Rarity
+        mounted.SOFT_CAP: Soft Cap
+        mounted.HARD_CAP: Hard Cap
+        mounted.BASE_POWER: Enchanting Base Power
+        mounted.POWER_PER_RANK: Enchanting Power Per Rank
+        mounted.POWER_RANGE: Enchanting Power Range
+        mounted.DAMAGE_BASE: Base Damage
+        mounted.DAMAGE_PER_LEVEL: Damage Per Level
+        mounted.PROJECTILE_BASE: Base Projectile Damage
+        mounted.PROJECTILE_PER_LEVEL: Projectile Damage Per Level
+
+        outburst: Outburst
+        outburst.ENABLED: Enable
+        outburst.IS_TREASURE: Is Treasure
+        outburst.IS_FOR_SALE: Sold by Villagers
+        outburst.RARITY: Rarity
+        outburst.SOFT_CAP: Soft Cap
+        outburst.HARD_CAP: Hard Cap
+        outburst.BASE_POWER: Enchanting Base Power
+        outburst.POWER_PER_RANK: Enchanting Power Per Rank
+        outburst.POWER_RANGE: Enchanting Power Range
+        outburst.RAGE_PER_HIT: Rage Per Hit
+        outburst.RAGE_THRESHOLD: Rage Threshold
+        outburst.SHOCKWAVE_FORCE: Shockwave Force
+        outburst.SHOCKWAVE_POWER: Shockwave Power
+        outburst.SHOCKWAVE_RANGE: Shockwave Range
+
+        phaseLeap: Phase Leap
+        phaseLeap.ENABLED: Enable
+        phaseLeap.IS_TREASURE: Is Treasure
+        phaseLeap.IS_FOR_SALE: Sold by Villagers
+        phaseLeap.RARITY: Rarity
+        phaseLeap.SOFT_CAP: Soft Cap
+        phaseLeap.HARD_CAP: Hard Cap
+        phaseLeap.BASE_POWER: Enchanting Base Power
+        phaseLeap.POWER_PER_RANK: Enchanting Power Per Rank
+        phaseLeap.POWER_RANGE: Enchanting Power Range
+
+        phaseStrafe: Phase Strafe
+        phaseStrafe.ENABLED: Enable
+        phaseStrafe.IS_TREASURE: Is Treasure
+        phaseStrafe.IS_FOR_SALE: Sold by Villagers
+        phaseStrafe.RARITY: Rarity
+        phaseStrafe.SOFT_CAP: Soft Cap
+        phaseStrafe.HARD_CAP: Hard Cap
+        phaseStrafe.BASE_POWER: Enchanting Base Power
+        phaseStrafe.POWER_PER_RANK: Enchanting Power Per Rank
+        phaseStrafe.POWER_RANGE: Enchanting Power Range
+
+        photosynthetic: Photosynthetic
+        photosynthetic.ENABLED: Enable
+        photosynthetic.IS_TREASURE: Is Treasure
+        photosynthetic.IS_FOR_SALE: Sold by Villagers
+        photosynthetic.RARITY: Rarity
+        photosynthetic.SOFT_CAP: Soft Cap
+        photosynthetic.HARD_CAP: Hard Cap
+        photosynthetic.BASE_POWER: Enchanting Base Power
+        photosynthetic.POWER_PER_RANK: Enchanting Power Per Rank
+        photosynthetic.POWER_RANGE: Enchanting Power Range
+        photosynthetic.LIGHT_MINIMUM: Light Minimum
+        photosynthetic.REPAIR_PERIOD: Repair Period
+
+        polygamous: Polygamous
+        polygamous.ENABLED: Enable
+        polygamous.IS_TREASURE: Is Treasure
+        polygamous.IS_FOR_SALE: Sold by Villagers
+        polygamous.RARITY: Rarity
+        polygamous.SOFT_CAP: Soft Cap
+        polygamous.HARD_CAP: Hard Cap
+        polygamous.BASE_POWER: Enchanting Base Power
+        polygamous.POWER_PER_RANK: Enchanting Power Per Rank
+        polygamous.POWER_RANGE: Enchanting Power Range
+        polygamous.DURATION: Duration
+
+        priming: Priming
+        priming.ENABLED: Enable
+        priming.IS_TREASURE: Is Treasure
+        priming.IS_FOR_SALE: Sold by Villagers
+        priming.RARITY: Rarity
+        priming.SOFT_CAP: Soft Cap
+        priming.HARD_CAP: Hard Cap
+        priming.BASE_POWER: Enchanting Base Power
+        priming.POWER_PER_RANK: Enchanting Power Per Rank
+        priming.POWER_RANGE: Enchanting Power Range
+        priming.DURATION: Duration
+        
+        prospector: Prospector
+        prospector.ENABLED: Enable
+        prospector.IS_TREASURE: Is Treasure
+        prospector.IS_FOR_SALE: Sold by Villagers
+        prospector.RARITY: Rarity
+        prospector.SOFT_CAP: Soft Cap
+        prospector.HARD_CAP: Hard Cap
+        prospector.BASE_POWER: Enchanting Base Power
+        prospector.POWER_PER_RANK: Enchanting Power Per Rank
+        prospector.POWER_RANGE: Enchanting Power Range
+        prospector.RADIUS: Ore Detection Radius
+        prospector.DETECT_ABUSE: Detect Abuse
+        prospector.NEW_CHUNK_GRACE_PERIOD: New Chunk Grace Period
+
+        rampage: Rampage
+        rampage.ENABLED: Enable
+        rampage.IS_TREASURE: Is Treasure
+        rampage.IS_FOR_SALE: Sold by Villagers
+        rampage.RARITY: Rarity
+        rampage.SOFT_CAP: Soft Cap
+        rampage.HARD_CAP: Hard Cap
+        rampage.BASE_POWER: Enchanting Base Power
+        rampage.POWER_PER_RANK: Enchanting Power Per Rank
+        rampage.POWER_RANGE: Enchanting Power Range
+        rampage.DAMAGE_BASE: Base Damage
+        rampage.DAMAGE_PER_LEVEL: Damage Per Level
+        rampage.DURATION_BASE: Base Duration
+        rampage.DURATION_PER_LEVEL: Duration Per Level
+
+        redAlert: Red Alert
+        redAlert.ENABLED: Enable
+        redAlert.IS_TREASURE: Is Treasure
+        redAlert.IS_FOR_SALE: Sold by Villagers
+        redAlert.RARITY: Rarity
+        redAlert.SOFT_CAP: Soft Cap
+        redAlert.HARD_CAP: Hard Cap
+        redAlert.BASE_POWER: Enchanting Base Power
+        redAlert.POWER_PER_RANK: Enchanting Power Per Rank
+        redAlert.POWER_RANGE: Enchanting Power Range
+        redAlert.MINIMUM_RECOVERY_TIME: Red Alert Minimum Recovery Time
+        redAlert.RECOVERY_RATE: Base Recovery Rate
+        redAlert.RECOVERY_REDUCTION: Recovery Rate Per Level
+        redAlert.SHIELD_DURATION: Shield Duration
+
+        repulsive: Repulsive
+        repulsive.ENABLED: Enable
+        repulsive.IS_TREASURE: Is Treasure
+        repulsive.IS_FOR_SALE: Sold by Villagers
+        repulsive.RARITY: Rarity
+        repulsive.SOFT_CAP: Soft Cap
+        repulsive.HARD_CAP: Hard Cap
+        repulsive.BASE_POWER: Enchanting Base Power
+        repulsive.POWER_PER_RANK: Enchanting Power Per Rank
+        repulsive.POWER_RANGE: Enchanting Power Range
+        repulsive.RANGE: Range
+        repulsive.STRENGTH: Strength
+
+        resurfacing: Resurfacing
+        resurfacing.ENABLED: Enable
+        resurfacing.IS_TREASURE: Is Treasure
+        resurfacing.IS_FOR_SALE: Sold by Villagers
+        resurfacing.RARITY: Rarity
+        resurfacing.SOFT_CAP: Soft Cap
+        resurfacing.HARD_CAP: Hard Cap
+        resurfacing.BASE_POWER: Enchanting Base Power
+        resurfacing.POWER_PER_RANK: Enchanting Power Per Rank
+        resurfacing.POWER_RANGE: Enchanting Power Range
+        resurfacing.RANGE: Range
+        resurfacing.STRENGTH: Strength
+        resurfacing.ATTEMPTS_PER_CHEST: Attempts Per Chest
+        resurfacing.CHANCE_PER_ATTEMPT: Chance Per Attempt
+
+        rockCollector: Rock Collecting
+        rockCollector.ENABLED: Enable
+        rockCollector.IS_TREASURE: Is Treasure
+        rockCollector.IS_FOR_SALE: Sold by Villagers
+        rockCollector.RARITY: Rarity
+        rockCollector.SOFT_CAP: Soft Cap
+        rockCollector.HARD_CAP: Hard Cap
+        rockCollector.BASE_POWER: Enchanting Base Power
+        rockCollector.POWER_PER_RANK: Enchanting Power Per Rank
+        rockCollector.POWER_RANGE: Enchanting Power Range
+
+        saturated: Saturated
+        saturated.ENABLED: Enable
+        saturated.IS_TREASURE: Is Treasure
+        saturated.IS_FOR_SALE: Sold by Villagers
+        saturated.RARITY: Rarity
+        saturated.SOFT_CAP: Soft Cap
+        saturated.HARD_CAP: Hard Cap
+        saturated.BASE_POWER: Enchanting Base Power
+        saturated.POWER_PER_RANK: Enchanting Power Per Rank
+        saturated.POWER_RANGE: Enchanting Power Range
+        saturated.EXHAUSTION_COST: Exhaustion Per Durability
+        saturated.FOOD_THRESHOLD: Food Threshold
+
+        selfish: Selfish
+        selfish.ENABLED: Enable
+        selfish.IS_TREASURE: Is Treasure
+        selfish.IS_FOR_SALE: Sold by Villagers
+        selfish.RARITY: Rarity
+        selfish.SOFT_CAP: Soft Cap
+        selfish.HARD_CAP: Hard Cap
+        selfish.BASE_POWER: Enchanting Base Power
+        selfish.POWER_PER_RANK: Enchanting Power Per Rank
+        selfish.POWER_RANGE: Enchanting Power Range
+
+        scalping: Scalping
+        scalping.ENABLED: Enable
+        scalping.IS_TREASURE: Is Treasure
+        scalping.IS_FOR_SALE: Sold by Villagers
+        scalping.RARITY: Rarity
+        scalping.SOFT_CAP: Soft Cap
+        scalping.HARD_CAP: Hard Cap
+        scalping.BASE_POWER: Enchanting Base Power
+        scalping.POWER_PER_RANK: Enchanting Power Per Rank
+        scalping.POWER_RANGE: Enchanting Power Range
+        scalping.DROP_FACTOR_PER_LEVEL: Drop Factor Per Level
+
+        skotosynthetic: Skotosynthetic
+        skotosynthetic.ENABLED: Enable
+        skotosynthetic.IS_TREASURE: Is Treasure
+        skotosynthetic.IS_FOR_SALE: Sold by Villagers
+        skotosynthetic.RARITY: Rarity
+        skotosynthetic.SOFT_CAP: Soft Cap
+        skotosynthetic.HARD_CAP: Hard Cap
+        skotosynthetic.BASE_POWER: Enchanting Base Power
+        skotosynthetic.POWER_PER_RANK: Enchanting Power Per Rank
+        skotosynthetic.POWER_RANGE: Enchanting Power Range
+        skotosynthetic.LIGHT_MAXIMUM: Light Maximum
+        skotosynthetic.REPAIR_PERIOD: Repair Period
+
+        spikes: Spikes
+        spikes.ENABLED: Enable
+        spikes.IS_TREASURE: Is Treasure
+        spikes.IS_FOR_SALE: Sold by Villagers
+        spikes.RARITY: Rarity
+        spikes.SOFT_CAP: Soft Cap
+        spikes.HARD_CAP: Hard Cap
+        spikes.BASE_POWER: Enchanting Base Power
+        spikes.POWER_PER_RANK: Enchanting Power Per Rank
+        spikes.POWER_RANGE: Enchanting Power Range
+        spikes.DAMAGE_PER_LEVEL: Damage Per Level
+
+        storied: Storied
+        storied.ENABLED: Enable
+        storied.IS_TREASURE: Is Treasure
+        storied.IS_FOR_SALE: Sold by Villagers
+        storied.RARITY: Rarity
+        storied.SOFT_CAP: Soft Cap
+        storied.HARD_CAP: Hard Cap
+        storied.BASE_POWER: Enchanting Base Power
+        storied.POWER_PER_RANK: Enchanting Power Per Rank
+        storied.POWER_RANGE: Enchanting Power Range
+        storied.WORDS_PER_LEVEL_BASE: Words Per Level Base
+        storied.WORDS_PER_LEVEL_FIRST_DEGREE: Words Per Level First Degree
+        storied.WORDS_PER_LEVEL_SECOND_DEGREE: Words Per Level Second Degree
+        storied.ALLOW_NEW_PLOTHOOKS: Allow New Plothooks
+        storied.RARITY_OF_NEW_PLOTHOOKS: Rarity Of New Plothooks
+
+        tethering: Tethering
+        tethering.ENABLED: Enable
+        tethering.IS_TREASURE: Is Treasure
+        tethering.IS_FOR_SALE: Sold by Villagers
+        tethering.RARITY: Rarity
+        tethering.SOFT_CAP: Soft Cap
+        tethering.HARD_CAP: Hard Cap
+        tethering.BASE_POWER: Enchanting Base Power
+        tethering.POWER_PER_RANK: Enchanting Power Per Rank
+        tethering.POWER_RANGE: Enchanting Power Range
+        tethering.LEASH_LENGTH: Leash Length
+        tethering.ATTRACTION_FACTOR: Attraction Speed
+        
+        trophyCollector: Trophy Collecting
+        trophyCollector.ENABLED: Enable
+        trophyCollector.IS_TREASURE: Is Treasure
+        trophyCollector.IS_FOR_SALE: Sold by Villagers
+        trophyCollector.RARITY: Rarity
+        trophyCollector.SOFT_CAP: Soft Cap
+        trophyCollector.HARD_CAP: Hard Cap
+        trophyCollector.BASE_POWER: Enchanting Base Power
+        trophyCollector.POWER_PER_RANK: Enchanting Power Per Rank
+        trophyCollector.POWER_RANGE: Enchanting Power Range
+        
+        POWER_TO_EXCEED_SOFT_CAP: Power To Exceed Soft Cap
+        COLLECTOR_DISPLAY_UPDATE_PERIOD: Collector Display Update Period
+        COLLECTOR_WINDOW_SIZE: Entries Shown On Collector Tooltip
+        DISABLE_INCOMPATIBILITY: DISABLE_INCOMPATIBILITY
+        DESTRUCTIVE_SHOCKWAVES: DESTRUCTIVE_SHOCKWAVES
+        UNLIMITED_CAVE_IN: UNLIMITED_CAVE_IN
+        TAKE_ANY_TROPHY: TAKE_ANY_TROPHY
+        COLLECT_ANY_ROCK: COLLECT_ANY_ROCK
+        YANDERE_TOOLS: YANDERE_TOOLS
+        STORIED_WORLD: STORIED_WORLD

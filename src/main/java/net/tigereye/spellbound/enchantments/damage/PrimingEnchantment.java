@@ -43,7 +43,7 @@ public class PrimingEnchantment extends SBEnchantment implements CustomCondition
             if(primedInstance != null){
                 effectLevel = Math.min(primedInstance.getAmplifier()+1, level-1);
             }
-            ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(SBStatusEffects.PRIMED, 60, effectLevel));
+            ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(SBStatusEffects.PRIMED, Spellbound.config.priming.DURATION, effectLevel));
         }
 
         super.onTargetDamaged(user, target, level);

@@ -104,7 +104,7 @@ public abstract class SBEnchantment extends Enchantment {
     public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
 
     //for when an item breaks with Legacy
-    public void onLegacyToolBreak(int level, ItemStack book, ItemStack itemStack, PlayerEntity entity) {}
+    public void onLegacyToolBreak(int level, ItemStack book, ItemStack itemStack, Entity entity) {}
 
     //for when the user is struck, before armor is applied
     public float onPreArmorDefense(int level, ItemStack stack, DamageSource source, LivingEntity defender, float amount){return amount;}
@@ -135,7 +135,9 @@ public abstract class SBEnchantment extends Enchantment {
 
     public void onEquipmentChange(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){}
 
-    public void onToolBreak(int level, ItemStack itemStack, PlayerEntity entity) {}
+    public boolean beforeToolBreak(int level, ItemStack itemStack, Entity entity) {return true;}
+
+    public void onToolBreak(int level, ItemStack itemStack, Entity entity) {}
 
     public float getArmorAmount(int level, ItemStack stack, LivingEntity entity) {
         return 0;

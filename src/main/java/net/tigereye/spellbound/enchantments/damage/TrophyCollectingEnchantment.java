@@ -75,11 +75,16 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
     }
 
     @Override
-    public void onLegacyToolBreak(int level, ItemStack book, ItemStack itemStack, PlayerEntity entity) {
+    public void onLegacyToolBreak(int level, ItemStack book, ItemStack itemStack, Entity entity) {
         ItemStack bagOfTrophies = new ItemStack(SBItems.BAG_OF_TROPHIES);
         bagOfTrophies.setSubNbt(TROPHY_COLLECTOR_KEY, itemStack.getSubNbt(TROPHY_COLLECTOR_KEY));
-        if(!entity.giveItemStack(bagOfTrophies)){
-            entity.dropStack(bagOfTrophies,0.5f);
+        if(entity instanceof PlayerEntity pEntity) {
+            if (!pEntity.giveItemStack(bagOfTrophies)) {
+                entity.dropStack(bagOfTrophies, 0.5f);
+            }
+        }
+        else{
+            entity.dropStack(bagOfTrophies, 0.5f);
         }
     }
 

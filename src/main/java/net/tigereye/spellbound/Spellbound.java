@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.ResourceType;
 import net.tigereye.spellbound.config.SBConfig;
 import net.tigereye.spellbound.data.ProspectorManager;
+import net.tigereye.spellbound.data.ResurfacingItemsPersistentState;
 import net.tigereye.spellbound.registration.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 public class Spellbound implements ModInitializer{
     
     public static final String MODID = "spellbound";
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     public static final Logger LOGGER = LogManager.getLogger();
     public static SBConfig config;
 
@@ -30,5 +31,6 @@ public class Spellbound implements ModInitializer{
         SBStatusEffects.register();
         SBTags.register();
         SBNetworking.register();
+        ResurfacingItemsPersistentState.registerResurfacingInChest();
     }
 }

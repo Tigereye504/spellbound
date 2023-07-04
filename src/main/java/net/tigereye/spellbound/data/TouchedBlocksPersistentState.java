@@ -3,12 +3,11 @@ package net.tigereye.spellbound.data;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
-import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -17,7 +16,6 @@ import java.util.*;
 public class TouchedBlocksPersistentState extends PersistentState {
 
     public static final String TOUCHED_BLOCKS_LIST_KEY = Spellbound.MODID+"TouchedBlocks";
-
     private final Map<ChunkPos, Set<Long>> touchedBlocks = new HashMap<>();
 
     public boolean isBlockTouched(BlockPos pos){
@@ -75,9 +73,8 @@ public class TouchedBlocksPersistentState extends PersistentState {
         return tbpState;
     }
 
-    public static TouchedBlocksPersistentState getTouchedBlocksPersistentState(MinecraftServer server){
-        PersistentStateManager persistentStateManager = server
-                .getWorld(World.OVERWORLD).getPersistentStateManager();
+    public static TouchedBlocksPersistentState getTouchedBlocksPersistentState(ServerWorld world){
+        PersistentStateManager persistentStateManager = world.getPersistentStateManager();
         return persistentStateManager.getOrCreate(
                 TouchedBlocksPersistentState::createFromNbt,
                 TouchedBlocksPersistentState::new,

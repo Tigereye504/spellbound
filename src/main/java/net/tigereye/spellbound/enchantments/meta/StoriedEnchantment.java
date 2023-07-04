@@ -1,6 +1,7 @@
 package net.tigereye.spellbound.enchantments.meta;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
@@ -26,12 +27,10 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class StoriedEnchantment extends SBEnchantment {
-
-    public static final String STORIED_CHAPTER_KEY = Spellbound.MODID+"StoriedChapter";
     public static final String STORIED_XP_KEY = Spellbound.MODID+"StoriedXP";
-    public static final String STORIED_NEXT_CHAPTER_KEY = Spellbound.MODID+"StoriedNextChapter";
 
     public StoriedEnchantment() {
         super(SpellboundUtil.rarityLookup(Spellbound.config.storied.RARITY), EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
@@ -69,33 +68,40 @@ public class StoriedEnchantment extends SBEnchantment {
             gainStoryXP(stack,player,state.getBlock().getHardness()*0.66F);
         }
     }
+
+    @Override
+    public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
+        List<Text> output = new ArrayList<>();
+        NbtCompound nbt = stack.getOrCreateNbt();
+        int chapter = getStoryChapter(stack);
+        output.add(Text.literal(
+                "Chapter "+ chapter +": "+((int)nbt.getFloat(STORIED_XP_KEY))+"/"
+                        +getXPToNextChapter(chapter)));
+        return output;
+    }
+
     private void gainStoryXP(ItemStack stack, LivingEntity owner, float xp){
         NbtCompound nbt = stack.getOrCreateNbt();
-        if(!nbt.contains(STORIED_CHAPTER_KEY)){
-            beginStory(nbt,owner,stack,EnchantmentHelper.get(stack));
+        if(!nbt.contains(STORIED_XP_KEY)){
+            beginStory(owner,stack,EnchantmentHelper.get(stack));
         }
-        int currentLevel = nbt.getInt(STORIED_CHAPTER_KEY);
+        int currentChapter = getStoryChapter(stack);
         float currentXP = xp + nbt.getFloat(STORIED_XP_KEY);
-        double xpToNextChapter = getXPToNextChapter(currentLevel);
-        boolean advanced = false;
+        double xpToNextChapter = getXPToNextChapter(currentChapter);
         while(currentXP > xpToNextChapter){
             currentXP -= xpToNextChapter;
-            ++currentLevel;
-            xpToNextChapter = getXPToNextChapter(currentLevel);
-            advanced = advanceStory(nbt,owner,stack,EnchantmentHelper.get(stack));
+            ++currentChapter;
+            xpToNextChapter = getXPToNextChapter(currentChapter);
+            advanceStory(owner,stack,EnchantmentHelper.get(stack));
         }
-        nbt.putInt(STORIED_CHAPTER_KEY,currentLevel);
         nbt.putFloat(STORIED_XP_KEY,currentXP);
     }
 
-    private void beginStory(NbtCompound nbt, LivingEntity entity, ItemStack stack, Map<Enchantment,Integer> enchantments){
+    private void beginStory(LivingEntity entity, ItemStack stack, Map<Enchantment,Integer> enchantments){
 
-        //First, set the story progress based on current durability missing
-        //nbt.putInt(STORIED_CHAPTER_KEY,(int)(damageRatio / Spellbound.config.storied.PERCENT_DURABILITY_PER_UPGRADE)+1);
-        nbt.putInt(STORIED_CHAPTER_KEY,0);
-        //TODO: Second, get one of those rare item name generators, use it if the item lacks a custom name.
+        //TODO: Get one of those rare item name generators, use it if the item lacks a custom name.
 
-        //TODO: Third, check if at least one other enchantment exists. If not, roll up a new enchantment to get started.
+        //Check if at least one other enchantment exists. If not, roll up a new enchantment to get started.
         String message = stack.getName().getString()+ "'s story begins.";
         if(getLevelableEnchantments(enchantments).isEmpty()) {
             Enchantment selection = selectRandomAddableEnchantment(entity,stack,true);
@@ -114,12 +120,19 @@ public class StoriedEnchantment extends SBEnchantment {
         }
     }
 
-    private double getXPToNextChapter(int level){
-        return (Spellbound.config.storied.WORDS_PER_LEVEL_BASE
+    private int getXPToNextChapter(int level){
+        return (int)((Spellbound.config.storied.WORDS_PER_LEVEL_BASE
                 +(Spellbound.config.storied.WORDS_PER_LEVEL_FIRST_DEGREE*(level-1)
-                +Spellbound.config.storied.WORDS_PER_LEVEL_SECOND_DEGREE *Math.pow(level-1,2)));
+                +Spellbound.config.storied.WORDS_PER_LEVEL_SECOND_DEGREE *Math.pow(level-1,2))));
     }
-    private boolean advanceStory(NbtCompound nbt, LivingEntity entity, ItemStack stack, Map<Enchantment,Integer> enchantments){
+
+    private int getStoryChapter(ItemStack stack){
+        AtomicInteger chapter = new AtomicInteger(-1);
+        Map<Enchantment,Integer> enchantments = EnchantmentHelper.get(stack);
+        enchantments.forEach(((enchantment, integer) -> chapter.addAndGet(integer)));
+        return chapter.get();
+    }
+    private void advanceStory(LivingEntity entity, ItemStack stack, Map<Enchantment,Integer> enchantments){
         //Determine which enchantments are not at max level
         List<Pair<Enchantment,Integer>> levelableEnchantments = getLevelableEnchantments(enchantments);
         //if there are no level-able enchantments, try to add a new enchantment. Otherwise, the item's story is finished.
@@ -146,14 +159,11 @@ public class StoriedEnchantment extends SBEnchantment {
 
         //apply the upgrade or remove storied
         if(selection != null){
-            nbt.putInt(STORIED_CHAPTER_KEY,nbt.getInt(STORIED_CHAPTER_KEY)+1);
             ((SpellboundLivingEntity)entity).addNextTickAction(new StoriedSetEnchantmentLevelAction(stack,selection,level));
-            String message = stack.getName().getString() + "'s story continues (Chapter "+nbt.getInt(STORIED_CHAPTER_KEY)+"). "
-                    +"Gained "+ selection.getName(level).getString() +"!";
+            String message = stack.getName().getString() + "'s story continues. Gained "+ selection.getName(level).getString() +"!";
             if(entity instanceof ServerPlayerEntity pEntity) {
                 pEntity.sendMessage(Text.literal(message), true);
             }
-            return true;
         }
         else{
             ((SpellboundLivingEntity) entity).addNextTickAction(new StoriedSetEnchantmentLevelAction(stack, SBEnchantments.STORIED, 0));
@@ -161,7 +171,6 @@ public class StoriedEnchantment extends SBEnchantment {
             if(entity instanceof ServerPlayerEntity pEntity) {
                 pEntity.sendMessage(Text.literal(message), true);
             }
-            return false;
         }
     }
 

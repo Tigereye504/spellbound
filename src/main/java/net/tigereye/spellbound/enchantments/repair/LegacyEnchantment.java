@@ -3,6 +3,7 @@ package net.tigereye.spellbound.enchantments.repair;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -40,13 +41,19 @@ public class LegacyEnchantment extends SBEnchantment {
         return super.isAcceptableItem(stack);
     }
 
-    public void onToolBreak(int level, ItemStack itemStack, PlayerEntity entity) {
+    @Override
+    public void onToolBreak(int level, ItemStack itemStack, Entity entity) {
         ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
         Map<Enchantment,Integer> enchants = EnchantmentHelper.get(itemStack);
         EnchantmentHelper.set(enchants,book);
         SBEnchantmentHelper.onLegacyToolBreak(book,itemStack,entity);
-        if(!entity.giveItemStack(book)){
-            entity.dropStack(book,0.5f);
+        if(entity instanceof PlayerEntity pEntity) {
+            if (!pEntity.giveItemStack(book)) {
+                entity.dropStack(book, 0.5f);
+            }
+        }
+        else{
+            entity.dropStack(book, 0.5f);
         }
     }
 

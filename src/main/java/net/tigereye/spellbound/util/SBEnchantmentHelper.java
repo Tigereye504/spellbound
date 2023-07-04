@@ -46,6 +46,7 @@ import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SBEnchantmentHelper {
     //called after vanilla's getAttackDamage
@@ -248,11 +249,20 @@ public class SBEnchantmentHelper {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDoRedHealthDamage(level,itemStack,attacker,victim,source,amount),attacker.getItemsEquipped());
     }
 
-    public static void onToolBreak(ItemStack stack, PlayerEntity entity) {
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onToolBreak(level, itemStack, entity), stack);
+    public static boolean onItemDestroyed(ItemStack stack, Entity entity) {
+        AtomicBoolean willBreak = new AtomicBoolean(true);
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
+            willBreak.set(enchantment.beforeToolBreak(level, itemStack, entity));
+        }, stack);
+        if(willBreak.get()){
+            forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
+                enchantment.onToolBreak(level, itemStack, entity);
+            }, stack);
+        }
+        return willBreak.get();
     }
 
-    public static void onLegacyToolBreak(ItemStack book, ItemStack stack, PlayerEntity entity) {
+    public static void onLegacyToolBreak(ItemStack book, ItemStack stack, Entity entity) {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onLegacyToolBreak(level, book, itemStack, entity), stack);
     }
 

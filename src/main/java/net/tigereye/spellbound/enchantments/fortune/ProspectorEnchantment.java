@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -46,35 +47,35 @@ public class ProspectorEnchantment extends SBEnchantment {
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.prospector.IS_FOR_SALE;}
     @Override
     public void onBreakBlock(int level, ItemStack stack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        //TODO: Populate and check the anti-abuse list
         if(world.isClient()){
             return;
         }
         if(state.getBlock().getHardness() == 0){
             return;
         }
-        if(ProspectorManager.detectTouchedBlock(world, pos)){
-            return;
-        }
-        Map<Identifier,Float> rates = ProspectorManager.getDropRateMapWithBonuses(world, pos,Spellbound.config.prospector.RADIUS);
-        Random random = player.getRandom();
-        for (Map.Entry<Identifier,Float> entry: rates.entrySet()){
-            if(entry.getValue() > 0) {
-                Item treasure = Registry.ITEM.get(entry.getKey());
-                if (treasure != Items.AIR) {
-                    if(Spellbound.DEBUG){
-                        Spellbound.LOGGER.info("Prospecting "+ Text.translatable(treasure.getTranslationKey()).getString() + ". Attempts: "+level+". Odds: " + entry.getValue());
-                    }
-                    int count = 0;
-                    for (int i = 0; i < level; i++) {
-                        if (random.nextFloat() < entry.getValue()){
-                            count++;
+        if(world instanceof ServerWorld sWorld) {
+            if (ProspectorManager.detectTouchedBlock(sWorld, pos)) {
+                return;
+            }
+            Map<Identifier, Float> rates = ProspectorManager.getDropRateMapWithBonuses(sWorld, pos, Spellbound.config.prospector.RADIUS);
+            Random random = player.getRandom();
+            for (Map.Entry<Identifier, Float> entry : rates.entrySet()) {
+                if (entry.getValue() > 0) {
+                    Item treasure = Registry.ITEM.get(entry.getKey());
+                    if (treasure != Items.AIR) {
+                        if (Spellbound.DEBUG) {
+                            Spellbound.LOGGER.info("Prospecting " + Text.translatable(treasure.getTranslationKey()).getString() + ". Attempts: " + level + ". Odds: " + entry.getValue());
                         }
+                        int count = 0;
+                        for (int i = 0; i < level; i++) {
+                            if (random.nextFloat() < entry.getValue()) {
+                                count++;
+                            }
+                        }
+                        ((SpellboundLivingEntity) player).addNextTickAction(new ProspectorAction(sWorld, pos, new ItemStack(treasure, count)));
+                    } else {
+                        Spellbound.LOGGER.error(player.getName().getString() + "'s Prospector is looking for " + entry.getKey() + ", but cannot find it in the item registry!");
                     }
-                    ((SpellboundLivingEntity)player).addNextTickAction(new ProspectorAction(world, pos, new ItemStack(treasure, count)));
-                }
-                else{
-                    Spellbound.LOGGER.error(player.getName().getString() + "'s Prospector is looking for " + entry.getKey() + ", but cannot find it in the item registry!");
                 }
             }
         }

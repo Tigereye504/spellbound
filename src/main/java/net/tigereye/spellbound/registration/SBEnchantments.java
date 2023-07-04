@@ -64,6 +64,7 @@ public class SBEnchantments {
     public static final SBEnchantment RAMPAGE = new RampageEnchantment();
     public static final SBEnchantment RED_ALERT = new RedAlertEnchantment();
     public static final SBEnchantment REPULSIVE = new RepulsiveEnchantment();
+    public static final SBEnchantment RESURFACING = new ResurfacingEnchantment();
     public static final RockCollectingEnchantment ROCK_COLLECTING = new RockCollectingEnchantment();
     public static final SBEnchantment SATURATED = new SaturatedEnchantment();
     public static final SBEnchantment SCALPING = new ScalpingEnchantment();
@@ -105,6 +106,7 @@ public class SBEnchantments {
         register("rampage", RAMPAGE);
         register("red_alert", RED_ALERT);
         register("repulsive", REPULSIVE);
+        register("resurfacing", RESURFACING);
         register("rock_collecting", ROCK_COLLECTING);
         register("saturated", SATURATED);
         register("scalping", SCALPING);

@@ -5,13 +5,13 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.tigereye.spellbound.Spellbound;
 
 import java.io.InputStream;
@@ -26,7 +26,7 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
     private static final Map<Identifier, Float> baseDropRateMap = new HashMap<>();
     private static final Map<Identifier, List<Pair<Identifier,Float>>> blockDropBonusMap = new HashMap<>();
     private static final Map<TagKey<Block>, List<Pair<Identifier,Float>>> tagDropBonusMap = new HashMap<>();
-    private static TouchedBlocksPersistentState tbpState;
+    private static final Map<DimensionType,TouchedBlocksPersistentState> tbpState = new HashMap<>();
 
     @Override
     public Identifier getFabricId() {
@@ -88,7 +88,7 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
         return baseDropRateMap;
     }
 
-    public static Map<Identifier, Float> getDropRateMapWithBonuses(World world, BlockPos center, int radius){
+    public static Map<Identifier, Float> getDropRateMapWithBonuses(ServerWorld world, BlockPos center, int radius){
         Map<Identifier, Float> output = new HashMap<>(getBaseDropRateMap());
         Set<Block> foundBlocks = new HashSet<>();
         BlockPos lowerCorner = center.add(-radius,-radius,-radius);
@@ -135,15 +135,13 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
         return output;
     }
 
-    public static boolean detectTouchedBlock(World world, BlockPos pos){
+    public static boolean detectTouchedBlock(ServerWorld world, BlockPos pos){
         if(Spellbound.config.prospector.DETECT_ABUSE) {
-            MinecraftServer server = world.getServer();
-            if (server != null) {
-                if (tbpState == null) {
-                    tbpState = TouchedBlocksPersistentState.getTouchedBlocksPersistentState(server);
-                }
-                return tbpState.isBlockTouched(pos);
+            DimensionType dimensionType = world.getDimension();
+            if (!tbpState.containsKey(dimensionType)) {
+                tbpState.put(dimensionType,TouchedBlocksPersistentState.getTouchedBlocksPersistentState(world));
             }
+            return tbpState.get(dimensionType).isBlockTouched(pos);
         }
         return false;
     }

@@ -3,10 +3,14 @@ package net.tigereye.spellbound.enchantments.efficiency;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.ShovelItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -66,11 +70,16 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
     }
 
     @Override
-    public void onLegacyToolBreak(int level, ItemStack book, ItemStack itemStack, PlayerEntity entity) {
+    public void onLegacyToolBreak(int level, ItemStack book, ItemStack itemStack, Entity entity) {
         ItemStack bagOfRocks = new ItemStack(SBItems.BAG_OF_ROCKS);
         bagOfRocks.setSubNbt(ROCK_COLLECTOR_KEY, itemStack.getSubNbt(ROCK_COLLECTOR_KEY));
-        if(!entity.giveItemStack(bagOfRocks)){
-            entity.dropStack(bagOfRocks,0.5f);
+        if(entity instanceof PlayerEntity pEntity) {
+            if (!pEntity.giveItemStack(bagOfRocks)) {
+                entity.dropStack(bagOfRocks, 0.5f);
+            }
+        }
+        else{
+            entity.dropStack(bagOfRocks, 0.5f);
         }
     }
 

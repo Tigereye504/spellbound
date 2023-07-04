@@ -1,6 +1,5 @@
 package net.tigereye.spellbound.mixins;
 
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -14,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
 import net.minecraft.util.math.random.Random;
 
 @Mixin(ItemStack.class)
@@ -30,7 +28,7 @@ public class ItemStackMixin {
     @Inject(at = @At(value = "RETURN"),method = "damage")
     public <T extends LivingEntity> void spellboundItemStackDamageMixin(int amount, Random random, ServerPlayerEntity player, CallbackInfoReturnable<Boolean> info){
         if(info.getReturnValue()){
-            SBEnchantmentHelper.onToolBreak((ItemStack)(Object)this, player);
+            SBEnchantmentHelper.onItemDestroyed((ItemStack)(Object)this, player);
         }
     }
 
