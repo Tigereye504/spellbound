@@ -1,6 +1,7 @@
 package net.tigereye.spellbound.enchantments.lure;
 
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.*;
@@ -19,6 +20,7 @@ import net.minecraft.stat.Stats;
 import net.minecraft.tag.ItemTags;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.List;
@@ -45,7 +47,10 @@ public class FisherOfMenEnchantment extends SBEnchantment {
     public boolean isTreasure() {return Spellbound.config.fisherOfMen.IS_TREASURE;}
     @Override
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.fisherOfMen.IS_FOR_SALE;}
-
+    @Override
+    public boolean canAccept(Enchantment other) {
+        return super.canAccept(other) && other != SBEnchantments.DULLNESS;
+    }
     @Override
     public void onPullHookedEntity(int level, FishingBobberEntity bobber, ItemStack stack, LivingEntity user, Entity target){
         target.damage(DamageSource.thrownProjectile(bobber,user),
@@ -60,7 +65,6 @@ public class FisherOfMenEnchantment extends SBEnchantment {
         double d = user.getX() - bobber.getX();
         double e = user.getY() - bobber.getY();
         double f = user.getZ() - bobber.getZ();
-        double g = 0.1D;
 
         double vX = d * 0.1D;
         double vY = e * 0.1D + Math.sqrt(Math.sqrt(d * d + e * e + f * f)) * 0.08D;
