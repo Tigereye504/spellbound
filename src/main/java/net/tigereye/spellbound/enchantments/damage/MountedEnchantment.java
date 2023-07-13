@@ -1,20 +1,19 @@
 package net.tigereye.spellbound.enchantments.damage;
 
-import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
-public class MountedEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class MountedEnchantment extends SBEnchantment{
 
     public MountedEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.mounted.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.mounted.RARITY), SBEnchantmentTargets.ANY_WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
 
     @Override
@@ -29,11 +28,10 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
     public int getPowerPerRank(){return Spellbound.config.mounted.POWER_PER_RANK;}
     @Override
     public int getPowerRange(){return Spellbound.config.mounted.POWER_RANGE;}
-
     @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return isAcceptableAtTable(stack);
-    }
+    public boolean isTreasure() {return Spellbound.config.mounted.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.mounted.IS_FOR_SALE;}
 
     @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
@@ -49,14 +47,5 @@ public class MountedEnchantment extends SBEnchantment implements CustomCondition
             return damage * ((Spellbound.config.mounted.PROJECTILE_PER_LEVEL * level) + Spellbound.config.mounted.PROJECTILE_BASE);
         }
         return damage;
-    }
-
-    @Override
-    public boolean isAcceptableAtTable(ItemStack stack) {
-        return stack.getItem() instanceof SwordItem
-                || stack.getItem() instanceof AxeItem
-                || stack.getItem() instanceof TridentItem
-                || stack.getItem() instanceof RangedWeaponItem
-                || stack.getItem() == Items.BOOK;
     }
 }

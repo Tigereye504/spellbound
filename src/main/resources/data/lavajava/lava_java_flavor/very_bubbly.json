@@ -6,5 +6,9 @@
   "magnitude": 9,
   "weight": 6,
   "value": 30,
-  "namePriority": 0
+  "namePriority": 0,
+  "exclusions": [
+    "spellbound:extra_bubbly",
+    "spellbound:bubbly"
+  ]
 }

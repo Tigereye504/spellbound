@@ -5,19 +5,20 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.AxeItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShovelItem;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
-import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
-public class JoustingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class JoustingEnchantment extends SBEnchantment{
 
     public JoustingEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.jousting.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.jousting.RARITY), EnchantmentTarget.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
 
     @Override
@@ -44,10 +45,14 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
     public int getPowerRange(){
         return Spellbound.config.jousting.POWER_RANGE;
     }
+    @Override
+    public boolean isTreasure() {return Spellbound.config.jousting.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.jousting.IS_FOR_SALE;}
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return isAcceptableAtTable(stack)
+        return super.isAcceptableItem(stack)
                 || EnchantmentTarget.WEAPON.isAcceptableItem(stack.getItem())
                 || stack.getItem() instanceof ShovelItem
                 || stack.getItem() instanceof AxeItem;
@@ -94,16 +99,5 @@ public class JoustingEnchantment extends SBEnchantment implements CustomConditio
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         ((SpellboundLivingEntity)entity).updatePositionTracker(entity.getPos());
-    }
-
-    @Override
-    public boolean isTreasure() {
-        return false;
-    }
-
-    @Override
-    public boolean isAcceptableAtTable(ItemStack stack) {
-        return stack.getItem() instanceof TridentItem
-                || stack.getItem() == Items.BOOK;
     }
 }

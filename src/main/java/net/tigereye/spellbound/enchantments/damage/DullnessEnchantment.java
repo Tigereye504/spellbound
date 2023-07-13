@@ -1,9 +1,10 @@
 package net.tigereye.spellbound.enchantments.damage;
 
-import net.minecraft.enchantment.*;
+import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolItem;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -33,7 +34,9 @@ public class DullnessEnchantment extends SBEnchantment {
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack) || EnchantmentTarget.BREAKABLE.isAcceptableItem(stack.getItem());
+        return super.isAcceptableItem(stack) ||
+                stack.getItem() instanceof ToolItem;
+
     }
 
     @Override

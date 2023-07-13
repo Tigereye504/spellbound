@@ -2,29 +2,25 @@ package net.tigereye.spellbound.enchantments.utility;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
-import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.RangedWeaponItem;
-import net.minecraft.item.TridentItem;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CaveInEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class CaveInEnchantment extends SBEnchantment{
 
     public CaveInEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.caveIn.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.caveIn.RARITY), SBEnchantmentTargets.RANGED_WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND,EquipmentSlot.OFFHAND},false);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.caveIn.ENABLED;}
@@ -42,18 +38,6 @@ public class CaveInEnchantment extends SBEnchantment implements CustomConditions
     public boolean isTreasure() {return Spellbound.config.caveIn.IS_TREASURE;}
     @Override
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.caveIn.IS_FOR_SALE;}
-
-    @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return isAcceptableAtTable(stack);
-    }
-
-    @Override
-    public boolean isAcceptableAtTable(ItemStack stack) {
-        return stack.getItem() instanceof RangedWeaponItem
-                || stack.getItem() instanceof TridentItem
-                || stack.getItem() == Items.BOOK;
-    }
 
     @Override
     public void onProjectileBlockHit(int level, ItemStack itemStack, ProjectileEntity projectileEntity, BlockHitResult blockHitResult) {

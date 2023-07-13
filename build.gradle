@@ -31,6 +31,8 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
+	include(modApi("com.github.Chocohead:Fabric-ASM:v${project.fabric_asm_version}"))
+
 	 modImplementation "com.github.tigereye504:modify-drops-api:${project.modify_drops_api_version}"
 	//Includes as a Jar-in-Jar dependency (optional)
 	 include "com.github.tigereye504:modify-drops-api:${project.modify_drops_api_version}"

@@ -1,23 +1,22 @@
 package net.tigereye.spellbound.enchantments.damage;
 
-import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
-public class RampageEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class RampageEnchantment extends SBEnchantment{
 
     public RampageEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.rampage.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.rampage.RARITY), SBEnchantmentTargets.ANY_WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
 
     @Override
@@ -33,9 +32,9 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
     @Override
     public int getPowerRange(){return Spellbound.config.rampage.POWER_RANGE;}
     @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return isAcceptableAtTable(stack);
-    }
+    public boolean isTreasure() {return Spellbound.config.rampage.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.rampage.IS_FOR_SALE;}
 
     @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
@@ -62,14 +61,5 @@ public class RampageEnchantment extends SBEnchantment implements CustomCondition
         killer.addStatusEffect(new StatusEffectInstance(SBStatusEffects.GREEN_SPARKLES,
                 Spellbound.config.rampage.DURATION_BASE +(Spellbound.config.rampage.DURATION_PER_LEVEL*level),
                 level-1));
-    }
-
-    @Override
-    public boolean isAcceptableAtTable(ItemStack stack) {
-        return stack.getItem() instanceof SwordItem
-                || stack.getItem() instanceof AxeItem
-                || stack.getItem() instanceof TridentItem
-                || stack.getItem() instanceof RangedWeaponItem
-                || stack.getItem() == Items.BOOK;
     }
 }

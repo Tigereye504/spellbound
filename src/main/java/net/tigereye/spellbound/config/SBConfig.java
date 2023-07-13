@@ -223,6 +223,7 @@ public class SBConfig implements ConfigData {
         public int POWER_RANGE = 50;
         public int DURATION_BASE = 0;
         public int DURATION_PER_LEVEL = 10;
+        public float UPWARD_DRIFT = 0.0085f;
     }
 
     @ConfigEntry.Category("enchantment")
@@ -674,7 +675,8 @@ public class SBConfig implements ConfigData {
         public int POWER_PER_RANK = 20;
         public int POWER_RANGE = 50;
     }
-
+    @ConfigEntry.Category("other")
+    public boolean CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS = false;
     @ConfigEntry.Category("other")
     public int POWER_TO_EXCEED_SOFT_CAP = 20;
     @ConfigEntry.Category("other")

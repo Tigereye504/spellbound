@@ -13,7 +13,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.decoration.AbstractDecorationEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
@@ -27,11 +26,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.interfaces.NextTickAction;
 import net.tigereye.spellbound.registration.SBDamageSource;
 import net.tigereye.spellbound.registration.SBEnchantments;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class SpellboundUtil {
@@ -88,7 +85,7 @@ public class SpellboundUtil {
                     float proximityRatio = (range-distance) / range;
                     target.damage(DamageSource.explosion(source), strength * proximityRatio);
 
-                    forceVec = forceVec.multiply(1,0,1).add(0,.1,0).normalize();
+                    forceVec = forceVec.multiply(1,0,1).normalize().add(0,.1,0);
                     forceVec = forceVec.multiply(force * proximityRatio * Math.max(0, 1 - target.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)));
 
                     target.addVelocity(forceVec.x, forceVec.y, forceVec.z);
@@ -192,16 +189,11 @@ public class SpellboundUtil {
     }
 
     public static Enchantment.Rarity rarityLookup(int configValue){
-        switch (configValue){
-            case 1:
-                return Enchantment.Rarity.COMMON;
-            case 2:
-                return Enchantment.Rarity.UNCOMMON;
-            case 3:
-                return Enchantment.Rarity.RARE;
-            case 4:
-            default:
-                return Enchantment.Rarity.VERY_RARE;
-        }
+        return switch (configValue) {
+            case 1 -> Enchantment.Rarity.COMMON;
+            case 2 -> Enchantment.Rarity.UNCOMMON;
+            case 3 -> Enchantment.Rarity.RARE;
+            default -> Enchantment.Rarity.VERY_RARE;
+        };
     }
 }

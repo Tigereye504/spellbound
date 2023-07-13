@@ -5,29 +5,29 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShieldItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
+import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
-public class GraceEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class GraceEnchantment extends SBEnchantment{
     public static final Identifier GRACE_ARMOR = new Identifier(Spellbound.MODID,"textures/gui/grace_armor.png");
     public GraceEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.grace.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.grace.RARITY), SBEnchantmentTargets.ARMOR_MAYBE_SHIELD,
+                Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
+                        ? new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND}
+                        : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}
+                ,true);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.grace.ENABLED;}
@@ -45,10 +45,6 @@ public class GraceEnchantment extends SBEnchantment implements CustomConditionsE
     public boolean isTreasure() {return Spellbound.config.grace.IS_TREASURE;}
     @Override
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.grace.IS_FOR_SALE;}
-    @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return isAcceptableAtTable(stack);
-    }
 
     @Override
     public int getIFrameAmount(int level, int frames, DamageSource source, float damageAmount, ItemStack itemStack, LivingEntity defender) {
@@ -58,13 +54,6 @@ public class GraceEnchantment extends SBEnchantment implements CustomConditionsE
     @Override
     public float getIFrameMagnitude(int level, float magnitude, DamageSource source, float damageAmount, ItemStack itemStack, LivingEntity defender) {
         return magnitude * (1+(level*Spellbound.config.grace.IFRAME_MAGNITUDE_PER_LEVEL));
-    }
-
-    @Override
-    public boolean isAcceptableAtTable(ItemStack stack) {
-        return stack.getItem() instanceof ArmorItem
-                || stack.getItem() instanceof ShieldItem
-                || stack.getItem() == Items.BOOK;
     }
 
     public static void renderArmor(MatrixStack matrixStack, float delta){

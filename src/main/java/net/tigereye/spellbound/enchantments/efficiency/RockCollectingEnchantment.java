@@ -8,15 +8,11 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.PickaxeItem;
-import net.minecraft.item.ShovelItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBItems;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -24,12 +20,12 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class RockCollectingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class RockCollectingEnchantment extends SBEnchantment{
 
     public static final String ROCK_COLLECTOR_KEY = Spellbound.MODID+"RockCollector";
     public static final String UNIQUE_ROCK_COUNT_KEY = Spellbound.MODID+"UniqueRockCount";
     public RockCollectingEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.rockCollector.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.rockCollector.RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.rockCollector.ENABLED;}
@@ -47,11 +43,6 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
     public boolean isTreasure() {return Spellbound.config.rockCollector.IS_TREASURE;}
     @Override
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.rockCollector.IS_FOR_SALE;}
-    @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return isAcceptableAtTable(stack)
-                ||EnchantmentTarget.DIGGER.isAcceptableItem(stack.getItem());
-    }
 
     @Override
     public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack stack, BlockState block, float miningSpeed) {
@@ -83,14 +74,6 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
         }
     }
 
-    /*@Override
-    public void onActivate(int level, PlayerEntity player, ItemStack stack, Entity target) {
-        if(!player.world.isClient && player.getPose() == EntityPose.CROUCHING) {
-            List<Text> output = addTooltip(level, stack, player, null, 1000);
-            output.forEach((line) -> player.sendMessage(line, false));
-        }
-    }*/
-
     @Override
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
         return addTooltip(stack,player.world);
@@ -119,13 +102,6 @@ public class RockCollectingEnchantment extends SBEnchantment implements CustomCo
                 entry.getValue() + " ")
                 .append(Text.translatable(entry.getKey()))
                 .append(" (+" + calculateBlockBonus(entry.getValue()) + ")"));
-    }
-
-    @Override
-    public boolean isAcceptableAtTable(ItemStack stack) {
-        return stack.getItem() instanceof PickaxeItem
-                || stack.getItem() instanceof ShovelItem
-                || stack.getItem() == Items.BOOK;
     }
 
     private boolean hasRock(BlockState blockState, ItemStack stack){

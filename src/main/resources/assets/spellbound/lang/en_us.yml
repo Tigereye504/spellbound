@@ -321,6 +321,7 @@ text.autoconfig.spellbound:
         hover.POWER_RANGE: Enchanting Power Range
         hover.DURATION_BASE: Base Duration
         hover.DURATION_PER_LEVEL: Duration Per Level
+        hover.UPWARD_DRIFT: Upward Drift
 
         impersonal: Impersonal
         impersonal.ENABLED: Enable
@@ -664,7 +665,8 @@ text.autoconfig.spellbound:
         trophyCollector.BASE_POWER: Enchanting Base Power
         trophyCollector.POWER_PER_RANK: Enchanting Power Per Rank
         trophyCollector.POWER_RANGE: Enchanting Power Range
-        
+
+        CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS: Can Shields have Armor Enchantments
         POWER_TO_EXCEED_SOFT_CAP: Power To Exceed Soft Cap
         COLLECTOR_DISPLAY_UPDATE_PERIOD: Collector Display Update Period
         COLLECTOR_WINDOW_SIZE: Entries Shown On Collector Tooltip

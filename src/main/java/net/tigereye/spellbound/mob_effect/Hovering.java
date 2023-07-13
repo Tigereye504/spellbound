@@ -2,6 +2,7 @@ package net.tigereye.spellbound.mob_effect;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.tigereye.spellbound.Spellbound;
 
 public class Hovering extends SBStatusEffect{
 
@@ -14,7 +15,7 @@ public class Hovering extends SBStatusEffect{
     }
 
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        entity.setVelocity(entity.getVelocity().getX(),0,entity.getVelocity().getZ());
+        entity.setVelocity(entity.getVelocity().getX(), Spellbound.config.hover.UPWARD_DRIFT,entity.getVelocity().getZ());
         entity.fallDistance = 0;
     }
 }

@@ -1,28 +1,25 @@
 package net.tigereye.spellbound.enchantments.looting;
 
-import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.List;
 
-public class ScalpingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class ScalpingEnchantment extends SBEnchantment{
 
     public ScalpingEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.scalping.RARITY), EnchantmentTarget.WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.scalping.RARITY), SBEnchantmentTargets.AXE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.scalping.ENABLED;}
@@ -42,15 +39,9 @@ public class ScalpingEnchantment extends SBEnchantment implements CustomConditio
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.scalping.IS_FOR_SALE;}
 
     @Override
-    public boolean isAcceptableAtTable(ItemStack stack) {
-        return stack.getItem() instanceof AxeItem
-                || stack.getItem() == Items.BOOK;
-    }
-
-    @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return isAcceptableAtTable(stack)
-                || EnchantmentTarget.WEAPON.isAcceptableItem(stack.getItem());
+        return super.isAcceptableItem(stack)
+                || SBEnchantmentTargets.ANY_WEAPON.isAcceptableItem(stack.getItem());
     }
 
     @Override
@@ -72,7 +63,7 @@ public class ScalpingEnchantment extends SBEnchantment implements CustomConditio
                  rawItemDrops) {
                 victim.dropStack(stack);
             }
-            dropChance = (dropChance - 1) / 2;
+            dropChance = (dropChance - 1) * Spellbound.config.scalping.CARRYOVER_DECAY;
         }
     }
 }

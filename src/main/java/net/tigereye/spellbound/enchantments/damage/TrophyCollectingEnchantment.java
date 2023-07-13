@@ -1,8 +1,9 @@
 package net.tigereye.spellbound.enchantments.damage;
 
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.Monster;
@@ -10,26 +11,27 @@ import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBItems;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-public class TrophyCollectingEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class TrophyCollectingEnchantment extends SBEnchantment{
 
     public static final String TROPHY_COLLECTOR_KEY = Spellbound.MODID+"TrophyCollector";
     public static final String UNIQUE_TROPHY_COUNT_KEY = Spellbound.MODID+"UniqueTrophyCount";
 
     public TrophyCollectingEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.trophyCollector.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.trophyCollector.RARITY), SBEnchantmentTargets.ANY_WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
 
     @Override
@@ -45,9 +47,9 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
     @Override
     public int getPowerRange(){return Spellbound.config.trophyCollector.POWER_RANGE;}
     @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return isAcceptableAtTable(stack);
-    }
+    public boolean isTreasure() {return Spellbound.config.trophyCollector.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.trophyCollector.IS_FOR_SALE;}
 
     @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
@@ -132,20 +134,6 @@ public class TrophyCollectingEnchantment extends SBEnchantment implements Custom
                     .append(Text.translatable(entry.getKey()))
                     .append(" (+" + getEntityDamageBonus(entry.getValue()) + ")"));
         }
-    }
-
-    @Override
-    public boolean isTreasure() {
-        return false;
-    }
-
-    @Override
-    public boolean isAcceptableAtTable(ItemStack stack) {
-        return stack.getItem() instanceof SwordItem
-                || stack.getItem() instanceof AxeItem
-                || stack.getItem() instanceof TridentItem
-                || stack.getItem() instanceof RangedWeaponItem
-                || stack.getItem() == Items.BOOK;
     }
 
     private boolean hasTrophy(LivingEntity victim, ItemStack stack){

@@ -26,6 +26,9 @@
     ],
     "modmenu": [
       "net.tigereye.spellbound.config.SBModMenuIntegration"
+    ],
+    "mm:early_risers": [
+      "net.tigereye.spellbound.SpellboundEarlyRiser"
     ]
   },
   "mixins": [

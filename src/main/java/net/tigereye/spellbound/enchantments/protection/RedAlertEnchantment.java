@@ -1,22 +1,25 @@
 package net.tigereye.spellbound.enchantments.protection;
 
-import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.enchantments.CustomConditionsEnchantment;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
-public class RedAlertEnchantment extends SBEnchantment implements CustomConditionsEnchantment {
+public class RedAlertEnchantment extends SBEnchantment{
 
     public RedAlertEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.redAlert.RARITY), EnchantmentTarget.VANISHABLE, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.redAlert.RARITY), SBEnchantmentTargets.ARMOR_MAYBE_SHIELD,
+                Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
+                        ? new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND}
+                        : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}
+                ,true);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.redAlert.ENABLED;}
@@ -34,10 +37,6 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
     public boolean isTreasure() {return Spellbound.config.redAlert.IS_TREASURE;}
     @Override
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.redAlert.IS_FOR_SALE;}
-    @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return isAcceptableAtTable(stack);
-    }
 
     @Override
     public void onTickOnceWhileEquipped(int level, ItemStack stack, LivingEntity entity){
@@ -81,12 +80,5 @@ public class RedAlertEnchantment extends SBEnchantment implements CustomConditio
         int redAlertLevel = SBEnchantmentHelper.getSpellboundEnchantmentAmount(entity.getItemsEquipped(), SBEnchantments.RED_ALERT);
         return Math.max(Spellbound.config.redAlert.MINIMUM_RECOVERY_TIME,
                 Spellbound.config.redAlert.RECOVERY_RATE -(Spellbound.config.redAlert.RECOVERY_REDUCTION *Math.max(0,redAlertLevel-redAlertCount)/redAlertCount));
-    }
-
-    @Override
-    public boolean isAcceptableAtTable(ItemStack stack) {
-        return stack.getItem() instanceof ArmorItem
-                || stack.getItem() instanceof ShieldItem
-                || stack.getItem() == Items.BOOK;
     }
 }

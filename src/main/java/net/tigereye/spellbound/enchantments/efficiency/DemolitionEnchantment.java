@@ -42,6 +42,10 @@ public class DemolitionEnchantment extends SBEnchantment {
     public int getPowerPerRank(){return Spellbound.config.demolition.POWER_PER_RANK;}
     @Override
     public int getPowerRange(){return Spellbound.config.demolition.POWER_RANGE;}
+    @Override
+    public boolean isTreasure() {return Spellbound.config.demolition.IS_TREASURE;}
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.demolition.IS_FOR_SALE;}
 
     @Override
     public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack stack, BlockState block, float miningSpeed) {
@@ -68,11 +72,6 @@ public class DemolitionEnchantment extends SBEnchantment {
         else if(player instanceof ServerPlayerEntity) {
             stack.damage(1, player.getRandom(), (ServerPlayerEntity) player);
         }
-    }
-
-    @Override
-    public boolean isTreasure() {
-        return false;
     }
 
     private static class DemolitionAction implements NextTickAction{
