@@ -49,6 +49,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SBEnchantmentHelper {
+    public static final String ON_BREAK_LOCKOUT_KEY = Spellbound.MODID+"OnBreakLockout";
+
     //called after vanilla's getAttackDamage
     public static int beforeDurabilityLoss(ItemStack stack, ServerPlayerEntity user, int loss){
         if(Spellbound.config.STORIED_WORLD && !stack.hasEnchantments()){
@@ -254,10 +256,11 @@ public class SBEnchantmentHelper {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
             willBreak.set(enchantment.beforeToolBreak(level, itemStack, entity));
         }, stack);
-        if(willBreak.get()){
+        if(willBreak.get() && !stack.getOrCreateNbt().getBoolean(ON_BREAK_LOCKOUT_KEY)){
             forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
                 enchantment.onToolBreak(level, itemStack, entity);
             }, stack);
+            stack.getOrCreateNbt().putBoolean(ON_BREAK_LOCKOUT_KEY,true);
         }
         return willBreak.get();
     }
