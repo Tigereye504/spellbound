@@ -50,7 +50,10 @@ public abstract class SBEnchantment extends Enchantment {
 
     @Override
     public int getMaxPower(int level) {
-        return super.getMinPower(level) + getPowerRange();
+        if(level < getHardLevelCap()) {
+            return super.getMinPower(level) + getPowerRange();
+        }
+        return Integer.MAX_VALUE;
     }
 
     @Override
