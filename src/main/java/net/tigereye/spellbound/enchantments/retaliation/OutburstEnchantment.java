@@ -5,10 +5,11 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.EntityDamageSource;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -47,6 +48,12 @@ public class OutburstEnchantment extends SBEnchantment {
         }
         NbtCompound nbt = stack.getOrCreateNbt();
         int rage = nbt.getInt(OUTBURST_RAGE_NBT_KEY) + Spellbound.config.outburst.RAGE_PER_HIT;
+
+        if(!defender.world.isClient()) {
+            int n = (int) (rage * 0.5);
+            ((ServerWorld) defender.world).spawnParticles(ParticleTypes.ANGRY_VILLAGER, defender.getX(), defender.getBodyY(0.5), defender.getZ(), n, 0.1, 0.0, 0.1, 0.2);
+        }
+
         if(rage >= Spellbound.config.outburst.RAGE_THRESHOLD){
             nbt.remove(OUTBURST_RAGE_NBT_KEY);
             Vec3d position = defender.getPos();
@@ -76,7 +83,7 @@ public class OutburstEnchantment extends SBEnchantment {
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return stack.getItem() instanceof ArmorItem
+        return EnchantmentTarget.ARMOR.isAcceptableItem(stack.getItem())
                 || stack.getItem() == Items.BOOK
                 || super.isAcceptableItem(stack);
     }

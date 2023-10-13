@@ -14,6 +14,7 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
@@ -184,7 +185,7 @@ public abstract class SBEnchantment extends Enchantment {
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack) && isEnabled();
+        return (super.isAcceptableItem(stack) || stack.getItem() == Items.BOOK) && isEnabled();
     }
 
     @Override
