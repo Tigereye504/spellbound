@@ -675,6 +675,22 @@ public class SBConfig implements ConfigData {
         public int POWER_PER_RANK = 20;
         public int POWER_RANGE = 50;
     }
+
+    @ConfigEntry.Category("enchantment")
+    @ConfigEntry.Gui.CollapsibleObject
+    public WarlikeConfig warlike = new WarlikeConfig();
+    public static class WarlikeConfig {
+        public boolean ENABLED = true;
+        public boolean IS_TREASURE = false;
+        public boolean IS_FOR_SALE = true;
+        public int RARITY = 3;
+        public int SOFT_CAP = 2;
+        public int HARD_CAP = 5;
+        public int BASE_POWER = 0;
+        public int POWER_PER_RANK = 10;
+        public int POWER_RANGE = 50;
+        public float DIFFICULTY_PER_RANK = 2f;
+    }
     @ConfigEntry.Category("other")
     public boolean CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS = false;
     @ConfigEntry.Category("other")

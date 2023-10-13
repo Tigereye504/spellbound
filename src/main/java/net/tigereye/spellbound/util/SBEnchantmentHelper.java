@@ -78,6 +78,11 @@ public class SBEnchantmentHelper {
         return mutableFloat.floatValue();
     }
 
+    public static float getLocalDifficultyModifier(World world, PlayerEntity player){
+        MutableFloat mutableFloat = new MutableFloat(0);
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add((enchantment).getLocalDifficultyModifier(level, world, player, itemStack)), player.getItemsEquipped());
+        return mutableFloat.floatValue();
+    }
     //called at the head of LivingEntity::onKilledBy
     //change: called just before drops onKilledBy
     public static void onDeath(DamageSource source, LivingEntity victim){
@@ -253,13 +258,9 @@ public class SBEnchantmentHelper {
 
     public static boolean onItemDestroyed(ItemStack stack, Entity entity) {
         AtomicBoolean willBreak = new AtomicBoolean(true);
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
-            willBreak.set(enchantment.beforeToolBreak(level, itemStack, entity));
-        }, stack);
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> willBreak.set(enchantment.beforeToolBreak(level, itemStack, entity)), stack);
         if(willBreak.get() && !stack.getOrCreateNbt().getBoolean(ON_BREAK_LOCKOUT_KEY)){
-            forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
-                enchantment.onToolBreak(level, itemStack, entity);
-            }, stack);
+            forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onToolBreak(level, itemStack, entity), stack);
             stack.getOrCreateNbt().putBoolean(ON_BREAK_LOCKOUT_KEY,true);
         }
         return willBreak.get();

@@ -12,6 +12,7 @@
     "ItemMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
+    "LocalDifficultyMixin",
     "MobEntityMixin",
     "PersistentProjectileEntityMixin",
     "PlayerEntityMixin",

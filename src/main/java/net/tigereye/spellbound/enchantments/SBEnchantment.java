@@ -143,6 +143,9 @@ public abstract class SBEnchantment extends Enchantment {
         return 0;
     }
 
+    public float getLocalDifficultyModifier(int level, World world, PlayerEntity player, ItemStack itemStack) {
+        return 0;
+    }
     public float getProtectionAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
         return 0;
     }
@@ -199,4 +202,5 @@ public abstract class SBEnchantment extends Enchantment {
         return super.canAccept(other) && (SBEnchantmentHelper.areNotInSameCategory(this,other)
                 || Spellbound.config.DISABLE_INCOMPATIBILITY);
     }
+
 }

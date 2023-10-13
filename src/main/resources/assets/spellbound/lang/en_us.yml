@@ -133,6 +133,9 @@ enchantment.spellbound:
 
     trophy_collecting: Trophy Collecting
     trophy_collecting.desc: Type:Damage. Damage grows with unique foes slain.
+    
+    warlike: Warlike
+    warlike.desc: Type:Utility. Declares war upon the world, increasing difficulty.
 
 flavor.spellbound:
     bubbly: Bubbly
@@ -665,6 +668,18 @@ text.autoconfig.spellbound:
         trophyCollector.BASE_POWER: Enchanting Base Power
         trophyCollector.POWER_PER_RANK: Enchanting Power Per Rank
         trophyCollector.POWER_RANGE: Enchanting Power Range
+        
+        warlike: Warlike
+        warlike.ENABLED: Enable
+        warlike.IS_TREASURE: Is Treasure
+        warlike.IS_FOR_SALE: Sold by Villagers
+        warlike.RARITY: Rarity
+        warlike.SOFT_CAP: Soft Cap
+        warlike.HARD_CAP: Hard Cap
+        warlike.BASE_POWER: Enchanting Base Power
+        warlike.POWER_PER_RANK: Enchanting Power Per Rank
+        warlike.POWER_RANGE: Enchanting Power Range
+        warlike.DIFFICULTY_PER_RANK: Difficulty Per Rank
 
         CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS: Can Shields have Armor Enchantments
         POWER_TO_EXCEED_SOFT_CAP: Power To Exceed Soft Cap

@@ -23,6 +23,7 @@ import net.tigereye.spellbound.enchantments.unbreaking.SaturatedEnchantment;
 import net.tigereye.spellbound.enchantments.utility.*;
 import net.tigereye.spellbound.enchantments.utility.chestplate.AttractiveEnchantment;
 import net.tigereye.spellbound.enchantments.utility.chestplate.RepulsiveEnchantment;
+import net.tigereye.spellbound.enchantments.utility.chestplate.WarlikeEnchantment;
 import net.tigereye.spellbound.enchantments.utility.leggings.HoverEnchantment;
 import net.tigereye.spellbound.enchantments.utility.leggings.PhaseLeapEnchantment;
 import net.tigereye.spellbound.enchantments.utility.leggings.PhaseStrafeEnchantment;
@@ -74,6 +75,7 @@ public class SBEnchantments {
     public static final SBEnchantment STORIED = new StoriedEnchantment();
     public static final SBEnchantment TETHERING = new TetheringEnchantment();
     public static final TrophyCollectingEnchantment TROPHY_COLLECTING = new TrophyCollectingEnchantment();
+    public static final WarlikeEnchantment WARLIKE = new WarlikeEnchantment();
 
     public static void register(){
         register("acceleration", ACCELERATION);
@@ -116,6 +118,7 @@ public class SBEnchantments {
         register("skotosynthetic", SKOTOSYNTHETIC);
         register("tethering", TETHERING);
         register("trophy_collecting", TROPHY_COLLECTING);
+        register("warlike", WARLIKE);
     }
 
     public static void register(String name, SBEnchantment enchantment){
