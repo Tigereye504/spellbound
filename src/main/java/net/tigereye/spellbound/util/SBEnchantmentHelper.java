@@ -44,6 +44,7 @@ import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.registration.SBTags;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -83,6 +84,13 @@ public class SBEnchantmentHelper {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add((enchantment).getLocalDifficultyModifier(level, world, player, itemStack)), player.getItemsEquipped());
         return mutableFloat.floatValue();
     }
+
+    public static int getLooting(LivingEntity entity){
+        MutableInt mutableInt = new MutableInt(0);
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableInt.add(enchantment.getLootingValue(level, entity, itemStack)), entity.getItemsEquipped());
+        return mutableInt.intValue();
+    }
+
     //called at the head of LivingEntity::onKilledBy
     //change: called just before drops onKilledBy
     public static void onDeath(DamageSource source, LivingEntity victim){
@@ -149,6 +157,13 @@ public class SBEnchantmentHelper {
             Spellbound.LOGGER.info(defender.getName() + "'s Grace Magnitude: " + mutableFloat.floatValue());
         }
         return mutableFloat.floatValue();
+    }
+
+    public static void onGainExperience(PlayerEntity player, int amount) {
+        for (SBEnchantment enchantment:
+                SBEnchantments.SBEnchantmentList) {
+            enchantment.onGainExperienceAlways(player,amount);
+        }
     }
 
     public static void onMidairJump(SpellboundClientPlayerEntity sbPlayer, PlayerEntity player, boolean isJumping) {
@@ -248,8 +263,20 @@ public class SBEnchantmentHelper {
         forEachSpellboundEnchantment((((enchantment, level, itemStack) -> enchantment.onInventoryTick(level,stack,world,entity,slot,selected))), stack);
     }
 
-    public static void onRedHealthDamage(DamageSource source, LivingEntity entity, float amount) {
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onRedHealthDamage(level,itemStack,entity,amount),entity.getItemsEquipped());
+    public static void onRedHealthDamage(DamageSource source, @NotNull LivingEntity entity, float amount) {
+        List<SBEnchantment> checked = new LinkedList<>();
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
+            if(enchantment.requiresPreferredSlot()) {
+                if (entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) != itemStack) {
+                    return;
+                }
+            }
+            if(!checked.contains(enchantment)){
+                checked.add(enchantment);
+                enchantment.onRedHealthDamageOnce(level, itemStack, entity,amount);
+            }
+            enchantment.onRedHealthDamage(level,itemStack,entity,amount);
+        },entity.getItemsEquipped());
     }
 
     public static void onDoRedHealthDamage(LivingEntity attacker, DamageSource source, LivingEntity victim, float amount) {
@@ -268,6 +295,26 @@ public class SBEnchantmentHelper {
 
     public static void onLegacyToolBreak(ItemStack book, ItemStack stack, Entity entity) {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onLegacyToolBreak(level, book, itemStack, entity), stack);
+    }
+
+    public static boolean onLethalDamage(DamageSource source, @NotNull LivingEntity entity) {
+        List<SBEnchantment> checked = new LinkedList<>();
+        AtomicBoolean saved = new AtomicBoolean(false);
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
+            if(enchantment.requiresPreferredSlot()) {
+                if (entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) != itemStack) {
+                    return;
+                }
+            }
+            if(!saved.get() && !checked.contains(enchantment)){
+                checked.add(enchantment);
+                saved.set(enchantment.onLethalDamageOnce(level, source, entity));
+            }
+            if(!saved.get()) {
+                saved.set(enchantment.onLethalDamage(level, source, entity));
+            }
+        },entity.getItemsEquipped());
+        return saved.get();
     }
 
     public static int getProjectileDamage(PersistentProjectileEntity persistentProjectileEntity, EntityHitResult entityHitResult, int damage) {
@@ -305,6 +352,13 @@ public class SBEnchantmentHelper {
             if (owner != null) {
                 forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult), ((SpellboundProjectileEntity)projectileEntity).getSource());
             }
+        }
+    }
+
+    public static void onStartSleeping(LivingEntity entity){
+        for (SBEnchantment enchantment:
+                SBEnchantments.SBEnchantmentList) {
+            enchantment.onStartSleepingAlways(entity);
         }
     }
 

@@ -185,7 +185,7 @@ public class SpellboundUtil {
             damage += polygamy * (itemCount - (monogamy + polygamy));
         }
 
-        entity.damage(SBDamageSource.SB_INFIDELITY,damage);
+        entity.damage(SBDamageSource.INFIDELITY,damage);
     }
 
     public static Enchantment.Rarity rarityLookup(int configValue){

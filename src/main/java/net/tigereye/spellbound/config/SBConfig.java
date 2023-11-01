@@ -125,7 +125,24 @@ public class SBConfig implements ConfigData {
         public float BASE_EXPLOSION_POWER = 1;
         public float EXPLOSION_POWER_PER_RANK = .5F;
     }
-
+    
+    @ConfigEntry.Category("enchantment")
+    @ConfigEntry.Gui.CollapsibleObject
+    public DespoilingConfig despoiling = new DespoilingConfig();
+    public static class DespoilingConfig {
+        public boolean ENABLED = true;
+        public boolean IS_TREASURE = false;
+        public boolean IS_FOR_SALE = true;
+        public int RARITY = 3;
+        public int SOFT_CAP = 3;
+        public int HARD_CAP = 3;
+        public int BASE_POWER = 6;
+        public int POWER_PER_RANK = 9;
+        public int POWER_RANGE = 50;
+        public int DURATION_BASE = 60;
+        public int DURATION_PER_LEVEL = 40;
+    }
+    
     @ConfigEntry.Category("enchantment")
     @ConfigEntry.Gui.CollapsibleObject
     public DullnessConfig dullness = new DullnessConfig();
@@ -258,6 +275,24 @@ public class SBConfig implements ConfigData {
 
     @ConfigEntry.Category("enchantment")
     @ConfigEntry.Gui.CollapsibleObject
+    public LastGaspConfig lastGasp = new LastGaspConfig();
+    public static class LastGaspConfig {
+        public boolean ENABLED = true;
+        public boolean IS_TREASURE = false;
+        public boolean IS_FOR_SALE = true;
+        public int RARITY = 2;
+        public int SOFT_CAP = 4;
+        public int HARD_CAP = 4;
+        public int BASE_POWER = -10;
+        public int POWER_PER_RANK = 11;
+        public int POWER_RANGE = 50;
+        public int TIME_TO_DIE = 200;
+        public float HEALTH_REBOUND_PER_RANK = 0.0625f;
+        public float RECOVERY_FROM_EXPERIENCE = 0.01f;
+    }
+
+    @ConfigEntry.Category("enchantment")
+    @ConfigEntry.Gui.CollapsibleObject
     public LaunchingConfig launching = new LaunchingConfig();
     public static class LaunchingConfig {
     public boolean ENABLED = true;
@@ -356,6 +391,29 @@ public class SBConfig implements ConfigData {
         public float SHOCKWAVE_FORCE = .5f;
         public float SHOCKWAVE_POWER = 6f;
         public float SHOCKWAVE_RANGE = 2f;
+    }
+
+    @ConfigEntry.Category("enchantment")
+    @ConfigEntry.Gui.CollapsibleObject
+    public PestilenceConfig pestilence = new PestilenceConfig();
+    public static class PestilenceConfig {
+        public boolean ENABLED = true;
+        public boolean IS_TREASURE = false;
+        public boolean IS_FOR_SALE = true;
+        public int RARITY = 3;
+        public int SOFT_CAP = 3;
+        public int HARD_CAP = 3;
+        public int BASE_POWER = -10;
+        public int POWER_PER_RANK = 20;
+        public int POWER_RANGE = 50;
+        public float DAMAGE_PER_EFFECT = .5f;
+        public float RADIUS_SQUARED_PER_LEVEL = .5f;
+        public int DURATION_PER_LEVEL = 20;
+        public float STATUS_DURATION_FACTOR = .5f;
+        public int MAX_STATUS_DURATION = 600;
+        public int PESTILENCE_DAMAGE_FREQUENCY = 25;
+        public int PESTILENCE_DAMAGE_FREQUENCY_OFFSET = 11;
+        public int MAX_DAMAGE_LEVELS_PER_EFFECT = 4;
     }
 
     @ConfigEntry.Category("enchantment")
@@ -469,9 +527,9 @@ public class SBConfig implements ConfigData {
         public int POWER_PER_RANK = 16;
         public int POWER_RANGE = 50;
         public float DAMAGE_BASE = 5;
-        public float DAMAGE_PER_LEVEL = 5;
-        public int DURATION_BASE = 20;
-        public int DURATION_PER_LEVEL = 10;
+        public float DAMAGE_PER_LEVEL = 3;
+        public int DURATION_BASE = 60;
+        public int DURATION_PER_LEVEL = 40;
     }
 
     @ConfigEntry.Category("enchantment")

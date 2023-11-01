@@ -1,5 +1,6 @@
 package net.tigereye.spellbound.registration;
 
+import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.tigereye.spellbound.Spellbound;
@@ -9,6 +10,7 @@ import net.tigereye.spellbound.enchantments.efficiency.AccelerationEnchantment;
 import net.tigereye.spellbound.enchantments.efficiency.DemolitionEnchantment;
 import net.tigereye.spellbound.enchantments.efficiency.RockCollectingEnchantment;
 import net.tigereye.spellbound.enchantments.fortune.ProspectorEnchantment;
+import net.tigereye.spellbound.enchantments.looting.DespoilingEnchantment;
 import net.tigereye.spellbound.enchantments.looting.ScalpingEnchantment;
 import net.tigereye.spellbound.enchantments.lure.FisherOfMenEnchantment;
 import net.tigereye.spellbound.enchantments.meta.MonogamousEnchantment;
@@ -17,6 +19,7 @@ import net.tigereye.spellbound.enchantments.meta.StoriedEnchantment;
 import net.tigereye.spellbound.enchantments.protection.*;
 import net.tigereye.spellbound.enchantments.repair.*;
 import net.tigereye.spellbound.enchantments.retaliation.OutburstEnchantment;
+import net.tigereye.spellbound.enchantments.retaliation.PestilenceEnchantment;
 import net.tigereye.spellbound.enchantments.retaliation.SpikesEnchantment;
 import net.tigereye.spellbound.enchantments.unbreaking.BufferedEnchantment;
 import net.tigereye.spellbound.enchantments.unbreaking.SaturatedEnchantment;
@@ -27,6 +30,7 @@ import net.tigereye.spellbound.enchantments.utility.chestplate.WarlikeEnchantmen
 import net.tigereye.spellbound.enchantments.utility.leggings.HoverEnchantment;
 import net.tigereye.spellbound.enchantments.utility.leggings.PhaseLeapEnchantment;
 import net.tigereye.spellbound.enchantments.utility.leggings.PhaseStrafeEnchantment;
+import net.tigereye.spellbound.util.SBEnchantmentHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,8 @@ public class SBEnchantments {
     public static final SBEnchantment CAVE_IN = new CaveInEnchantment();
     public static final SBEnchantment DEATH_WISH = new DeathWishEnchantment();
     public static final SBEnchantment DEMOLITION = new DemolitionEnchantment();
+    public static final SBEnchantment DESPOILING = new DespoilingEnchantment();
+    public static final SBEnchantment LAST_GASP = new LastGaspEnchantment();
     public static final SBEnchantment DULLNESS = new DullnessEnchantment();
     public static final SBEnchantment FISHER_OF_MEN = new FisherOfMenEnchantment();
     public static final SBEnchantment FLESH_WOUND = new FleshWoundEnchantment();
@@ -56,6 +62,7 @@ public class SBEnchantments {
     public static final SBEnchantment MOUNTED = new MountedEnchantment();
     public static final SBEnchantment MONOGAMOUS = new MonogamousEnchantment();
     public static final SBEnchantment OUTBURST = new OutburstEnchantment();
+    public static final SBEnchantment PESTILENCE = new PestilenceEnchantment();
     public static final SBEnchantment PHASE_LEAP = new PhaseLeapEnchantment();
     public static final SBEnchantment PHASE_STRAFE = new PhaseStrafeEnchantment();
     public static final SBEnchantment PHOTOSYNTHETIC = new PhotosyntheticEnchantment();
@@ -85,6 +92,7 @@ public class SBEnchantments {
         register("cave_in", CAVE_IN);
         register("death_wish", DEATH_WISH);
         register("demolition", DEMOLITION);
+        register("despoiling", DESPOILING);
         register("dullness", DULLNESS);
         register("fisher_of_men", FISHER_OF_MEN);
         register("flesh_wound", FLESH_WOUND);
@@ -93,12 +101,14 @@ public class SBEnchantments {
         register("hover", HOVER);
         register("impersonal", IMPERSONAL);
         register("jousting", JOUSTING);
+        register("last_gasp", LAST_GASP);
         register("launching", LAUNCHING);
         register("legacy", LEGACY);
         register("metabolising", METABOLISING);
         register("mounted", MOUNTED);
         register("monogamous", MONOGAMOUS);
         register("outburst", OUTBURST);
+        register("pestilence", PESTILENCE);
         register("phase_leap", PHASE_LEAP);
         register("phase_strafe", PHASE_STRAFE);
         register("photosynthetic", PHOTOSYNTHETIC);
@@ -119,6 +129,8 @@ public class SBEnchantments {
         register("tethering", TETHERING);
         register("trophy_collecting", TROPHY_COLLECTING);
         register("warlike", WARLIKE);
+
+        EntitySleepEvents.START_SLEEPING.register(((entity, sleepingPos) -> SBEnchantmentHelper.onStartSleeping(entity)));
     }
 
     public static void register(String name, SBEnchantment enchantment){

@@ -77,6 +77,9 @@ public abstract class SBEnchantment extends Enchantment {
         return miningSpeed;
     }
 
+    public int getLootingValue(int level, LivingEntity user, ItemStack stack) {
+        return 0;
+    }
     public void onActivate(int level, PlayerEntity playerEntity, ItemStack itemStack, Entity target) {}
 
     //for when equipment is changed
@@ -89,6 +92,8 @@ public abstract class SBEnchantment extends Enchantment {
 
     public void onBreakBlock(int level, ItemStack itemStack, World world, BlockPos pos, BlockState state, PlayerEntity player) {}
 
+    public boolean onLethalDamageOnce(int level, DamageSource source, LivingEntity entity){return false;}
+    public boolean onLethalDamage(int level, DamageSource source, LivingEntity entity){return false;}
     //for when the user dies
     public void onDeath(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
 
@@ -112,6 +117,8 @@ public abstract class SBEnchantment extends Enchantment {
 
     //for when the user is struck, before armor is applied
     public float onPreArmorDefense(int level, ItemStack stack, DamageSource source, LivingEntity defender, float amount){return amount;}
+
+    public void onStartSleepingAlways(LivingEntity entity){}
 
     //for when a thrown trident strikes a target
     //called before vanilla on-hit but after vanilla on-hurt
@@ -179,6 +186,8 @@ public abstract class SBEnchantment extends Enchantment {
     public void onRedHealthDamage(int level, ItemStack itemStack, LivingEntity entity, float amount) {
     }
 
+    public void onRedHealthDamageOnce(int level, ItemStack itemStack, LivingEntity entity, float amount) {}
+
     public void onDoRedHealthDamage(int level, ItemStack itemStack, LivingEntity attacker, LivingEntity victim, DamageSource source, float amount) {
     }
 
@@ -207,4 +216,5 @@ public abstract class SBEnchantment extends Enchantment {
                 || Spellbound.config.DISABLE_INCOMPATIBILITY);
     }
 
+    public void onGainExperienceAlways(PlayerEntity player, int amount) {}
 }

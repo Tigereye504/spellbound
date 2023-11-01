@@ -111,6 +111,13 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
         }
     }
 
+    @Inject(at = @At("HEAD"), method = "tryUseTotem", cancellable = true)
+    public void spellboundLivingEntityTryUseTotemMixin(DamageSource source, CallbackInfoReturnable<Boolean> cir){
+        if(SBEnchantmentHelper.onLethalDamage(source,(LivingEntity)(Object)this)){
+            cir.setReturnValue(true);
+        }
+    }
+
     //@Inject(at = @At("HEAD"), method = "onKilledBy")
     //Lnet/minecraft/entity/LivingEntity;onKilledBy(
     //  Lnet/minecraft/entity/LivingEntity;

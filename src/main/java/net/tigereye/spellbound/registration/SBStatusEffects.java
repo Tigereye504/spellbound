@@ -9,9 +9,11 @@ import net.tigereye.spellbound.mob_effect.*;
 public class SBStatusEffects {
 
     public static StatusEffect BRAVADOS = new Bravados();
+    public static StatusEffect DYING = new DyingEffect();
     public static StatusEffect GREEN_SPARKLES = new GreenSparkles();
     public static StatusEffect HOVERING = new Hovering();
     public static StatusEffect MONOGAMY = new Monogamy();
+    public static StatusEffect PESTILENCE = new PestilenceEffect();
     public static StatusEffect POLYGAMY = new Polygamy();
     public static StatusEffect PRIMED = new Primed();
     public static StatusEffect SHIELDS_DOWN = new ShieldsDown();
@@ -22,9 +24,11 @@ public class SBStatusEffects {
 
     public static void register(){
         Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "bravados"), BRAVADOS);
+        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "dying"), DYING);
         Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "green_sparkles"), GREEN_SPARKLES);
         Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "hovering"), HOVERING);
         Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "monogamy"), MONOGAMY);
+        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "pestilence"), PESTILENCE);
         Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "polygamy"), POLYGAMY);
         Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "primed"), PRIMED);
         Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "shields_down"), SHIELDS_DOWN);

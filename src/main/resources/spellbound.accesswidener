@@ -2,5 +2,7 @@ accessWidener	v1	named
 
 accessible    method    net/minecraft/entity/LivingEntity    getLootContextBuilder    (ZLnet/minecraft/entity/damage/DamageSource;)Lnet/minecraft/loot/context/LootContext$Builder;
 accessible    method    net/minecraft/enchantment/EnchantmentHelper    forEachEnchantment    (Lnet/minecraft/enchantment/EnchantmentHelper$Consumer;Lnet/minecraft/item/ItemStack;)V
-accessible    class    net/minecraft/enchantment/EnchantmentHelper$Consumer
+accessible    method    net/minecraft/entity/damage/DamageSource setBypassesArmor ()Lnet/minecraft/entity/damage/DamageSource;
+accessible    class     net/minecraft/enchantment/EnchantmentHelper$Consumer
 extendable class net/minecraft/enchantment/EnchantmentTarget
+accessible method net/minecraft/client/gui/hud/InGameHud renderOverlay (Lnet/minecraft/util/Identifier;F)V

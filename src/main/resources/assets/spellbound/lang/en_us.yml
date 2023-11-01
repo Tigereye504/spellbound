@@ -1,12 +1,16 @@
 death.attack:
     sbInfidelity: "%1$s died from possessiveness."
     sbInfidelity.player: "%1$s was betrayed while fighting %2$s."
+    sbPestilence: "%1$s died from disease."
+    sbPestilence.player: "%1$s died from disease caught from %2$s."
 
 effect.spellbound:
     bravados: Bravados
+    dying: Dying
     green_sparkles: Green Sparkles
     hovering: Hovering
     monogamy: Monogamy
+    pestilence: Pestilence
     polygamy: Polygamy
     primed: Primed
     shielded: Shielded
@@ -31,6 +35,9 @@ enchantment.spellbound:
 
     death_wish: Death Wish
     death_wish.desc: Type:Protection. Provides no protection. Greatly increases damage.
+
+    despoiling: Despoiling
+    despoiling.desc: Type:Looting. Triggers kill streaks, and has better looting during kill streaks
 
     demolition: Demolition
     demolition.desc: Type:Efficiency. Creates explosions when mining. Hard on your tool.
@@ -59,6 +66,9 @@ enchantment.spellbound:
     jousting: Jousting
     jousting.desc: Type:Damage. Increase damage with relative velocity.
 
+    last_gasp: Last Gasp
+    last_gasp.desc: Type:Protection. Enter dying state on lethal damage, recover on kill.
+
     launching: Launching
     launching.desc: Type:Utility. Knock targets skyward.
 
@@ -76,6 +86,9 @@ enchantment.spellbound:
 
     outburst: Outburst
     outburst.desc: Type:Retaliation. Burst free when hit multiple times.
+
+    pestilence: Pestilence
+    pestilence.desc: Type:Retaliation. Spread status effects to nearby foes and damage them.
 
     phase_leap: Phase Leap
     phase_leap.desc: Type:Utility. Phase forward upon midair jump.
@@ -250,6 +263,19 @@ text.autoconfig.spellbound:
         demolition.BASE_EXPLOSION_POWER: Base Explosion Strength
         demolition.EXPLOSION_POWER_PER_RANK: Explosion Strength Per Rank
 
+        despoiling: Despoiling
+        despoiling.ENABLED: Enable
+        despoiling.IS_TREASURE: Is Treasure
+        despoiling.IS_FOR_SALE: Sold by Villagers
+        despoiling.RARITY: Rarity
+        despoiling.SOFT_CAP: Soft Cap
+        despoiling.HARD_CAP: Hard Cap
+        despoiling.BASE_POWER: Enchanting Base Power
+        despoiling.POWER_PER_RANK: Enchanting Power Per Rank
+        despoiling.POWER_RANGE: Enchanting Power Range
+        despoiling.DURATION_BASE: Base Duration
+        despoiling.DURATION_PER_LEVEL: Duration Per Level
+
         dullness: Dullness
         dullness.ENABLED: Enable
         dullness.IS_TREASURE: Is Treasure
@@ -348,6 +374,19 @@ text.autoconfig.spellbound:
         jousting.POWER_PER_RANK: Enchanting Power Per Rank
         jousting.POWER_RANGE: Enchanting Power Range
 
+        lastGasp: Last Gasp
+        lastGasp.ENABLED: Enable
+        lastGasp.IS_TREASURE: Is Treasure
+        lastGasp.IS_FOR_SALE: Sold by Villagers
+        lastGasp.RARITY: Rarity
+        lastGasp.SOFT_CAP: Soft Cap
+        lastGasp.HARD_CAP: Hard Cap
+        lastGasp.BASE_POWER: Enchanting Base Power
+        lastGasp.POWER_PER_RANK: Enchanting Power Per Rank
+        lastGasp.POWER_RANGE: Enchanting Power Range
+        lastGasp.HEALTH_REBOUND_PER_RANK: Health Rebound per Rank
+        lastGasp.RECOVERY_FROM_EXPERIENCE: Max Health Restored per Exp
+        
         launching: Launching
         launching.ENABLED: Enable
         launching.IS_TREASURE: Is Treasure
@@ -426,6 +465,25 @@ text.autoconfig.spellbound:
         outburst.SHOCKWAVE_POWER: Shockwave Power
         outburst.SHOCKWAVE_RANGE: Shockwave Range
 
+        pestilence: Pestilence
+        pestilence.ENABLED: Enable
+        pestilence.IS_TREASURE: Is Treasure
+        pestilence.IS_FOR_SALE: Sold by Villagers
+        pestilence.RARITY: Rarity
+        pestilence.SOFT_CAP: Soft Cap
+        pestilence.HARD_CAP: Hard Cap
+        pestilence.BASE_POWER: Enchanting Base Power
+        pestilence.POWER_PER_RANK: Enchanting Power Per Rank
+        pestilence.POWER_RANGE: Enchanting Power Range
+        pestilence.DURATION: Duration
+        pestilence.DAMAGE_PER_EFFECT: Damage per Status Effect Level
+        pestilence.RADIUS_SQUARED_PER_LEVEL: Radius Squared per Rank
+        pestilence.DURATION_PER_LEVEL: Duration per Rank
+        pestilence.STATUS_DURATION_FACTOR: Status Duration Factor
+        pestilence.MAX_STATUS_DURATION: Maximum Status Duration
+        pestilence.PESTILENCE_DAMAGE_FREQUENCY: Pestilence Damage Frequency
+        pestilence.PESTILENCE_DAMAGE_FREQUENCY_OFFSET: Pestilence Damage Frequency Offset
+        pestilence.MAX_DAMAGE_LEVELS_PER_EFFECT: Max Damage Levels per Effect
         phaseLeap: Phase Leap
         phaseLeap.ENABLED: Enable
         phaseLeap.IS_TREASURE: Is Treasure
