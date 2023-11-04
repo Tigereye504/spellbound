@@ -44,7 +44,7 @@ public class AccelerationEnchantment extends SBEnchantment{
         if(accelerationStacks == 0 || !stack.isSuitableFor(block)) {
             return miningSpeed;
         }
-        return miningSpeed + (accelerationStacks*level*level/10f);
+        return miningSpeed + (Math.min(Spellbound.config.acceleration.MAX_ACCELERATION_STACKS,accelerationStacks)*level*level/10f);
     }
 
     @Override

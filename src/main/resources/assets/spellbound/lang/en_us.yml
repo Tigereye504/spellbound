@@ -184,6 +184,7 @@ text.autoconfig.spellbound:
         acceleration.POWER_PER_RANK: Enchanting Power Per Rank
         acceleration.POWER_RANGE: Power Range
         acceleration.TIMEOUT: Timeout
+        acceleration.MAX_ACCELERATION_STACKS: Max Acceleration Stacks
 
         airline: Airline
         airline.ENABLED: Enable

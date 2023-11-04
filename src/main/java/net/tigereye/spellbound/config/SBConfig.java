@@ -22,6 +22,7 @@ public class SBConfig implements ConfigData {
         public int POWER_PER_RANK = 10;
         public int POWER_RANGE = 50;
         public int TIMEOUT = 50;
+        public float MAX_ACCELERATION_STACKS = 5;
     }
 
     @ConfigEntry.Category("enchantment")
@@ -139,8 +140,8 @@ public class SBConfig implements ConfigData {
         public int BASE_POWER = 6;
         public int POWER_PER_RANK = 9;
         public int POWER_RANGE = 50;
-        public int DURATION_BASE = 60;
-        public int DURATION_PER_LEVEL = 40;
+        public int DURATION_BASE = 40;
+        public int DURATION_PER_LEVEL = 20;
     }
     
     @ConfigEntry.Category("enchantment")
@@ -528,8 +529,8 @@ public class SBConfig implements ConfigData {
         public int POWER_RANGE = 50;
         public float DAMAGE_BASE = 5;
         public float DAMAGE_PER_LEVEL = 3;
-        public int DURATION_BASE = 60;
-        public int DURATION_PER_LEVEL = 40;
+        public int DURATION_BASE = 40;
+        public int DURATION_PER_LEVEL = 20;
     }
 
     @ConfigEntry.Category("enchantment")
