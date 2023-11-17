@@ -26,9 +26,9 @@ public class BagOfTrophies extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if (!user.world.isClient()) {
+        if (!user.getWorld().isClient()) {
             ItemStack bagOfRocks = user.getStackInHand(hand);
-            for (ItemStack item : user.getItemsHand()) {
+            for (ItemStack item : user.getHandItems()) {
                 if (item != bagOfRocks && EnchantmentHelper.getLevel(SBEnchantments.TROPHY_COLLECTING, item) > 0) {
                     Map<String,Integer> keyIntMap = SBEnchantments.TROPHY_COLLECTING.getTrophyMap(bagOfRocks);
                     NbtCompound tag = item.getOrCreateSubNbt(TrophyCollectingEnchantment.TROPHY_COLLECTOR_KEY);

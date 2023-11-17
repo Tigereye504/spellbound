@@ -4,7 +4,6 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.EntityDamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -43,15 +42,15 @@ public class OutburstEnchantment extends SBEnchantment {
         if(defender.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
             return amount;
         }
-        if(!source.isProjectile() && !(source instanceof EntityDamageSource)){
+        if(source.getAttacker() == null){
             return amount;
         }
         NbtCompound nbt = stack.getOrCreateNbt();
         int rage = nbt.getInt(OUTBURST_RAGE_NBT_KEY) + Spellbound.config.outburst.RAGE_PER_HIT;
 
-        if(!defender.world.isClient()) {
+        if(!defender.getWorld().isClient()) {
             int n = (int) (rage * 0.5);
-            ((ServerWorld) defender.world).spawnParticles(ParticleTypes.ANGRY_VILLAGER, defender.getX(), defender.getBodyY(0.5), defender.getZ(), n, 0.1, 0.0, 0.1, 0.2);
+            ((ServerWorld) defender.getWorld()).spawnParticles(ParticleTypes.ANGRY_VILLAGER, defender.getX(), defender.getBodyY(0.5), defender.getZ(), n, 0.1, 0.0, 0.1, 0.2);
         }
 
         if(rage >= Spellbound.config.outburst.RAGE_THRESHOLD){
@@ -70,7 +69,7 @@ public class OutburstEnchantment extends SBEnchantment {
 
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         NbtCompound nbt = stack.getOrCreateNbt();
-        if(nbt.contains(OUTBURST_RAGE_NBT_KEY) && entity.world.getTime() % 20 == 0){
+        if(nbt.contains(OUTBURST_RAGE_NBT_KEY) && entity.getWorld().getTime() % 20 == 0){
             int rage = nbt.getInt(OUTBURST_RAGE_NBT_KEY);
             if(rage <= 1){
                 nbt.remove(OUTBURST_RAGE_NBT_KEY);

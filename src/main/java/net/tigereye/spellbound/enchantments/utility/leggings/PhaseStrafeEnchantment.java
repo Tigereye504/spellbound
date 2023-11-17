@@ -50,7 +50,7 @@ public class PhaseStrafeEnchantment extends SBEnchantment {
         }
         //track Position
         if(!(entity instanceof PlayerEntity)) {
-            ((SpellboundLivingEntity)entity).updatePositionTracker(entity.getPos());
+            ((SpellboundLivingEntity)entity).spellbound$updatePositionTracker(entity.getPos());
         }
     }
 
@@ -75,7 +75,7 @@ public class PhaseStrafeEnchantment extends SBEnchantment {
             direction = entity.getVelocity();
         }
         else {
-            direction = entity.getPos().subtract(((SpellboundLivingEntity)entity).readPositionTracker());
+            direction = entity.getPos().subtract(((SpellboundLivingEntity)entity).spellbound$readPositionTracker());
         }
         direction = direction.multiply(1,0,1);
         Vec3d boundingBoxOffset = VectorUtil.getEntityBoundingBoxOffset(direction,entity.getBoundingBox(entity.getPose()));

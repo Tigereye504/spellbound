@@ -5,19 +5,18 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.*;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTables;
-import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
-import net.minecraft.tag.ItemTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
@@ -53,9 +52,9 @@ public class FisherOfMenEnchantment extends SBEnchantment {
     }
     @Override
     public void onPullHookedEntity(int level, FishingBobberEntity bobber, ItemStack stack, LivingEntity user, Entity target){
-        target.damage(DamageSource.thrownProjectile(bobber,user),
+        target.damage(user.getDamageSources().thrown(bobber,user),
                 Spellbound.config.fisherOfMen.BASE_DAMAGE + (Spellbound.config.fisherOfMen.DAMAGE_PER_LEVEL * level));
-        if(!target.isAlive() && !bobber.world.isClient()){
+        if(!target.isAlive() && !bobber.getWorld().isClient()){
             spawnFishingLoot(bobber, stack, user, target);
         }
     }
@@ -96,20 +95,20 @@ public class FisherOfMenEnchantment extends SBEnchantment {
             playerEntity = (PlayerEntity)user;
             luck = playerEntity.getLuck();
         }
-        LootContext.Builder builder = (new LootContext.Builder((ServerWorld)bobber.world)).parameter(LootContextParameters.ORIGIN, bobber.getPos()).parameter(LootContextParameters.TOOL, stack).parameter(LootContextParameters.THIS_ENTITY, bobber).random(user.getRandom()).luck(EnchantmentHelper.getLuckOfTheSea(stack) + luck);
-        LootTable lootTable = bobber.world.getServer().getLootManager().getTable(LootTables.FISHING_GAMEPLAY);
-        List<ItemStack> list = lootTable.generateLoot(builder.build(LootContextTypes.FISHING));
+        LootContextParameterSet.Builder LPSBuilder = new LootContextParameterSet.Builder((ServerWorld) bobber.getWorld()).add(LootContextParameters.ORIGIN, bobber.getPos()).add(LootContextParameters.TOOL, stack).add(LootContextParameters.THIS_ENTITY, bobber).luck(EnchantmentHelper.getLuckOfTheSea(stack) + luck);
+        LootTable lootTable = bobber.getWorld().getServer().getLootManager().getLootTable(LootTables.FISHING_GAMEPLAY);
+        List<ItemStack> list = lootTable.generateLoot(LPSBuilder.build(LootContextTypes.FISHING));
         if(playerEntity != null) {
             Criteria.FISHING_ROD_HOOKED.trigger((ServerPlayerEntity) playerEntity, stack, bobber, list);
         }
         for (ItemStack itemStack:
                 list) {
-            ItemEntity itemEntity = new ItemEntity(bobber.world, bobber.getX(), bobber.getY(), bobber.getZ(), itemStack);
+            ItemEntity itemEntity = new ItemEntity(bobber.getWorld(), bobber.getX(), bobber.getY(), bobber.getZ(), itemStack);
 
             itemEntity.setVelocity(vX, vY, vZ);
-            bobber.world.spawnEntity(itemEntity);
+            bobber.getWorld().spawnEntity(itemEntity);
             if (itemStack.isIn(ItemTags.FISHES) && playerEntity != null) {
-                playerEntity.increaseStat(Stats.FISH_CAUGHT, 1);
+                playerEntity.increaseStat(Stats.FISH_CAUGHT, itemStack.getCount());
             }
         }
     }

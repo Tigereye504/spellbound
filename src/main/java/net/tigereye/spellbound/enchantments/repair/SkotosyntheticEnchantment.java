@@ -47,7 +47,7 @@ public class SkotosyntheticEnchantment extends SBEnchantment {
                 return;
             }
             int periodMultiplier = Math.max(1,light+1);
-            if(entity.world.getTime() % ((long) Spellbound.config.skotosynthetic.REPAIR_PERIOD*periodMultiplier) == 0){
+            if(entity.getWorld().getTime() % ((long) Spellbound.config.skotosynthetic.REPAIR_PERIOD*periodMultiplier) == 0){
                 stack.setDamage(stack.getDamage()-1);
             }
         }

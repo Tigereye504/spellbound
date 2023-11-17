@@ -41,7 +41,7 @@ public class CaveInEnchantment extends SBEnchantment{
 
     @Override
     public void onProjectileBlockHit(int level, ItemStack itemStack, ProjectileEntity projectileEntity, BlockHitResult blockHitResult) {
-        caveIn(level,projectileEntity.world,blockHitResult.getBlockPos());
+        caveIn(level,projectileEntity.getWorld(),blockHitResult.getBlockPos());
     }
 
     private void caveIn(int level, World world, BlockPos center){

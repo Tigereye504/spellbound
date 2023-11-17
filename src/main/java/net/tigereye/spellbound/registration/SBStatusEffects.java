@@ -1,8 +1,9 @@
 package net.tigereye.spellbound.registration;
 
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.mob_effect.*;
 
@@ -23,16 +24,16 @@ public class SBStatusEffects {
 
 
     public static void register(){
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "bravados"), BRAVADOS);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "dying"), DYING);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "green_sparkles"), GREEN_SPARKLES);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "hovering"), HOVERING);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "monogamy"), MONOGAMY);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "pestilence"), PESTILENCE);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "polygamy"), POLYGAMY);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "primed"), PRIMED);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "shields_down"), SHIELDS_DOWN);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "shielded"), SHIELDED);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(Spellbound.MODID, "tethered"), TETHERED);
+        Registry.register(Registries.STATUS_EFFECT, new Identifier(Spellbound.MODID, "bravados"), BRAVADOS);
+        Registry.register(Registries.STATUS_EFFECT, new Identifier(Spellbound.MODID, "dying"), DYING);
+        Registry.register(Registries.STATUS_EFFECT, new Identifier(Spellbound.MODID, "green_sparkles"), GREEN_SPARKLES);
+        Registry.register(Registries.STATUS_EFFECT, new Identifier(Spellbound.MODID, "hovering"), HOVERING);
+        Registry.register(Registries.STATUS_EFFECT, new Identifier(Spellbound.MODID, "monogamy"), MONOGAMY);
+        Registry.register(Registries.STATUS_EFFECT, new Identifier(Spellbound.MODID, "pestilence"), PESTILENCE);
+        Registry.register(Registries.STATUS_EFFECT, new Identifier(Spellbound.MODID, "polygamy"), POLYGAMY);
+        Registry.register(Registries.STATUS_EFFECT, new Identifier(Spellbound.MODID, "primed"), PRIMED);
+        Registry.register(Registries.STATUS_EFFECT, new Identifier(Spellbound.MODID, "shields_down"), SHIELDS_DOWN);
+        Registry.register(Registries.STATUS_EFFECT, new Identifier(Spellbound.MODID, "shielded"), SHIELDED);
+        Registry.register(Registries.STATUS_EFFECT, new Identifier(Spellbound.MODID, "tethered"), TETHERED);
     }
 }

@@ -76,7 +76,7 @@ public class RockCollectingEnchantment extends SBEnchantment{
 
     @Override
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
-        return addTooltip(stack,player.world);
+        return addTooltip(stack,player.getWorld());
     }
     public List<Text> addTooltip(ItemStack stack, World world) {
         List<Text> output = new ArrayList<>();

@@ -85,7 +85,7 @@ public class ExplosionMixin implements SpellboundExplosion {
                         double o = this.z;
 
                         for(float var21 = 0.3F; h > 0.0F; h -= 0.22500001F) {
-                            BlockPos blockPos = new BlockPos(m, n, o);
+                            BlockPos blockPos = BlockPos.ofFloored(m, n, o);
                             BlockState blockState = this.world.getBlockState(blockPos);
                             FluidState fluidState = this.world.getFluidState(blockPos);
                             if (!this.world.isInBuildLimit(blockPos)) {

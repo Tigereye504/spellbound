@@ -40,9 +40,9 @@ public class SelfishEnchantment extends SBEnchantment {
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        if(!entity.world.isClient() && stack.isDamaged()){
+        if(!entity.getWorld().isClient() && stack.isDamaged()){
             ItemStack target;
-            int targetSlot = (int) (entity.world.getTime() % 7);
+            int targetSlot = (int) (entity.getWorld().getTime() % 7);
             switch (targetSlot) {
                 case 0 -> target = entity.getEquippedStack(EquipmentSlot.MAINHAND);
                 case 1 -> target = entity.getEquippedStack(EquipmentSlot.OFFHAND);

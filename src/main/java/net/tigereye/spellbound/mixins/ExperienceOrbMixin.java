@@ -16,7 +16,7 @@ public class ExperienceOrbMixin{
 
     @Inject(at = @At("HEAD"), method = "onPlayerCollision")
     public void spellboundOnPlayerCollisionMixin(PlayerEntity player, CallbackInfo ci){
-        if(!player.world.isClient()) {
+        if(!player.getWorld().isClient()) {
             SBEnchantmentHelper.onGainExperience(player, amount);
         }
     }

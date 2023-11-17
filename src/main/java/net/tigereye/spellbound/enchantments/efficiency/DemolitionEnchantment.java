@@ -65,7 +65,7 @@ public class DemolitionEnchantment extends SBEnchantment {
         long time = nbtCompound.getLong(DEMOLTION_LAST_BLAST_KEY);
         if(world.getTime() - time > 2){
             nbtCompound.putLong(DEMOLTION_LAST_BLAST_KEY,world.getTime());
-            ((SpellboundLivingEntity)player).addNextTickAction(new DemolitionAction(world, player, pos,
+            ((SpellboundLivingEntity)player).spellbound$addNextTickAction(new DemolitionAction(world, player, pos,
                     Spellbound.config.demolition.BASE_EXPLOSION_POWER + (Spellbound.config.demolition.EXPLOSION_POWER_PER_RANK *level)));
 
         }
@@ -93,7 +93,7 @@ public class DemolitionEnchantment extends SBEnchantment {
             double y = pos.getY() + .5;
             double z = pos.getZ() + .5;
             if(!world.isClient()) {
-                Explosion explosion = new Explosion(world, player, null, null, x, y, z, power, false, Explosion.DestructionType.BREAK);
+                Explosion explosion = new Explosion(world, player, null, null, x, y, z, power, false, Explosion.DestructionType.DESTROY);
                 ((SpellboundExplosion) explosion).collectBlocksAndDamageNonItemEntities();
                 List<BlockPos> explodedBlocks = explosion.getAffectedBlocks();
                 for (BlockPos position : explodedBlocks) {

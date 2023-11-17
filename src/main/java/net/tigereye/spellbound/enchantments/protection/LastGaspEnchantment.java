@@ -76,7 +76,7 @@ public class LastGaspEnchantment extends SBEnchantment{
             float driftX = (entity.getRandom().nextFloat() - .5f) * .15f;
             float driftY = (entity.getRandom().nextFloat() - .5f) * .15f;
             float driftZ = (entity.getRandom().nextFloat() - .5f) * .15f;
-            entity.world.addParticle(ParticleTypes.FALLING_LAVA,
+            entity.getWorld().addParticle(ParticleTypes.FALLING_LAVA,
                     entity.getX() + driftX, entity.getY() + driftY, entity.getZ() + driftZ,
                     driftX, driftY, driftZ);
         }

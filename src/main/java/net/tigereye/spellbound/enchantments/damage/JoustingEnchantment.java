@@ -60,7 +60,7 @@ public class JoustingEnchantment extends SBEnchantment{
 
     @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
-        Vec3d attackerVelocity = attacker.getPos().subtract(((SpellboundLivingEntity)attacker).readPositionTracker());
+        Vec3d attackerVelocity = attacker.getPos().subtract(((SpellboundLivingEntity)attacker).spellbound$readPositionTracker());
         Vec3d relativeVelocity = attackerVelocity.subtract(defender.getVelocity());
         Vec3d attackerFacing = attacker.getRotationVector().normalize();
         double dotP = relativeVelocity.dotProduct(attackerFacing);
@@ -77,7 +77,7 @@ public class JoustingEnchantment extends SBEnchantment{
                 damage = -damage;
             }
         }
-        if(Spellbound.DEBUG && attacker instanceof PlayerEntity && !attacker.world.isClient){
+        if(Spellbound.DEBUG && attacker instanceof PlayerEntity && !attacker.getWorld().isClient){
             String out;
             out = "Dot Product: " + dotP;
             ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
@@ -98,6 +98,6 @@ public class JoustingEnchantment extends SBEnchantment{
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        ((SpellboundLivingEntity)entity).updatePositionTracker(entity.getPos());
+        ((SpellboundLivingEntity)entity).spellbound$updatePositionTracker(entity.getPos());
     }
 }

@@ -10,7 +10,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -74,10 +74,6 @@ public class WorldChunkMixin extends Chunk {
     @Shadow
     @Nullable
     public NbtCompound getPackedBlockEntityNbt(BlockPos pos) {
-        return null;
-    }
-    @Shadow
-    public Stream<BlockPos> getLightSourcesStream() {
         return null;
     }
     @Shadow

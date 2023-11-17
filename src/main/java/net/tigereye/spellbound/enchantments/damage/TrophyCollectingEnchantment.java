@@ -92,7 +92,7 @@ public class TrophyCollectingEnchantment extends SBEnchantment{
 
     @Override
     public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
-        return addTooltip(stack,player.world);
+        return addTooltip(stack,player.getWorld());
     }
     public List<Text> addTooltip(ItemStack stack, World world) {
         boolean isRanged = stack.getItem() instanceof RangedWeaponItem;

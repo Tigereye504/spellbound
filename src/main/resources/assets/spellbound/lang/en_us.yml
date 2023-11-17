@@ -1,8 +1,8 @@
 death.attack:
-    sbInfidelity: "%1$s died from possessiveness."
-    sbInfidelity.player: "%1$s was betrayed while fighting %2$s."
-    sbPestilence: "%1$s died from disease."
-    sbPestilence.player: "%1$s died from disease caught from %2$s."
+    infidelity: "%1$s died from possessiveness."
+    infidelity.player: "%1$s was betrayed while fighting %2$s."
+    pestilence: "%1$s died from disease."
+    pestilence.player: "%1$s died from disease caught from %2$s."
 
 effect.spellbound:
     bravados: Bravados

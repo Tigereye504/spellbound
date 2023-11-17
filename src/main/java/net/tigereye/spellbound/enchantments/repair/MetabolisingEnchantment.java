@@ -40,7 +40,7 @@ public class MetabolisingEnchantment extends SBEnchantment {
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        World world = entity.world;
+        World world = entity.getWorld();
         if(!world.isClient() && stack.isDamaged()){
             if(!(entity instanceof PlayerEntity)){
                 return;

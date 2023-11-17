@@ -48,7 +48,7 @@ public class PhotosyntheticEnchantment extends SBEnchantment {
                 return;
             }
             int periodMultiplier = Math.max(1,16 - light);
-            if(entity.world.getTime() % ((long) Spellbound.config.photosynthetic.REPAIR_PERIOD*periodMultiplier) == 0){
+            if(entity.getWorld().getTime() % ((long) Spellbound.config.photosynthetic.REPAIR_PERIOD*periodMultiplier) == 0){
                 stack.setDamage(stack.getDamage()-1);
             }
         }

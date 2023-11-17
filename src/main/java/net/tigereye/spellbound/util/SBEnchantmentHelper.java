@@ -18,8 +18,10 @@ import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -27,9 +29,9 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -96,7 +98,7 @@ public class SBEnchantmentHelper {
     public static void onDeath(DamageSource source, LivingEntity victim){
         LivingEntity killer = victim.getPrimeAdversary();
         ItemStack projectileSource = null;
-        if(source.isProjectile()){
+        if(source.isIn(DamageTypeTags.IS_PROJECTILE)){
             if(source.getSource() instanceof TridentEntity){
                 projectileSource = ((TridentEntityItemAccessor) source.getSource()).spellbound_getTridentStack();
             }
@@ -379,7 +381,7 @@ public class SBEnchantmentHelper {
             for(int i = 0; i < NbtList.size(); ++i) {
                 String string = NbtList.getCompound(i).getString("id");
                 int j = NbtList.getCompound(i).getInt("lvl");
-                Registry.ENCHANTMENT.getOrEmpty(Identifier.tryParse(string)).ifPresent((enchantment) -> {
+                Registries.ENCHANTMENT.getOrEmpty(Identifier.tryParse(string)).ifPresent((enchantment) -> {
                     if(enchantment instanceof SBEnchantment) {
                         consumer.accept((SBEnchantment)enchantment, j, stack);
                     }
@@ -439,7 +441,7 @@ public class SBEnchantmentHelper {
     }
     //returns false if they are pologamous, true if they are monogamous
     public static boolean testOwnerFaithfulness(ItemStack stack, LivingEntity owner){
-        if(owner.world.isClient()){
+        if(owner.getWorld().isClient()){
             return true;
         }
         UUID id = loadItemUUID(stack);
@@ -546,10 +548,10 @@ public class SBEnchantmentHelper {
 
     private static RegistryEntry<Enchantment> getEnchantmentRegistryKey(Enchantment enchantment){
         RegistryKey<Enchantment> key;
-        Optional<RegistryKey<Enchantment>> optional = Registry.ENCHANTMENT.getKey(enchantment);
+        Optional<RegistryKey<Enchantment>> optional = Registries.ENCHANTMENT.getKey(enchantment);
         if(optional.isPresent()) {key = optional.get();}
         else {return null;}
-        Optional<RegistryEntry<Enchantment>> optional2 = Registry.ENCHANTMENT.getEntry(key);
+        Optional<RegistryEntry.Reference<Enchantment>> optional2 = Registries.ENCHANTMENT.getEntry(key);
         return optional2.orElse(null);
     }
 

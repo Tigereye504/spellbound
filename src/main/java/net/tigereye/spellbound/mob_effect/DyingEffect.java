@@ -1,6 +1,7 @@
 package net.tigereye.spellbound.mob_effect;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
@@ -34,7 +35,7 @@ public class DyingEffect extends SBStatusEffect{
     }
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(!(entity.world.isClient)){
+        if(!(entity.getWorld().isClient)){
             EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
             if(att != null) {
                 EntityAttributeModifier oldmod = att.getModifier(DYING_HEATLH_ID);
@@ -42,7 +43,7 @@ public class DyingEffect extends SBStatusEffect{
                 if(oldmod != null) {
                 newValue = oldmod.getValue();
                 }
-                newValue -= (1d/Spellbound.config.lastGasp.TIME_TO_DIE);
+                newValue -= (Math.pow(2,amplifier)/Spellbound.config.lastGasp.TIME_TO_DIE);
                 UpdateDyingModifier(entity,newValue);
                 if(entity.getHealth() > entity.getMaxHealth() && newValue > -1){
                     entity.setHealth(entity.getMaxHealth());
@@ -50,7 +51,7 @@ public class DyingEffect extends SBStatusEffect{
 
                 if(newValue <= -1){
                     //entity.setHealth(0.01f);
-                    entity.damage(DamageSource.GENERIC,999);
+                    entity.damage(entity.getDamageSources().genericKill(),999);
                 }
             }
         }
@@ -69,7 +70,7 @@ public class DyingEffect extends SBStatusEffect{
         }
     }
 
-    public static void renderDyingOverlay(MatrixStack matrixStack, float delta){
+    public static void renderDyingOverlay(DrawContext context, float delta){
         MinecraftClient client = MinecraftClient.getInstance();
         ClientPlayerEntity player = client.player;
         if(player != null && player.hasStatusEffect(SBStatusEffects.DYING)) {
@@ -82,7 +83,7 @@ public class DyingEffect extends SBStatusEffect{
             else{
                 opacity = .15f + (.05f * amplifier);
             }
-            MinecraftClient.getInstance().inGameHud.renderOverlay(DYING_OVERLAY,opacity);
+            MinecraftClient.getInstance().inGameHud.renderOverlay(context,DYING_OVERLAY,opacity);
         }
     }
 }

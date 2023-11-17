@@ -4,10 +4,14 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootManager;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameterSet;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -46,12 +50,13 @@ public class ScalpingEnchantment extends SBEnchantment{
 
     @Override
     public void onDoRedHealthDamage(int level, ItemStack itemStack, LivingEntity attacker, LivingEntity victim, DamageSource source, float amount) {
-        if(victim.world.isClient()){
+        if(victim.getWorld().isClient()){
             return;
         }
         Identifier identifier = victim.getLootTable();
-        LootTable lootTable = victim.world.getServer().getLootManager().getTable(identifier);
-        LootContext.Builder builder = victim.getLootContextBuilder(attacker instanceof ServerPlayerEntity, source);
+        LootManager lootManager = victim.getWorld().getServer().getLootManager();
+        LootTable lootTable = lootManager.getLootTable(identifier);
+        LootContextParameterSet.Builder builder = new LootContextParameterSet.Builder((ServerWorld) victim.getWorld()).add(LootContextParameters.KILLER_ENTITY,attacker);
         float dropChance = (amount / victim.getMaxHealth()) * level * Spellbound.config.scalping.DROP_FACTOR_PER_LEVEL;
         while(dropChance > 0){
             List<ItemStack> rawItemDrops = lootTable.generateLoot(builder.build(LootContextTypes.ENTITY));

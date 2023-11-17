@@ -40,7 +40,7 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
 
             Vec3d pullVector = new Vec3d(ti.anchor.getX() - entity.getX(), ti.anchor.getY() - entity.getY(), ti.anchor.getZ() - entity.getZ());
 
-            if(!(entity.world.isClient)) {
+            if(!(entity.getWorld().isClient)) {
                 if (pullVector.length() >= Spellbound.config.tethering.LEASH_LENGTH) {
                     entity.setPos(entity.getX(), entity.getY() + pullVector.y * 0.015D * Spellbound.config.tethering.ATTRACTION_FACTOR, entity.getZ());
 
@@ -59,7 +59,7 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
                 float driftX = (entity.getRandom().nextFloat() - .5f) * .15f;
                 float driftY = (entity.getRandom().nextFloat() - .5f) * .15f;
                 float driftZ = (entity.getRandom().nextFloat() - .5f) * .15f;
-                entity.world.addParticle(ParticleTypes.ELECTRIC_SPARK,
+                entity.getWorld().addParticle(ParticleTypes.ELECTRIC_SPARK,
                         modifiedPosition.x+driftX, modifiedPosition.y+driftY, modifiedPosition.z+driftZ,
                         0, 0, 0);
             }
@@ -78,8 +78,8 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
             }
             else{
                 ServerWorld world;
-                if(entity.world instanceof ServerWorld){
-                    world = (ServerWorld)entity.world;
+                if(entity.getWorld() instanceof ServerWorld){
+                    world = (ServerWorld)entity.getWorld();
                 }
                 else{
                     return false;

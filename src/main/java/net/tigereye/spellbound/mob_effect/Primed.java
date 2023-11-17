@@ -17,7 +17,7 @@ public class Primed extends SBStatusEffect{
     }
 
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(!(entity.world.isClient)){
+        if(!(entity.getWorld().isClient)){
             SpellboundUtil.psudeoExplosion(entity, false, entity.getPos()
                     , ((amplifier*amplifier)+1)
                     ,(amplifier+1)*2

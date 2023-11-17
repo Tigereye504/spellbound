@@ -56,15 +56,15 @@ public class BufferedEnchantment extends SBEnchantment {
         if(entity == null){
             return loss;
         }
-        World world = entity.world;
+        World world = entity.getWorld();
         if(!world.isClient()){
-            float durabilityBuffer = getDurabilityBuffer(level, stack, entity.world);
+            float durabilityBuffer = getDurabilityBuffer(level, stack, entity.getWorld());
             if(Spellbound.DEBUG) {
                 Spellbound.LOGGER.info(stack.getName().getString() + " has " + durabilityBuffer + " buffer");
             }
             if(durabilityBuffer >= 1){
                 int cost = (int)Math.min(loss,Math.floor(durabilityBuffer));
-                setDurabilityBuffer(level, stack, entity.world, durabilityBuffer-cost);
+                setDurabilityBuffer(level, stack, entity.getWorld(), durabilityBuffer-cost);
                 if(Spellbound.DEBUG){
                     Spellbound.LOGGER.info("Buffered prevented "+cost+" durability loss");
                     Spellbound.LOGGER.info(durabilityBuffer-cost + " buffer remains");
@@ -161,13 +161,13 @@ public class BufferedEnchantment extends SBEnchantment {
 
     @Environment(EnvType.CLIENT)
     private static void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int red, int green, int blue, int alpha) {
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         buffer.vertex(x, y, 0.0D).color(red, green, blue, alpha).next();
         buffer.vertex(x, y + height, 0.0D).color(red, green, blue, alpha).next();
         buffer.vertex(x + width, y + height, 0.0D).color(red, green, blue, alpha).next();
         buffer.vertex(x + width, y, 0.0D).color(red, green, blue, alpha).next();
-        BufferRenderer.drawWithShader(buffer.end());
+        BufferRenderer.draw(buffer.end());
     }
 
 }

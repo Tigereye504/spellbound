@@ -4,13 +4,14 @@ import com.google.gson.Gson;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.dimension.DimensionType;
 import net.tigereye.spellbound.Spellbound;
 
@@ -52,7 +53,7 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
                 else if(prospectorData.materialIsTag) {
                     List<Pair<Identifier,Float>> value;
                     Pair<Identifier,Float> pair = new Pair<>(prospectorData.treasure,prospectorData.frequency);
-                    TagKey<Block> tag = TagKey.of(Registry.BLOCK_KEY,prospectorData.material);
+                    TagKey<Block> tag = TagKey.of(RegistryKeys.BLOCK,prospectorData.material);
                     if(!tagDropBonusMap.containsKey(tag)){
                         value = new LinkedList<>();
                         tagDropBonusMap.put(tag,value);
@@ -113,7 +114,7 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
 
         Set<TagKey<Block>> tagsLeft = new HashSet<>(tagDropBonusMap.keySet());
         for (Block block: foundBlocks) {
-            Identifier id = Registry.BLOCK.getId(block);
+            Identifier id = Registries.BLOCK.getId(block);
             //see if any tag bonuses are had
             Iterator<TagKey<Block>> iter = tagsLeft.iterator();
             while(iter.hasNext()){

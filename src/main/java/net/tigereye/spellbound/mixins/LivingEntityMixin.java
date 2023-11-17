@@ -6,8 +6,6 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -18,6 +16,7 @@ import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.mob_effect.SBStatusEffectHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -28,18 +27,25 @@ import java.util.List;
 import java.util.Map;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin extends Entity implements SpellboundLivingEntity {
+public abstract class LivingEntityMixin extends Entity implements SpellboundLivingEntity {
 
     @Shadow protected float lastDamageTaken;
+    @Unique
     private Vec3d SB_OldPos;
+    @Unique
     private Vec3d SB_LastPos;
+    @Unique
     private final List<NextTickAction> nextTickActions = new LinkedList<>();
+    @Unique
     private final List<NextTickAction> nextTickActionsQueue = new LinkedList<>();
+    @Unique
     private boolean performingNextTickActions = false;
+    @Unique
     private int graceTicks = 0;
+    @Unique
     private float graceMagnitude = 0;
 
-    public void addNextTickAction(NextTickAction action){
+    public void spellbound$addNextTickAction(NextTickAction action){
         if (performingNextTickActions)
             nextTickActionsQueue.add(action);
         else
@@ -65,7 +71,7 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
     public void spellboundLivingEntityApplyIFramesDurationMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
         this.lastDamageTaken = SBEnchantmentHelper.onApplyIFrameMagnitude(this.lastDamageTaken, source, amount, (LivingEntity)(Object)this);
         int duration = SBEnchantmentHelper.onApplyIFrameDuration(this.timeUntilRegen, source, amount, (LivingEntity)(Object)this);
-        if(!this.world.isClient && ((LivingEntity)(Object)this) instanceof ServerPlayerEntity entity){
+        if(!this.getWorld().isClient && ((LivingEntity)(Object)this) instanceof ServerPlayerEntity entity){
             NetworkingUtil.sendGraceDataPacket(this.lastDamageTaken,duration-10,entity);
         }
         this.timeUntilRegen = duration;
@@ -138,47 +144,27 @@ public class LivingEntityMixin extends Entity implements SpellboundLivingEntity 
     }
 
     @Override
-    public void updatePositionTracker(Vec3d pos) {
+    public void spellbound$updatePositionTracker(Vec3d pos) {
         SB_OldPos = SB_LastPos;
         SB_LastPos = pos;
     }
 
     @Override
-    public Vec3d readPositionTracker() {
+    public Vec3d spellbound$readPositionTracker() {
         return SB_OldPos;
     }
 
-    public float getGraceMagnitude(){
+    public float spellbound$getGraceMagnitude(){
         return graceMagnitude;
     }
-    public int getGraceTicks(){
+    public int spellbound$getGraceTicks(){
         return graceTicks;
     }
-    public void setGraceMagnitude(float lastDamageTaken){
+    public void spellbound$setGraceMagnitude(float lastDamageTaken){
         this.graceMagnitude = lastDamageTaken;
     }
 
-    public void setGraceTicks(int iFrameTicks){
+    public void spellbound$setGraceTicks(int iFrameTicks){
         graceTicks = iFrameTicks;
-    }
-
-    @Shadow
-    protected void initDataTracker() {
-
-    }
-
-    @Shadow
-    protected void readCustomDataFromNbt(NbtCompound tag) {
-
-    }
-
-    @Shadow
-    protected void writeCustomDataToNbt(NbtCompound tag) {
-
-    }
-
-    @Shadow
-    public Packet<?> createSpawnPacket() {
-        return null;
     }
 }

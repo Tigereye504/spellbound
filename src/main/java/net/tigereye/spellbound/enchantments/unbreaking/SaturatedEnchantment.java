@@ -41,7 +41,7 @@ public class SaturatedEnchantment extends SBEnchantment {
         if(entity == null){
             return loss;
         }
-        World world = entity.world;
+        World world = entity.getWorld();
         if(!world.isClient()){
             HungerManager manager = entity.getHungerManager();
             if(manager.getFoodLevel() >= Spellbound.config.saturated.FOOD_THRESHOLD){

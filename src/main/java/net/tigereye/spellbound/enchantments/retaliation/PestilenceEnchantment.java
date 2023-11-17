@@ -57,7 +57,7 @@ public class PestilenceEnchantment  extends SBEnchantment {
                 }
             });
             if(!hostileEffects.isEmpty()){
-                AreaEffectCloudEntity stank = new AreaEffectCloudEntity(entity.world,entity.getX(),entity.getY(),entity.getZ());
+                AreaEffectCloudEntity stank = new AreaEffectCloudEntity(entity.getWorld(),entity.getX(),entity.getY(),entity.getZ());
                 AtomicInteger longestDuration = new AtomicInteger(1);
                 int levels = SBEnchantmentHelper.getSpellboundEnchantmentAmountCorrectlyWorn(SBEnchantments.PESTILENCE,entity);
                 stank.setOwner(entity);
@@ -74,7 +74,7 @@ public class PestilenceEnchantment  extends SBEnchantment {
                 OwnedStatusEffectInstance osei = new OwnedStatusEffectInstance(entity, SBStatusEffects.PESTILENCE,
                         (longestDuration.get() - (longestDuration.get() % Spellbound.config.pestilence.PESTILENCE_DAMAGE_FREQUENCY) + Spellbound.config.pestilence.PESTILENCE_DAMAGE_FREQUENCY_OFFSET));
                 stank.addEffect(osei);
-                entity.world.spawnEntity(stank);
+                entity.getWorld().spawnEntity(stank);
             }
         }
     }

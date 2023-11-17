@@ -98,7 +98,7 @@ public class ResurfacingItemsPersistentState extends PersistentState {
                         ResurfacingItemsPersistentState ripState = getResurfacingItemsPersistentState(server);
                         if (ripState.canResurfaceItem()) {
                             loot.addAll(ripState.PopMultipleWithChance(Spellbound.config.resurfacing.ATTEMPTS_PER_CHEST,
-                                    Spellbound.config.resurfacing.CHANCE_PER_ATTEMPT,entity.world.getRandom()));
+                                    Spellbound.config.resurfacing.CHANCE_PER_ATTEMPT,entity.getWorld().getRandom()));
                         }
                     }
                 }

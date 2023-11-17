@@ -46,17 +46,17 @@ public class ImpersonalEnchantment extends SBEnchantment{
         }
         Direction shift = target.getHorizontalFacing().getOpposite();
         double distanceBehind = 3+target.getBoundingBox().getZLength();
-        BlockPos newPos = new BlockPos(target.getX() + (shift.getOffsetX()*distanceBehind),
-                target.getY() + (shift.getOffsetY()*distanceBehind),
-                target.getZ() + (shift.getOffsetZ()*distanceBehind));
-        BlockState newPosBlock = user.world.getBlockState(newPos);
+        BlockPos newPos = BlockPos.ofFloored((target.getX() + (shift.getOffsetX()*distanceBehind)),
+                (target.getY() + (shift.getOffsetY()*distanceBehind)),
+                (target.getZ() + (shift.getOffsetZ()*distanceBehind)));
+        BlockState newPosBlock = user.getWorld().getBlockState(newPos);
         if(!newPosBlock.isOpaque()) {
             user.teleport(newPos.getX(),newPos.getY(),newPos.getZ());
             user.setYaw(target.getHorizontalFacing().asRotation());
         }
         else{
             newPos = newPos.add(0,1,0);
-            newPosBlock = user.world.getBlockState(newPos);
+            newPosBlock = user.getWorld().getBlockState(newPos);
             if(!newPosBlock.isOpaque()) {
                 user.teleport(newPos.getX(),newPos.getY(),newPos.getZ());
                 user.setYaw(target.getHorizontalFacing().asRotation());

@@ -1,8 +1,9 @@
 package net.tigereye.spellbound.registration;
 
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.enchantments.damage.*;
@@ -134,7 +135,7 @@ public class SBEnchantments {
     }
 
     public static void register(String name, SBEnchantment enchantment){
-        Registry.register(Registry.ENCHANTMENT,new Identifier(Spellbound.MODID, name), enchantment);
+        Registry.register(Registries.ENCHANTMENT,new Identifier(Spellbound.MODID, name), enchantment);
         SBEnchantmentList.add(enchantment);
     }
 }

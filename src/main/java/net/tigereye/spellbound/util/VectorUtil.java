@@ -66,10 +66,10 @@ public class VectorUtil {
 
     public static Vec3d findCollisionWithStepAssistOnLine(World world, Vec3d position, Vec3d direction, double length){
         int remainingMaxIterations = (int)(length*2+1);
-        BlockPos blockPos = new BlockPos(position);
+        BlockPos blockPos = BlockPos.ofFloored(position);
         Vec3d unitVector = direction.normalize();
         Vec3d finalPosition = position.add(unitVector.multiply(length/*level*DISTANCE_PER_LEVEL*/));
-        BlockPos finalBlockPosition = new BlockPos(finalPosition);
+        BlockPos finalBlockPosition = BlockPos.ofFloored(finalPosition);
         boolean endPointFound = false;
         while(!endPointFound) {
             //find point and direction where next block is touched

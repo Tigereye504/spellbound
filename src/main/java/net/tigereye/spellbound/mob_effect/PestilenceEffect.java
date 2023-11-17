@@ -2,13 +2,14 @@ package net.tigereye.spellbound.mob_effect;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.mob_effect.instance.OwnedStatusEffectInstance;
-import net.tigereye.spellbound.registration.SBDamageSource;
+import net.tigereye.spellbound.registration.SBDamageSources;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
@@ -55,7 +56,7 @@ public class PestilenceEffect extends SBStatusEffect implements CustomDataStatus
     }
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(!(entity.world.isClient)){
+        if(!(entity.getWorld().isClient)){
             if(SBEnchantmentHelper.getSpellboundEnchantmentAmountCorrectlyWorn(SBEnchantments.PESTILENCE,entity) == 0) {
                 AtomicInteger effectLevels = new AtomicInteger();
                 Collection<StatusEffectInstance> effects = entity.getStatusEffects();
@@ -67,10 +68,12 @@ public class PestilenceEffect extends SBStatusEffect implements CustomDataStatus
                 if (effectLevels.get() > 0) {
                     StatusEffectInstance temp = entity.getStatusEffect(PESTILENCE);
                     if(temp instanceof OwnedStatusEffectInstance si && fillMissingPestilenceData(si,entity)) {
-                        entity.damage(SBDamageSource.pestilence(si.owner), Spellbound.config.pestilence.DAMAGE_PER_EFFECT * effectLevels.get());
+                        entity.damage(SBDamageSources.of(entity.getWorld(),SBDamageSources.PESTILENCE,si.owner),
+                                Spellbound.config.pestilence.DAMAGE_PER_EFFECT * effectLevels.get());
                     }
                     else{
-                        entity.damage(SBDamageSource.PESTILENCE, Spellbound.config.pestilence.DAMAGE_PER_EFFECT * effectLevels.get());
+                        entity.damage(SBDamageSources.of(entity.getWorld(),SBDamageSources.PESTILENCE),
+                                Spellbound.config.pestilence.DAMAGE_PER_EFFECT * effectLevels.get());
                     }
                 }
             }
@@ -84,8 +87,8 @@ public class PestilenceEffect extends SBStatusEffect implements CustomDataStatus
             }
             else{
                 ServerWorld world;
-                if(entity.world instanceof ServerWorld){
-                    world = (ServerWorld)entity.world;
+                if(entity.getWorld() instanceof ServerWorld){
+                    world = (ServerWorld)entity.getWorld();
                 }
                 else{
                     return false;

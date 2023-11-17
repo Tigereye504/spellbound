@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.util.Identifier;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
@@ -24,10 +25,10 @@ public class SBNetworking {
             double y = buf.readDouble();
             double z = buf.readDouble();
             server.execute(() -> {
-                Set<PlayerPositionLookS2CPacket.Flag> flags = new HashSet<>();
-                flags.add(PlayerPositionLookS2CPacket.Flag.X);
-                flags.add(PlayerPositionLookS2CPacket.Flag.Y);
-                flags.add(PlayerPositionLookS2CPacket.Flag.Z);
+                Set<PositionFlag> flags = new HashSet<>();
+                flags.add(PositionFlag.X);
+                flags.add(PositionFlag.Y);
+                flags.add(PositionFlag.Z);
                 client.networkHandler.requestTeleport(x, y, z, client.getYaw(), client.getPitch(), flags);
 
             });
@@ -55,8 +56,8 @@ public class SBNetworking {
             int ticks = buf.readInt();
             client.execute(() -> {
                 if(client.player instanceof SpellboundLivingEntity entity){
-                    entity.setGraceTicks(ticks);
-                    entity.setGraceMagnitude(magnitude);
+                    entity.spellbound$setGraceTicks(ticks);
+                    entity.spellbound$setGraceMagnitude(magnitude);
                 }
             });
         });

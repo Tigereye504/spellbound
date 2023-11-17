@@ -8,12 +8,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.data.ProspectorManager;
@@ -61,7 +62,7 @@ public class ProspectorEnchantment extends SBEnchantment {
             Random random = player.getRandom();
             for (Map.Entry<Identifier, Float> entry : rates.entrySet()) {
                 if (entry.getValue() > 0) {
-                    Item treasure = Registry.ITEM.get(entry.getKey());
+                    Item treasure = Registries.ITEM.get(entry.getKey());
                     if (treasure != Items.AIR) {
                         if (Spellbound.DEBUG) {
                             Spellbound.LOGGER.info("Prospecting " + Text.translatable(treasure.getTranslationKey()).getString() + ". Attempts: " + level + ". Odds: " + entry.getValue());
@@ -72,7 +73,7 @@ public class ProspectorEnchantment extends SBEnchantment {
                                 count++;
                             }
                         }
-                        ((SpellboundLivingEntity) player).addNextTickAction(new ProspectorAction(sWorld, pos, new ItemStack(treasure, count)));
+                        ((SpellboundLivingEntity) player).spellbound$addNextTickAction(new ProspectorAction(sWorld, pos, new ItemStack(treasure, count)));
                     } else {
                         Spellbound.LOGGER.error(player.getName().getString() + "'s Prospector is looking for " + entry.getKey() + ", but cannot find it in the item registry!");
                     }

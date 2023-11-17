@@ -39,7 +39,7 @@ public class ProjectileEntityMixin  implements SpellboundProjectileEntity {
                 }
             }
             else {
-                for (ItemStack stack : owner.getItemsHand()) {
+                for (ItemStack stack : owner.getHandItems()) {
                     if (stack.getItem() instanceof RangedWeaponItem) {
                         setSource(stack);
                         SBEnchantmentHelper.onFireProjectile(owner,getSource(),(ProjectileEntity)(Object)this);

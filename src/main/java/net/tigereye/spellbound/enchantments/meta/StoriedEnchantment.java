@@ -57,7 +57,7 @@ public class StoriedEnchantment extends SBEnchantment {
     }
     @Override
     public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){
-        World world = killer.world;
+        World world = killer.getWorld();
         if(!world.isClient()){
             gainStoryXP(stack,killer,victim.getXpToDrop());
         }
@@ -107,11 +107,11 @@ public class StoriedEnchantment extends SBEnchantment {
             Enchantment selection = selectRandomAddableEnchantment(entity,stack,true);
             if(selection != null){
                 message += " Gained "+ selection.getName(1).getString() +"!";
-                ((SpellboundLivingEntity)entity).addNextTickAction(new StoriedSetEnchantmentLevelAction(stack, selection, 1));
+                ((SpellboundLivingEntity)entity).spellbound$addNextTickAction(new StoriedSetEnchantmentLevelAction(stack, selection, 1));
             }
             else{
                 message = stack.getName().getString()+ "has no story to tell.";
-                ((SpellboundLivingEntity)entity).addNextTickAction(new StoriedSetEnchantmentLevelAction(stack, SBEnchantments.STORIED, 0));
+                ((SpellboundLivingEntity)entity).spellbound$addNextTickAction(new StoriedSetEnchantmentLevelAction(stack, SBEnchantments.STORIED, 0));
             }
         }
         //Finally, tell the player the story has begun.
@@ -159,14 +159,14 @@ public class StoriedEnchantment extends SBEnchantment {
 
         //apply the upgrade or remove storied
         if(selection != null){
-            ((SpellboundLivingEntity)entity).addNextTickAction(new StoriedSetEnchantmentLevelAction(stack,selection,level));
+            ((SpellboundLivingEntity)entity).spellbound$addNextTickAction(new StoriedSetEnchantmentLevelAction(stack,selection,level));
             String message = stack.getName().getString() + "'s story continues. Gained "+ selection.getName(level).getString() +"!";
             if(entity instanceof ServerPlayerEntity pEntity) {
                 pEntity.sendMessage(Text.literal(message), true);
             }
         }
         else{
-            ((SpellboundLivingEntity) entity).addNextTickAction(new StoriedSetEnchantmentLevelAction(stack, SBEnchantments.STORIED, 0));
+            ((SpellboundLivingEntity) entity).spellbound$addNextTickAction(new StoriedSetEnchantmentLevelAction(stack, SBEnchantments.STORIED, 0));
             String message = stack.getName().getString() + "'s story is complete.";
             if(entity instanceof ServerPlayerEntity pEntity) {
                 pEntity.sendMessage(Text.literal(message), true);
