@@ -10,6 +10,7 @@ import net.minecraft.util.Hand;
 import net.tigereye.spellbound.interfaces.SpellboundPlayerEntity;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -19,11 +20,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin implements SpellboundPlayerEntity {
 
+    @Unique
     boolean spellboundEnchantments_IsMakingFullChargeAttack = false;
 
-    @ModifyVariable(at = @At(value = "CONSTANT", args = "floatValue=0.5F", ordinal = 0), ordinal = 1, method = "attack")
-    public float spellboundPlayerEntityAttackMixin(float h, Entity target){
-        return h + SBEnchantmentHelper.getAttackDamage((PlayerEntity)(Object)this, target);
+    @ModifyVariable(at = @At(value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/enchantment/EnchantmentHelper;getAttackDamage(" +
+                    "Lnet/minecraft/item/ItemStack;" +
+                    "Lnet/minecraft/entity/EntityGroup;" +
+                    ")F"),
+            //require = 2,
+            ordinal = 1,
+            method= "attack")
+    public float spellboundPlayerEntityAttackMixin(float g, Entity target){
+        return g + SBEnchantmentHelper.getAttackDamage((PlayerEntity)(Object)this, target);
     }
 
     @Inject(at = @At(value="CONSTANT", args="floatValue=0",ordinal = 1), method = "applyDamage")

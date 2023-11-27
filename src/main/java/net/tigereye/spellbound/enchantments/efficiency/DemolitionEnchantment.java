@@ -67,11 +67,8 @@ public class DemolitionEnchantment extends SBEnchantment {
             nbtCompound.putLong(DEMOLTION_LAST_BLAST_KEY,world.getTime());
             ((SpellboundLivingEntity)player).spellbound$addNextTickAction(new DemolitionAction(world, player, pos,
                     Spellbound.config.demolition.BASE_EXPLOSION_POWER + (Spellbound.config.demolition.EXPLOSION_POWER_PER_RANK *level)));
-
         }
-        else if(player instanceof ServerPlayerEntity) {
-            stack.damage(1, player.getRandom(), (ServerPlayerEntity) player);
-        }
+        stack.postMine(world,state,pos,player);
     }
 
     private static class DemolitionAction implements NextTickAction{

@@ -107,11 +107,11 @@ public class BufferedEnchantment extends SBEnchantment {
         }
         float durabilityBuffer = BufferedEnchantment.getDurabilityBuffer(stack,world);
 
-        RenderSystem.disableDepthTest();
+        //RenderSystem.disableDepthTest();
         //RenderSystem.disableTexture();
         //RenderSystem.disableBlend();
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+        //RenderSystem.enableBlend();
+        //RenderSystem.defaultBlendFunc();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
 
@@ -122,7 +122,7 @@ public class BufferedEnchantment extends SBEnchantment {
 
         //RenderSystem.enableBlend();
         //RenderSystem.enableTexture();
-        RenderSystem.enableDepthTest();
+        //RenderSystem.enableDepthTest();
 
     }
 

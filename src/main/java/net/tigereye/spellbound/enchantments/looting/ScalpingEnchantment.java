@@ -56,7 +56,11 @@ public class ScalpingEnchantment extends SBEnchantment{
         Identifier identifier = victim.getLootTable();
         LootManager lootManager = victim.getWorld().getServer().getLootManager();
         LootTable lootTable = lootManager.getLootTable(identifier);
-        LootContextParameterSet.Builder builder = new LootContextParameterSet.Builder((ServerWorld) victim.getWorld()).add(LootContextParameters.KILLER_ENTITY,attacker);
+        LootContextParameterSet.Builder builder = new LootContextParameterSet.Builder((ServerWorld) victim.getWorld())
+                .add(LootContextParameters.KILLER_ENTITY,attacker)
+                .add(LootContextParameters.ORIGIN,attacker.getPos())
+                .add(LootContextParameters.THIS_ENTITY,victim)
+                .add(LootContextParameters.DAMAGE_SOURCE,source);
         float dropChance = (amount / victim.getMaxHealth()) * level * Spellbound.config.scalping.DROP_FACTOR_PER_LEVEL;
         while(dropChance > 0){
             List<ItemStack> rawItemDrops = lootTable.generateLoot(builder.build(LootContextTypes.ENTITY));
