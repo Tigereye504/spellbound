@@ -60,7 +60,15 @@ public class JoustingEnchantment extends SBEnchantment{
 
     @Override
     public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
-        Vec3d attackerVelocity = attacker.getPos().subtract(((SpellboundLivingEntity)attacker).spellbound$readPositionTracker());
+        Vec3d attackerOldPos = ((SpellboundLivingEntity)attacker).spellbound$readPositionTracker();
+        if(attackerOldPos == null){
+            Spellbound.LOGGER.error("Unable to read Jousting attacker's old position!");
+            Spellbound.LOGGER.error("Attacker: "+attacker);
+            Spellbound.LOGGER.error("Defender: "+defender);
+            Spellbound.LOGGER.error("Weapon: "+stack);
+            return 0;
+        }
+        Vec3d attackerVelocity = attacker.getPos().subtract(attackerOldPos);
         Vec3d relativeVelocity = attackerVelocity.subtract(defender.getVelocity());
         Vec3d attackerFacing = attacker.getRotationVector().normalize();
         double dotP = relativeVelocity.dotProduct(attackerFacing);

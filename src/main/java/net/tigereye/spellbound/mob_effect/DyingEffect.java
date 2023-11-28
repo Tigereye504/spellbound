@@ -1,15 +1,17 @@
 package net.tigereye.spellbound.mob_effect;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.registration.SBStatusEffects;
@@ -31,27 +33,41 @@ public class DyingEffect extends SBStatusEffect{
     }
     @Override
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
-        return true;
+        return duration % Math.max(2,20>>amplifier) == 1;
     }
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(!(entity.getWorld().isClient)){
-            EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
-            if(att != null) {
-                EntityAttributeModifier oldmod = att.getModifier(DYING_HEATLH_ID);
-                double newValue = 0;
-                if(oldmod != null) {
+        EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        if(att != null) {
+            EntityAttributeModifier oldmod = att.getModifier(DYING_HEATLH_ID);
+            double newValue = 0;
+            if(oldmod != null) {
                 newValue = oldmod.getValue();
-                }
-                newValue -= (Math.pow(2,amplifier)/Spellbound.config.lastGasp.TIME_TO_DIE);
-                UpdateDyingModifier(entity,newValue);
-                if(entity.getHealth() > entity.getMaxHealth() && newValue > -1){
-                    entity.setHealth(entity.getMaxHealth());
-                }
+            }
+            newValue -= Math.max(-.999,1d/Spellbound.config.lastGasp.SECONDS_TO_DIE);
 
-                if(newValue <= -1){
-                    //entity.setHealth(0.01f);
-                    entity.damage(entity.getDamageSources().genericKill(),999);
+            UpdateDyingModifier(entity,newValue);
+            if(entity.getHealth() > entity.getMaxHealth()){
+                entity.setHealth(entity.getMaxHealth());
+            }
+
+            if(newValue <= -.99){ //a bit of leeway to account for rounding errors
+                entity.damage(entity.getDamageSources().genericKill(),999);
+                if(entity.isAlive()){
+                    entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.DYING, 53688
+                            , 9,false,false,true));
+                }
+            }
+        }
+    }
+
+    public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier) {
+        EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        if(att != null) {
+            EntityAttributeModifier mod = att.getModifier(DYING_HEATLH_ID);
+            if (mod != null) {
+                if(mod.getValue() > 0){
+                    att.removeModifier(mod);
                 }
             }
         }
@@ -67,6 +83,9 @@ public class DyingEffect extends SBStatusEffect{
         if(att != null) {
             att.removeModifier(mod);
             att.addPersistentModifier(mod);
+            if(!entity.getWorld().isClient() && entity instanceof ServerPlayerEntity sPlayer){
+                sPlayer.markHealthDirty();
+            }
         }
     }
 
@@ -77,12 +96,13 @@ public class DyingEffect extends SBStatusEffect{
             int duration = player.getStatusEffect(SBStatusEffects.DYING).getDuration();
             int amplifier = player.getStatusEffect(SBStatusEffects.DYING).getAmplifier();
             float opacity;
-            if(duration == Spellbound.config.lastGasp.TIME_TO_DIE){
+            if(duration == Spellbound.config.lastGasp.SECONDS_TO_DIE){
                 opacity = .5f;
             }
             else{
                 opacity = .15f + (.05f * amplifier);
             }
+            RenderSystem.enableBlend();
             MinecraftClient.getInstance().inGameHud.renderOverlay(context,DYING_OVERLAY,opacity);
         }
     }

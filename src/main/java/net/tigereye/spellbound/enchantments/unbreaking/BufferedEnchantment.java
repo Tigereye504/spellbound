@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
@@ -99,7 +100,7 @@ public class BufferedEnchantment extends SBEnchantment {
     }
 
     @Environment(EnvType.CLIENT)
-    public static void RenderBufferItemOverlay(ItemStack stack, int x, int y){
+    public static void RenderBufferItemOverlay(DrawContext drawContext, ItemStack stack, int x, int y){
         World world = MinecraftClient.getInstance().world;
         int level = EnchantmentHelper.getLevel(SBEnchantments.BUFFERED,stack);
         if(world == null || level == 0){
@@ -107,27 +108,15 @@ public class BufferedEnchantment extends SBEnchantment {
         }
         float durabilityBuffer = BufferedEnchantment.getDurabilityBuffer(stack,world);
 
-        //RenderSystem.disableDepthTest();
-        //RenderSystem.disableTexture();
-        //RenderSystem.disableBlend();
-        //RenderSystem.enableBlend();
-        //RenderSystem.defaultBlendFunc();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-
         switch (Spellbound.config.buffered.DISPLAY) {
-            case "Aura", "aura" -> renderBufferAsAura(level, durabilityBuffer, buffer, x, y);
-            default -> renderBufferAsBar(level, durabilityBuffer, buffer, x, y);
+            case "Aura", "aura" -> renderBufferAsAura(drawContext, durabilityBuffer, x, y);
+            default -> renderBufferAsBar(drawContext, level, durabilityBuffer, x, y);
         }
-
-        //RenderSystem.enableBlend();
-        //RenderSystem.enableTexture();
-        //RenderSystem.enableDepthTest();
 
     }
 
     @Environment(EnvType.CLIENT)
-    private static void renderBufferAsAura(int level, float durability, BufferBuilder buffer, int x, int y){
+    private static void renderBufferAsAura(DrawContext drawContext, float durability, int x, int y){
 
         int totalLayers = (int)Math.ceil(durability);
         for(int i = 0; i < totalLayers && i < 8; i++){
@@ -141,33 +130,21 @@ public class BufferedEnchantment extends SBEnchantment {
             }
             int longSide = 15 - (i*2);
 
-            renderGuiQuad(buffer, x + i, y + i, longSide, 1, color >> 16 & 255, color >> 8 & 255, color & 255, alpha);
-            renderGuiQuad(buffer, x + 15 - i, y + i, 1, longSide, color >> 16 & 255, color >> 8 & 255, color & 255, alpha);
-            renderGuiQuad(buffer, x + i, y + 1 + i, 1, longSide, color >> 16 & 255, color >> 8 & 255, color & 255, alpha);
-            renderGuiQuad(buffer, x + 1 + i, y + 15 - i, longSide, 1, color >> 16 & 255, color >> 8 & 255, color & 255, alpha);
+            drawContext.fill(RenderLayer.getGuiOverlay(), x + i, y + i, x + i + longSide, y + i + 1, color | alpha << 24);
+            drawContext.fill(RenderLayer.getGuiOverlay(), x + 15 - i, y + i, x + 16 - i, y + i + longSide, color | alpha << 24);
+            drawContext.fill(RenderLayer.getGuiOverlay(), x + i, y + 1 + i, x + i + 1, y + 1 + i + longSide, color | alpha << 24);
+            drawContext.fill(RenderLayer.getGuiOverlay(), x + 1 + i, y + 15 - i, x + 1 + i + longSide, y + 16 - i, color | alpha << 24);
             durability--;
         }
     }
-
-
+    
     @Environment(EnvType.CLIENT)
-    private static void renderBufferAsBar(int level, float durability, BufferBuilder buffer, int x, int y){
+    private static void renderBufferAsBar(DrawContext drawContext, int level, float durability, int x, int y){
         int color = durability >= 1 ? BUFFER_COLOR : BUFFER_DULL_COLOR;
         int alpha = 255;//durabilityBuffer >= 1 ? 255 : 100;
         int width = (int) Math.ceil(Math.min(13, 13 * durability / (level * (float) Spellbound.config.buffered.MAX_PER_RANK)));
 
-        renderGuiQuad(buffer, x + 2, y + 14, width, 1, color >> 16 & 255, color >> 8 & 255, color & 255, alpha);
-    }
-
-    @Environment(EnvType.CLIENT)
-    private static void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int red, int green, int blue, int alpha) {
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        buffer.vertex(x, y, 0.0D).color(red, green, blue, alpha).next();
-        buffer.vertex(x, y + height, 0.0D).color(red, green, blue, alpha).next();
-        buffer.vertex(x + width, y + height, 0.0D).color(red, green, blue, alpha).next();
-        buffer.vertex(x + width, y, 0.0D).color(red, green, blue, alpha).next();
-        BufferRenderer.draw(buffer.end());
+        drawContext.fill(RenderLayer.getGuiOverlay(), x + 2, y + 14, x + 2 + width, y + 15, color | alpha << 24);
     }
 
 }

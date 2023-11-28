@@ -287,8 +287,9 @@ public class SBConfig implements ConfigData {
         public int BASE_POWER = -10;
         public int POWER_PER_RANK = 11;
         public int POWER_RANGE = 50;
-        public int TIME_TO_DIE = 200;
+        public int SECONDS_TO_DIE = 10;
         public float HEALTH_REBOUND_PER_RANK = 0.0625f;
+        public double INSTANT_MAX_HEALTH_LOSS_FACTOR = 0.5;
         public float RECOVERY_FROM_EXPERIENCE = 0.01f;
     }
 

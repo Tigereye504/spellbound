@@ -61,13 +61,7 @@ public class GraceEnchantment extends SBEnchantment{
             float graceAmount = ((SpellboundLivingEntity)player).spellbound$getGraceMagnitude();
             int graceTicks = ((SpellboundLivingEntity)player).spellbound$getGraceTicks();
             if(graceAmount > 0 && graceTicks > 0 && SBEnchantmentHelper.getSpellboundEnchantmentAmount(player.getArmorItems(),SBEnchantments.GRACE) > 0) {
-                //RenderSystem.disableDepthTest();
-                //RenderSystem.enableBlend();
-                //RenderSystem.defaultBlendFunc();
-
-                //matrixStack.push();
                 client.getProfiler().push("armor");
-                //RenderSystem._setShaderTexture(0, GRACE_ARMOR);
                 int scaledWidth = client.getWindow().getScaledWidth();
                 int scaledHeight = client.getWindow().getScaledHeight();
 
@@ -90,11 +84,7 @@ public class GraceEnchantment extends SBEnchantment{
                         drawContext.drawTexture(GRACE_ARMOR, x, s, 9, fadeLevel*9, 9, 9, 18, 36);
                     }
                 }
-
-                //matrixStack.pop();
                 client.getProfiler().pop();
-
-                //RenderSystem.enableDepthTest();
             }
         }
     }

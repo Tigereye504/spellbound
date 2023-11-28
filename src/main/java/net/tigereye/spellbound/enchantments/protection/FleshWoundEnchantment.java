@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.interfaces.NextTickAction;
+import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -39,6 +41,7 @@ public class FleshWoundEnchantment extends SBEnchantment{
 
     @Override
     public void onRedHealthDamage(int level, ItemStack itemStack, LivingEntity entity, float amount) {
+
         if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) != itemStack){
             return;
         }
@@ -46,13 +49,30 @@ public class FleshWoundEnchantment extends SBEnchantment{
                 itemStack.getItem() == Items.LEATHER_CHESTPLATE ||
                 itemStack.getItem() == Items.LEATHER_LEGGINGS ||
                 itemStack.getItem() == Items.LEATHER_HELMET){
-            //if(((DyeableArmorItem) itemStack.getItem()).getColor(itemStack) == 1908001) {
-            //    level *= 3;
-            //}
             level *= 3;
         }
-        float absorption = entity.getAbsorptionAmount();
-        entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.BRAVADOS, 1200, 0,false,false,false));
-        entity.setAbsorptionAmount(absorption+(level*amount*Spellbound.config.fleshWound.ABSORPTION_PER_DAMAGE_PER_LEVEL));
+        float absorption = Math.min(entity.getMaxHealth()*level,level*amount*Spellbound.config.fleshWound.ABSORPTION_PER_DAMAGE_PER_LEVEL);
+
+        ((SpellboundLivingEntity)entity).spellbound$addNextTickAction(new FleshWoundEnchantment.FleshWoundAction(entity,absorption));
+    }
+
+    private static class FleshWoundAction implements NextTickAction {
+
+        LivingEntity entity;
+        float absorption;
+
+        FleshWoundAction(LivingEntity entity, float absorption){
+            this.entity = entity;
+            this.absorption = absorption;
+        }
+        @Override
+        public void act() {
+            if(!entity.isAlive()){
+                return;
+            }
+            float existingAbsorption = entity.getAbsorptionAmount();
+            entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.BRAVADOS, 1200, 0,false,false,false));
+            entity.setAbsorptionAmount(existingAbsorption+this.absorption);
+        }
     }
 }

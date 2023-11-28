@@ -1,5 +1,6 @@
 package net.tigereye.spellbound.mob_effect;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -50,14 +51,8 @@ public class Shielded extends SBStatusEffect{
     public static void renderShields(DrawContext drawContext, float delta){
         MinecraftClient client = MinecraftClient.getInstance();
         ClientPlayerEntity player = client.player;
-        if(!(player.isCreative() || player.isSpectator())) {
-            //RenderSystem.disableDepthTest();
-            //RenderSystem.enableBlend();
-            //RenderSystem.defaultBlendFunc();
-
-            //matrixStack.push();
+        if(player != null && !(player.isCreative() || player.isSpectator())) {
             client.getProfiler().push("health");
-            //RenderSystem._setShaderTexture(0, SHIELDED_HEART);
             int scaledWidth = client.getWindow().getScaledWidth();
             int scaledHeight = client.getWindow().getScaledHeight();
 
@@ -75,15 +70,11 @@ public class Shielded extends SBStatusEffect{
                 }
             }
 
-            int i = 9 * (player.getWorld().getLevelProperties().isHardcore() ? 5 : 0);
             int j = MathHelper.ceil((double) maxHealth / 2.0D);
             int k = MathHelper.ceil((double) absorption / 2.0D);
-            int l = j * 2;
 
-
+            RenderSystem.enableBlend();
             for (int m = j + k - 1; m >= 0; --m) {
-
-                //int r = m * 2;
 
                 if (m < displayedShields) {
                     int n = m / 10;
@@ -91,12 +82,9 @@ public class Shielded extends SBStatusEffect{
                     int posX = x + o * 8;
                     int posY = y - n * lines;
                     drawContext.drawTexture(SHIELDED_HEART, posX, posY, 0, 0, 11, 11, 11, 11);
-                    //this.drawHeart(matrixStack, heartType, posX, posY, i, false, isHalfHeart);
                 }
             }
-            //matrixStack.pop();
             client.getProfiler().pop();
-            //RenderSystem.enableDepthTest();
         }
     }
 }
