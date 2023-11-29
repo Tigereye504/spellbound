@@ -4,7 +4,6 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -36,12 +35,9 @@ public class AttractiveEnchantment extends SBEnchantment{
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        World world = entity.getEntityWorld();
-        if(!world.isClient()){
-            if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
-                return;
-            }
-            SpellboundUtil.pushPullEntitiesPlayersInRange(Spellbound.config.attractive.RANGE, Spellbound.config.attractive.STRENGTH, entity);
+        if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
+            return;
         }
+        SpellboundUtil.pushPullEntitiesPlayersInRange(Spellbound.config.attractive.RANGE, Spellbound.config.attractive.STRENGTH, entity);
     }
 }

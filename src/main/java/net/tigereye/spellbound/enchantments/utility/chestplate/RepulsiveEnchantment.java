@@ -4,7 +4,6 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -36,14 +35,9 @@ public class RepulsiveEnchantment extends SBEnchantment{
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.repulsive.IS_FOR_SALE;}
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        World world = entity.getEntityWorld();
-        if(!world.isClient()){
-            if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
-                return;
-            }
-            if(stack == entity.getEquippedStack(EquipmentSlot.CHEST)) {
-                SpellboundUtil.pushPullEntitiesPlayersInRange(Spellbound.config.repulsive.RANGE, -Spellbound.config.repulsive.STRENGTH, entity);
-            }
+        if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
+            return;
         }
+        SpellboundUtil.pushPullEntitiesPlayersInRange(Spellbound.config.repulsive.RANGE, -Spellbound.config.repulsive.STRENGTH, entity);
     }
 }

@@ -63,26 +63,46 @@ public class Shielded extends SBStatusEffect{
 
             int x = scaledWidth / 2 - 92;
             int y = scaledHeight - 40;
-            int lines = Math.max(10 - (lineMidValue - 2), 3);
-            int displayedShields = 0;{
+            int lineWidth = Math.max(10 - (lineMidValue - 2), 3);
+            int shieldLayers = 0;{
                 if(player.hasStatusEffect(SBStatusEffects.SHIELDED)){
-                    displayedShields = player.getStatusEffect(SBStatusEffects.SHIELDED).getAmplifier()+1;
+                    shieldLayers = player.getStatusEffect(SBStatusEffects.SHIELDED).getAmplifier()+1;
                 }
             }
 
             int j = MathHelper.ceil((double) maxHealth / 2.0D);
             int k = MathHelper.ceil((double) absorption / 2.0D);
-
+            int displayableShields = Math.min(shieldLayers,j + k);
             RenderSystem.enableBlend();
-            for (int m = j + k - 1; m >= 0; --m) {
+            for (int m = displayableShields - 1; m >= 0; --m) {
 
-                if (m < displayedShields) {
-                    int n = m / 10;
-                    int o = m % 10;
-                    int posX = x + o * 8;
-                    int posY = y - n * lines;
-                    drawContext.drawTexture(SHIELDED_HEART, posX, posY, 0, 0, 11, 11, 11, 11);
+                int n = m / 10;
+                int o = m % 10;
+                int posX = x + o * 8;
+                int posY = y - n * lineWidth;
+                boolean isRightmost = o == 9 || m == displayableShields - 1;
+                boolean isLeftmost = o == 0;
+                if (isLeftmost) {
+                    drawContext.drawTexture(SHIELDED_HEART, posX, posY, 0, 0, 1, 11, 11, 11);
                 }
+                drawContext.drawTexture(SHIELDED_HEART, posX+1, posY, 1, 0, 8, 11, 11, 11);
+                if (isRightmost) {
+                    drawContext.drawTexture(SHIELDED_HEART, posX+9, posY, 9, 0, 2, 11, 11, 11);
+                }
+                /*
+                if(isLeftmost && isRightmost){
+                    drawContext.drawTexture(SHIELDED_HEART, posX, posY, 0, 0, 11, 11, 40, 11);
+                }
+                else if (!isLeftmost && !isRightmost) {
+                    drawContext.drawTexture(SHIELDED_HEART, posX+1, posY, 20, 0, 9, 11, 40, 11);
+                }
+                else if (isLeftmost) {
+                    drawContext.drawTexture(SHIELDED_HEART, posX, posY, 11, 0, 9, 11, 40, 11);
+                }
+                else {
+                    drawContext.drawTexture(SHIELDED_HEART, posX+2, posY, 29, 0, 9, 11, 40, 11);
+                }
+                */
             }
             client.getProfiler().pop();
         }

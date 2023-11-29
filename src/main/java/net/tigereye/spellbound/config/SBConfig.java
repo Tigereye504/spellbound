@@ -745,9 +745,9 @@ public class SBConfig implements ConfigData {
         public boolean IS_FOR_SALE = true;
         public int RARITY = 3;
         public int SOFT_CAP = 2;
-        public int HARD_CAP = 5;
+        public int HARD_CAP = 3;
         public int BASE_POWER = 0;
-        public int POWER_PER_RANK = 10;
+        public int POWER_PER_RANK = 15;
         public int POWER_RANGE = 50;
         public float DIFFICULTY_PER_RANK = 2f;
     }

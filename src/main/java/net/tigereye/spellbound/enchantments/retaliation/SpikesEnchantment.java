@@ -3,8 +3,6 @@ package net.tigereye.spellbound.enchantments.retaliation;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -39,16 +37,18 @@ public class SpikesEnchantment extends SBEnchantment {
     @Override
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.spikes.IS_FOR_SALE;}
     @Override
-    public void onTickOnceWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        List<LivingEntity> entities = entity.getWorld().getEntitiesByClass(LivingEntity.class,
-                entity.getBoundingBox().expand(.5,.5,.5),Objects::nonNull);
+    public void onTickOnceWhileEquipped(int level, ItemStack stack, LivingEntity user){
+        List<LivingEntity> entities = user.getWorld().getEntitiesByClass(LivingEntity.class,
+                user.getBoundingBox().expand(.5,.5,.5),Objects::nonNull);
         if(!entities.isEmpty()) {
-            float damage = SBEnchantmentHelper.getSpellboundEnchantmentAmountCorrectlyWorn(SBEnchantments.SPIKES, entity)
+            float damage = SBEnchantmentHelper.getSpellboundEnchantmentAmountCorrectlyWorn(SBEnchantments.SPIKES, user)
                     * Spellbound.config.spikes.DAMAGE_PER_LEVEL;
             for (LivingEntity target :
                     entities) {
-                if (target != entity) {
-                    target.damage(entity.getDamageSources().thorns(entity), damage);
+                if (target != user
+                        && !(user.hasPassengerDeep(target) || target.hasPassengerDeep(user)))
+                {
+                    target.damage(user.getDamageSources().thorns(user), damage);
                 }
             }
         }

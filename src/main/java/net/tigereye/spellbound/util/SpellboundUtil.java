@@ -10,14 +10,9 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
@@ -43,18 +38,22 @@ public class SpellboundUtil {
                         position.x-range,position.y-range,position.z-range));
         for (Entity target:
                 entityList) {
-            if(target != user && (target instanceof LivingEntity || target instanceof ItemEntity) && !(target instanceof PlayerEntity)) {
+            if(target != user && (target instanceof LivingEntity || target instanceof ItemEntity)
+                    //&& !(target instanceof PlayerEntity)
+                    && !(user.hasPassengerDeep(target) || target.hasPassengerDeep(user))
+                    && !(target.hasVehicle())
+            ) {
                 Vec3d forceVec = position.subtract(target.getPos()).normalize();
                 if (target instanceof LivingEntity) {
                     forceVec = forceVec.multiply(strength * Math.max(0, 1 - ((LivingEntity) target).getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)));
                 } else {
                     forceVec = forceVec.multiply(strength);
                 }
-                target.addVelocity(forceVec.x, forceVec.y, forceVec.z);
-                target.velocityModified = true;
+                target.addVelocity(forceVec.x, target.isOnGround() ? 0 : forceVec.y, forceVec.z);
+                target.velocityDirty = true;
             }
         }
-
+        /*
         List<PlayerEntity> playerList = user.getWorld().getPlayers(TargetPredicate.DEFAULT,user,
                 new Box(position.x+range,position.y+range,position.z+range,
                         position.x-range,position.y-range,position.z-range));
@@ -67,6 +66,7 @@ public class SpellboundUtil {
                 target.velocityModified = true;
             }
         }
+        */
     }
 
     public static boolean isPositionObstructed(World world, BlockPos pos){

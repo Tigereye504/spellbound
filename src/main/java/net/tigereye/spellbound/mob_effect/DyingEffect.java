@@ -52,8 +52,8 @@ public class DyingEffect extends SBStatusEffect{
             }
 
             if(newValue <= -.99){ //a bit of leeway to account for rounding errors
-                entity.damage(entity.getDamageSources().genericKill(),999);
-                if(entity.isAlive()){
+                entity.damage(entity.getDamageSources().generic(),entity.getMaxHealth() * 100);
+                if(entity.isAlive() && entity.hasStatusEffect(SBStatusEffects.DYING)){
                     entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.DYING, 53688
                             , 9,false,false,true));
                 }

@@ -387,6 +387,8 @@ text.autoconfig.spellbound:
         lastGasp.POWER_RANGE: Enchanting Power Range
         lastGasp.HEALTH_REBOUND_PER_RANK: Health Rebound per Rank
         lastGasp.RECOVERY_FROM_EXPERIENCE: Max Health Restored per Exp
+        lastGasp.SECONDS_TO_DIE: Seconds to Die
+        lastGasp.INSTANT_MAX_HEALTH_LOSS_FACTOR: Instant Max Health Loss Factor
         
         launching: Launching
         launching.ENABLED: Enable
