@@ -10,6 +10,7 @@ import net.tigereye.spellbound.enchantments.damage.*;
 import net.tigereye.spellbound.enchantments.efficiency.AccelerationEnchantment;
 import net.tigereye.spellbound.enchantments.efficiency.DemolitionEnchantment;
 import net.tigereye.spellbound.enchantments.efficiency.RockCollectingEnchantment;
+import net.tigereye.spellbound.enchantments.efficiency.WidenedEnchantment;
 import net.tigereye.spellbound.enchantments.fortune.ProspectorEnchantment;
 import net.tigereye.spellbound.enchantments.looting.DespoilingEnchantment;
 import net.tigereye.spellbound.enchantments.looting.ScalpingEnchantment;
@@ -84,6 +85,7 @@ public class SBEnchantments {
     public static final SBEnchantment TETHERING = new TetheringEnchantment();
     public static final TrophyCollectingEnchantment TROPHY_COLLECTING = new TrophyCollectingEnchantment();
     public static final WarlikeEnchantment WARLIKE = new WarlikeEnchantment();
+    public static final WidenedEnchantment WIDENED = new WidenedEnchantment();
 
     public static void register(){
         register("acceleration", ACCELERATION);
@@ -130,6 +132,7 @@ public class SBEnchantments {
         register("tethering", TETHERING);
         register("trophy_collecting", TROPHY_COLLECTING);
         register("warlike", WARLIKE);
+        register("widened", WIDENED);
 
         EntitySleepEvents.START_SLEEPING.register(((entity, sleepingPos) -> SBEnchantmentHelper.onStartSleeping(entity)));
     }

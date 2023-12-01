@@ -150,6 +150,9 @@ enchantment.spellbound:
     warlike: Warlike
     warlike.desc: Type:Utility. Declares war upon the world, increasing difficulty.
 
+    widened: Widened
+    widened.desc: Type:Efficiency. Tool breaks matching blocks in small plane around target.
+
 flavor.spellbound:
     bubbly: Bubbly
     extra_bubbly: Extra Bubbly
@@ -741,7 +744,18 @@ text.autoconfig.spellbound:
         warlike.POWER_PER_RANK: Enchanting Power Per Rank
         warlike.POWER_RANGE: Enchanting Power Range
         warlike.DIFFICULTY_PER_RANK: Difficulty Per Rank
-
+        
+        widened: Widened
+        widened.ENABLED: Enable
+        widened.IS_TREASURE: Is Treasure
+        widened.IS_FOR_SALE: Sold by Villagers
+        widened.RARITY: Rarity
+        widened.SOFT_CAP: Soft Cap
+        widened.HARD_CAP: Hard Cap
+        widened.BASE_POWER: Enchanting Base Power
+        widened.POWER_PER_RANK: Enchanting Power Per Rank
+        widened.POWER_RANGE: Enchanting Power Range
+        
         CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS: Can Shields have Armor Enchantments
         POWER_TO_EXCEED_SOFT_CAP: Power To Exceed Soft Cap
         COLLECTOR_DISPLAY_UPDATE_PERIOD: Collector Display Update Period

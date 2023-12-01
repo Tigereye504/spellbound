@@ -11,6 +11,7 @@ public class SBConfig implements ConfigData {
     @ConfigEntry.Category("enchantment")
     @ConfigEntry.Gui.CollapsibleObject
     public AccelerationConfig acceleration = new AccelerationConfig();
+
     public static class AccelerationConfig{
         public boolean ENABLED = true;
         public boolean IS_TREASURE = false;
@@ -751,6 +752,22 @@ public class SBConfig implements ConfigData {
         public int POWER_RANGE = 50;
         public float DIFFICULTY_PER_RANK = 2f;
     }
+
+    @ConfigEntry.Category("enchantment")
+    @ConfigEntry.Gui.CollapsibleObject
+    public WidenedConfig widened = new WidenedConfig();
+    public static class WidenedConfig {
+        public boolean ENABLED = true;
+        public boolean IS_TREASURE = false;
+        public boolean IS_FOR_SALE = true;
+        public int RARITY = 2;
+        public int SOFT_CAP = 5;
+        public int HARD_CAP = 8;
+        public int BASE_POWER = -9;
+        public int POWER_PER_RANK = 10;
+        public int POWER_RANGE = 50;
+    }
+
     @ConfigEntry.Category("other")
     public boolean CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS = false;
     @ConfigEntry.Category("other")

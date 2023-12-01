@@ -90,6 +90,10 @@ public abstract class SBEnchantment extends Enchantment {
 
     //public void onArmorChangeEvenIfAbsent
 
+    public void onBreakBlockDirectly(int level, ItemStack itemStack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        onBreakBlock(level, itemStack, world, pos, state, player);
+    }
+
     public void onBreakBlock(int level, ItemStack itemStack, World world, BlockPos pos, BlockState state, PlayerEntity player) {}
 
     public boolean onLethalDamageOnce(int level, DamageSource source, LivingEntity entity){return false;}

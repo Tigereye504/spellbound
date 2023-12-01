@@ -250,6 +250,10 @@ public class SBEnchantmentHelper {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onActivate(level, playerEntity, itemStack, target), playerEntity.getStackInHand(hand));
     }
 
+    public static void onBreakBlockDirectly(Block block, World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onBreakBlockDirectly(level, itemStack, world, pos, state, player), player.getMainHandStack());
+    }
+
     public static void onBreakBlock(Block block, World world, BlockPos pos, BlockState state, PlayerEntity player) {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onBreakBlock(level, itemStack, world, pos, state, player), player.getMainHandStack());
     }

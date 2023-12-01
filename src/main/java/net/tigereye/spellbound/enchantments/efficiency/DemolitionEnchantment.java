@@ -25,7 +25,6 @@ import java.util.*;
 
 public class DemolitionEnchantment extends SBEnchantment {
 
-    public static final String DEMOLTION_LAST_BLAST_KEY = Spellbound.MODID+"Demolition_Last_Blast";
     public DemolitionEnchantment() {
         super(SpellboundUtil.rarityLookup(Spellbound.config.demolition.RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
@@ -57,16 +56,18 @@ public class DemolitionEnchantment extends SBEnchantment {
     }
 
     @Override
-    public void onBreakBlock(int level, ItemStack stack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void onBreakBlockDirectly(int level, ItemStack stack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if(state.getBlock().getHardness() == 0){
             return;
         }
-        NbtCompound nbtCompound = stack.getOrCreateNbt();
-        long time = nbtCompound.getLong(DEMOLTION_LAST_BLAST_KEY);
-        if(world.getTime() - time > 2){
-            nbtCompound.putLong(DEMOLTION_LAST_BLAST_KEY,world.getTime());
-            ((SpellboundLivingEntity)player).spellbound$addNextTickAction(new DemolitionAction(world, player, pos,
-                    Spellbound.config.demolition.BASE_EXPLOSION_POWER + (Spellbound.config.demolition.EXPLOSION_POWER_PER_RANK *level)));
+        ((SpellboundLivingEntity)player).spellbound$addNextTickAction(new DemolitionAction(world, player, pos,
+            Spellbound.config.demolition.BASE_EXPLOSION_POWER + (Spellbound.config.demolition.EXPLOSION_POWER_PER_RANK *level)));
+    }
+
+    @Override
+    public void onBreakBlock(int level, ItemStack stack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        if(state.getBlock().getHardness() == 0){
+            return;
         }
         stack.postMine(world,state,pos,player);
     }
