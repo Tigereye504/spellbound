@@ -16,6 +16,7 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.Registries;
@@ -23,6 +24,7 @@ import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -297,6 +299,10 @@ public class SBEnchantmentHelper {
             stack.getOrCreateNbt().putBoolean(ON_BREAK_LOCKOUT_KEY,true);
         }
         return willBreak.get();
+    }
+
+    public static void onItemUse(ItemStack stack, ItemUsageContext context, ActionResult result){
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onItemUse(level, itemStack, context, result), stack);
     }
 
     public static void onLegacyToolBreak(ItemStack book, ItemStack stack, Entity entity) {

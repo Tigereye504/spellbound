@@ -755,6 +755,14 @@ text.autoconfig.spellbound:
         widened.BASE_POWER: Enchanting Base Power
         widened.POWER_PER_RANK: Enchanting Power Per Rank
         widened.POWER_RANGE: Enchanting Power Range
+        widened.REQUIRE_EXACT_MATCHING_BLOCK: Require Exact Matching Block
+        widened.ALLOW_UNSUITABLE_TOOL: Allow Unsuitable Tool for Block
+        widened.REQUIRE_UNCOVERED_BLOCK: Require Uncovered Blocks
+        widened.REQUIRE_CONTIGUOUS_BREAK: Require Contiguous Break
+        widened.IS_DIAGONAL_CONTIGUOUS: Is Diagonal Contiguous
+        widened.MAXIMUM_HARDNESS_GAIN: Maximum Hardness Gain
+        widened.MAXIMUM_HARDNESS_LOSS: Maximum Hardness Loss
+        widened.MINING_SPEED_FACTOR: Mining Speed Factor
         
         CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS: Can Shields have Armor Enchantments
         POWER_TO_EXCEED_SOFT_CAP: Power To Exceed Soft Cap

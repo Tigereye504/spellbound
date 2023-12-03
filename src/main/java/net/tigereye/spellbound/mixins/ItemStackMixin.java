@@ -3,7 +3,9 @@ package net.tigereye.spellbound.mixins;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.ActionResult;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,6 +38,13 @@ public class ItemStackMixin {
     public void spellboundItemStackInventoryTickMixin(World world, Entity entity, int slot, boolean selected, CallbackInfo ci){
         if(((ItemStack)(Object)this).hasEnchantments()){
             SBEnchantmentHelper.onInventoryTick((ItemStack)(Object)this, world, entity, slot, selected);
+        }
+    }
+
+    @Inject(at = @At("RETURN"), method = "useOnBlock")
+    public void spellboundItemStackOnUseMixin(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir){
+        if(((ItemStack)(Object)this).hasEnchantments()){
+            SBEnchantmentHelper.onItemUse((ItemStack)(Object)this, context, cir.getReturnValue());
         }
     }
 }

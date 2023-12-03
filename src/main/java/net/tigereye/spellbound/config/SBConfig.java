@@ -766,6 +766,14 @@ public class SBConfig implements ConfigData {
         public int BASE_POWER = -9;
         public int POWER_PER_RANK = 10;
         public int POWER_RANGE = 50;
+        public boolean REQUIRE_EXACT_MATCHING_BLOCK = true;
+        public boolean ALLOW_UNSUITABLE_TOOL = false;
+        public boolean REQUIRE_UNCOVERED_BLOCK = true;
+        public boolean REQUIRE_CONTIGUOUS_BREAK = true;
+        public boolean IS_DIAGONAL_CONTIGUOUS = true;
+        public float MAXIMUM_HARDNESS_GAIN = 0f;
+        public float MAXIMUM_HARDNESS_LOSS = 0f;
+        public float MINING_SPEED_FACTOR = .7f;
     }
 
     @ConfigEntry.Category("other")

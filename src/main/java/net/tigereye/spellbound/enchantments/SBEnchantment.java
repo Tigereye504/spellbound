@@ -14,9 +14,11 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -221,4 +223,7 @@ public abstract class SBEnchantment extends Enchantment {
     }
 
     public void onGainExperienceAlways(PlayerEntity player, int amount) {}
+
+    public void onItemUse(int level, ItemStack itemStack, ItemUsageContext context, ActionResult result) {
+    }
 }
