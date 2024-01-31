@@ -5,6 +5,9 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.tigereye.spellbound.Spellbound;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Config(name = Spellbound.MODID)
 public class SBConfig implements ConfigData {
 
@@ -703,6 +706,35 @@ public class SBConfig implements ConfigData {
         public int WORDS_PER_LEVEL_SECOND_DEGREE = 22;
         public boolean ALLOW_NEW_PLOTHOOKS = true;
         public int RARITY_OF_NEW_PLOTHOOKS = 2;
+    }
+
+    @ConfigEntry.Category("enchantment")
+    @ConfigEntry.Gui.CollapsibleObject
+    public SunkenTreasureConfig sunkenTreasure = new SunkenTreasureConfig();
+    public static class SunkenTreasureConfig {
+        public boolean ENABLED = true;
+        public boolean IS_TREASURE = false;
+        public boolean IS_FOR_SALE = true;
+        public int RARITY = 3;
+        public int SOFT_CAP = 3;
+        public int HARD_CAP = 3;
+        public int BASE_POWER = 6;
+        public int POWER_PER_RANK = 9;
+        public int POWER_RANGE = 50;
+        public boolean DETECT_ABUSE = true;
+        public List<Double> QUALITY_WEIGHTS;
+        public double LUCK_IMPACT_ON_QUALITY = 0.1;
+
+        public SunkenTreasureConfig(){
+            QUALITY_WEIGHTS = new ArrayList<>();
+            QUALITY_WEIGHTS.add(25d);
+            QUALITY_WEIGHTS.add(55d);
+            QUALITY_WEIGHTS.add(15d);
+            QUALITY_WEIGHTS.add(4d);
+            QUALITY_WEIGHTS.add(1d);
+        }
+
+
     }
 
     @ConfigEntry.Category("enchantment")

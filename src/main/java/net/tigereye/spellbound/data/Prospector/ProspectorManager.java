@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.data;
+package net.tigereye.spellbound.data.Prospector;
 
 import com.google.gson.Gson;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -14,6 +14,7 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.data.TouchedBlocksPersistentState;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,7 +28,7 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
     private static final Map<Identifier, Float> baseDropRateMap = new HashMap<>();
     private static final Map<Identifier, List<Pair<Identifier,Float>>> blockDropBonusMap = new HashMap<>();
     private static final Map<TagKey<Block>, List<Pair<Identifier,Float>>> tagDropBonusMap = new HashMap<>();
-    private static final Map<DimensionType,TouchedBlocksPersistentState> tbpState = new HashMap<>();
+    private static final Map<DimensionType, TouchedBlocksPersistentState> tbpState = new HashMap<>();
 
     @Override
     public Identifier getFabricId() {

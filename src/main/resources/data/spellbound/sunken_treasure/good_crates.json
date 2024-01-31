@@ -1,0 +1,5 @@
+{
+    "lootTables": ["minecraft:chests/ruined_portal"],
+    "quality": 2,
+    "weight": 6
+}

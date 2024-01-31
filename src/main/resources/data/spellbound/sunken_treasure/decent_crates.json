@@ -1,0 +1,5 @@
+{
+    "lootTables": ["minecraft:chests/village/village_shepherd"],
+    "quality": 1,
+    "weight": 6
+}

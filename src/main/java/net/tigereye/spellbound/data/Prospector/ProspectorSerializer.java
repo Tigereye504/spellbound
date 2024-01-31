@@ -1,12 +1,7 @@
-package net.tigereye.spellbound.data;
+package net.tigereye.spellbound.data.Prospector;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class ProspectorSerializer {
     public ProspectorData read(Identifier id, ProspectorJsonFormat prospectorJson) {

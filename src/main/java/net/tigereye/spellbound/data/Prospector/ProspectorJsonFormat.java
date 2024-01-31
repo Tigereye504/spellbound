@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.data;
+package net.tigereye.spellbound.data.Prospector;
 
 import com.google.gson.JsonArray;
 
