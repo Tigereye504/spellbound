@@ -76,7 +76,9 @@ public class TetheredInstance extends StatusEffectInstance{
         tag.putBoolean("Ambient", this.isAmbient());
         tag.putBoolean("ShowParticles", this.shouldShowParticles());
         tag.putBoolean("ShowIcon", this.shouldShowIcon());
-        tag.putUuid("TetherUUID",tetherUUID);
+        if(tetherUUID != null) {
+            tag.putUuid("TetherUUID", tetherUUID);
+        }
         return tag;
     }
 
