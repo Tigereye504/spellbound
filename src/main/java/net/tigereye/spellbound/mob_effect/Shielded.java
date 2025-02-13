@@ -89,20 +89,6 @@ public class Shielded extends SBStatusEffect{
                 if (isRightmost) {
                     drawContext.drawTexture(SHIELDED_HEART, posX+9, posY, 9, 0, 2, 11, 11, 11);
                 }
-                /*
-                if(isLeftmost && isRightmost){
-                    drawContext.drawTexture(SHIELDED_HEART, posX, posY, 0, 0, 11, 11, 40, 11);
-                }
-                else if (!isLeftmost && !isRightmost) {
-                    drawContext.drawTexture(SHIELDED_HEART, posX+1, posY, 20, 0, 9, 11, 40, 11);
-                }
-                else if (isLeftmost) {
-                    drawContext.drawTexture(SHIELDED_HEART, posX, posY, 11, 0, 9, 11, 40, 11);
-                }
-                else {
-                    drawContext.drawTexture(SHIELDED_HEART, posX+2, posY, 29, 0, 9, 11, 40, 11);
-                }
-                */
             }
             client.getProfiler().pop();
         }
