@@ -7,7 +7,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.random.Random;
@@ -62,9 +61,9 @@ public class PinataEnchantment extends SBEnchantment{
         int killCount = getKillcount(stack);
         if(killCount % Spellbound.config.pinata.KILLS_TO_PAYOUT == 0){
             List<ItemEntity> items = killer.getWorld().getEntitiesByClass(ItemEntity.class, victim.getBoundingBox(), Objects::nonNull);
-            ItemEntity nuggets = new ItemEntity(victim.getWorld(),victim.getX(),victim.getY(),victim.getZ(),new ItemStack(Items.GOLD_NUGGET,Spellbound.config.pinata.KILLS_TO_PAYOUT/4));
-            killer.getWorld().spawnEntity(nuggets);
-            items.add(nuggets);
+            if(items.isEmpty()){
+                return; //just end it here, and let the fountain trigger on something with actual drops.
+            }
             for (ItemEntity itemEntity:
                     items) {
                 itemEntity.setPickupDelay(80);
