@@ -22,7 +22,7 @@
         },
         {
           "type": "minecraft:loot_table",
-          "name": "spellbound:chests/random_pottery_shard",
+          "name": "spellbound:chests/random_pottery_sherd",
           "weight": 80
         },
         {

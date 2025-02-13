@@ -193,6 +193,7 @@ public class StoriedEnchantment extends SBEnchantment {
                     && enchantment.getMaxLevel() > 0 //to prevent disabled enchantments from being rolled
                     && ((!enchantment.isCursed()) || Spellbound.config.storied.CAN_CREATE_CURSE)
                     && ((!enchantment.isTreasure()) || Spellbound.config.storied.CAN_CREATE_TREASURE)
+                    && ((enchantment.isAvailableForRandomSelection()) || Spellbound.config.storied.CAN_CREATE_NON_LOOT)
                     && enchantment.isAcceptableItem(stack))
             {
                 boolean noConflict = true;

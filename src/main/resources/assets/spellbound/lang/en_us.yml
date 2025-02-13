@@ -736,6 +736,9 @@ text.autoconfig.spellbound:
         storied.WORDS_PER_LEVEL_SECOND_DEGREE: Words Per Level Second Degree
         storied.ALLOW_NEW_PLOTHOOKS: Allow New Plothooks
         storied.RARITY_OF_NEW_PLOTHOOKS: Rarity Of New Plothooks
+        storied.CAN_CREATE_TREASURE: Can Add Treasure Enchantments
+        storied.CAN_CREATE_CURSE: Can Add Curses
+        storied.CAN_CREATE_NON_LOOT: Can Add Non-Loot Enchantments
         
         sunkenTreasure: Sunken Treasure
         sunkenTreasure.ENABLED: Enable

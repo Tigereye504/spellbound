@@ -728,6 +728,7 @@ public class SBConfig implements ConfigData {
         public int RARITY_OF_NEW_PLOTHOOKS = 2;
         public boolean CAN_CREATE_TREASURE = true;
         public boolean CAN_CREATE_CURSE = false;
+        public boolean CAN_CREATE_NON_LOOT = false;
 
     }
 
