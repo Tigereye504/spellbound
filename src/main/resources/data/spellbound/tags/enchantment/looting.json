@@ -2,7 +2,8 @@
     "replace": false,
     "values": [
       "minecraft:looting",
-      "spellbound:scalping",
-      "spellbound:despoiling"
+      "spellbound:despoiling",
+      "spellbound:pinata",
+      "spellbound:scalping"
     ]
   }

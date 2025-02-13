@@ -76,7 +76,7 @@ public class FisherOfMenEnchantment extends SBEnchantment {
         double vY = e * 0.1D + Math.sqrt(Math.sqrt(d * d + e * e + f * f)) * 0.08D;
         double vZ = f * 0.1D;
 
-        //grab all the loot that is problably the dead entity's
+        //grab all the loot that is probably the dead entity's
         List<ItemEntity> items = user.getWorld().getEntitiesByClass(ItemEntity.class, target.getBoundingBox(), Objects::nonNull);
         for (ItemEntity itemEntity:
              items) {

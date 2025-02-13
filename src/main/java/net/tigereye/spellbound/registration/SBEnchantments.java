@@ -14,6 +14,7 @@ import net.tigereye.spellbound.enchantments.efficiency.WidenedEnchantment;
 import net.tigereye.spellbound.enchantments.fortune.ProspectorEnchantment;
 import net.tigereye.spellbound.enchantments.fortune.SunkenTreasureEnchantment;
 import net.tigereye.spellbound.enchantments.looting.DespoilingEnchantment;
+import net.tigereye.spellbound.enchantments.looting.PinataEnchantment;
 import net.tigereye.spellbound.enchantments.looting.ScalpingEnchantment;
 import net.tigereye.spellbound.enchantments.lure.FisherOfMenEnchantment;
 import net.tigereye.spellbound.enchantments.meta.MonogamousEnchantment;
@@ -72,6 +73,7 @@ public class SBEnchantments {
     public static final SBEnchantment PHASE_LEAP = new PhaseLeapEnchantment();
     public static final SBEnchantment PHASE_STRAFE = new PhaseStrafeEnchantment();
     public static final SBEnchantment PHOTOSYNTHETIC = new PhotosyntheticEnchantment();
+    public static final SBEnchantment PINATA = new PinataEnchantment();
     public static final SBEnchantment POLYGAMOUS = new PolygamousEnchantment();
     public static final SBEnchantment PRIMING = new PrimingEnchantment();
     public static final SBEnchantment PROSPECTOR = new ProspectorEnchantment();
@@ -122,6 +124,7 @@ public class SBEnchantments {
         register("phase_leap", PHASE_LEAP);
         register("phase_strafe", PHASE_STRAFE);
         register("photosynthetic", PHOTOSYNTHETIC);
+        register("pinata", PINATA);
         register("polygamous", POLYGAMOUS);
         register("priming", PRIMING);
         register("prospector", PROSPECTOR);

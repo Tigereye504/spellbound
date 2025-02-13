@@ -486,6 +486,23 @@ public class SBConfig implements ConfigData {
 
     @ConfigEntry.Category("enchantment")
     @ConfigEntry.Gui.CollapsibleObject
+    public PinataConfig pinata = new PinataConfig();
+    public static class PinataConfig {
+        public boolean ENABLED = true;
+        public boolean IS_TREASURE = false;
+        public boolean IS_FOR_SALE = true;
+        public int RARITY = 3;
+        public int SOFT_CAP = 3;
+        public int HARD_CAP = 3;
+        public int BASE_POWER = 6;
+        public int POWER_PER_RANK = 9;
+        public int POWER_RANGE = 50;
+        public int KILLS_TO_PAYOUT = 20;
+        public int PAYOUT_MULTIPLIER = 20;
+    }
+
+    @ConfigEntry.Category("enchantment")
+    @ConfigEntry.Gui.CollapsibleObject
     public PolygamousConfig polygamous = new PolygamousConfig();
     public static class PolygamousConfig {
         public boolean ENABLED = false;

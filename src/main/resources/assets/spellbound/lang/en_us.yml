@@ -105,6 +105,10 @@ enchantment.spellbound:
     photosynthetic: Photosynthetic
     photosynthetic.desc: Type:Repair. Restores itself in the light.
 
+    pinata: Pinata
+    pinata.desc: Type:Looting. Large but infrequent loot explosions.
+    pinata.tooltip: Reward in %d kills
+
     polygamous: Polygamous
     polygamous.desc: Type:Personality. Increases power with other bonded items.
 
@@ -547,6 +551,19 @@ text.autoconfig.spellbound:
         photosynthetic.POWER_RANGE: Enchanting Power Range
         photosynthetic.LIGHT_MINIMUM: Light Minimum
         photosynthetic.REPAIR_PERIOD: Repair Period
+
+        pinata: Pinata
+        pinata.ENABLED: Enable
+        pinata.IS_TREASURE: Is Treasure
+        pinata.IS_FOR_SALE: Sold by Villagers
+        pinata.RARITY: Rarity
+        pinata.SOFT_CAP: Soft Cap
+        pinata.HARD_CAP: Hard Cap
+        pinata.BASE_POWER: Enchanting Base Power
+        pinata.POWER_PER_RANK: Enchanting Power Per Rank
+        pinata.POWER_RANGE: Enchanting Power Range
+        pinata.KILLS_TO_PAYOUT: Kills to Payout
+        pinata.PAYOUT_MULTIPLIER: Payout Multiplier
 
         polygamous: Polygamous
         polygamous.ENABLED: Enable
