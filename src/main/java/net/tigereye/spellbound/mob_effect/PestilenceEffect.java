@@ -8,7 +8,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.mob_effect.instance.OwnedStatusEffectInstance;
 import net.tigereye.spellbound.registration.SBDamageSources;
+import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
+import net.tigereye.spellbound.util.SBEnchantmentHelper;
 
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,6 +41,10 @@ public class PestilenceEffect extends SBStatusEffect implements CustomDataStatus
                 if(si.owner == entity) return;
                 else owner = si.owner;
             }
+            //TODO: for now, as the ownership check isn't working correctly on servers, we will simply make all pestilence users immune to pestilence
+            if(SBEnchantmentHelper.getSpellboundEnchantmentAmountCorrectlyWorn(SBEnchantments.PESTILENCE,entity) > 0){
+                return;
+            }
 
             //tally up the levels of negative effects on the target
             AtomicInteger effectLevels = new AtomicInteger();
@@ -65,4 +71,6 @@ public class PestilenceEffect extends SBStatusEffect implements CustomDataStatus
     public StatusEffectInstance getInstanceFromTag(NbtCompound tag) {
         return OwnedStatusEffectInstance.customFromNbt(SBStatusEffects.PESTILENCE,tag);
     }
+
+
 }
