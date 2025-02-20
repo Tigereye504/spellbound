@@ -59,10 +59,12 @@ public class FisherOfMenEnchantment extends SBEnchantment {
     }
     @Override
     public void onPullHookedEntity(int level, FishingBobberEntity bobber, ItemStack stack, LivingEntity user, Entity target){
-        target.damage(user.getDamageSources().thrown(bobber,user),
-                Spellbound.config.fisherOfMen.BASE_DAMAGE + (Spellbound.config.fisherOfMen.DAMAGE_PER_LEVEL * level));
-        if(!target.isAlive() && !bobber.getWorld().isClient()){
-            spawnFishingLoot(bobber, stack, user, target);
+        if(target instanceof LivingEntity) {
+            target.damage(user.getDamageSources().thrown(bobber, user),
+                    Spellbound.config.fisherOfMen.BASE_DAMAGE + (Spellbound.config.fisherOfMen.DAMAGE_PER_LEVEL * level));
+            if (!target.isAlive() && !bobber.getWorld().isClient()) {
+                spawnFishingLoot(bobber, stack, user, target);
+            }
         }
     }
 

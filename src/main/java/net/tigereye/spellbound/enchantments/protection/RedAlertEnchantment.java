@@ -66,8 +66,6 @@ public class RedAlertEnchantment extends SBEnchantment{
         else{
             entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.SHIELDS_DOWN, RedAlertEnchantment.getModifiedRecoveryRate(entity), 0, false, false, false));
         }
-
-
     }
 
     public static int getModifiedRecoveryRate(LivingEntity entity){

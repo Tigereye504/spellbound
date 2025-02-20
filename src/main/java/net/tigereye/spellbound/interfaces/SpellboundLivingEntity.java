@@ -10,4 +10,5 @@ public interface SpellboundLivingEntity {
     int spellbound$getGraceTicks();
     void spellbound$setGraceMagnitude(float lastDamageTaken);
     void spellbound$setGraceTicks(int GraceTicks);
+    boolean spellbound$shouldDisplayShielded();
 }

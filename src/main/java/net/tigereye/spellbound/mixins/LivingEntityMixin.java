@@ -1,16 +1,23 @@
 package net.tigereye.spellbound.mixins;
 
+import com.google.common.collect.Maps;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.interfaces.NextTickAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
+import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.NetworkingUtil;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.mob_effect.SBStatusEffectHelper;
@@ -30,6 +37,7 @@ import java.util.Map;
 public abstract class LivingEntityMixin extends Entity implements SpellboundLivingEntity {
 
     @Shadow protected float lastDamageTaken;
+    @Shadow private final Map<StatusEffect, StatusEffectInstance> activeStatusEffects = Maps.newHashMap();
     @Unique
     private Vec3d SB_OldPos;
     @Unique
@@ -44,6 +52,8 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     private int graceTicks = 0;
     @Unique
     private float graceMagnitude = 0;
+    @Unique
+    private static final TrackedData<Boolean> SHIELDED = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     public void spellbound$addNextTickAction(NextTickAction action){
         if (performingNextTickActions)
@@ -144,6 +154,16 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
         SBEnchantmentHelper.onJump((LivingEntity)(Object)this);
     }
 
+    @Inject(at = @At("HEAD"), method = "initDataTracker")
+    public void spellboundLivingEntityInitDataTracker(CallbackInfo info){
+        this.dataTracker.startTracking(SHIELDED, false);
+    }
+
+    @Inject(at = @At("HEAD"), method = "updatePotionVisibility")
+    public void spellboundLivingEntityUpdatePotionVisibilityMixin(CallbackInfo info){
+        this.dataTracker.set(SHIELDED, this.activeStatusEffects.containsKey(SBStatusEffects.SHIELDED));
+    }
+
     @Override
     public void spellbound$updatePositionTracker(Vec3d pos) {
         SB_OldPos = SB_LastPos;
@@ -168,4 +188,5 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     public void spellbound$setGraceTicks(int iFrameTicks){
         graceTicks = iFrameTicks;
     }
+    public boolean spellbound$shouldDisplayShielded(){return this.dataTracker.get(SHIELDED);}
 }

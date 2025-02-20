@@ -97,7 +97,7 @@ public class PinataEnchantment extends SBEnchantment{
 
         List<ItemEntity> items;
         Random random;
-        SpellboundLivingEntity owner; //I wonder if this will cause a memory leak... if it does, I'll need to null owner after creating the next action
+        SpellboundLivingEntity owner;
 
         PinataLootFountainAction(List<ItemEntity> items, Random random, SpellboundLivingEntity owner){
             this.items = items;

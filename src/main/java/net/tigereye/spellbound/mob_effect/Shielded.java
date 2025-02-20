@@ -12,7 +12,10 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
+import net.tigereye.spellbound.registration.SBParticles;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
 import java.util.List;
@@ -26,10 +29,19 @@ public class Shielded extends SBStatusEffect{
     }
 
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
-        return false;
+        return true;
     }
 
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+        Vec3d basePosition = entity.getPos();
+        Vec3d velocity = entity.getVelocity();
+        if(entity instanceof SpellboundLivingEntity slEntity && slEntity.spellbound$shouldDisplayShielded()) {
+            Vec3d rotVec = entity.getRotationVector();
+            Vec3d finalPos = basePosition.subtract(rotVec.normalize().multiply(0.1));
+            entity.getWorld().addParticle(SBParticles.RED_ALERT_SHIELD,
+                    finalPos.x, finalPos.y + 1, finalPos.z,
+                    velocity.x, velocity.y, velocity.z);
+        }
     }
 
     public float onPreArmorDefense(StatusEffectInstance instance, DamageSource source, LivingEntity defender, float amount, List<StatusEffectInstance> effectsToAdd, List<StatusEffect> effectsToRemove){
