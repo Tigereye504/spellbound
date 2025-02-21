@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.tigereye.spellbound.interfaces.NextTickAction;
+import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.NetworkingUtil;
@@ -43,11 +43,11 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     @Unique
     private Vec3d SB_LastPos;
     @Unique
-    private final List<NextTickAction> nextTickActions = new LinkedList<>();
+    private final List<DelayedAction> delayedActions = new LinkedList<>();
     @Unique
-    private final List<NextTickAction> nextTickActionsQueue = new LinkedList<>();
+    private final List<DelayedAction> delayedActionsQueue = new LinkedList<>();
     @Unique
-    private boolean performingNextTickActions = false;
+    private boolean performingDelayedActions = false;
     @Unique
     private int graceTicks = 0;
     @Unique
@@ -55,11 +55,15 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     @Unique
     private static final TrackedData<Boolean> SHIELDED = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
-    public void spellbound$addNextTickAction(NextTickAction action){
-        if (performingNextTickActions)
-            nextTickActionsQueue.add(action);
+    public void spellbound$addDelayedAction(DelayedAction action){
+        if (performingDelayedActions)
+            delayedActionsQueue.add(action);
         else
-            nextTickActions.add(action);
+            delayedActions.add(action);
+    }
+
+    public List<DelayedAction> spellbound$getDelayedActions(){
+        return delayedActions;
     }
 
     public LivingEntityMixin(EntityType<?> type, World world) {
@@ -112,14 +116,16 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
 
     @Inject(at = @At("HEAD"), method = "baseTick")
     public void spellboundLivingEntityBaseTickMixin(CallbackInfo info){
-        performingNextTickActions = true;
-        for (NextTickAction action : nextTickActions) {
-            action.act();
+        performingDelayedActions = true;
+        for (DelayedAction action : delayedActions) {
+            if(action.actOrDecrementTicks()){
+                delayedActionsQueue.add(action);
+            }
         }
-        nextTickActions.clear();
-        nextTickActions.addAll(nextTickActionsQueue);
-        nextTickActionsQueue.clear();
-        performingNextTickActions = false;
+        delayedActions.clear();
+        delayedActions.addAll(delayedActionsQueue);
+        delayedActionsQueue.clear();
+        performingDelayedActions = false;
         SBEnchantmentHelper.onTickAlways((LivingEntity)(Object)this);
         SBEnchantmentHelper.onTickWhileEquipped((LivingEntity)(Object)this);
         if(graceTicks > 0){

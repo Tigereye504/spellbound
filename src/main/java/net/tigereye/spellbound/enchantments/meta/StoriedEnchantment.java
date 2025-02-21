@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.interfaces.NextTickAction;
+import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -108,11 +108,11 @@ public class StoriedEnchantment extends SBEnchantment {
             Enchantment selection = selectRandomAddableEnchantment(entity,stack,false);
             if(selection != null){
                 message += " Gained "+ selection.getName(1).getString() +"!";
-                ((SpellboundLivingEntity)entity).spellbound$addNextTickAction(new StoriedSetEnchantmentLevelAction(stack, selection, 1));
+                ((SpellboundLivingEntity)entity).spellbound$addDelayedAction(new StoriedSetEnchantmentLevelAction(stack, selection, 1));
             }
             else{
                 message = stack.getName().getString()+ "has no story to tell.";
-                ((SpellboundLivingEntity)entity).spellbound$addNextTickAction(new StoriedSetEnchantmentLevelAction(stack, SBEnchantments.STORIED, 0));
+                ((SpellboundLivingEntity)entity).spellbound$addDelayedAction(new StoriedSetEnchantmentLevelAction(stack, SBEnchantments.STORIED, 0));
             }
         }
         //Finally, tell the player the story has begun.
@@ -160,14 +160,14 @@ public class StoriedEnchantment extends SBEnchantment {
 
         //apply the upgrade or remove storied
         if(selection != null){
-            ((SpellboundLivingEntity)entity).spellbound$addNextTickAction(new StoriedSetEnchantmentLevelAction(stack,selection,level));
+            ((SpellboundLivingEntity)entity).spellbound$addDelayedAction(new StoriedSetEnchantmentLevelAction(stack,selection,level));
             String message = stack.getName().getString() + "'s story continues. Gained "+ selection.getName(level).getString() +"!";
             if(entity instanceof ServerPlayerEntity pEntity) {
                 pEntity.sendMessage(Text.literal(message), true);
             }
         }
         else{
-            ((SpellboundLivingEntity) entity).spellbound$addNextTickAction(new StoriedSetEnchantmentLevelAction(stack, SBEnchantments.STORIED, 0));
+            ((SpellboundLivingEntity) entity).spellbound$addDelayedAction(new StoriedSetEnchantmentLevelAction(stack, SBEnchantments.STORIED, 0));
             String message = stack.getName().getString() + "'s story is complete.";
             if(entity instanceof ServerPlayerEntity pEntity) {
                 pEntity.sendMessage(Text.literal(message), true);
@@ -244,7 +244,7 @@ public class StoriedEnchantment extends SBEnchantment {
         return selection != null ? selection.enchantment : null;
         */
     }
-    private static class StoriedSetEnchantmentLevelAction implements NextTickAction {
+    private static class StoriedSetEnchantmentLevelAction extends DelayedAction {
 
         ItemStack stack;
         Enchantment enchantment;

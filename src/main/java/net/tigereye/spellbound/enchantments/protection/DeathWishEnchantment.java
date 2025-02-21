@@ -45,7 +45,7 @@ public class DeathWishEnchantment extends SBEnchantment{
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.deathWish.IS_FOR_SALE;}
 
     @Override
-    public void onEquipmentChange(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){
+    public void onEquipmentChangeOnce(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){
         EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         if(att != null) {
             EntityAttributeModifier mod = new EntityAttributeModifier(DEATH_WISH_ID, "SpellboundDeathWishDamage",

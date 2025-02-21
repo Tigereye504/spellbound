@@ -6,6 +6,8 @@ death.attack:
     infidelity.player: "%1$s was betrayed while fighting %2$s."
     pestilence: "%1$s died from disease."
     pestilence.player: "%1$s died from disease caught from %2$s."
+    vengeance: "%1$s death was well earned."
+    vengeance.player: "%1$s was killed by %2$s's vengeance."
 
 effect.spellbound:
     bravados: Bravados
@@ -108,6 +110,8 @@ enchantment.spellbound:
     pinata: Pinata
     pinata.desc: Type:Looting. Large but infrequent loot explosions.
     pinata.tooltip: Reward in %d kills
+    pinata.message.countdown: Reward in %d kills
+    pinata.message.nextKill: Reward Imminent!
 
     polygamous: Polygamous
     polygamous.desc: Type:Personality. Increases power with other bonded items.
@@ -162,6 +166,9 @@ enchantment.spellbound:
 
     universal: Universal
     universal.desc: Type:Utility. Tool is suitable for all blocks, with speed penalty for off-type blocks.
+
+    vengeful: Vengeful
+    vengeful.desc: Type:Retaliation. Built up damage becomes followup strikes when user strikes back.
     
     warlike: Warlike
     warlike.desc: Type:Utility. Declares war upon the world, increasing difficulty.
@@ -564,6 +571,7 @@ text.autoconfig.spellbound:
         pinata.POWER_RANGE: Enchanting Power Range
         pinata.KILLS_TO_PAYOUT: Kills to Payout
         pinata.PAYOUT_MULTIPLIER: Payout Multiplier
+        pinata.ADVANCE_NOTICE: Advance Notice
 
         polygamous: Polygamous
         polygamous.ENABLED: Enable
@@ -806,6 +814,23 @@ text.autoconfig.spellbound:
         universal.POWER_PER_RANK: Enchanting Power Per Rank
         universal.POWER_RANGE: Enchanting Power Range
         universal.OFF_TYPE_MINING_SPEED_FACTOR: Off Type Mining Speed Factor
+        
+        vengeful: Vengeful
+        vengeful.ENABLED: Enable
+        vengeful.IS_TREASURE: Is Treasure
+        vengeful.IS_FOR_SALE: Sold by Villagers
+        vengeful.RARITY: Rarity
+        vengeful.SOFT_CAP: Soft Cap
+        vengeful.HARD_CAP: Hard Cap
+        vengeful.BASE_POWER: Enchanting Base Power
+        vengeful.POWER_PER_RANK: Enchanting Power Per Rank
+        vengeful.POWER_RANGE: Enchanting Power Range
+        vengeful.DIFFICULTY_PER_RANK: Difficulty Per Rank
+        vengeful.DAMAGE_RATIO_PER_LEVEL: Damage Ratio Per Level
+        vengeful.INJURY_MINIMUM: Injury Minimum
+        vengeful.TIMEOUT: Base Timeout
+        vengeful.FOLLOWUP_HIT_DELAY: Followup Hit Delay
+        vengeful.HIGHLIGHT_COLOR: Highlight Color
         
         warlike: Warlike
         warlike.ENABLED: Enable

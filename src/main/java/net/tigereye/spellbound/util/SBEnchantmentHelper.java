@@ -3,6 +3,7 @@ package net.tigereye.spellbound.util;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -51,6 +52,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SBEnchantmentHelper {
     public static final String ON_BREAK_LOCKOUT_KEY = Spellbound.MODID+"OnBreakLockout";
@@ -133,7 +135,7 @@ public class SBEnchantmentHelper {
             }
         },currentStack);
         enchantmentsToCheck.forEach((enchantment,levels) ->
-                enchantment.onEquipmentChange(levels.getLeft(),levels.getRight(),previousStack,currentStack,livingEntity));
+                enchantment.onEquipmentChangeOnce(levels.getLeft(),levels.getRight(),previousStack,currentStack,livingEntity));
     }
 
     public static void onJump(LivingEntity entity){
@@ -171,13 +173,13 @@ public class SBEnchantmentHelper {
 
     public static void onMidairJump(SpellboundClientPlayerEntity sbPlayer, PlayerEntity player, boolean isJumping) {
         if (player.isOnGround() || player.isClimbing() || player.isSwimming()) {
-            sbPlayer.setJumpReleased(false);
+            sbPlayer.spellbound$setJumpReleased(false);
         }
         else if(!isJumping){
-            sbPlayer.setJumpReleased(true);
+            sbPlayer.spellbound$setJumpReleased(true);
         }
-        else if(sbPlayer.getJumpReleased() && !player.getAbilities().flying && !player.hasVehicle()){
-            sbPlayer.setJumpReleased(false);
+        else if(sbPlayer.spellbound$getJumpReleased() && !player.getAbilities().flying && !player.hasVehicle()){
+            sbPlayer.spellbound$setJumpReleased(false);
             SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> (enchantment).onMidairJump(level, itemStack, player), player.getItemsEquipped());
         }
     }
@@ -187,6 +189,10 @@ public class SBEnchantmentHelper {
         MutableFloat mutableFloat = new MutableFloat(amount);
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(enchantment.onPreArmorDefense(level, itemStack, source, defender, mutableFloat.floatValue())), defender.getItemsEquipped());
         return mutableFloat.floatValue();
+    }
+
+    public static void onTargetDamaged(LivingEntity user, Entity defender){
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onTargetDamaged(level, itemStack, user, defender), user.getItemsEquipped());
     }
 
     //called right after TridentEntity calls getdamage
@@ -279,9 +285,9 @@ public class SBEnchantmentHelper {
             }
             if(!checked.contains(enchantment)){
                 checked.add(enchantment);
-                enchantment.onRedHealthDamageOnce(level, itemStack, entity,amount);
+                enchantment.onRedHealthDamageOnce(level,itemStack,source,entity,amount);
             }
-            enchantment.onRedHealthDamage(level,itemStack,entity,amount);
+            enchantment.onRedHealthDamage(level,itemStack,source,entity,amount);
         },entity.getItemsEquipped());
     }
 
@@ -372,6 +378,18 @@ public class SBEnchantmentHelper {
         }
     }
 
+    public static Boolean onClientEntityIsGlowing(ClientPlayerEntity player, Entity entity, Boolean isGlowing) {
+        AtomicBoolean glow = new AtomicBoolean(isGlowing);
+        forEachSpellboundEnchantment((((enchantment, level, itemStack) -> glow.set(enchantment.onClientEntityIsGlowing(level,itemStack,player,entity,glow.get())))), player.getItemsEquipped());
+        return glow.get();
+    }
+
+    public static int overwriteClientEntityTeamColor(ClientPlayerEntity player, Entity entity, int _color) {
+        AtomicInteger color = new AtomicInteger(_color);
+        forEachSpellboundEnchantment((((enchantment, level, itemStack) -> color.set(enchantment.overwriteClientEntityTeamColor(level,itemStack,player,entity,color.get())))), player.getItemsEquipped());
+        return color.get();
+    }
+
     public static boolean setItemSuitability(ItemStack stack, BlockState state, Boolean suitability){
         AtomicBoolean ab = new AtomicBoolean(suitability);
         forEachSpellboundEnchantment((enchantment, level, itemStack) ->  ab.set(enchantment.setItemSuitability(level, itemStack, state, ab.get())), stack);
@@ -430,11 +448,15 @@ public class SBEnchantmentHelper {
     public static int getSpellboundEnchantmentAmountCorrectlyWorn(Iterable<ItemStack> equipment, Enchantment target, LivingEntity entity) {
         MutableInt mutableInt = new MutableInt();
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
-            if(enchantment == target && entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) == itemStack) {
+            if(enchantment == target && isEquipmentCorrectlyWorn(itemStack,entity)) {
                 mutableInt.add(level);
             }
         }, equipment);
         return mutableInt.intValue();
+    }
+
+    public static boolean isEquipmentCorrectlyWorn(ItemStack itemStack, LivingEntity entity){
+        return entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) == itemStack;
     }
 
     public static int countSpellboundEnchantmentInstances(Iterable<ItemStack> equipment, Enchantment target) {

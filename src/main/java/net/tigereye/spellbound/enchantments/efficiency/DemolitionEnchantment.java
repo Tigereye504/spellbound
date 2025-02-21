@@ -5,9 +5,7 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -15,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.interfaces.NextTickAction;
+import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundExplosion;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
@@ -60,7 +58,7 @@ public class DemolitionEnchantment extends SBEnchantment {
         if(state.getBlock().getHardness() == 0){
             return;
         }
-        ((SpellboundLivingEntity)player).spellbound$addNextTickAction(new DemolitionAction(world, player, pos,
+        ((SpellboundLivingEntity)player).spellbound$addDelayedAction(new DemolitionAction(world, player, pos,
             Spellbound.config.demolition.BASE_EXPLOSION_POWER + (Spellbound.config.demolition.EXPLOSION_POWER_PER_RANK *level)));
     }
 
@@ -72,7 +70,7 @@ public class DemolitionEnchantment extends SBEnchantment {
         stack.postMine(world,state,pos,player);
     }
 
-    private static class DemolitionAction implements NextTickAction{
+    private static class DemolitionAction extends DelayedAction {
 
         World world;
         PlayerEntity player;

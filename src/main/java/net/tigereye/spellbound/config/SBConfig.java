@@ -497,8 +497,9 @@ public class SBConfig implements ConfigData {
         public int BASE_POWER = 6;
         public int POWER_PER_RANK = 9;
         public int POWER_RANGE = 50;
-        public int KILLS_TO_PAYOUT = 20;
-        public int PAYOUT_MULTIPLIER = 20;
+        public int KILLS_TO_PAYOUT = 30;
+        public int PAYOUT_MULTIPLIER = 30;
+        public int ADVANCE_NOTICE = 3;
     }
 
     @ConfigEntry.Category("enchantment")
@@ -809,6 +810,7 @@ public class SBConfig implements ConfigData {
         public int POWER_PER_RANK = 20;
         public int POWER_RANGE = 50;
     }
+
     @ConfigEntry.Category("enchantment")
     @ConfigEntry.Gui.CollapsibleObject
     public UniversalConfig universal = new UniversalConfig();
@@ -825,6 +827,25 @@ public class SBConfig implements ConfigData {
         public float OFF_TYPE_MINING_SPEED_FACTOR = .5f;
     }
 
+    @ConfigEntry.Category("enchantment")
+    @ConfigEntry.Gui.CollapsibleObject
+    public VengefulConfig vengeful = new VengefulConfig();
+    public static class VengefulConfig {
+        public boolean ENABLED = true;
+        public boolean IS_TREASURE = false;
+        public boolean IS_FOR_SALE = true;
+        public int RARITY = 3;
+        public int SOFT_CAP = 3;
+        public int HARD_CAP = 3;
+        public int BASE_POWER = -10;
+        public int POWER_PER_RANK = 20;
+        public int POWER_RANGE = 50;
+        public float DAMAGE_RATIO_PER_LEVEL = .33f;
+        public float INJURY_MINIMUM = 4f;
+        public int TIMEOUT = 100;
+        public int FOLLOWUP_HIT_DELAY = 12;
+        public int HIGHLIGHT_COLOR = 0x880808;
+    }
     @ConfigEntry.Category("enchantment")
     @ConfigEntry.Gui.CollapsibleObject
     public WarlikeConfig warlike = new WarlikeConfig();

@@ -2,12 +2,13 @@ package net.tigereye.spellbound.enchantments.protection;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.interfaces.NextTickAction;
+import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBStatusEffects;
@@ -40,7 +41,7 @@ public class FleshWoundEnchantment extends SBEnchantment{
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.fleshWound.IS_FOR_SALE;}
 
     @Override
-    public void onRedHealthDamage(int level, ItemStack itemStack, LivingEntity entity, float amount) {
+    public void onRedHealthDamage(int level, ItemStack itemStack, DamageSource source, LivingEntity entity, float amount) {
 
         if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) != itemStack){
             return;
@@ -53,10 +54,10 @@ public class FleshWoundEnchantment extends SBEnchantment{
         }
         float absorption = Math.min(entity.getMaxHealth()*level,level*amount*Spellbound.config.fleshWound.ABSORPTION_PER_DAMAGE_PER_LEVEL);
 
-        ((SpellboundLivingEntity)entity).spellbound$addNextTickAction(new FleshWoundEnchantment.FleshWoundAction(entity,absorption));
+        ((SpellboundLivingEntity)entity).spellbound$addDelayedAction(new FleshWoundEnchantment.FleshWoundAction(entity,absorption));
     }
 
-    private static class FleshWoundAction implements NextTickAction {
+    private static class FleshWoundAction extends DelayedAction {
 
         LivingEntity entity;
         float absorption;

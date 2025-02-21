@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class SBDamageSources {
     public static final RegistryKey<DamageType> INFIDELITY = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier(Spellbound.MODID,"infidelity"));
     public static final RegistryKey<DamageType>  PESTILENCE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier(Spellbound.MODID,"pestilence"));
+    public static final RegistryKey<DamageType> VENGEANCE = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier(Spellbound.MODID,"vengeance"));
 
     public static DamageSource of(World world, RegistryKey<DamageType> key) {
         return new DamageSource(world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(key));

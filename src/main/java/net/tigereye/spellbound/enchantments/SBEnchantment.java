@@ -2,6 +2,7 @@ package net.tigereye.spellbound.enchantments;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.Entity;
@@ -152,7 +153,7 @@ public abstract class SBEnchantment extends Enchantment {
 
     public void onTickAlways(LivingEntity entity){}
 
-    public void onEquipmentChange(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){}
+    public void onEquipmentChangeOnce(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){}
 
     public boolean beforeToolBreak(int level, ItemStack itemStack, Entity entity) {return true;}
 
@@ -185,16 +186,18 @@ public abstract class SBEnchantment extends Enchantment {
         return damage;
     }
 
+    public void onTargetDamaged(int level, ItemStack itemStack, LivingEntity user, Entity entity){}
+
     public void onProjectileEntityHit(int level, ItemStack itemStack, PersistentProjectileEntity persistentProjectileEntity, Entity entity) {
     }
 
     public void onProjectileBlockHit(int level, ItemStack itemStack, ProjectileEntity projectileEntity, BlockHitResult blockHitResult) {
     }
 
-    public void onRedHealthDamage(int level, ItemStack itemStack, LivingEntity entity, float amount) {
+    public void onRedHealthDamage(int level, ItemStack itemStack, DamageSource source, LivingEntity entity, float amount) {
     }
 
-    public void onRedHealthDamageOnce(int level, ItemStack itemStack, LivingEntity entity, float amount) {}
+    public void onRedHealthDamageOnce(int level, ItemStack itemStack, DamageSource source, LivingEntity entity, float amount) {}
 
     public void onDoRedHealthDamage(int level, ItemStack itemStack, LivingEntity attacker, LivingEntity victim, DamageSource source, float amount) {
     }
@@ -231,5 +234,13 @@ public abstract class SBEnchantment extends Enchantment {
 
     public boolean setItemSuitability(int level, ItemStack stack, BlockState state, Boolean suitability) {
         return suitability;
+    }
+
+    public boolean onClientEntityIsGlowing(int level, ItemStack itemStack, ClientPlayerEntity player, Entity entity, Boolean isGlowing) {
+        return isGlowing;
+    }
+
+    public int overwriteClientEntityTeamColor(int level, ItemStack itemStack, ClientPlayerEntity player, Entity entity, int color) {
+        return color;
     }
 }

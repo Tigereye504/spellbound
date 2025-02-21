@@ -26,9 +26,10 @@
     "WorldMixin"
   ],
   "client": [
-    "ClientPlayerEntityMixin",
-    "ItemRendererMixin",
-    "ItemStackClientMixin"
+    "client.ClientPlayerEntityMixin",
+    "client.ItemRendererMixin",
+    "client.ItemStackClientMixin",
+    "client.EntityClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

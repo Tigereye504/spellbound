@@ -44,7 +44,7 @@ public class HeartyEnchantment extends SBEnchantment{
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.hearty.IS_FOR_SALE;}
 
     @Override
-    public void onEquipmentChange(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){
+    public void onEquipmentChangeOnce(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){
         EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if(att != null) {
             EntityAttributeModifier mod = new EntityAttributeModifier(HEARTY_ID, "SpellboundHeartyMaxHP",

@@ -25,6 +25,7 @@ import net.tigereye.spellbound.enchantments.repair.*;
 import net.tigereye.spellbound.enchantments.retaliation.OutburstEnchantment;
 import net.tigereye.spellbound.enchantments.retaliation.PestilenceEnchantment;
 import net.tigereye.spellbound.enchantments.retaliation.SpikesEnchantment;
+import net.tigereye.spellbound.enchantments.retaliation.VengefulEnchantment;
 import net.tigereye.spellbound.enchantments.unbreaking.BufferedEnchantment;
 import net.tigereye.spellbound.enchantments.unbreaking.SaturatedEnchantment;
 import net.tigereye.spellbound.enchantments.utility.*;
@@ -92,6 +93,7 @@ public class SBEnchantments {
     public static final SBEnchantment TETHERING = new TetheringEnchantment();
     public static final TrophyCollectingEnchantment TROPHY_COLLECTING = new TrophyCollectingEnchantment();
     public static final SBEnchantment UNIVERSAL = new UniversalEnchantment();
+    public static final SBEnchantment VENGEFUL = new VengefulEnchantment();
     public static final SBEnchantment WARLIKE = new WarlikeEnchantment();
     public static final SBEnchantment WIDENED = new WidenedEnchantment();
 
@@ -143,6 +145,7 @@ public class SBEnchantments {
         register("tethering", TETHERING);
         register("trophy_collecting", TROPHY_COLLECTING);
         register("universal", UNIVERSAL);
+        register("vengeful", VENGEFUL);
         register("warlike", WARLIKE);
         register("widened", WIDENED);
 

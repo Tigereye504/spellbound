@@ -12,7 +12,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.random.Random;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.interfaces.NextTickAction;
+import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -69,10 +69,20 @@ public class PinataEnchantment extends SBEnchantment{
                 itemEntity.setPickupDelay(80);
             }
             if(killer instanceof SpellboundLivingEntity slEntity){
-                slEntity.spellbound$addNextTickAction(new PinataLootFountainAction(items,killer.getRandom(),slEntity));
+                slEntity.spellbound$addDelayedAction(new PinataLootFountainAction(items,killer.getRandom(),slEntity));
             }
         }
-        setKillcount(stack,killCount+1);
+        killCount++;
+        setKillcount(stack,killCount);
+        int killsToPayout = Spellbound.config.pinata.KILLS_TO_PAYOUT - ((killCount-1)%Spellbound.config.pinata.KILLS_TO_PAYOUT);
+        if(killer instanceof PlayerEntity playerEntity && killsToPayout <= Spellbound.config.pinata.ADVANCE_NOTICE && killsToPayout != 0){
+            if(killsToPayout == 1){
+                playerEntity.sendMessage(Text.translatable("enchantment.spellbound.pinata.message.nextKill"), true);
+            }
+            else {
+                playerEntity.sendMessage(Text.translatable("enchantment.spellbound.pinata.message.countdown", killsToPayout), true);
+            }
+        }
     }
 
     @Override
@@ -93,7 +103,7 @@ public class PinataEnchantment extends SBEnchantment{
         nbtCompound.putLong(PINATA_KILL_COUNT_KEY,killCount);
     }
 
-    private static class PinataLootFountainAction implements NextTickAction {
+    private static class PinataLootFountainAction extends DelayedAction {
 
         List<ItemEntity> items;
         Random random;
@@ -126,7 +136,7 @@ public class PinataEnchantment extends SBEnchantment{
                     items.remove(item);
                 }
                 if (!items.isEmpty()) {
-                    owner.spellbound$addNextTickAction(new PinataLootFountainAction(items, random, owner));
+                    owner.spellbound$addDelayedAction(new PinataLootFountainAction(items, random, owner));
                 }
             }
         }

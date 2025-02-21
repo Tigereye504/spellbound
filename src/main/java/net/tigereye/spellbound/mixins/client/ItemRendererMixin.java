@@ -1,4 +1,4 @@
-package net.tigereye.spellbound.mixins;
+package net.tigereye.spellbound.mixins.client;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;

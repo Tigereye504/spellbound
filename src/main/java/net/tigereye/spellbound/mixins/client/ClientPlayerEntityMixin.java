@@ -1,17 +1,20 @@
-package net.tigereye.spellbound.mixins;
+package net.tigereye.spellbound.mixins.client;
 
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.tigereye.spellbound.interfaces.SpellboundClientPlayerEntity;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin implements SpellboundClientPlayerEntity {
+    @Unique
     private boolean jumpReleased = false;
 
+    @Unique
     private boolean hasMidairJumped = false;
 
 
@@ -21,19 +24,19 @@ public class ClientPlayerEntityMixin implements SpellboundClientPlayerEntity {
     }
 
     @Override
-    public void setJumpReleased(boolean set) {
+    public void spellbound$setJumpReleased(boolean set) {
         jumpReleased = set;
     }
     @Override
-    public boolean getJumpReleased() {
+    public boolean spellbound$getJumpReleased() {
         return jumpReleased;
     }
     @Override
-    public void setHasMidairJumped(boolean set) {
+    public void spellbound$setHasMidairJumped(boolean set) {
         hasMidairJumped = set;
     }
     @Override
-    public boolean hasMidairJumped() {
+    public boolean spellbound$hasMidairJumped() {
         return hasMidairJumped;
     }
 }

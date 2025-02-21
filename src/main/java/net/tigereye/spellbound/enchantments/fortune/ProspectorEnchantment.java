@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.data.Prospector.ProspectorManager;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.interfaces.NextTickAction;
+import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
@@ -72,7 +72,7 @@ public class ProspectorEnchantment extends SBEnchantment {
                                 count++;
                             }
                         }
-                        ((SpellboundLivingEntity) player).spellbound$addNextTickAction(new ProspectorAction(sWorld, pos, new ItemStack(treasure, count)));
+                        ((SpellboundLivingEntity) player).spellbound$addDelayedAction(new ProspectorAction(sWorld, pos, new ItemStack(treasure, count)));
                     } else {
                         Spellbound.LOGGER.error(player.getName().getString() + "'s Prospector is looking for " + entry.getKey() + ", but cannot find it in the item registry!");
                     }
@@ -81,7 +81,7 @@ public class ProspectorEnchantment extends SBEnchantment {
         }
     }
 
-    private static class ProspectorAction implements NextTickAction{
+    private static class ProspectorAction extends DelayedAction {
 
         World world;
         BlockPos pos;
