@@ -39,8 +39,8 @@ public class HoverEnchantment extends SBEnchantment {
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         //if the user has landed since phasing, reset
         if(entity instanceof SpellboundClientPlayerEntity player) {
-            if (player.hasMidairJumped() && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming() || entity.isTouchingWater())) {
-                player.setHasMidairJumped(false);
+            if (player.spellbound$hasMidairJumped() && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming() || entity.isTouchingWater())) {
+                player.spellbound$setHasMidairJumped(false);
             }
         }
     }
@@ -54,11 +54,11 @@ public class HoverEnchantment extends SBEnchantment {
             return;
         }
         if(entity instanceof SpellboundClientPlayerEntity player) {
-            if (player.hasMidairJumped()) {
+            if (player.spellbound$hasMidairJumped()) {
                 entity.removeStatusEffect(SBStatusEffects.HOVERING);
                 return;
             }
-            player.setHasMidairJumped(true);
+            player.spellbound$setHasMidairJumped(true);
             NetworkingUtil.sendStatusEffectRequestPacket(
                     Spellbound.config.hover.DURATION_BASE + Spellbound.config.hover.DURATION_PER_LEVEL * level, 0,
                     SBStatusEffects.HOVERING);

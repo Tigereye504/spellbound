@@ -42,8 +42,8 @@ public class PhaseLeapEnchantment extends SBEnchantment {
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         //if the user has landed since phasing, reset
         if(entity instanceof SpellboundClientPlayerEntity player) {
-            if (player.hasMidairJumped() && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming() || entity.isTouchingWater())) {
-                player.setHasMidairJumped(false);
+            if (player.spellbound$hasMidairJumped() && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming() || entity.isTouchingWater())) {
+                player.spellbound$setHasMidairJumped(false);
             }
         }
     }
@@ -58,7 +58,7 @@ public class PhaseLeapEnchantment extends SBEnchantment {
         if(!(entity instanceof SpellboundClientPlayerEntity player)) {
             return;
         }
-        if(player.hasMidairJumped()){
+        if(player.spellbound$hasMidairJumped()){
             return;
         }
 
@@ -79,7 +79,7 @@ public class PhaseLeapEnchantment extends SBEnchantment {
             Spellbound.LOGGER.info("Phase leap teleporting to position [" + position.getX() + "," + position.getY() + "," + position.getZ() + "]");
         }
         NetworkingUtil.sendTeleportRequestPacket(position);
-        player.setHasMidairJumped(true);
+        player.spellbound$setHasMidairJumped(true);
         entity.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT,1.0F, 1.0F);
     }
 }

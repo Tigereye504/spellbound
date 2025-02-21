@@ -1,8 +1,8 @@
 package net.tigereye.spellbound.interfaces;
 
 public interface SpellboundClientPlayerEntity {
-    void setJumpReleased(boolean set);
-    boolean getJumpReleased();
-    void setHasMidairJumped(boolean set);
-    boolean hasMidairJumped();
+    void spellbound$setJumpReleased(boolean set);
+    boolean spellbound$getJumpReleased();
+    void spellbound$setHasMidairJumped(boolean set);
+    boolean spellbound$hasMidairJumped();
 }
