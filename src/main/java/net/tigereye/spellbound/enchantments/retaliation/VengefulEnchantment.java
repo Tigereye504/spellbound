@@ -1,6 +1,7 @@
 package net.tigereye.spellbound.enchantments.retaliation;
 
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
@@ -18,6 +19,7 @@ import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.registration.SBDamageSources;
+import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
@@ -50,7 +52,7 @@ public class VengefulEnchantment extends SBEnchantment {
         if(entity.getWorld().isClient()){
             return;
         }
-        if(entity.age - entity.getLastAttackedTime() > Spellbound.config.vengeful.TIMEOUT * level){
+        if(entity.age - entity.getLastAttackedTime() > Spellbound.config.vengeful.TIMEOUT){
             stack.removeSubNbt(VENGENCE_NBT_KEY);
         }
     }
@@ -67,7 +69,7 @@ public class VengefulEnchantment extends SBEnchantment {
     }
 
     @Override
-    public void onTargetDamaged(int level, ItemStack stack, LivingEntity user, Entity target) {
+    public void onDoRedHealthDamage(int level, ItemStack stack, LivingEntity user, LivingEntity target, DamageSource source, float amount) {
         //if(user.getWorld().isClient()){
         //    return;
         //}
@@ -75,9 +77,9 @@ public class VengefulEnchantment extends SBEnchantment {
         if(SBEnchantmentHelper.isEquipmentCorrectlyWorn(stack,user)) {
             NbtCompound nbt = stack.getOrCreateSubNbt(VENGENCE_NBT_KEY);
             String targetUUID = target.getUuidAsString();
-            float damage = nbt.getFloat(targetUUID);
-            if(damage > Spellbound.config.vengeful.INJURY_MINIMUM){
-                VengefulAction vAction = new VengefulAction(damage * level * Spellbound.config.vengeful.DAMAGE_RATIO_PER_LEVEL
+            float excessDamage = nbt.getFloat(targetUUID) - getMinimumDamage(level);
+            if(excessDamage > 0){
+                VengefulAction vAction = new VengefulAction(Spellbound.config.vengeful.DAMAGE_BASE + (excessDamage * Spellbound.config.vengeful.DAMAGE_RATIO)
                         , user, target, Spellbound.config.vengeful.FOLLOWUP_HIT_DELAY);
                 vAction.ifVengeanceInQueueSetAsFollowupElseAddToQueue();
                 nbt.remove(targetUUID);
@@ -98,7 +100,11 @@ public class VengefulEnchantment extends SBEnchantment {
         NbtCompound nbt = itemStack.getOrCreateSubNbt(VENGENCE_NBT_KEY);
         String targetUUID = target.getUuidAsString();
         float damage = nbt.getFloat(targetUUID);
-        return damage > Spellbound.config.vengeful.INJURY_MINIMUM;
+        return damage > getMinimumDamage(EnchantmentHelper.getLevel(SBEnchantments.VENGEFUL,itemStack));
+    }
+
+    private float getMinimumDamage(int level){
+        return Spellbound.config.vengeful.INJURY_MINIMUM_BASE + (level * Spellbound.config.vengeful.INJURY_MINIMUM_PER_LEVEL);
     }
 
     @Override

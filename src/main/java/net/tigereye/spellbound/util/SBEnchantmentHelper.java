@@ -275,7 +275,7 @@ public class SBEnchantmentHelper {
         forEachSpellboundEnchantment((((enchantment, level, itemStack) -> enchantment.onInventoryTick(level,stack,world,entity,slot,selected))), stack);
     }
 
-    public static void onRedHealthDamage(DamageSource source, @NotNull LivingEntity entity, float amount) {
+    public static void onRedHealthDamage(DamageSource source, @NotNull LivingEntity entity, float redHealthDamage) {
         List<SBEnchantment> checked = new LinkedList<>();
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
             if(enchantment.requiresPreferredSlot()) {
@@ -285,14 +285,14 @@ public class SBEnchantmentHelper {
             }
             if(!checked.contains(enchantment)){
                 checked.add(enchantment);
-                enchantment.onRedHealthDamageOnce(level,itemStack,source,entity,amount);
+                enchantment.onRedHealthDamageOnce(level,itemStack,source,entity,redHealthDamage);
             }
-            enchantment.onRedHealthDamage(level,itemStack,source,entity,amount);
+            enchantment.onRedHealthDamage(level,itemStack,source,entity,redHealthDamage);
         },entity.getItemsEquipped());
     }
 
-    public static void onDoRedHealthDamage(LivingEntity attacker, DamageSource source, LivingEntity victim, float amount) {
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDoRedHealthDamage(level,itemStack,attacker,victim,source,amount),attacker.getItemsEquipped());
+    public static void onDoRedHealthDamage(LivingEntity attacker, DamageSource source, LivingEntity victim, float redHealthDamage) {
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDoRedHealthDamage(level,itemStack,attacker,victim,source,redHealthDamage),attacker.getItemsEquipped());
     }
 
     public static boolean onItemDestroyed(ItemStack stack, Entity entity) {

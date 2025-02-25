@@ -825,9 +825,10 @@ text.autoconfig.spellbound:
         vengeful.BASE_POWER: Enchanting Base Power
         vengeful.POWER_PER_RANK: Enchanting Power Per Rank
         vengeful.POWER_RANGE: Enchanting Power Range
-        vengeful.DIFFICULTY_PER_RANK: Difficulty Per Rank
-        vengeful.DAMAGE_RATIO_PER_LEVEL: Damage Ratio Per Level
-        vengeful.INJURY_MINIMUM: Injury Minimum
+        vengeful.DAMAGE_BASE: Damage Base
+        vengeful.DAMAGE_RATIO: Damage Ratio
+        vengeful.INJURY_MINIMUM_BASE: Injury Minimum Base
+        vengeful.INJURY_MINIMUM_PER_LEVEL: Injury Minimum Per Level
         vengeful.TIMEOUT: Base Timeout
         vengeful.FOLLOWUP_HIT_DELAY: Followup Hit Delay
         vengeful.HIGHLIGHT_COLOR: Highlight Color

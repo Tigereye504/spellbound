@@ -208,7 +208,10 @@ public class SBConfig implements ConfigData {
         public int BASE_POWER = -10;
         public int POWER_PER_RANK = 11;
         public int POWER_RANGE = 50;
-        public float ABSORPTION_PER_DAMAGE_PER_LEVEL = 0.125F;
+        public int TIME_UNTIL_RESET = 100;
+        public float ABSORPTION_PER_TICK = .2f;
+        public float BASE_ABSORPTION = .1F;
+        public float ABSORPTION_PER_LEVEL = .1F;
     }
 
     @ConfigEntry.Category("enchantment")
@@ -365,7 +368,7 @@ public class SBConfig implements ConfigData {
     public static class MonogamousConfig {
         public boolean ENABLED = false;
         public boolean IS_TREASURE = false;
-        public boolean IS_FOR_SALE = true;
+        public boolean IS_FOR_SALE = false;
         public int RARITY = 4;
         public int SOFT_CAP = 1;
         public int HARD_CAP = 1;
@@ -508,7 +511,7 @@ public class SBConfig implements ConfigData {
     public static class PolygamousConfig {
         public boolean ENABLED = false;
         public boolean IS_TREASURE = false;
-        public boolean IS_FOR_SALE = true;
+        public boolean IS_FOR_SALE = false;
         public int RARITY = 3;
         public int SOFT_CAP = 1;
         public int HARD_CAP = 1;
@@ -840,9 +843,11 @@ public class SBConfig implements ConfigData {
         public int BASE_POWER = -10;
         public int POWER_PER_RANK = 20;
         public int POWER_RANGE = 50;
-        public float DAMAGE_RATIO_PER_LEVEL = .33f;
-        public float INJURY_MINIMUM = 4f;
-        public int TIMEOUT = 100;
+        public float DAMAGE_BASE = 1f;
+        public float DAMAGE_RATIO = .33f;
+        public float INJURY_MINIMUM_BASE = 10f;
+        public float INJURY_MINIMUM_PER_LEVEL = -2f;
+        public int TIMEOUT = 2400;
         public int FOLLOWUP_HIT_DELAY = 12;
         public int HIGHLIGHT_COLOR = 0x880808;
     }

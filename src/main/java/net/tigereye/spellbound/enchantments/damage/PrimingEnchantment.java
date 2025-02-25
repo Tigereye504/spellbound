@@ -1,9 +1,11 @@
 package net.tigereye.spellbound.enchantments.damage;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.instance.OwnedStatusEffectInstance;
@@ -11,13 +13,8 @@ import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 public class PrimingEnchantment extends SBEnchantment{
 
-    private static final Map<UUID,Long> lastUse = new HashMap<>();
     public PrimingEnchantment() {
         super(SpellboundUtil.rarityLookup(Spellbound.config.priming.RARITY), SBEnchantmentTargets.ANY_WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
@@ -40,29 +37,25 @@ public class PrimingEnchantment extends SBEnchantment{
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.priming.IS_FOR_SALE;}
 
     @Override
-    public void onTargetDamaged(LivingEntity user, Entity target, int level) {
-        if(user.getWorld().isClient()){
+    public void onDoRedHealthDamage(int level, ItemStack itemStack, LivingEntity attacker, LivingEntity victim, DamageSource source, float amount) {
+        if(attacker.getWorld().isClient()){
             return;
         }
-        if(target instanceof LivingEntity lTarget) {
-            //minecraft's on target damaged trigger is flawed and calls items in player's main hands twice. Check for that.
-            if (lastUse.getOrDefault(user.getUuid(),0L) != user.getWorld().getTime()) {
-                lastUse.put(user.getUuid(),user.getWorld().getTime());
-                int effectLevel = 0;
-                StatusEffectInstance primedInstance = lTarget.getStatusEffect(SBStatusEffects.PRIMED);
-                if (primedInstance != null) {
-                    int existingLevel = primedInstance.getAmplifier();
-                    if(existingLevel >= level) {
-                        return;
-                    }
-                    else{
-                        effectLevel = existingLevel+1;
-                    }
-                }
-                Spellbound.LOGGER.debug("Applying Primed at magnitude " + effectLevel);
-                lTarget.addStatusEffect(new OwnedStatusEffectInstance(user, SBStatusEffects.PRIMED, Spellbound.config.priming.DURATION, effectLevel));
+        if(source.getTypeRegistryEntry().matchesKey(DamageTypes.EXPLOSION)){
+            return;
+        }
+        int effectLevel = 0;
+        StatusEffectInstance primedInstance = victim.getStatusEffect(SBStatusEffects.PRIMED);
+        if (primedInstance != null) {
+            int existingLevel = primedInstance.getAmplifier();
+            if(existingLevel >= level) {
+                return;
+            }
+            else{
+                effectLevel = existingLevel+1;
             }
         }
-        super.onTargetDamaged(user, target, level);
+        Spellbound.LOGGER.debug("Applying Primed at magnitude " + effectLevel);
+        victim.addStatusEffect(new OwnedStatusEffectInstance(attacker, SBStatusEffects.PRIMED, Spellbound.config.priming.DURATION, effectLevel));
     }
 }
