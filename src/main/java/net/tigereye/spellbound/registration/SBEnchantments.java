@@ -59,7 +59,7 @@ public class SBEnchantments {
     public static final SBEnchantment DULLNESS = new DullnessEnchantment();
     public static final SBEnchantment GOLDSKIN = new GoldskinEnchantment();
     public static final SBEnchantment FISHER_OF_MEN = new FisherOfMenEnchantment();
-    public static final SBEnchantment FLESH_WOUND = new FleshWoundEnchantment();
+    public static final FleshWoundEnchantment FLESH_WOUND = new FleshWoundEnchantment();
     public static final SBEnchantment GRACE = new GraceEnchantment();
     public static final SBEnchantment HEARTY = new HeartyEnchantment();
     public static final SBEnchantment HOVER = new HoverEnchantment();

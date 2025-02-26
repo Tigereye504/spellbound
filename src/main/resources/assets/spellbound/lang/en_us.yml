@@ -53,14 +53,14 @@ enchantment.spellbound:
     dullness: Dullness
     dullness.desc: Type:Damage. Reduces damage done by tool.
 
-    goldskin: Goldskin
-    goldskin.desc: Type:Protection. Grants absorption hearts that regenerate out of combat.
-
     fisher_of_men: Fisher Of Men
     fisher_of_men.desc: Type:Lure. Deals damage to pulled entities and grants fish if lethal.
 
     flesh_wound: Flesh Wound
     flesh_wound.desc: Type:Protection. Grants absorption hearts when injured.
+
+    goldskin: Goldskin
+    goldskin.desc: Type:Protection. Grants absorption hearts that regenerate out of combat.
 
     grace: Grace
     grace.desc: Type:Protection. Greatly extends and improves I-Frames.
