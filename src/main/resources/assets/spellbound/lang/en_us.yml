@@ -53,11 +53,14 @@ enchantment.spellbound:
     dullness: Dullness
     dullness.desc: Type:Damage. Reduces damage done by tool.
 
+    goldskin: Goldskin
+    goldskin.desc: Type:Protection. Grants absorption hearts that regenerate out of combat.
+
     fisher_of_men: Fisher Of Men
     fisher_of_men.desc: Type:Lure. Deals damage to pulled entities and grants fish if lethal.
 
     flesh_wound: Flesh Wound
-    flesh_wound.desc: Type:Protection. Grants absorption hearts on non-absorption damage.
+    flesh_wound.desc: Type:Protection. Grants absorption hearts when injured.
 
     grace: Grace
     grace.desc: Type:Protection. Greatly extends and improves I-Frames.
@@ -325,6 +328,21 @@ text.autoconfig.spellbound:
         dullness.POWER_PER_RANK: Enchanting Power Per Rank
         dullness.POWER_RANGE: Enchanting Power Range
 
+        goldskin: Flesh Wound
+        goldskin.ENABLED: Enable
+        goldskin.IS_TREASURE: Is Treasure
+        goldskin.IS_FOR_SALE: Sold by Villagers
+        goldskin.RARITY: Rarity
+        goldskin.SOFT_CAP: Soft Cap
+        goldskin.HARD_CAP: Hard Cap
+        goldskin.BASE_POWER: Enchanting Base Power
+        goldskin.POWER_PER_RANK: Enchanting Power Per Rank
+        goldskin.POWER_RANGE: Enchanting Power Range
+        goldskin.TIME_UNTIL_RESET: Time Until Reset
+        goldskin.ABSORPTION_PER_TICK: Absorption Per Tick
+        goldskin.BASE_ABSORPTION: Base Absorption
+        goldskin.ABSORPTION_PER_LEVEL: Absorption Per Level
+        
         fisherOfMen: Fisher Of Men
         fisherOfMen.ENABLED: Enable
         fisherOfMen.IS_TREASURE: Is Treasure
@@ -348,7 +366,11 @@ text.autoconfig.spellbound:
         fleshWound.BASE_POWER: Enchanting Base Power
         fleshWound.POWER_PER_RANK: Enchanting Power Per Rank
         fleshWound.POWER_RANGE: Enchanting Power Range
-        fleshWound.ABSORPTION_PER_DAMAGE_PER_LEVEL: Absorption Per Rank Per Dmg
+        fleshWound.TIME_UNTIL_RESET: Time Until Reset
+        fleshWound.ABSORPTION_PER_TICK: Absorption Per Tick
+        fleshWound.BASE_ABSORPTION: Base Absorption
+        fleshWound.ABSORPTION_PER_LEVEL: Absorption Per Level
+        fleshWound.DURATION: Duration
         
         grace: Grace
         grace.ENABLED: Enable

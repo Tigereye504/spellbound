@@ -208,10 +208,27 @@ public class SBConfig implements ConfigData {
         public int BASE_POWER = -10;
         public int POWER_PER_RANK = 11;
         public int POWER_RANGE = 50;
+        public float ABSORPTION_RATIO_PER_RANK = .125f;
+        public int DURATION = 600;
+    }
+
+    @ConfigEntry.Category("enchantment")
+    @ConfigEntry.Gui.CollapsibleObject
+    public GoldskinConfig goldskin = new GoldskinConfig();
+    public static class GoldskinConfig {
+        public boolean ENABLED = true;
+        public boolean IS_TREASURE = false;
+        public boolean IS_FOR_SALE = true;
+        public int RARITY = 2;
+        public int SOFT_CAP = 4;
+        public int HARD_CAP = 4;
+        public int BASE_POWER = -10;
+        public int POWER_PER_RANK = 11;
+        public int POWER_RANGE = 50;
         public int TIME_UNTIL_RESET = 100;
-        public float ABSORPTION_PER_TICK = .2f;
-        public float BASE_ABSORPTION = .1F;
-        public float ABSORPTION_PER_LEVEL = .1F;
+        public float ABSORPTION_PER_TICK = .01f;
+        public float BASE_ABSORPTION = .05F;
+        public float ABSORPTION_PER_LEVEL = .05F;
     }
 
     @ConfigEntry.Category("enchantment")

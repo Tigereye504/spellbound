@@ -57,6 +57,7 @@ public class SBEnchantments {
     public static final SBEnchantment DESPOILING = new DespoilingEnchantment();
     public static final SBEnchantment LAST_GASP = new LastGaspEnchantment();
     public static final SBEnchantment DULLNESS = new DullnessEnchantment();
+    public static final SBEnchantment GOLDSKIN = new GoldskinEnchantment();
     public static final SBEnchantment FISHER_OF_MEN = new FisherOfMenEnchantment();
     public static final SBEnchantment FLESH_WOUND = new FleshWoundEnchantment();
     public static final SBEnchantment GRACE = new GraceEnchantment();
@@ -108,6 +109,7 @@ public class SBEnchantments {
         register("demolition", DEMOLITION);
         register("despoiling", DESPOILING);
         register("dullness", DULLNESS);
+        register("goldskin", GOLDSKIN);
         register("fisher_of_men", FISHER_OF_MEN);
         register("flesh_wound", FLESH_WOUND);
         register("grace", GRACE);

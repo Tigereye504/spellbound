@@ -2,17 +2,9 @@ package net.tigereye.spellbound.mob_effect;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.world.explosion.Explosion;
 import net.tigereye.spellbound.registration.SBStatusEffects;
-
-import java.util.Iterator;
-import java.util.Map;
+import net.tigereye.spellbound.util.SBEnchantmentHelper;
 
 public class Bravados extends SBStatusEffect{
 
@@ -34,5 +26,6 @@ public class Bravados extends SBStatusEffect{
 
     public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier) {
         entity.setAbsorptionAmount(0);
+        SBEnchantmentHelper.onRedHealthDamage(entity.getDamageSources().generic(),entity,0);
     }
 }
