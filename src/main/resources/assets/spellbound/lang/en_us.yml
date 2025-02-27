@@ -328,7 +328,7 @@ text.autoconfig.spellbound:
         dullness.POWER_PER_RANK: Enchanting Power Per Rank
         dullness.POWER_RANGE: Enchanting Power Range
 
-        goldskin: Flesh Wound
+        goldskin: Goldskin
         goldskin.ENABLED: Enable
         goldskin.IS_TREASURE: Is Treasure
         goldskin.IS_FOR_SALE: Sold by Villagers

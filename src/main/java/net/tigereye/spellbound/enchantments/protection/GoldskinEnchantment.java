@@ -76,7 +76,7 @@ public class GoldskinEnchantment extends SBEnchantment{
         int instanceCount = 0;
         for(ItemStack item : gear){
             if(SBEnchantmentHelper.isEquipmentCorrectlyWorn(item,entity)){
-                int itemLevel = EnchantmentHelper.getLevel(SBEnchantments.FLESH_WOUND, item);
+                int itemLevel = EnchantmentHelper.getLevel(SBEnchantments.GOLDSKIN, item);
                 if(itemLevel > 0) {
                     totalLevels += itemLevel;
                     instanceCount++;
