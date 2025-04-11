@@ -48,11 +48,11 @@ public class DyingEffect extends SBStatusEffect{
 
             UpdateDyingModifier(entity,newValue);
             if(entity.getHealth() > entity.getMaxHealth()){
-                entity.setHealth(entity.getMaxHealth());
+                entity.setHealth(Math.max(Math.min(entity.getMaxHealth(),entity.getHealth()-.1F),.1F)); //a tiny bit of health drain should force proper updates... for now.
             }
 
             if(newValue <= -.99){ //a bit of leeway to account for rounding errors
-                entity.damage(entity.getDamageSources().generic(),entity.getMaxHealth() * 100);
+                entity.damage(entity.getDamageSources().generic(),(entity.getMaxHealth()+entity.getAbsorptionAmount()) * 100);
                 if(entity.isAlive() && entity.hasStatusEffect(SBStatusEffects.DYING)){
                     entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.DYING, 53688
                             , 9,false,false,true));
@@ -85,6 +85,7 @@ public class DyingEffect extends SBStatusEffect{
             att.addPersistentModifier(mod);
             if(!entity.getWorld().isClient() && entity instanceof ServerPlayerEntity sPlayer){
                 sPlayer.markHealthDirty();
+                sPlayer.sendAbilitiesUpdate();
             }
         }
     }

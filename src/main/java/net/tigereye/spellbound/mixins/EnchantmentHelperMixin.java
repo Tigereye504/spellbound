@@ -20,6 +20,8 @@ public class EnchantmentHelperMixin{
 
     @Inject(at = @At("RETURN"), method = "onTargetDamaged")
     private static void spellboundOnTargetDamagedMixin(LivingEntity user, Entity target, CallbackInfo ci){
-        SBEnchantmentHelper.onTargetDamaged(user,target);
+        if(user != null) {
+            SBEnchantmentHelper.onTargetDamaged(user, target);
+        }
     }
 }

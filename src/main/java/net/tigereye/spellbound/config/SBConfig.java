@@ -330,6 +330,7 @@ public class SBConfig implements ConfigData {
         public float HEALTH_REBOUND_PER_RANK = 0.0625f;
         public double INSTANT_MAX_HEALTH_LOSS_FACTOR = 0.5;
         public float RECOVERY_FROM_EXPERIENCE = 0.01f;
+        public boolean TEXT_PROMPT = true;
     }
 
     @ConfigEntry.Category("enchantment")

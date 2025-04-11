@@ -79,6 +79,7 @@ enchantment.spellbound:
 
     last_gasp: Last Gasp
     last_gasp.desc: Type:Protection. Enter dying state on lethal damage, recover on kill.
+    last_gasp.message.dying: Fight For Your Life!
 
     launching: Launching
     launching.desc: Type:Utility. Knock targets skyward.
@@ -448,6 +449,7 @@ text.autoconfig.spellbound:
         lastGasp.RECOVERY_FROM_EXPERIENCE: Max Health Restored per Exp
         lastGasp.SECONDS_TO_DIE: Seconds to Die
         lastGasp.INSTANT_MAX_HEALTH_LOSS_FACTOR: Instant Max Health Loss Factor
+        lastGasp.TEXT_PROMPT: Display Text Prompt When Downed
         
         launching: Launching
         launching.ENABLED: Enable

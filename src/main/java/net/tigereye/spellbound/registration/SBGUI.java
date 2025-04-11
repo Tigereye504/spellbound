@@ -13,5 +13,6 @@ public class SBGUI {
         HudRenderCallback.EVENT.register(Shielded::renderShields);
         HudRenderCallback.EVENT.register(GraceEnchantment::renderArmor);
         HudRenderCallback.EVENT.register(DyingEffect::renderDyingOverlay);
+
     }
 }

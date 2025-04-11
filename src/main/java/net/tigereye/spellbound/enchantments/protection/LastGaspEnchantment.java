@@ -11,6 +11,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.text.Text;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.DyingEffect;
@@ -60,9 +61,9 @@ public class LastGaspEnchantment extends SBEnchantment{
             }
         }
         int levels = SBEnchantmentHelper.getSpellboundEnchantmentAmountCorrectlyWorn(SBEnchantments.LAST_GASP,entity);
-        entity.setHealth(entity.getMaxHealth()*levels*Spellbound.config.lastGasp.HEALTH_REBOUND_PER_RANK);
         double lossFactor = Spellbound.config.lastGasp.INSTANT_MAX_HEALTH_LOSS_FACTOR * (1 - levels/16.0);
         DyingEffect.UpdateDyingModifier(entity,currentHealthLost - ((1+currentHealthLost)*lossFactor));
+        entity.setHealth(entity.getMaxHealth()*levels*Spellbound.config.lastGasp.HEALTH_REBOUND_PER_RANK);
 
         int severity = 0;
         if(entity.hasStatusEffect(SBStatusEffects.DYING)){
@@ -75,8 +76,10 @@ public class LastGaspEnchantment extends SBEnchantment{
                 , severity,false,false,false));
         entity.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, duration
                 , severity,false,false,false));
-
-        //draw particals between entity and anchor
+        if(Spellbound.config.lastGasp.TEXT_PROMPT && entity instanceof PlayerEntity pEntity) {
+            pEntity.sendMessage(Text.translatable("enchantment.spellbound.last_gasp.message.dying"), true);
+        }
+        //draw particles between entity and anchor
 
         int particles = (severity+1)*5;
         for (int i = 0; i < particles; i++) {
