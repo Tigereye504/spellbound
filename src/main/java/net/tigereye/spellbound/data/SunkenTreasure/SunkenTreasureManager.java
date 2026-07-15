@@ -112,8 +112,6 @@ public class SunkenTreasureManager implements SimpleSynchronousResourceReloadLis
         return 0;
     }
 
-
-    //TODO: make Sunken Treasure entries
     //TODO: experiment with Sunken Treasure on tools and weapons
 
     /*public static void registerSunkenTreasure(){

@@ -10,16 +10,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.efficiency.RockCollectingEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
-import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class BagOfRocks extends Item {
 

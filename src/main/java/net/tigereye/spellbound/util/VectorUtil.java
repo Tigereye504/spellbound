@@ -8,9 +8,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.Spellbound;
 
-import javax.swing.text.html.parser.Entity;
-import java.util.Collections;
-
 public class VectorUtil {
 
     public static Vec3d getEntityBoundingBoxOffset(Vec3d direction, Box boundingBox){

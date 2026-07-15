@@ -4,11 +4,9 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShovelItem;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -84,21 +82,6 @@ public class JoustingEnchantment extends SBEnchantment{
             if (dotP < 0) {
                 damage = -damage;
             }
-        }
-        if(Spellbound.DEBUG && attacker instanceof PlayerEntity && !attacker.getWorld().isClient){
-            String out;
-            out = "Dot Product: " + dotP;
-            ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
-            out = "Damage: " + damage;
-            ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
-            out = "Relative Velocity: " + relativeVelocity;
-            ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
-            out = "Attacker Facing: " + attackerFacing;
-            ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
-            out = "Attacker Velocity: " + attackerVelocity;
-            ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
-            out = "Defender Velocity: " + defender.getVelocity();
-            ((PlayerEntity)attacker).sendMessage(Text.literal(out), false);
         }
         return damage;
         //return (float)dotP*10*level;

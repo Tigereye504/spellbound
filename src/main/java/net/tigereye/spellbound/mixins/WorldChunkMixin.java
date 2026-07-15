@@ -27,8 +27,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.stream.Stream;
-
 @Mixin(WorldChunk.class)
 public class WorldChunkMixin extends Chunk {
 

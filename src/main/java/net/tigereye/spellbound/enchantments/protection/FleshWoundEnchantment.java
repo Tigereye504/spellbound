@@ -52,8 +52,6 @@ public class FleshWoundEnchantment extends SBEnchantment{
     @Override
     public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.fleshWound.IS_FOR_SALE;}
 
-    //TODO: add GUI layer for Flesh Wound
-
     public void onEquipmentChangeOnce(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){
         if(oldLevel != newLevel) {
             Iterable<ItemStack> gear = entity.getItemsEquipped();

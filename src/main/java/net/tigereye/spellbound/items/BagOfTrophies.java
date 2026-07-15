@@ -11,7 +11,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.tigereye.spellbound.enchantments.damage.TrophyCollectingEnchantment;
-import net.tigereye.spellbound.enchantments.efficiency.RockCollectingEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import org.jetbrains.annotations.Nullable;
 

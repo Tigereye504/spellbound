@@ -23,7 +23,7 @@ extends SpriteBillboardParticle {
         this.green = f;
         this.blue = f;
         this.scale = 1.2f - (float)d * 0.5f;
-        this.setSpriteForAge(spriteProvider);
+        this.setSpriteForAge(this.spriteProvider);
     }
 
     @Override

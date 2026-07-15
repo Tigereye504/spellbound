@@ -149,18 +149,12 @@ public class SBEnchantmentHelper {
     public static int onApplyIFrameDuration(int frames, DamageSource source, float damageAmount, LivingEntity defender) {
         MutableInt mutableInt = new MutableInt(frames);
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableInt.setValue((enchantment).getIFrameAmount(level, mutableInt.intValue(), source, damageAmount, itemStack, defender)), defender.getArmorItems());
-        if(Spellbound.DEBUG && frames != mutableInt.intValue()) {
-            Spellbound.LOGGER.info(defender.getName() + "'s Grace Ticks: " + mutableInt.intValue());
-        }
         return mutableInt.intValue();
     }
 
     public static float onApplyIFrameMagnitude(float magnitude, DamageSource source, float damageAmount, LivingEntity defender) {
         MutableFloat mutableFloat = new MutableFloat(magnitude);
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue((enchantment).getIFrameMagnitude(level, mutableFloat.floatValue(), source, damageAmount, itemStack, defender)), defender.getArmorItems());
-        if(Spellbound.DEBUG && magnitude != mutableFloat.floatValue()) {
-            Spellbound.LOGGER.info(defender.getName() + "'s Grace Magnitude: " + mutableFloat.floatValue());
-        }
         return mutableFloat.floatValue();
     }
 

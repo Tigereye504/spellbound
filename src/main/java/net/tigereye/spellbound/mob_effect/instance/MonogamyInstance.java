@@ -1,6 +1,5 @@
 package net.tigereye.spellbound.mob_effect.instance;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.nbt.NbtCompound;

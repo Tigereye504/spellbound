@@ -115,12 +115,11 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
 
         Set<TagKey<Block>> tagsLeft = new HashSet<>(tagDropBonusMap.keySet());
         for (Block block: foundBlocks) {
-            Identifier id = Registries.BLOCK.getId(block);
             //see if any tag bonuses are had
             Iterator<TagKey<Block>> iter = tagsLeft.iterator();
             while(iter.hasNext()){
                 TagKey<Block> tag = iter.next();
-                if(block.getRegistryEntry().isIn(tag)){
+                if(Registries.BLOCK.getEntry(block).isIn(tag)){
                     for (Pair<Identifier,Float> pair: tagDropBonusMap.get(tag)) {
                         output.put(pair.getLeft(),output.getOrDefault(pair.getLeft(),0f) + pair.getRight());
                     }
@@ -128,6 +127,7 @@ public class ProspectorManager implements SimpleSynchronousResourceReloadListene
                 }
             }
             //see if any block bonuses are had
+            Identifier id = Registries.BLOCK.getId(block);
             if(blockDropBonusMap.containsKey(id)){
                 for (Pair<Identifier,Float> pair: blockDropBonusMap.get(id)) {
                     output.put(pair.getLeft(),output.getOrDefault(pair.getLeft(),0f) + pair.getRight());
