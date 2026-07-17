@@ -1,11 +1,11 @@
 package net.tigereye.spellbound.enchantments.utility;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.instance.OwnedStatusEffectInstance;
@@ -31,12 +31,12 @@ public class AirlineEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.airline.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.airline.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.airline.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.airline.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.airline.IS_FOR_SALE;}
 
     @Override
-    public void onFireProjectile(int level, ItemStack itemStack, Entity entity, ProjectileEntity projectile){
+    public void onFireProjectile(int level, ItemStack itemStack, Entity entity, Projectile projectile){
         //TODO: require user to be grounded
         if(entity instanceof LivingEntity livingEntity){
             tetherTarget(level,projectile,livingEntity);
@@ -44,14 +44,14 @@ public class AirlineEnchantment extends SBEnchantment{
     }
 
     @Override
-    public void onThrowTrident(int level, ItemStack itemStack, Entity entity, TridentEntity projectile){
+    public void onThrowTrident(int level, ItemStack itemStack, Entity entity, ThrownTrident projectile){
         if(entity instanceof LivingEntity livingEntity){
             tetherTarget(level,projectile,livingEntity);
         }
     }
 
     private void tetherTarget(int level, Entity anchor, LivingEntity target){
-        target.removeStatusEffect(SBStatusEffects.TETHERED);
-        target.addStatusEffect(new OwnedStatusEffectInstance(anchor, SBStatusEffects.TETHERED, Spellbound.config.airline.BASE_DURATION + (Spellbound.config.airline.DURATION_PER_RANK*level), 0));
+        target.removeEffect(SBStatusEffects.TETHERED);
+        target.addEffect(new OwnedStatusEffectInstance(anchor, SBStatusEffects.TETHERED, Spellbound.config.airline.BASE_DURATION + (Spellbound.config.airline.DURATION_PER_RANK*level), 0));
     }
 }

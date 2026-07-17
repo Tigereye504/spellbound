@@ -1,18 +1,18 @@
 package net.tigereye.spellbound.mob_effect;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.phys.Vec3;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.registration.SBParticles;
@@ -22,29 +22,29 @@ import java.util.List;
 
 public class Shielded extends SBStatusEffect{
 
-    public static final Identifier SHIELDED_HEART = new Identifier(Spellbound.MODID,"textures/gui/shielded_heart.png");
+    public static final ResourceLocation SHIELDED_HEART = new ResourceLocation(Spellbound.MODID,"textures/gui/shielded_heart.png");
 
     public Shielded(){
-        super(StatusEffectCategory.BENEFICIAL, 0x7CB5C6);
+        super(MobEffectCategory.BENEFICIAL, 0x7CB5C6);
     }
 
-    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+    public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
     }
 
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        Vec3d basePosition = entity.getPos();
-        Vec3d velocity = entity.getVelocity();
+    public void applyEffectTick(LivingEntity entity, int amplifier) {
+        Vec3 basePosition = entity.position();
+        Vec3 velocity = entity.getDeltaMovement();
         if(entity instanceof SpellboundLivingEntity slEntity && slEntity.spellbound$shouldDisplayShielded()) {
-            Vec3d rotVec = entity.getRotationVector();
-            Vec3d finalPos = basePosition.subtract(rotVec.normalize().multiply(0.1));
-            entity.getWorld().addParticle(SBParticles.RED_ALERT_SHIELD,
+            Vec3 rotVec = entity.getLookAngle();
+            Vec3 finalPos = basePosition.subtract(rotVec.normalize().scale(0.1));
+            entity.level().addParticle(SBParticles.RED_ALERT_SHIELD,
                     finalPos.x, finalPos.y + 1, finalPos.z,
                     velocity.x, velocity.y, velocity.z);
         }
     }
 
-    public float onPreArmorDefense(StatusEffectInstance instance, DamageSource source, LivingEntity defender, float amount, List<StatusEffectInstance> effectsToAdd, List<StatusEffect> effectsToRemove){
+    public float onPreArmorDefense(MobEffectInstance instance, DamageSource source, LivingEntity defender, float amount, List<MobEffectInstance> effectsToAdd, List<MobEffect> effectsToRemove){
         if(amount <= 0){
             return amount;
         }
@@ -55,35 +55,35 @@ public class Shielded extends SBStatusEffect{
             int shieldDuration = instance.getDuration();
             int shieldAmp = instance.getAmplifier()-1;
             effectsToRemove.add(SBStatusEffects.SHIELDED);
-            effectsToAdd.add(new StatusEffectInstance(SBStatusEffects.SHIELDED, shieldDuration, shieldAmp, instance.isAmbient(), instance.shouldShowParticles(),instance.shouldShowIcon()));
+            effectsToAdd.add(new MobEffectInstance(SBStatusEffects.SHIELDED, shieldDuration, shieldAmp, instance.isAmbient(), instance.isVisible(),instance.showIcon()));
         }
         return 0;
     }
 
-    public static void renderShields(DrawContext drawContext, float delta){
-        MinecraftClient client = MinecraftClient.getInstance();
-        ClientPlayerEntity player = client.player;
+    public static void renderShields(GuiGraphics drawContext, float delta){
+        Minecraft client = Minecraft.getInstance();
+        LocalPlayer player = client.player;
         if(player != null && !(player.isCreative() || player.isSpectator())) {
             client.getProfiler().push("health");
-            int scaledWidth = client.getWindow().getScaledWidth();
-            int scaledHeight = client.getWindow().getScaledHeight();
+            int scaledWidth = client.getWindow().getGuiScaledWidth();
+            int scaledHeight = client.getWindow().getGuiScaledHeight();
 
 
-            float maxHealth = Math.max((float) player.getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH), 2);
-            int absorption = MathHelper.ceil(player.getAbsorptionAmount());
-            int lineMidValue = MathHelper.ceil((maxHealth + (float) absorption) / 2.0F / 10.0F);
+            float maxHealth = Math.max((float) player.getAttributeValue(Attributes.MAX_HEALTH), 2);
+            int absorption = Mth.ceil(player.getAbsorptionAmount());
+            int lineMidValue = Mth.ceil((maxHealth + (float) absorption) / 2.0F / 10.0F);
 
             int x = scaledWidth / 2 - 92;
             int y = scaledHeight - 40;
             int lineWidth = Math.max(10 - (lineMidValue - 2), 3);
             int shieldLayers = 0;{
-                if(player.hasStatusEffect(SBStatusEffects.SHIELDED)){
-                    shieldLayers = player.getStatusEffect(SBStatusEffects.SHIELDED).getAmplifier()+1;
+                if(player.hasEffect(SBStatusEffects.SHIELDED)){
+                    shieldLayers = player.getEffect(SBStatusEffects.SHIELDED).getAmplifier()+1;
                 }
             }
 
-            int j = MathHelper.ceil((double) maxHealth / 2.0D);
-            int k = MathHelper.ceil((double) absorption / 2.0D);
+            int j = Mth.ceil((double) maxHealth / 2.0D);
+            int k = Mth.ceil((double) absorption / 2.0D);
             int displayableShields = Math.min(shieldLayers,j + k);
             RenderSystem.enableBlend();
             for (int m = displayableShields - 1; m >= 0; --m) {
@@ -95,11 +95,11 @@ public class Shielded extends SBStatusEffect{
                 boolean isRightmost = o == 9 || m == displayableShields - 1;
                 boolean isLeftmost = o == 0;
                 if (isLeftmost) {
-                    drawContext.drawTexture(SHIELDED_HEART, posX, posY, 0, 0, 1, 11, 11, 11);
+                    drawContext.blit(SHIELDED_HEART, posX, posY, 0, 0, 1, 11, 11, 11);
                 }
-                drawContext.drawTexture(SHIELDED_HEART, posX+1, posY, 1, 0, 8, 11, 11, 11);
+                drawContext.blit(SHIELDED_HEART, posX+1, posY, 1, 0, 8, 11, 11, 11);
                 if (isRightmost) {
-                    drawContext.drawTexture(SHIELDED_HEART, posX+9, posY, 9, 0, 2, 11, 11, 11);
+                    drawContext.blit(SHIELDED_HEART, posX+9, posY, 9, 0, 2, 11, 11, 11);
                 }
             }
             client.getProfiler().pop();

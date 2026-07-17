@@ -1,8 +1,6 @@
 accessWidener	v1	named
 
-accessible    method    net/minecraft/enchantment/EnchantmentHelper    forEachEnchantment    (Lnet/minecraft/enchantment/EnchantmentHelper$Consumer;Lnet/minecraft/item/ItemStack;)V
-accessible    class     net/minecraft/enchantment/EnchantmentHelper$Consumer
-extendable class net/minecraft/enchantment/EnchantmentTarget
-accessible method net/minecraft/client/gui/hud/InGameHud renderOverlay (Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/util/Identifier;F)V
-accessible field net/minecraft/item/MiningToolItem miningSpeed F
-accessible class net/minecraft/recipe/CookingRecipeSerializer$RecipeFactory
+accessible field net/minecraft/world/item/DiggerItem speed F
+accessible method net/minecraft/client/gui/Gui renderTextureOverlay (Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/resources/ResourceLocation;F)V
+
+extendable class net/minecraft/world/item/enchantment/EnchantmentCategory

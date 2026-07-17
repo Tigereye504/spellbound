@@ -1,21 +1,21 @@
 package net.tigereye.spellbound.enchantments.damage;
 
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.Angerable;
-import net.minecraft.entity.mob.Monster;
-import net.minecraft.entity.mob.WaterCreatureEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.RangedWeaponItem;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantmentTargets;
@@ -47,12 +47,12 @@ public class TrophyCollectingEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.trophyCollector.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.trophyCollector.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.trophyCollector.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.trophyCollector.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.trophyCollector.IS_FOR_SALE;}
 
     @Override
-    public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
+    public float getDamageBonus(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
         float UniqueTrophyDamage = getUniqueDamageBonus(getUniqueTrophyCount(stack));
         int EntityTrophyDamage = 0;
         if(defender instanceof LivingEntity) {
@@ -62,7 +62,7 @@ public class TrophyCollectingEnchantment extends SBEnchantment{
     }
 
     @Override
-    public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
+    public float getProjectileDamage(int level, ItemStack stack, AbstractArrow projectile, Entity attacker, Entity defender, float damage) {
         float UniqueTrophyDamage = getRangedUniqueDamageMultiple(getUniqueTrophyCount(stack));
         float EntityTrophyDamage = 0;
         if(defender instanceof LivingEntity) {
@@ -73,110 +73,110 @@ public class TrophyCollectingEnchantment extends SBEnchantment{
 
     @Override
     public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){
-        addTrophy(victim, killer, stack,stack.getItem() instanceof RangedWeaponItem);
+        addTrophy(victim, killer, stack,stack.getItem() instanceof ProjectileWeaponItem);
     }
 
     @Override
     public void onLegacyToolBreak(int level, ItemStack book, ItemStack itemStack, Entity entity) {
         ItemStack bagOfTrophies = new ItemStack(SBItems.BAG_OF_TROPHIES);
-        bagOfTrophies.setSubNbt(TROPHY_COLLECTOR_KEY, itemStack.getSubNbt(TROPHY_COLLECTOR_KEY));
-        if(entity instanceof PlayerEntity pEntity) {
-            if (!pEntity.giveItemStack(bagOfTrophies)) {
-                entity.dropStack(bagOfTrophies, 0.5f);
+        bagOfTrophies.addTagElement(TROPHY_COLLECTOR_KEY, itemStack.getTagElement(TROPHY_COLLECTOR_KEY));
+        if(entity instanceof Player pEntity) {
+            if (!pEntity.addItem(bagOfTrophies)) {
+                entity.spawnAtLocation(bagOfTrophies, 0.5f);
             }
         }
         else{
-            entity.dropStack(bagOfTrophies, 0.5f);
+            entity.spawnAtLocation(bagOfTrophies, 0.5f);
         }
     }
 
     @Override
-    public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
-        return addTooltip(stack,player.getWorld());
+    public List<Component> addTooltip(int level, ItemStack stack, Player player, TooltipFlag context) {
+        return addTooltip(stack,player.level());
     }
-    public List<Text> addTooltip(ItemStack stack, World world) {
-        boolean isRanged = stack.getItem() instanceof RangedWeaponItem;
-        List<Text> output = new ArrayList<>();
-        NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
+    public List<Component> addTooltip(ItemStack stack, Level world) {
+        boolean isRanged = stack.getItem() instanceof ProjectileWeaponItem;
+        List<Component> output = new ArrayList<>();
+        CompoundTag tag = stack.getOrCreateTagElement(TROPHY_COLLECTOR_KEY);
         Map<String,Integer> keyIntMap = getTrophyMap(stack);
         int trophyCount = getUniqueTrophyCount(stack);
         if(isRanged) {
-            output.add(Text.literal(
+            output.add(Component.literal(
                     "--" + trophyCount + " Unique Trophies (+"
                             + String.format("%.2f", getRangedUniqueDamageMultiple(getUniqueTrophyCount(stack))) + "x)--"));
         }
         else{
-            output.add(Text.literal(
+            output.add(Component.literal(
                     "--" + tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + " Unique Trophies (+"
                             + String.format("%.1f", getUniqueDamageBonus(getUniqueTrophyCount(stack))) + ")--"));
         }
         Stream<Map.Entry<String, Integer>> stream = keyIntMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()));
         int scrollingSteps = Math.max(1,trophyCount-Spellbound.config.COLLECTOR_WINDOW_SIZE+1);
         if(scrollingSteps > 1) {
-            stream = stream.skip(world.getTime() % ((long) scrollingSteps * Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD)) / Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD));
+            stream = stream.skip(world.getGameTime() % ((long) scrollingSteps * Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD)) / Math.max(1,Spellbound.config.COLLECTOR_DISPLAY_UPDATE_PERIOD));
         }
         stream = stream.limit(Spellbound.config.COLLECTOR_WINDOW_SIZE);
         stream.forEach((entry) -> writeLineInTooltip(output,entry,isRanged));
-        output.add(Text.literal("--------------------------"));
+        output.add(Component.literal("--------------------------"));
         return output;
     }
 
-    private void writeLineInTooltip(List<Text> output, Map.Entry<String, Integer> entry, boolean isRanged){
+    private void writeLineInTooltip(List<Component> output, Map.Entry<String, Integer> entry, boolean isRanged){
         if(isRanged) {
-            output.add(Text.literal(
+            output.add(Component.literal(
                     entry.getValue() + " ")
-                    .append(Text.translatable(entry.getKey()))
+                    .append(Component.translatable(entry.getKey()))
                     .append(" (+" + String.format("%.1f", getRangedEntityDamageMultiple(entry.getValue())) + "x)"));
         }
         else{
-            output.add(Text.literal(
+            output.add(Component.literal(
                     entry.getValue() + " ")
-                    .append(Text.translatable(entry.getKey()))
+                    .append(Component.translatable(entry.getKey()))
                     .append(" (+" + getEntityDamageBonus(entry.getValue()) + ")"));
         }
     }
 
     private boolean hasTrophy(LivingEntity victim, ItemStack stack){
-        NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
+        CompoundTag tag = stack.getOrCreateTagElement(TROPHY_COLLECTOR_KEY);
         return tag.contains(victim.getType().toString());
     }
 
     private boolean addTrophy(LivingEntity victim, LivingEntity killer, ItemStack stack,boolean isRanged){
-        NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
+        CompoundTag tag = stack.getOrCreateTagElement(TROPHY_COLLECTOR_KEY);
         if(Spellbound.config.TAKE_ANY_TROPHY ||
-                !(victim instanceof PassiveEntity || victim instanceof WaterCreatureEntity) || victim instanceof Angerable || victim instanceof Monster) {
+                !(victim instanceof AgeableMob || victim instanceof WaterAnimal) || victim instanceof NeutralMob || victim instanceof Enemy) {
             if (!hasTrophy(victim, stack)) {
                 tag.putInt(UNIQUE_TROPHY_COUNT_KEY, tag.getInt(UNIQUE_TROPHY_COUNT_KEY) + 1);
                 tag.putInt(victim.getType().toString(), 1);
-                if (killer instanceof PlayerEntity) {
-                    String message = stack.getName().getString()
+                if (killer instanceof Player) {
+                    String message = stack.getHoverName().getString()
                             + " acquired a "
-                            + Text.translatable(victim.getType().toString()).getString()
+                            + Component.translatable(victim.getType().toString()).getString()
                             + " trophy";
-                    ((PlayerEntity) killer).sendMessage(Text.literal(message)
+                    ((Player) killer).displayClientMessage(Component.literal(message)
                             , true);
                 }
                 return true;
             } else {
                 int newValue = tag.getInt(victim.getType().toString()) + 1;
                 tag.putInt(victim.getType().toString(), newValue);
-                if(killer instanceof PlayerEntity) {
+                if(killer instanceof Player) {
                     if (isRanged) {
                         if (getRangedEntityDamageMultiple(newValue - 1) < (getRangedEntityDamageMultiple(newValue))) {
-                            String message = stack.getName().getString()
+                            String message = stack.getHoverName().getString()
                                     + "'s "
-                                    + Text.translatable(victim.getType().toString()).getString()
+                                    + Component.translatable(victim.getType().toString()).getString()
                                     + " trophy improved";
-                            ((PlayerEntity) killer).sendMessage(Text.literal(message)
+                            ((Player) killer).displayClientMessage(Component.literal(message)
                                     , true);
                         }
                     } else {
                         if (getEntityDamageBonus(newValue - 1) < (getEntityDamageBonus(newValue))) {
-                            String message = stack.getName().getString()
+                            String message = stack.getHoverName().getString()
                                     + "'s "
-                                    + Text.translatable(victim.getType().toString()).getString()
+                                    + Component.translatable(victim.getType().toString()).getString()
                                     + " trophy improved";
-                            ((PlayerEntity) killer).sendMessage(Text.literal(message)
+                            ((Player) killer).displayClientMessage(Component.literal(message)
                                     , true);
                         }
                     }
@@ -188,18 +188,18 @@ public class TrophyCollectingEnchantment extends SBEnchantment{
     }
 
     private int getUniqueTrophyCount(ItemStack stack){
-        NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
+        CompoundTag tag = stack.getOrCreateTagElement(TROPHY_COLLECTOR_KEY);
         return tag.getInt(UNIQUE_TROPHY_COUNT_KEY);
     }
 
     private int getEntityTrophyCount(LivingEntity victim, ItemStack stack){
-        NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
+        CompoundTag tag = stack.getOrCreateTagElement(TROPHY_COLLECTOR_KEY);
         return tag.getInt(victim.getType().toString());
     }
 
     public Map<String,Integer> getTrophyMap(ItemStack stack){
-        NbtCompound tag = stack.getOrCreateSubNbt(TROPHY_COLLECTOR_KEY);
-        Set<String> keys = tag.getKeys();
+        CompoundTag tag = stack.getOrCreateTagElement(TROPHY_COLLECTOR_KEY);
+        Set<String> keys = tag.getAllKeys();
         Map<String,Integer> keyIntMap = new HashMap<>();
         keys.forEach((trophyKey) -> {
             if(!trophyKey.equals(UNIQUE_TROPHY_COUNT_KEY)) {

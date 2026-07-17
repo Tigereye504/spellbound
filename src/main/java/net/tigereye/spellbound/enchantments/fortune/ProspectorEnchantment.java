@@ -1,20 +1,20 @@
 package net.tigereye.spellbound.enchantments.fortune;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.data.Prospector.ProspectorManager;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class ProspectorEnchantment extends SBEnchantment {
 
     public ProspectorEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.prospector.RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.prospector.RARITY), EnchantmentCategory.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.prospector.ENABLED;}
@@ -42,29 +42,29 @@ public class ProspectorEnchantment extends SBEnchantment {
     @Override
     public int getPowerRange(){return Spellbound.config.prospector.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.prospector.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.prospector.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.prospector.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.prospector.IS_FOR_SALE;}
     @Override
-    public void onBreakBlock(int level, ItemStack stack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        if(world.isClient()){
+    public void onBreakBlock(int level, ItemStack stack, Level world, BlockPos pos, BlockState state, Player player) {
+        if(world.isClientSide()){
             return;
         }
-        if(state.getBlock().getHardness() == 0){
+        if(state.getBlock().defaultDestroyTime() == 0){
             return;
         }
-        if(world instanceof ServerWorld sWorld) {
+        if(world instanceof ServerLevel sWorld) {
             if (ProspectorManager.detectTouchedBlock(sWorld, pos)) {
                 return;
             }
-            Map<Identifier, Float> rates = ProspectorManager.getDropRateMapWithBonuses(sWorld, pos, Spellbound.config.prospector.RADIUS);
-            Random random = player.getRandom();
-            for (Map.Entry<Identifier, Float> entry : rates.entrySet()) {
+            Map<ResourceLocation, Float> rates = ProspectorManager.getDropRateMapWithBonuses(sWorld, pos, Spellbound.config.prospector.RADIUS);
+            RandomSource random = player.getRandom();
+            for (Map.Entry<ResourceLocation, Float> entry : rates.entrySet()) {
                 if (entry.getValue() > 0) {
-                    Item treasure = Registries.ITEM.get(entry.getKey());
+                    Item treasure = BuiltInRegistries.ITEM.get(entry.getKey());
                     if (treasure != Items.AIR) {
                         if (Spellbound.DEBUG) {
-                            Spellbound.LOGGER.info("Prospecting " + Text.translatable(treasure.getTranslationKey()).getString() + ". Attempts: " + level + ". Odds: " + entry.getValue());
+                            Spellbound.LOGGER.info("Prospecting " + Component.translatable(treasure.getDescriptionId()).getString() + ". Attempts: " + level + ". Odds: " + entry.getValue());
                         }
                         int count = 0;
                         for (int i = 0; i < level; i++) {
@@ -83,18 +83,18 @@ public class ProspectorEnchantment extends SBEnchantment {
 
     private static class ProspectorAction extends DelayedAction {
 
-        World world;
+        Level world;
         BlockPos pos;
         ItemStack stack;
 
-        ProspectorAction(World world, BlockPos pos, ItemStack stack){
+        ProspectorAction(Level world, BlockPos pos, ItemStack stack){
             this.world = world;
             this.pos = pos;
             this.stack = stack;
         }
         @Override
         public void act() {
-            world.spawnEntity(new ItemEntity(world,pos.getX()+.5,pos.getY()+.5,pos.getZ()+.5,stack));
+            world.addFreshEntity(new ItemEntity(world,pos.getX()+.5,pos.getY()+.5,pos.getZ()+.5,stack));
         }
     }
 }

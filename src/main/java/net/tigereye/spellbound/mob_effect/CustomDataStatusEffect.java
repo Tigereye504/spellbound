@@ -1,8 +1,8 @@
 package net.tigereye.spellbound.mob_effect;
 
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectInstance;
 
 public interface CustomDataStatusEffect {
-    StatusEffectInstance getInstanceFromTag(NbtCompound tag);
+    MobEffectInstance getInstanceFromTag(CompoundTag tag);
 }

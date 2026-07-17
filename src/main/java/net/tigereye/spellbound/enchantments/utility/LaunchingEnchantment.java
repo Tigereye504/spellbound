@@ -1,8 +1,8 @@
 package net.tigereye.spellbound.enchantments.utility;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.SpellboundPlayerEntity;
@@ -27,17 +27,17 @@ public class LaunchingEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.launching.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.launching.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.launching.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.launching.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.launching.IS_FOR_SALE;}
 
     @Override
-    public void onTargetDamaged(LivingEntity user, Entity target, int level) {
+    public void doPostAttack(LivingEntity user, Entity target, int level) {
         if(user instanceof SpellboundPlayerEntity &&
                 !(((SpellboundPlayerEntity)user).isMakingFullChargeAttack())){
             return;
         }
-        target.setVelocity(target.getVelocity().x,Math.abs(target.getVelocity().y)+(level*.3),target.getVelocity().z);
-        super.onTargetDamaged(user, target, level);
+        target.setDeltaMovement(target.getDeltaMovement().x,Math.abs(target.getDeltaMovement().y)+(level*.3),target.getDeltaMovement().z);
+        super.doPostAttack(user, target, level);
     }
 }

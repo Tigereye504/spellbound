@@ -1,64 +1,64 @@
 package net.tigereye.spellbound.mob_effect;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.mob_effect.instance.OwnedStatusEffectInstance;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
 public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
     public Tethered(){
-        super(StatusEffectCategory.HARMFUL, 0xaaaaaa);
+        super(MobEffectCategory.HARMFUL, 0xaaaaaa);
     }
 
 
-    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+    public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
     }
 
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+    public void applyEffectTick(LivingEntity entity, int amplifier) {
         //Spellbound.LOGGER.info("Dragging Target");
-        StatusEffectInstance temp = entity.getStatusEffect(SBStatusEffects.TETHERED);
+        MobEffectInstance temp = entity.getEffect(SBStatusEffects.TETHERED);
         if(temp instanceof OwnedStatusEffectInstance ti){
             //attempt to get any missing data. Remove the debuff if it fails because we can't use it.
             if(!ti.fillMissingOwnerData(entity)){
-                entity.removeStatusEffect(SBStatusEffects.TETHERED);
+                entity.removeEffect(SBStatusEffects.TETHERED);
                 return;
             }
             //if the anchor has been removed from the world, remove the tether
             if(ti.owner.isRemoved()){
-                entity.removeStatusEffect(SBStatusEffects.TETHERED);
+                entity.removeEffect(SBStatusEffects.TETHERED);
                 return;
             }
             //otherwise, drag them in if they are past the leash
             entity.fallDistance = 0;
 
-            Vec3d pullVector = new Vec3d(ti.owner.getX() - entity.getX(), ti.owner.getY() - entity.getY(), ti.owner.getZ() - entity.getZ());
+            Vec3 pullVector = new Vec3(ti.owner.getX() - entity.getX(), ti.owner.getY() - entity.getY(), ti.owner.getZ() - entity.getZ());
 
-            if(!(entity.getWorld().isClient)) {
+            if(!(entity.level().isClientSide)) {
                 if (pullVector.length() >= Spellbound.config.tethering.LEASH_LENGTH) {
-                    entity.setPos(entity.getX(), entity.getY() + pullVector.y * 0.015D * Spellbound.config.tethering.ATTRACTION_FACTOR, entity.getZ());
+                    entity.setPosRaw(entity.getX(), entity.getY() + pullVector.y * 0.015D * Spellbound.config.tethering.ATTRACTION_FACTOR, entity.getZ());
 
                     double d = 0.05D * Spellbound.config.tethering.ATTRACTION_FACTOR;
-                    Vec3d impulseVector = pullVector.multiply(d).subtract(entity.getVelocity().multiply(0.15D));
-                    entity.addVelocity(impulseVector.x, impulseVector.y, impulseVector.z);
-                    entity.velocityModified = true;
+                    Vec3 impulseVector = pullVector.scale(d).subtract(entity.getDeltaMovement().scale(0.15D));
+                    entity.push(impulseVector.x, impulseVector.y, impulseVector.z);
+                    entity.hurtMarked = true;
                 }
             }
             //draw particles between entity and anchor
 
-            int sparks = entity.getRandom().nextInt(Math.min(20,Math.max(3,(int)(pullVector.lengthSquared()/5))));
-            Vec3d basePosition = entity.getPos();
+            int sparks = entity.getRandom().nextInt(Math.min(20,Math.max(3,(int)(pullVector.lengthSqr()/5))));
+            Vec3 basePosition = entity.position();
             for (int i = 0; i < sparks; i++) {
-                Vec3d modifiedPosition = basePosition.add(pullVector.multiply(entity.getRandom().nextFloat()));
+                Vec3 modifiedPosition = basePosition.add(pullVector.scale(entity.getRandom().nextFloat()));
                 float driftX = (entity.getRandom().nextFloat() - .5f) * .15f;
                 float driftY = (entity.getRandom().nextFloat() - .5f) * .15f;
                 float driftZ = (entity.getRandom().nextFloat() - .5f) * .15f;
-                entity.getWorld().addParticle(ParticleTypes.ELECTRIC_SPARK,
+                entity.level().addParticle(ParticleTypes.ELECTRIC_SPARK,
                         modifiedPosition.x+driftX, modifiedPosition.y+driftY, modifiedPosition.z+driftZ,
                         0, 0, 0);
             }
@@ -66,7 +66,7 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
     }
 
     @Override
-    public StatusEffectInstance getInstanceFromTag(NbtCompound tag) {
+    public MobEffectInstance getInstanceFromTag(CompoundTag tag) {
         return OwnedStatusEffectInstance.customFromNbt(this, tag);
     }
 }

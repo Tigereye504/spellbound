@@ -1,9 +1,9 @@
 package net.tigereye.spellbound.enchantments.utility.chestplate;
 
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -11,7 +11,7 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class AttractiveEnchantment extends SBEnchantment{
 
     public AttractiveEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.attractive.RARITY), EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.CHEST},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.attractive.RARITY), EnchantmentCategory.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.CHEST},true);
     }
 
     @Override
@@ -29,13 +29,13 @@ public class AttractiveEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.attractive.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.attractive.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.attractive.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.attractive.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.attractive.IS_FOR_SALE;}
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        if(entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
+        if(entity.getItemBySlot(LivingEntity.getEquipmentSlotForItem(stack)) != stack){
             return;
         }
         SpellboundUtil.pushPullEntitiesPlayersInRange(Spellbound.config.attractive.RANGE, Spellbound.config.attractive.STRENGTH, entity);

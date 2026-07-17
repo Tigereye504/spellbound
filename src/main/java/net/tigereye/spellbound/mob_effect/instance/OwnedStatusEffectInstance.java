@@ -1,106 +1,106 @@
 package net.tigereye.spellbound.mob_effect.instance;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.UUID;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 
-public class OwnedStatusEffectInstance extends StatusEffectInstance{
+public class OwnedStatusEffectInstance extends MobEffectInstance{
     public Entity owner = null;
     public UUID ownerUUID = null;
 
-    public OwnedStatusEffectInstance(@Nullable Entity owner, StatusEffect statusEffect) {
+    public OwnedStatusEffectInstance(@Nullable Entity owner, MobEffect statusEffect) {
         super(statusEffect);
         this.owner = owner;
         if(owner != null) {
-            this.ownerUUID = owner.getUuid();
+            this.ownerUUID = owner.getUUID();
         }
     }
 
-    public OwnedStatusEffectInstance(@Nullable Entity owner, StatusEffect statusEffect, int duration) {
+    public OwnedStatusEffectInstance(@Nullable Entity owner, MobEffect statusEffect, int duration) {
         super(statusEffect, duration);
         this.owner = owner;
         if(owner != null) {
-            this.ownerUUID = owner.getUuid();
+            this.ownerUUID = owner.getUUID();
         }
     }
 
-    public OwnedStatusEffectInstance(@Nullable Entity owner, StatusEffect statusEffect, int duration, int amplifier) {
+    public OwnedStatusEffectInstance(@Nullable Entity owner, MobEffect statusEffect, int duration, int amplifier) {
         super(statusEffect, duration, amplifier);
         this.owner = owner;
         if(owner != null) {
-            this.ownerUUID = owner.getUuid();
+            this.ownerUUID = owner.getUUID();
         }
     }
 
-    public OwnedStatusEffectInstance(@Nullable Entity owner, StatusEffect statusEffect, int duration, int amplifier, boolean ambient, boolean visible) {
+    public OwnedStatusEffectInstance(@Nullable Entity owner, MobEffect statusEffect, int duration, int amplifier, boolean ambient, boolean visible) {
         super(statusEffect, duration, amplifier, ambient, visible);
         this.owner = owner;
         if(owner != null) {
-            this.ownerUUID = owner.getUuid();
+            this.ownerUUID = owner.getUUID();
         }
     }
 
-    public OwnedStatusEffectInstance(@Nullable Entity owner, StatusEffect statusEffect, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon) {
+    public OwnedStatusEffectInstance(@Nullable Entity owner, MobEffect statusEffect, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon) {
         super(statusEffect, duration, amplifier, ambient, showParticles, showIcon);
         this.owner = owner;
         if(owner != null) {
-            this.ownerUUID = owner.getUuid();
+            this.ownerUUID = owner.getUUID();
         }
     }
 
-    public OwnedStatusEffectInstance(@Nullable Entity owner, StatusEffect statusEffect, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, StatusEffectInstance hiddenEffect, Optional<FactorCalculationData> factorCalculationData) {
+    public OwnedStatusEffectInstance(@Nullable Entity owner, MobEffect statusEffect, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, MobEffectInstance hiddenEffect, Optional<FactorData> factorCalculationData) {
         super(statusEffect, duration, amplifier, ambient, showParticles, showIcon, hiddenEffect, factorCalculationData);
         this.owner = owner;
         if(owner != null) {
-            this.ownerUUID = owner.getUuid();
+            this.ownerUUID = owner.getUUID();
         }
     }
 
-    public OwnedStatusEffectInstance(UUID ownerUUID, StatusEffect statusEffect, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, StatusEffectInstance hiddenEffect, Optional<FactorCalculationData> factorCalculationData) {
+    public OwnedStatusEffectInstance(UUID ownerUUID, MobEffect statusEffect, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, MobEffectInstance hiddenEffect, Optional<FactorData> factorCalculationData) {
         super(statusEffect, duration, amplifier, ambient, showParticles, showIcon, hiddenEffect, factorCalculationData);
         this.ownerUUID = ownerUUID;
     }
 
-    public OwnedStatusEffectInstance(StatusEffectInstance statusEffectInstance) {
+    public OwnedStatusEffectInstance(MobEffectInstance statusEffectInstance) {
         super(statusEffectInstance);
         if(statusEffectInstance instanceof OwnedStatusEffectInstance){
             this.owner = ((OwnedStatusEffectInstance) statusEffectInstance).owner;
             if(owner != null) {
-                this.ownerUUID = owner.getUuid();
+                this.ownerUUID = owner.getUUID();
             }
         }
     }
 
-    public OwnedStatusEffectInstance(@Nullable Entity owner, StatusEffectInstance statusEffectInstance) {
+    public OwnedStatusEffectInstance(@Nullable Entity owner, MobEffectInstance statusEffectInstance) {
         super(statusEffectInstance);
         this.owner = owner;
         if(owner != null) {
-            this.ownerUUID = owner.getUuid();
+            this.ownerUUID = owner.getUUID();
         }
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag) {
-        tag.putByte("Id", (byte)StatusEffect.getRawId(this.getEffectType()));
+    public CompoundTag save(CompoundTag tag) {
+        tag.putByte("Id", (byte)MobEffect.getId(this.getEffect()));
         tag.putByte("Amplifier", (byte)this.getAmplifier());
         tag.putInt("Duration", this.getDuration());
         tag.putBoolean("Ambient", this.isAmbient());
-        tag.putBoolean("ShowParticles", this.shouldShowParticles());
-        tag.putBoolean("ShowIcon", this.shouldShowIcon());
+        tag.putBoolean("ShowParticles", this.isVisible());
+        tag.putBoolean("ShowIcon", this.showIcon());
         if(ownerUUID != null) {
-            tag.putUuid("OwnerUUID", ownerUUID);
+            tag.putUUID("OwnerUUID", ownerUUID);
         }
         return tag;
     }
 
-    public static OwnedStatusEffectInstance customFromNbt(StatusEffect type, NbtCompound tag) {
+    public static OwnedStatusEffectInstance customFromNbt(MobEffect type, CompoundTag tag) {
         int amplifier = tag.getByte("Amplifier");
         int duration = tag.getInt("Duration");
         boolean ambient = tag.getBoolean("Ambient");
@@ -116,12 +116,12 @@ public class OwnedStatusEffectInstance extends StatusEffectInstance{
         }
 
         if(tag.contains("OwnerUUID")){
-            ownerUUID = tag.getUuid("OwnerUUID");
+            ownerUUID = tag.getUUID("OwnerUUID");
         }
         return new OwnedStatusEffectInstance(ownerUUID,type,duration,amplifier,ambient,showParticles,showIcon,null,Optional.empty());
     }
 
-    public boolean fillMissingOwnerData(ServerWorld world){
+    public boolean fillMissingOwnerData(ServerLevel world){
         if(this.owner != null && this.ownerUUID != null){
             return true;
         }
@@ -136,18 +136,18 @@ public class OwnedStatusEffectInstance extends StatusEffectInstance{
             if(this.owner == null) {return false;}
         }
         if(this.ownerUUID == null){
-            this.ownerUUID = this.owner.getUuid();
+            this.ownerUUID = this.owner.getUUID();
         }
         return true;
     }
 
     public boolean fillMissingOwnerData(Entity entity){
-        World world = entity.getWorld();
-        if(world instanceof ServerWorld sWorld){
+        Level world = entity.level();
+        if(world instanceof ServerLevel sWorld){
             return fillMissingOwnerData(sWorld);
         }
         else{
-            return fillMissingOwnerData((ServerWorld) null);
+            return fillMissingOwnerData((ServerLevel) null);
         }
     }
 }

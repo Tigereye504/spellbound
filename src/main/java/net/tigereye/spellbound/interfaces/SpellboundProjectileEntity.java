@@ -1,6 +1,6 @@
 package net.tigereye.spellbound.interfaces;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public interface SpellboundProjectileEntity {
     ItemStack getSource();

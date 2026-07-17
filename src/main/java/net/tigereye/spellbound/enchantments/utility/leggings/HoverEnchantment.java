@@ -1,9 +1,9 @@
 package net.tigereye.spellbound.enchantments.utility.leggings;
 
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.SpellboundClientPlayerEntity;
@@ -14,7 +14,7 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class HoverEnchantment extends SBEnchantment {
 
     public HoverEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.hover.RARITY), EnchantmentTarget.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.hover.RARITY), EnchantmentCategory.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS},true);
     }
 
     @Override
@@ -32,14 +32,14 @@ public class HoverEnchantment extends SBEnchantment {
     @Override
     public int getPowerRange(){return Spellbound.config.hover.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.hover.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.hover.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.hover.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.hover.IS_FOR_SALE;}
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         //if the user has landed since phasing, reset
         if(entity instanceof SpellboundClientPlayerEntity player) {
-            if (player.spellbound$hasMidairJumped() && (entity.isOnGround() || entity.isClimbing() || entity.isSwimming() || entity.isTouchingWater())) {
+            if (player.spellbound$hasMidairJumped() && (entity.onGround() || entity.onClimbable() || entity.isSwimming() || entity.isInWater())) {
                 player.spellbound$setHasMidairJumped(false);
             }
         }
@@ -49,13 +49,13 @@ public class HoverEnchantment extends SBEnchantment {
     public void onMidairJump(int level, ItemStack stack, LivingEntity entity){
 
         if(entity.isSwimming()
-        || entity.isTouchingWater()
-        || stack != entity.getEquippedStack(EquipmentSlot.LEGS)){
+        || entity.isInWater()
+        || stack != entity.getItemBySlot(EquipmentSlot.LEGS)){
             return;
         }
         if(entity instanceof SpellboundClientPlayerEntity player) {
             if (player.spellbound$hasMidairJumped()) {
-                entity.removeStatusEffect(SBStatusEffects.HOVERING);
+                entity.removeEffect(SBStatusEffects.HOVERING);
                 return;
             }
             player.spellbound$setHasMidairJumped(true);

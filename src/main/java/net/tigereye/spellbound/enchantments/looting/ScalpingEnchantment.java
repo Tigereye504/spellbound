@@ -1,16 +1,16 @@
 package net.tigereye.spellbound.enchantments.looting;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootManager;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.context.LootContextParameterSet;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootContextTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootDataManager;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantmentTargets;
@@ -36,39 +36,39 @@ public class ScalpingEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.scalping.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.scalping.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.scalping.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.scalping.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.scalping.IS_FOR_SALE;}
 
     @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack)
-                || SBEnchantmentTargets.ANY_WEAPON.isAcceptableItem(stack.getItem());
+    public boolean canEnchant(ItemStack stack) {
+        return super.canEnchant(stack)
+                || SBEnchantmentTargets.ANY_WEAPON.canEnchant(stack.getItem());
     }
 
     @Override
     public void onDoRedHealthDamage(int level, ItemStack itemStack, LivingEntity attacker, LivingEntity victim, DamageSource source, float amount) {
-        if(victim.getWorld().isClient()){
+        if(victim.level().isClientSide()){
             return;
         }
-        Identifier identifier = victim.getLootTable();
-        LootManager lootManager = victim.getWorld().getServer().getLootManager();
+        ResourceLocation identifier = victim.getLootTable();
+        LootDataManager lootManager = victim.level().getServer().getLootData();
         LootTable lootTable = lootManager.getLootTable(identifier);
-        LootContextParameterSet.Builder builder = new LootContextParameterSet.Builder((ServerWorld) victim.getWorld())
-                .add(LootContextParameters.KILLER_ENTITY,attacker)
-                .add(LootContextParameters.ORIGIN,attacker.getPos())
-                .add(LootContextParameters.THIS_ENTITY,victim)
-                .add(LootContextParameters.DAMAGE_SOURCE,source);
+        LootParams.Builder builder = new LootParams.Builder((ServerLevel) victim.level())
+                .withParameter(LootContextParams.KILLER_ENTITY,attacker)
+                .withParameter(LootContextParams.ORIGIN,attacker.position())
+                .withParameter(LootContextParams.THIS_ENTITY,victim)
+                .withParameter(LootContextParams.DAMAGE_SOURCE,source);
         float dropChance = (amount / victim.getMaxHealth()) * level * Spellbound.config.scalping.DROP_FACTOR_PER_LEVEL;
         while(dropChance > 0){
-            List<ItemStack> rawItemDrops = lootTable.generateLoot(builder.build(LootContextTypes.ENTITY));
+            List<ItemStack> rawItemDrops = lootTable.getRandomItems(builder.create(LootContextParamSets.ENTITY));
             if(dropChance < 1) {
                 float finalDropChance = dropChance;
                 rawItemDrops.removeIf((ItemStack) -> attacker.getRandom().nextFloat() > finalDropChance);
             }
             for (ItemStack stack:
                  rawItemDrops) {
-                victim.dropStack(stack);
+                victim.spawnAtLocation(stack);
             }
             dropChance = (dropChance - 1) * Spellbound.config.scalping.CARRYOVER_DECAY;
         }

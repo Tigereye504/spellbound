@@ -1,10 +1,10 @@
 package net.tigereye.spellbound.enchantments.utility.chestplate;
 
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.level.Level;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -12,7 +12,7 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class WarlikeEnchantment extends SBEnchantment{
 
     public WarlikeEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.warlike.RARITY), EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.warlike.RARITY), EnchantmentCategory.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET},true);
     }
 
     @Override
@@ -30,17 +30,17 @@ public class WarlikeEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.warlike.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.warlike.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.warlike.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.warlike.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.warlike.IS_FOR_SALE;}
 
     @Override
-    public float getLocalDifficultyModifier(int level, World world, PlayerEntity player, ItemStack itemStack) {
+    public float getLocalDifficultyModifier(int level, Level world, Player player, ItemStack itemStack) {
         return level*Spellbound.config.warlike.DIFFICULTY_PER_RANK;
     }
     @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack)
-                || EnchantmentTarget.ARMOR.isAcceptableItem(stack.getItem());
+    public boolean canEnchant(ItemStack stack) {
+        return super.canEnchant(stack)
+                || EnchantmentCategory.ARMOR.canEnchant(stack.getItem());
     }
 }

@@ -1,21 +1,21 @@
 package net.tigereye.spellbound.mob_effect;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
 import net.tigereye.spellbound.Spellbound;
 
 public class Hovering extends SBStatusEffect{
 
     public Hovering(){
-        super(StatusEffectCategory.BENEFICIAL, 0x194212);
+        super(MobEffectCategory.BENEFICIAL, 0x194212);
     }
 
-    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+    public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
     }
 
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        entity.setVelocity(entity.getVelocity().getX(), Spellbound.config.hover.UPWARD_DRIFT,entity.getVelocity().getZ());
+    public void applyEffectTick(LivingEntity entity, int amplifier) {
+        entity.setDeltaMovement(entity.getDeltaMovement().x(), Spellbound.config.hover.UPWARD_DRIFT,entity.getDeltaMovement().z());
         entity.fallDistance = 0;
     }
 }

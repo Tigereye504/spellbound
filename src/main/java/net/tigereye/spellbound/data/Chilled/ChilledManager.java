@@ -2,10 +2,10 @@ package net.tigereye.spellbound.data.Chilled;
 
 import com.google.gson.Gson;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.block.BlockState;
-import net.minecraft.registry.Registries;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.level.block.state.BlockState;
 import net.tigereye.spellbound.Spellbound;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,19 +19,19 @@ public class ChilledManager implements SimpleSynchronousResourceReloadListener {
 
     private static final String RESOURCE_LOCATION = "chilled";
     private final ChilledSerializer SERIALIZER = new ChilledSerializer();
-    private static final Map<Identifier, Identifier> recipeMap = new HashMap<>();
+    private static final Map<ResourceLocation, ResourceLocation> recipeMap = new HashMap<>();
 
     @Override
-    public Identifier getFabricId() {
-        return new Identifier(Spellbound.MODID, RESOURCE_LOCATION);
+    public ResourceLocation getFabricId() {
+        return new ResourceLocation(Spellbound.MODID, RESOURCE_LOCATION);
     }
 
     @Override
-    public void reload(ResourceManager manager) {
+    public void onResourceManagerReload(ResourceManager manager) {
         recipeMap.clear();
         Spellbound.LOGGER.info("Loading Spellbound Chilled Recipes.");
-        manager.findResources(RESOURCE_LOCATION, path -> path.getPath().endsWith(".json")).forEach((id,resource) -> {
-            try(InputStream stream = resource.getInputStream()) {
+        manager.listResources(RESOURCE_LOCATION, path -> path.getPath().endsWith(".json")).forEach((id,resource) -> {
+            try(InputStream stream = resource.open()) {
                 Reader reader = new InputStreamReader(stream);
                 ChilledData chilledData = SERIALIZER.read(id,new Gson().fromJson(reader, ChilledJsonFormat.class));
                 if(recipeMap.containsKey(chilledData.block)){
@@ -45,12 +45,12 @@ public class ChilledManager implements SimpleSynchronousResourceReloadListener {
         Spellbound.LOGGER.info("Loaded "+ recipeMap.size()+" Chilled Recipes.");
     }
 
-    public static Map<Identifier, Identifier> getRecipeMap(){
+    public static Map<ResourceLocation, ResourceLocation> getRecipeMap(){
         return recipeMap;
     }
 
     @Nullable
-    public static Identifier getResult(BlockState state){
-        return recipeMap.get(Registries.BLOCK.getId(state.getBlock()));
+    public static ResourceLocation getResult(BlockState state){
+        return recipeMap.get(BuiltInRegistries.BLOCK.getKey(state.getBlock()));
     }
 }

@@ -1,12 +1,11 @@
 package net.tigereye.spellbound.interfaces;
 
-import net.minecraft.util.math.Vec3d;
-
 import java.util.List;
+import net.minecraft.world.phys.Vec3;
 
 public interface SpellboundLivingEntity {
-    void spellbound$updatePositionTracker(Vec3d pos);
-    Vec3d spellbound$readPositionTracker();
+    void spellbound$updatePositionTracker(Vec3 pos);
+    Vec3 spellbound$readPositionTracker();
     void spellbound$addDelayedAction(DelayedAction action);
     List<DelayedAction> spellbound$getDelayedActions();
     float spellbound$getGraceMagnitude();

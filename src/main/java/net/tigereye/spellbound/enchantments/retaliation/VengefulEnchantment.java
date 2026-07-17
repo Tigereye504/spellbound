@@ -1,19 +1,19 @@
 package net.tigereye.spellbound.enchantments.retaliation;
 
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.phys.Vec3;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.DelayedAction;
@@ -28,7 +28,7 @@ public class VengefulEnchantment extends SBEnchantment {
     private static final String VENGENCE_NBT_KEY = "SB_Vengence";
 
     public VengefulEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.spikes.RARITY), EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.spikes.RARITY), EnchantmentCategory.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND},true);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.spikes.ENABLED;}
@@ -43,27 +43,27 @@ public class VengefulEnchantment extends SBEnchantment {
     @Override
     public int getPowerRange(){return Spellbound.config.spikes.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.spikes.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.spikes.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.spikes.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.spikes.IS_FOR_SALE;}
 
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
         //if time from last injury exceeded retention duration, clear the list
-        if(entity.getWorld().isClient()){
+        if(entity.level().isClientSide()){
             return;
         }
-        if(entity.age - entity.getLastAttackedTime() > Spellbound.config.vengeful.TIMEOUT){
-            stack.removeSubNbt(VENGENCE_NBT_KEY);
+        if(entity.tickCount - entity.getLastHurtByMobTimestamp() > Spellbound.config.vengeful.TIMEOUT){
+            stack.removeTagKey(VENGENCE_NBT_KEY);
         }
     }
 
     @Override
     public void onRedHealthDamage(int level, ItemStack stack, DamageSource source, LivingEntity entity, float amount) {
         //If damage was from an attacker, save the attacker and accumulate damage taken from that entity
-        Entity attacker = source.getAttacker();
+        Entity attacker = source.getEntity();
         if(attacker != null){
-            NbtCompound nbt = stack.getOrCreateSubNbt(VENGENCE_NBT_KEY);
-            String AttackerUUID = attacker.getUuidAsString();
+            CompoundTag nbt = stack.getOrCreateTagElement(VENGENCE_NBT_KEY);
+            String AttackerUUID = attacker.getStringUUID();
             nbt.putFloat(AttackerUUID,nbt.getFloat(AttackerUUID)+amount);
         }
     }
@@ -75,8 +75,8 @@ public class VengefulEnchantment extends SBEnchantment {
         //}
         //check if the target has enough damaged tracked to trigger.
         if(SBEnchantmentHelper.isEquipmentCorrectlyWorn(stack,user)) {
-            NbtCompound nbt = stack.getOrCreateSubNbt(VENGENCE_NBT_KEY);
-            String targetUUID = target.getUuidAsString();
+            CompoundTag nbt = stack.getOrCreateTagElement(VENGENCE_NBT_KEY);
+            String targetUUID = target.getStringUUID();
             float excessDamage = nbt.getFloat(targetUUID) - getMinimumDamage(level);
             if(excessDamage > 0){
                 VengefulAction vAction = new VengefulAction(Spellbound.config.vengeful.DAMAGE_BASE + (excessDamage * Spellbound.config.vengeful.DAMAGE_RATIO)
@@ -88,19 +88,19 @@ public class VengefulEnchantment extends SBEnchantment {
         //if so, create a DelayedAction that hits them more.
     }
 
-    public boolean onClientEntityIsGlowing(int level, ItemStack itemStack, ClientPlayerEntity player, Entity entity, Boolean isGlowing) {
+    public boolean onClientEntityIsGlowing(int level, ItemStack itemStack, LocalPlayer player, Entity entity, Boolean isGlowing) {
         return isVengeanceReady(itemStack,entity) || isGlowing;
     }
 
-    public int overwriteClientEntityTeamColor(int level, ItemStack itemStack, ClientPlayerEntity player, Entity entity, int color) {
+    public int overwriteClientEntityTeamColor(int level, ItemStack itemStack, LocalPlayer player, Entity entity, int color) {
         return isVengeanceReady(itemStack,entity) ? Spellbound.config.vengeful.HIGHLIGHT_COLOR : color;
     }
 
     private boolean isVengeanceReady(ItemStack itemStack, Entity target){
-        NbtCompound nbt = itemStack.getOrCreateSubNbt(VENGENCE_NBT_KEY);
-        String targetUUID = target.getUuidAsString();
+        CompoundTag nbt = itemStack.getOrCreateTagElement(VENGENCE_NBT_KEY);
+        String targetUUID = target.getStringUUID();
         float damage = nbt.getFloat(targetUUID);
-        return damage > getMinimumDamage(EnchantmentHelper.getLevel(SBEnchantments.VENGEFUL,itemStack));
+        return damage > getMinimumDamage(EnchantmentHelper.getItemEnchantmentLevel(SBEnchantments.VENGEFUL,itemStack));
     }
 
     private float getMinimumDamage(int level){
@@ -108,10 +108,10 @@ public class VengefulEnchantment extends SBEnchantment {
     }
 
     @Override
-    public boolean isAcceptableItem(ItemStack stack) {
+    public boolean canEnchant(ItemStack stack) {
         return stack.getItem() instanceof ArmorItem
                 || stack.getItem() == Items.BOOK
-                || super.isAcceptableItem(stack);
+                || super.canEnchant(stack);
     }
 
     public static class VengefulAction extends DelayedAction {
@@ -131,12 +131,12 @@ public class VengefulEnchantment extends SBEnchantment {
         @Override
         public void act(){
             if(target != null) {
-                target.damage(SBDamageSources.of(owner.getWorld(), SBDamageSources.VENGEANCE, owner), damage);
+                target.hurt(SBDamageSources.of(owner.level(), SBDamageSources.VENGEANCE, owner), damage);
                 //spawn slashing particle
-                if(target.getWorld() instanceof ServerWorld sWorld) {
-                    Vec3d pos = target.getPos();
-                    Vec3d directionOfOwner = owner.getPos().subtract(target.getPos()).normalize();
-                    sWorld.spawnParticles(ParticleTypes.SWEEP_ATTACK,pos.x+directionOfOwner.x, target.getBodyY(0.5), pos.z+directionOfOwner.z,0,0,
+                if(target.level() instanceof ServerLevel sWorld) {
+                    Vec3 pos = target.position();
+                    Vec3 directionOfOwner = owner.position().subtract(target.position()).normalize();
+                    sWorld.sendParticles(ParticleTypes.SWEEP_ATTACK,pos.x+directionOfOwner.x, target.getY(0.5), pos.z+directionOfOwner.z,0,0,
                             0, 0, 0);
                 }
                 if(followUp != null && owner instanceof SpellboundLivingEntity sleOwner) {

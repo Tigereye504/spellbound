@@ -1,19 +1,19 @@
 package net.tigereye.spellbound.data;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.PersistentState;
-import net.minecraft.world.PersistentStateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.tigereye.spellbound.Spellbound;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.*;
 
-public class TouchedBlocksPersistentState extends PersistentState {
+public class TouchedBlocksPersistentState extends SavedData {
 
     public static final String TOUCHED_BLOCKS_LIST_KEY = Spellbound.MODID+"TouchedBlocks";
     private final Map<ChunkPos, Set<Long>> touchedBlocks = new HashMap<>();
@@ -41,16 +41,16 @@ public class TouchedBlocksPersistentState extends PersistentState {
             }
             blockSet.add(pos.asLong());
             touchedBlocks.put(chunkPos, blockSet);
-            this.markDirty();
+            this.setDirty();
         }
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt) {
-        NbtList nbtList = new NbtList();
+    public CompoundTag save(CompoundTag nbt) {
+        ListTag nbtList = new ListTag();
         Set<Map.Entry<ChunkPos, Set<Long>>> chunkSet = touchedBlocks.entrySet();
         for (Map.Entry<ChunkPos, Set<Long>> chunk : chunkSet) {
-            NbtCompound nbtChunk = new NbtCompound();
+            CompoundTag nbtChunk = new CompoundTag();
             nbtChunk.putInt("x",chunk.getKey().x);
             nbtChunk.putInt("z",chunk.getKey().z);
             nbtChunk.putLongArray("blocks",chunk.getValue().stream().toList());
@@ -59,12 +59,12 @@ public class TouchedBlocksPersistentState extends PersistentState {
         nbt.put("TouchedChunks",nbtList);
         return nbt;
     }
-    public static TouchedBlocksPersistentState createFromNbt(NbtCompound nbt){
+    public static TouchedBlocksPersistentState createFromNbt(CompoundTag nbt){
         TouchedBlocksPersistentState tbpState = new TouchedBlocksPersistentState();
         if(nbt.contains("TouchedChunks")){
-            NbtList chunkList = nbt.getList("TouchedChunks", NbtElement.COMPOUND_TYPE);
-            for (NbtElement element:chunkList) {
-                NbtCompound chunkNbt = (NbtCompound)element;
+            ListTag chunkList = nbt.getList("TouchedChunks", Tag.TAG_COMPOUND);
+            for (Tag element:chunkList) {
+                CompoundTag chunkNbt = (CompoundTag)element;
                 ChunkPos chunkPos = new ChunkPos(chunkNbt.getInt("x"),chunkNbt.getInt("z"));
                 Set<Long> blockSet = new HashSet<>(Arrays.stream(ArrayUtils.toObject(chunkNbt.getLongArray("blocks"))).toList());
                 tbpState.touchedBlocks.put(chunkPos,blockSet);
@@ -73,9 +73,9 @@ public class TouchedBlocksPersistentState extends PersistentState {
         return tbpState;
     }
 
-    public static TouchedBlocksPersistentState getTouchedBlocksPersistentState(ServerWorld world){
-        PersistentStateManager persistentStateManager = world.getPersistentStateManager();
-        return persistentStateManager.getOrCreate(
+    public static TouchedBlocksPersistentState getTouchedBlocksPersistentState(ServerLevel world){
+        DimensionDataStorage persistentStateManager = world.getDataStorage();
+        return persistentStateManager.computeIfAbsent(
                 TouchedBlocksPersistentState::createFromNbt,
                 TouchedBlocksPersistentState::new,
                 TOUCHED_BLOCKS_LIST_KEY);

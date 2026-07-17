@@ -1,15 +1,15 @@
 package net.tigereye.spellbound.enchantments.retaliation;
 
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.phys.Vec3;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -19,7 +19,7 @@ public class OutburstEnchantment extends SBEnchantment {
     private static final String OUTBURST_RAGE_NBT_KEY = "SB_Rage";
 
     public OutburstEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.outburst.RARITY), EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.outburst.RARITY), EnchantmentCategory.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND},true);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.outburst.ENABLED;}
@@ -34,28 +34,28 @@ public class OutburstEnchantment extends SBEnchantment {
     @Override
     public int getPowerRange(){return Spellbound.config.outburst.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.outburst.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.outburst.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.outburst.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.outburst.IS_FOR_SALE;}
 
     public float onPreArmorDefense(int level, ItemStack stack, DamageSource source, LivingEntity defender, float amount){
-        if(defender.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(stack)) != stack){
+        if(defender.getItemBySlot(LivingEntity.getEquipmentSlotForItem(stack)) != stack){
             return amount;
         }
-        if(source.getAttacker() == null){
+        if(source.getEntity() == null){
             return amount;
         }
-        NbtCompound nbt = stack.getOrCreateNbt();
+        CompoundTag nbt = stack.getOrCreateTag();
         int rage = nbt.getInt(OUTBURST_RAGE_NBT_KEY) + Spellbound.config.outburst.RAGE_PER_HIT;
 
-        if(!defender.getWorld().isClient()) {
+        if(!defender.level().isClientSide()) {
             int n = (int) (rage * 0.5);
-            ((ServerWorld) defender.getWorld()).spawnParticles(ParticleTypes.ANGRY_VILLAGER, defender.getX(), defender.getBodyY(0.5), defender.getZ(), n, 0.1, 0.0, 0.1, 0.2);
+            ((ServerLevel) defender.level()).sendParticles(ParticleTypes.ANGRY_VILLAGER, defender.getX(), defender.getY(0.5), defender.getZ(), n, 0.1, 0.0, 0.1, 0.2);
         }
 
         if(rage >= Spellbound.config.outburst.RAGE_THRESHOLD){
             nbt.remove(OUTBURST_RAGE_NBT_KEY);
-            Vec3d position = defender.getPos();
+            Vec3 position = defender.position();
             float strength = Spellbound.config.outburst.SHOCKWAVE_POWER*level;
             float range = Spellbound.config.outburst.SHOCKWAVE_RANGE*level;
             float force = Spellbound.config.outburst.SHOCKWAVE_FORCE*level;
@@ -68,8 +68,8 @@ public class OutburstEnchantment extends SBEnchantment {
     }
 
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        NbtCompound nbt = stack.getOrCreateNbt();
-        if(nbt.contains(OUTBURST_RAGE_NBT_KEY) && entity.getWorld().getTime() % 20 == 0){
+        CompoundTag nbt = stack.getOrCreateTag();
+        if(nbt.contains(OUTBURST_RAGE_NBT_KEY) && entity.level().getGameTime() % 20 == 0){
             int rage = nbt.getInt(OUTBURST_RAGE_NBT_KEY);
             if(rage <= 1){
                 nbt.remove(OUTBURST_RAGE_NBT_KEY);
@@ -81,10 +81,10 @@ public class OutburstEnchantment extends SBEnchantment {
     }
 
     @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return EnchantmentTarget.ARMOR.isAcceptableItem(stack.getItem())
+    public boolean canEnchant(ItemStack stack) {
+        return EnchantmentCategory.ARMOR.canEnchant(stack.getItem())
                 || stack.getItem() == Items.BOOK
-                || super.isAcceptableItem(stack);
+                || super.canEnchant(stack);
     }
 
 }

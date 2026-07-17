@@ -1,17 +1,17 @@
 package net.tigereye.spellbound.enchantments.protection;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantmentTargets;
@@ -25,7 +25,7 @@ public class FleshWoundEnchantment extends SBEnchantment{
     public int breakpointRenderIntervals = 1;
     public int breakpointRenderCurrent = 0;
 
-    public static final Identifier FLESH_WOUND_BREAKPOINT = new Identifier(Spellbound.MODID,"textures/gui/flesh_wound_breakpoint.png");
+    public static final ResourceLocation FLESH_WOUND_BREAKPOINT = new ResourceLocation(Spellbound.MODID,"textures/gui/flesh_wound_breakpoint.png");
     private static final String FLESH_WOUND_NBT_KEY = "SB_FleshWound";
 
     public FleshWoundEnchantment() {
@@ -48,20 +48,20 @@ public class FleshWoundEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.fleshWound.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.fleshWound.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.fleshWound.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.fleshWound.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.fleshWound.IS_FOR_SALE;}
 
     public void onEquipmentChangeOnce(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){
         if(oldLevel != newLevel) {
-            Iterable<ItemStack> gear = entity.getItemsEquipped();
+            Iterable<ItemStack> gear = entity.getAllSlots();
             for(ItemStack item : gear){
-                if(EnchantmentHelper.getLevel(SBEnchantments.FLESH_WOUND,item) > 0){
-                    item.getOrCreateNbt().putInt(FLESH_WOUND_NBT_KEY,0);
+                if(EnchantmentHelper.getItemEnchantmentLevel(SBEnchantments.FLESH_WOUND,item) > 0){
+                    item.getOrCreateTag().putInt(FLESH_WOUND_NBT_KEY,0);
                 }
             }
-            if(entity.getWorld().isClient()){
-                if(entity == MinecraftClient.getInstance().player){
+            if(entity.level().isClientSide()){
+                if(entity == Minecraft.getInstance().player){
                     breakpointRenderIntervals = 1;
                     breakpointRenderCurrent = 0;
                 }
@@ -71,15 +71,15 @@ public class FleshWoundEnchantment extends SBEnchantment{
 
     @Override
     public void onTickOnceWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        int enchantmentCount = SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getItemsEquipped(), SBEnchantments.FLESH_WOUND,entity);
-        int activeBreakpoints = stack.getOrCreateNbt().getInt(FLESH_WOUND_NBT_KEY);
+        int enchantmentCount = SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getAllSlots(), SBEnchantments.FLESH_WOUND,entity);
+        int activeBreakpoints = stack.getOrCreateTag().getInt(FLESH_WOUND_NBT_KEY);
         int breakpointDelta = updateBreakPointLevel(stack,entity);
-        if(!entity.getWorld().isClient()) {
+        if(!entity.level().isClientSide()) {
             int totalRanksActivated = 0;
             float oldAbsorptionAmount = entity.getAbsorptionAmount();
             if (breakpointDelta < 0) {
                 totalRanksActivated = getNthtoMthEnchantmentLevels(enchantmentCount - activeBreakpoints + 1, enchantmentCount - activeBreakpoints - breakpointDelta, entity);
-                entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.BRAVADOS, Spellbound.config.fleshWound.DURATION, 0, false, false, false));
+                entity.addEffect(new MobEffectInstance(SBStatusEffects.BRAVADOS, Spellbound.config.fleshWound.DURATION, 0, false, false, false));
             }
             entity.setAbsorptionAmount(oldAbsorptionAmount + (entity.getMaxHealth() * totalRanksActivated * Spellbound.config.fleshWound.ABSORPTION_RATIO_PER_RANK));
         }
@@ -87,9 +87,9 @@ public class FleshWoundEnchantment extends SBEnchantment{
 
     private int updateBreakPointLevel(ItemStack stack, LivingEntity entity){
 
-        int oldBreakpointCount = stack.getOrCreateNbt().getInt(FLESH_WOUND_NBT_KEY);
+        int oldBreakpointCount = stack.getOrCreateTag().getInt(FLESH_WOUND_NBT_KEY);
         int newBreakpointCount = oldBreakpointCount;
-        int intervals = SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getItemsEquipped(),SBEnchantments.FLESH_WOUND, entity)+1;
+        int intervals = SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getAllSlots(),SBEnchantments.FLESH_WOUND, entity)+1;
         //determine the most break points the current health level can support
         int breakPointsPossible = (int) Math.floor(entity.getHealth() / entity.getMaxHealth()
                 * intervals);
@@ -100,10 +100,10 @@ public class FleshWoundEnchantment extends SBEnchantment{
             newBreakpointCount = breakPointsPossible;
         }
         if(oldBreakpointCount != newBreakpointCount) {
-            stack.getOrCreateNbt().putInt(FLESH_WOUND_NBT_KEY, newBreakpointCount);
+            stack.getOrCreateTag().putInt(FLESH_WOUND_NBT_KEY, newBreakpointCount);
         }
-        if(entity.getWorld().isClient()){
-            if(entity == MinecraftClient.getInstance().player){
+        if(entity.level().isClientSide()){
+            if(entity == Minecraft.getInstance().player){
                 breakpointRenderIntervals = intervals;
                 breakpointRenderCurrent = newBreakpointCount;
             }
@@ -114,12 +114,12 @@ public class FleshWoundEnchantment extends SBEnchantment{
     private int getNthtoMthEnchantmentLevels(int n, int m, LivingEntity entity){
         int counter = 0;
         int total = 0;
-        for(ItemStack item : entity.getItemsEquipped()){
+        for(ItemStack item : entity.getAllSlots()){
             if(counter > m){
                 return total;
             }
             if(SBEnchantmentHelper.isEquipmentCorrectlyWorn(item,entity)){
-                int itemLevel = EnchantmentHelper.getLevel(SBEnchantments.FLESH_WOUND, item);
+                int itemLevel = EnchantmentHelper.getItemEnchantmentLevel(SBEnchantments.FLESH_WOUND, item);
                 if(itemLevel > 0) {
                     counter++;
                     if(counter >= n && counter <= m) {
@@ -131,17 +131,17 @@ public class FleshWoundEnchantment extends SBEnchantment{
         return total;
     }
 
-    public static void renderBreakpoints(DrawContext drawContext, float delta){
-        MinecraftClient client = MinecraftClient.getInstance();
-        ClientPlayerEntity player = client.player;
+    public static void renderBreakpoints(GuiGraphics drawContext, float delta){
+        Minecraft client = Minecraft.getInstance();
+        LocalPlayer player = client.player;
         if(player != null && !(player.isCreative() || player.isSpectator())) {
             client.getProfiler().push("health");
-            int scaledWidth = client.getWindow().getScaledWidth();
-            int scaledHeight = client.getWindow().getScaledHeight();
+            int scaledWidth = client.getWindow().getGuiScaledWidth();
+            int scaledHeight = client.getWindow().getGuiScaledHeight();
 
-            float maxHealth = Math.max((float) player.getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH), 2);
-            int absorption = MathHelper.ceil(player.getAbsorptionAmount());
-            int lineMidValue = MathHelper.ceil((maxHealth + (float) absorption) / 2.0F / 10.0F);
+            float maxHealth = Math.max((float) player.getAttributeValue(Attributes.MAX_HEALTH), 2);
+            int absorption = Mth.ceil(player.getAbsorptionAmount());
+            int lineMidValue = Mth.ceil((maxHealth + (float) absorption) / 2.0F / 10.0F);
 
             int x = scaledWidth / 2 - 92;
             int y = scaledHeight - 40;
@@ -153,7 +153,7 @@ public class FleshWoundEnchantment extends SBEnchantment{
                 int o = (int) Math.ceil(breakpointHealth % 20); //horizontal offset in columns.
                 int posX = x + (o * 4) - 1;
                 int posY = y - (n * lineWidth); //height of row n
-                drawContext.drawTexture(FLESH_WOUND_BREAKPOINT, posX, posY, 0, 0, 5, 9, 5, 9);
+                drawContext.blit(FLESH_WOUND_BREAKPOINT, posX, posY, 0, 0, 5, 9, 5, 9);
             }
             client.getProfiler().pop();
         }

@@ -1,10 +1,10 @@
 package net.tigereye.spellbound.enchantments.looting;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantmentTargets;
@@ -30,13 +30,13 @@ public class DespoilingEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.despoiling.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.despoiling.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.despoiling.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.despoiling.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.despoiling.IS_FOR_SALE;}
 
     @Override
     public int getLootingValue(int level, LivingEntity user, ItemStack stack) {
-        StatusEffectInstance greenSparkles = user.getStatusEffect(SBStatusEffects.GREEN_SPARKLES);
+        MobEffectInstance greenSparkles = user.getEffect(SBStatusEffects.GREEN_SPARKLES);
         if(greenSparkles != null){
             return level*2;
         }
@@ -44,7 +44,7 @@ public class DespoilingEnchantment extends SBEnchantment{
     }
     @Override
     public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){
-        killer.addStatusEffect(new StatusEffectInstance(SBStatusEffects.GREEN_SPARKLES,
+        killer.addEffect(new MobEffectInstance(SBStatusEffects.GREEN_SPARKLES,
                 Spellbound.config.despoiling.DURATION_BASE +(Spellbound.config.despoiling.DURATION_PER_LEVEL*level),
                 level-1));
     }

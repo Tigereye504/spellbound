@@ -1,15 +1,15 @@
 package net.tigereye.spellbound.enchantments.looting;
 
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.DelayedAction;
@@ -41,9 +41,9 @@ public class PinataEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.pinata.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.pinata.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.pinata.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.pinata.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.pinata.IS_FOR_SALE;}
 
     @Override
     public int getLootingValue(int level, LivingEntity user, ItemStack stack) {
@@ -60,13 +60,13 @@ public class PinataEnchantment extends SBEnchantment{
     public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){
         int killCount = getKillcount(stack);
         if(killCount % Spellbound.config.pinata.KILLS_TO_PAYOUT == 0){
-            List<ItemEntity> items = killer.getWorld().getEntitiesByClass(ItemEntity.class, victim.getBoundingBox(), Objects::nonNull);
+            List<ItemEntity> items = killer.level().getEntitiesOfClass(ItemEntity.class, victim.getBoundingBox(), Objects::nonNull);
             if(items.isEmpty()){
                 return; //just end it here, and let the fountain trigger on something with actual drops.
             }
             for (ItemEntity itemEntity:
                     items) {
-                itemEntity.setPickupDelay(80);
+                itemEntity.setPickUpDelay(80);
             }
             if(killer instanceof SpellboundLivingEntity slEntity){
                 slEntity.spellbound$addDelayedAction(new PinataLootFountainAction(items,killer.getRandom(),slEntity));
@@ -75,41 +75,41 @@ public class PinataEnchantment extends SBEnchantment{
         killCount++;
         setKillcount(stack,killCount);
         int killsToPayout = Spellbound.config.pinata.KILLS_TO_PAYOUT - ((killCount-1)%Spellbound.config.pinata.KILLS_TO_PAYOUT);
-        if(killer instanceof PlayerEntity playerEntity && killsToPayout <= Spellbound.config.pinata.ADVANCE_NOTICE && killsToPayout != 0){
+        if(killer instanceof Player playerEntity && killsToPayout <= Spellbound.config.pinata.ADVANCE_NOTICE && killsToPayout != 0){
             if(killsToPayout == 1){
-                playerEntity.sendMessage(Text.translatable("enchantment.spellbound.pinata.message.nextKill"), true);
+                playerEntity.displayClientMessage(Component.translatable("enchantment.spellbound.pinata.message.nextKill"), true);
             }
             else {
-                playerEntity.sendMessage(Text.translatable("enchantment.spellbound.pinata.message.countdown", killsToPayout), true);
+                playerEntity.displayClientMessage(Component.translatable("enchantment.spellbound.pinata.message.countdown", killsToPayout), true);
             }
         }
     }
 
     @Override
-    public List<Text> addTooltip(int level, ItemStack stack, PlayerEntity player, TooltipContext context) {
-        List<Text> output = new ArrayList<>();
+    public List<Component> addTooltip(int level, ItemStack stack, Player player, TooltipFlag context) {
+        List<Component> output = new ArrayList<>();
         int kills = getKillcount(stack);
-        output.add(Text.translatable("enchantment.spellbound.pinata.tooltip",Spellbound.config.pinata.KILLS_TO_PAYOUT - ((kills-1)%Spellbound.config.pinata.KILLS_TO_PAYOUT)));
+        output.add(Component.translatable("enchantment.spellbound.pinata.tooltip",Spellbound.config.pinata.KILLS_TO_PAYOUT - ((kills-1)%Spellbound.config.pinata.KILLS_TO_PAYOUT)));
         return output;
     }
 
     private static int getKillcount(ItemStack item){
-        NbtCompound nbtCompound = item.getOrCreateNbt();
+        CompoundTag nbtCompound = item.getOrCreateTag();
         return nbtCompound.getInt(PINATA_KILL_COUNT_KEY);
     }
 
     private static void setKillcount(ItemStack item, int killCount){
-        NbtCompound nbtCompound = item.getOrCreateNbt();
+        CompoundTag nbtCompound = item.getOrCreateTag();
         nbtCompound.putLong(PINATA_KILL_COUNT_KEY,killCount);
     }
 
     private static class PinataLootFountainAction extends DelayedAction {
 
         List<ItemEntity> items;
-        Random random;
+        RandomSource random;
         SpellboundLivingEntity owner;
 
-        PinataLootFountainAction(List<ItemEntity> items, Random random, SpellboundLivingEntity owner){
+        PinataLootFountainAction(List<ItemEntity> items, RandomSource random, SpellboundLivingEntity owner){
             this.items = items;
             this.random = random;
             this.owner = owner;
@@ -120,16 +120,16 @@ public class PinataEnchantment extends SBEnchantment{
             if(!items.isEmpty()) {
                 ItemEntity item = items.get(random.nextInt(items.size()));
                 if (!item.isRemoved()) {
-                    if (item.getStack().getCount() > 1) {
-                        item.getStack().decrement(1);
+                    if (item.getItem().getCount() > 1) {
+                        item.getItem().shrink(1);
                         ItemEntity itemCopy = item.copy();
-                        itemCopy.getWorld().spawnEntity(itemCopy);
-                        itemCopy.getStack().setCount(1);
-                        itemCopy.setPickupDelay(5);
+                        itemCopy.level().addFreshEntity(itemCopy);
+                        itemCopy.getItem().setCount(1);
+                        itemCopy.setPickUpDelay(5);
                         throwItem(itemCopy);
                     } else {
                         throwItem(item);
-                        item.setPickupDelay(5);
+                        item.setPickUpDelay(5);
                         items.remove(item);
                     }
                 } else {
@@ -142,9 +142,9 @@ public class PinataEnchantment extends SBEnchantment{
         }
 
         private void throwItem(ItemEntity item){
-            item.setVelocity((random.nextDouble()-.5D)*0.2D, random.nextDouble()*0.5D,(random.nextDouble()-.5D)*0.2D);
-            item.velocityDirty = true;
-            item.velocityModified = true;
+            item.setDeltaMovement((random.nextDouble()-.5D)*0.2D, random.nextDouble()*0.5D,(random.nextDouble()-.5D)*0.2D);
+            item.hasImpulse = true;
+            item.hurtMarked = true;
         }
     }
 }

@@ -1,75 +1,75 @@
 package net.tigereye.spellbound.blocks;
 
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.tigereye.spellbound.blocks.entity.CrateBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class CrateBlock extends BlockWithEntity {
-    public CrateBlock(Settings settings) {
+public class CrateBlock extends BaseEntityBlock {
+    public CrateBlock(Properties settings) {
         super(settings);
     }
 
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new CrateBlockEntity(null,0,pos,state);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public RenderShape getRenderShape(BlockState state) {
         //With inheriting from BlockWithEntity this defaults to INVISIBLE, so we need to change that!
-        return BlockRenderType.MODEL;
+        return RenderShape.MODEL;
     }
 
     @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         if (world.getBlockEntity(pos) instanceof CrateBlockEntity crateBlockEntity) {
-            NbtCompound nbt = BlockItem.getBlockEntityNbt(itemStack);
+            CompoundTag nbt = BlockItem.getBlockEntityData(itemStack);
             if(nbt != null){
                 if(nbt.contains(CrateBlockEntity.LOOT_QUALITY_KEY)){
                     crateBlockEntity.setQuality(nbt.getInt(CrateBlockEntity.LOOT_QUALITY_KEY));
                 }
                 if(nbt.contains(CrateBlockEntity.LOOT_DIMENSION_KEY)){
-                    crateBlockEntity.setDimension(new Identifier(nbt.getString(CrateBlockEntity.LOOT_DIMENSION_KEY)));
+                    crateBlockEntity.setDimension(new ResourceLocation(nbt.getString(CrateBlockEntity.LOOT_DIMENSION_KEY)));
                 }
             }
         }
     }
     @Override
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof CrateBlockEntity crateBlockEntity && !EnchantmentHelper.hasSilkTouch(player.getMainHandStack())) {
+        if (blockEntity instanceof CrateBlockEntity crateBlockEntity && !EnchantmentHelper.hasSilkTouch(player.getMainHandItem())) {
             crateBlockEntity.spawnLoot(world, pos, player);
         }
-        super.onBreak(world, pos, state, player);
+        super.playerWillDestroy(world, pos, state, player);
     }
 
     @Override
-    public void appendTooltip(ItemStack itemStack, BlockView world, List<Text> tooltip, TooltipContext tooltipContext) {
-        NbtCompound nbt = BlockItem.getBlockEntityNbt(itemStack);
+    public void appendHoverText(ItemStack itemStack, BlockGetter world, List<Component> tooltip, TooltipFlag tooltipContext) {
+        CompoundTag nbt = BlockItem.getBlockEntityData(itemStack);
         if(nbt != null){
-            tooltip.add(Text.translatable("crate.spellbound.quality"+nbt.getInt(CrateBlockEntity.LOOT_QUALITY_KEY)));
+            tooltip.add(Component.translatable("crate.spellbound.quality"+nbt.getInt(CrateBlockEntity.LOOT_QUALITY_KEY)));
             if(nbt.contains(CrateBlockEntity.LOOT_DIMENSION_KEY)) {
-                Identifier dimension = new Identifier(nbt.getString(CrateBlockEntity.LOOT_DIMENSION_KEY));
-                tooltip.add(Text.translatable("crate.dimension."+dimension.toTranslationKey()));
+                ResourceLocation dimension = new ResourceLocation(nbt.getString(CrateBlockEntity.LOOT_DIMENSION_KEY));
+                tooltip.add(Component.translatable("crate.dimension."+dimension.toLanguageKey()));
             }
         }
     }

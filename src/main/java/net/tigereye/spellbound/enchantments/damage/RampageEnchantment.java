@@ -1,12 +1,12 @@
 package net.tigereye.spellbound.enchantments.damage;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantmentTargets;
@@ -32,13 +32,13 @@ public class RampageEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.rampage.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.rampage.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.rampage.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.rampage.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.rampage.IS_FOR_SALE;}
 
     @Override
-    public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
-        StatusEffectInstance greenSparkles = attacker.getStatusEffect(SBStatusEffects.GREEN_SPARKLES);
+    public float getDamageBonus(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
+        MobEffectInstance greenSparkles = attacker.getEffect(SBStatusEffects.GREEN_SPARKLES);
         if(greenSparkles != null){
             return Spellbound.config.rampage.DAMAGE_BASE + (Spellbound.config.rampage.DAMAGE_PER_LEVEL * level);
         }
@@ -46,9 +46,9 @@ public class RampageEnchantment extends SBEnchantment{
     }
 
     @Override
-    public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
+    public float getProjectileDamage(int level, ItemStack stack, AbstractArrow projectile, Entity attacker, Entity defender, float damage) {
         if(attacker instanceof LivingEntity) {
-            StatusEffectInstance greenSparkles = ((LivingEntity)attacker).getStatusEffect(SBStatusEffects.GREEN_SPARKLES);
+            MobEffectInstance greenSparkles = ((LivingEntity)attacker).getEffect(SBStatusEffects.GREEN_SPARKLES);
             if (greenSparkles != null) {
                 return damage + Spellbound.config.rampage.DAMAGE_BASE + (Spellbound.config.rampage.DAMAGE_PER_LEVEL * level);
             }
@@ -58,7 +58,7 @@ public class RampageEnchantment extends SBEnchantment{
 
     @Override
     public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){
-        killer.addStatusEffect(new StatusEffectInstance(SBStatusEffects.GREEN_SPARKLES,
+        killer.addEffect(new MobEffectInstance(SBStatusEffects.GREEN_SPARKLES,
                 Spellbound.config.rampage.DURATION_BASE +(Spellbound.config.rampage.DURATION_PER_LEVEL*level),
                 level-1));
     }

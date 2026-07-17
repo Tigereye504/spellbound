@@ -1,17 +1,17 @@
 package net.tigereye.spellbound.mob_effect.instance;
 
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public class PolygamyInstance extends StatusEffectInstance{
+public class PolygamyInstance extends MobEffectInstance{
     public UUID itemUUID;
 
-    public PolygamyInstance(UUID itemUUID, StatusEffect statusEffect) {
+    public PolygamyInstance(UUID itemUUID, MobEffect statusEffect) {
         super(statusEffect);
         this.itemUUID = itemUUID;
     }
@@ -36,37 +36,37 @@ public class PolygamyInstance extends StatusEffectInstance{
         this.itemUUID = itemUUID;
     }
 
-    public PolygamyInstance(UUID itemUUID, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, StatusEffectInstance hiddenEffect, Optional<FactorCalculationData> factorCalculationData) {
+    public PolygamyInstance(UUID itemUUID, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, MobEffectInstance hiddenEffect, Optional<FactorData> factorCalculationData) {
         super(SBStatusEffects.POLYGAMY, duration, amplifier, ambient, showParticles, showIcon, hiddenEffect, factorCalculationData);
         this.itemUUID = itemUUID;
     }
 
 
-    public PolygamyInstance(StatusEffectInstance statusEffectInstance) {
+    public PolygamyInstance(MobEffectInstance statusEffectInstance) {
         super(statusEffectInstance);
         if(statusEffectInstance instanceof PolygamyInstance){
             this.itemUUID = ((PolygamyInstance) statusEffectInstance).itemUUID;
         }
     }
 
-    public PolygamyInstance(UUID itemUUID, StatusEffectInstance statusEffectInstance) {
+    public PolygamyInstance(UUID itemUUID, MobEffectInstance statusEffectInstance) {
         super(statusEffectInstance);
         this.itemUUID = itemUUID;
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag) {
-        tag.putByte("Id", (byte)StatusEffect.getRawId(this.getEffectType()));
+    public CompoundTag save(CompoundTag tag) {
+        tag.putByte("Id", (byte)MobEffect.getId(this.getEffect()));
         tag.putByte("Amplifier", (byte)this.getAmplifier());
         tag.putInt("Duration", this.getDuration());
         tag.putBoolean("Ambient", this.isAmbient());
-        tag.putBoolean("ShowParticles", this.shouldShowParticles());
-        tag.putBoolean("ShowIcon", this.shouldShowIcon());
-        tag.putUuid("ItemUUID", itemUUID);
+        tag.putBoolean("ShowParticles", this.isVisible());
+        tag.putBoolean("ShowIcon", this.showIcon());
+        tag.putUUID("ItemUUID", itemUUID);
         return tag;
     }
 
-    public static PolygamyInstance customFromNbt(NbtCompound tag) {
+    public static PolygamyInstance customFromNbt(CompoundTag tag) {
         int amplifier = tag.getByte("Amplifier");
         int duration = tag.getInt("Duration");
         boolean ambient = tag.getBoolean("Ambient");
@@ -82,7 +82,7 @@ public class PolygamyInstance extends StatusEffectInstance{
         }
 
         if(tag.contains("ItemUUID")){
-            tetherUUID = tag.getUuid("ItemUUID");
+            tetherUUID = tag.getUUID("ItemUUID");
         }
         else{
             tetherUUID = new UUID(0,0);

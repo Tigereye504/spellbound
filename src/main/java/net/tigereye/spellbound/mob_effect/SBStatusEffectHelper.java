@@ -1,14 +1,14 @@
 package net.tigereye.spellbound.mob_effect;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import org.apache.commons.lang3.mutable.MutableFloat;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 
 public class SBStatusEffectHelper {
 
@@ -17,40 +17,40 @@ public class SBStatusEffectHelper {
     public static float onPreArmorDefense(DamageSource source, LivingEntity defender, Float amount){
         MutableFloat mutableFloat = new MutableFloat(amount);
         SBStatusEffectHelper.forEachStatusEffect((instance,effectsToAdd,effectsToRemove) -> {
-            if(instance.getEffectType() instanceof SBStatusEffect) {
-                mutableFloat.setValue(((SBStatusEffect)(instance.getEffectType())).onPreArmorDefense(instance, source, defender, mutableFloat.floatValue(), effectsToAdd, effectsToRemove));
+            if(instance.getEffect() instanceof SBStatusEffect) {
+                mutableFloat.setValue(((SBStatusEffect)(instance.getEffect())).onPreArmorDefense(instance, source, defender, mutableFloat.floatValue(), effectsToAdd, effectsToRemove));
             }
-        }, defender.getStatusEffects(), defender);
+        }, defender.getActiveEffects(), defender);
         return mutableFloat.floatValue();
     }
 
     public static void onDeath(DamageSource source, LivingEntity defender){
         SBStatusEffectHelper.forEachStatusEffect((instance,effectsToAdd,effectsToRemove) -> {
-            if(instance.getEffectType() instanceof SBStatusEffect) {
-                ((SBStatusEffect)(instance.getEffectType())).onDeath(instance, source, defender, effectsToAdd, effectsToRemove);
+            if(instance.getEffect() instanceof SBStatusEffect) {
+                ((SBStatusEffect)(instance.getEffect())).onDeath(instance, source, defender, effectsToAdd, effectsToRemove);
             }
-        }, defender.getStatusEffects(), defender);
+        }, defender.getActiveEffects(), defender);
     }
 
-    private static void forEachStatusEffect(SBStatusEffectHelper.Consumer consumer, Collection<StatusEffectInstance> effects, LivingEntity entity) {
-        List<StatusEffectInstance> effectsToAdd = new ArrayList<>();
-        List<StatusEffect> effectsToRemove = new ArrayList<>();
-        for (StatusEffectInstance effect:
+    private static void forEachStatusEffect(SBStatusEffectHelper.Consumer consumer, Collection<MobEffectInstance> effects, LivingEntity entity) {
+        List<MobEffectInstance> effectsToAdd = new ArrayList<>();
+        List<MobEffect> effectsToRemove = new ArrayList<>();
+        for (MobEffectInstance effect:
              effects) {
             consumer.accept(effect,effectsToAdd,effectsToRemove);
         }
-        for (StatusEffect effect:
+        for (MobEffect effect:
                 effectsToRemove) {
-            entity.removeStatusEffect(effect);
+            entity.removeEffect(effect);
         }
-        for (StatusEffectInstance effect:
+        for (MobEffectInstance effect:
                 effectsToAdd) {
-            entity.addStatusEffect(effect);
+            entity.addEffect(effect);
         }
     }
 
     @FunctionalInterface
     interface Consumer {
-        void accept(StatusEffectInstance instance, List<StatusEffectInstance> effectsToAdd, List<StatusEffect> effectsToRemove);
+        void accept(MobEffectInstance instance, List<MobEffectInstance> effectsToAdd, List<MobEffect> effectsToRemove);
     }
 }

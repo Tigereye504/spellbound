@@ -1,11 +1,11 @@
 package net.tigereye.spellbound.enchantments.utility;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.SpellboundPlayerEntity;
@@ -31,38 +31,38 @@ public class ImpersonalEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.impersonal.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.impersonal.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.impersonal.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.impersonal.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.impersonal.IS_FOR_SALE;}
 
     @Override
-    public void onTargetDamaged(LivingEntity user, Entity target, int level) {
+    public void doPostAttack(LivingEntity user, Entity target, int level) {
         if(user instanceof SpellboundPlayerEntity &&
                 !(((SpellboundPlayerEntity)user).isMakingFullChargeAttack())){
             return;
         }
-        if(user.hasVehicle()){
+        if(user.isPassenger()){
             user.stopRiding();
         }
-        Direction shift = target.getHorizontalFacing().getOpposite();
-        double distanceBehind = 3+target.getBoundingBox().getZLength();
-        BlockPos newPos = BlockPos.ofFloored((target.getX() + (shift.getOffsetX()*distanceBehind)),
-                (target.getY() + (shift.getOffsetY()*distanceBehind)),
-                (target.getZ() + (shift.getOffsetZ()*distanceBehind)));
-        BlockState newPosBlock = user.getWorld().getBlockState(newPos);
-        if(!newPosBlock.isOpaque()) {
-            user.teleport(newPos.getX(),newPos.getY(),newPos.getZ());
-            user.setYaw(target.getHorizontalFacing().asRotation());
+        Direction shift = target.getDirection().getOpposite();
+        double distanceBehind = 3+target.getBoundingBox().getZsize();
+        BlockPos newPos = BlockPos.containing((target.getX() + (shift.getStepX()*distanceBehind)),
+                (target.getY() + (shift.getStepY()*distanceBehind)),
+                (target.getZ() + (shift.getStepZ()*distanceBehind)));
+        BlockState newPosBlock = user.level().getBlockState(newPos);
+        if(!newPosBlock.canOcclude()) {
+            user.teleportToWithTicket(newPos.getX(),newPos.getY(),newPos.getZ());
+            user.setYRot(target.getDirection().toYRot());
         }
         else{
-            newPos = newPos.add(0,1,0);
-            newPosBlock = user.getWorld().getBlockState(newPos);
-            if(!newPosBlock.isOpaque()) {
-                user.teleport(newPos.getX(),newPos.getY(),newPos.getZ());
-                user.setYaw(target.getHorizontalFacing().asRotation());
+            newPos = newPos.offset(0,1,0);
+            newPosBlock = user.level().getBlockState(newPos);
+            if(!newPosBlock.canOcclude()) {
+                user.teleportToWithTicket(newPos.getX(),newPos.getY(),newPos.getZ());
+                user.setYRot(target.getDirection().toYRot());
             }
         }
         //TODO: insert warp sound effect here
-        super.onTargetDamaged(user, target, level);
+        super.doPostAttack(user, target, level);
     }
 }

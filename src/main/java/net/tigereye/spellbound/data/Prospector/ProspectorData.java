@@ -1,11 +1,11 @@
 package net.tigereye.spellbound.data.Prospector;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 
 public class ProspectorData {
-    Identifier treasure;
+    ResourceLocation treasure;
     float frequency;
-    Identifier material;
+    ResourceLocation material;
     boolean materialIsTag;
 }

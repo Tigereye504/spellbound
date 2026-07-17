@@ -1,13 +1,13 @@
 package net.tigereye.spellbound.enchantments.utility;
 
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.instance.OwnedStatusEffectInstance;
@@ -17,7 +17,7 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class TetheringEnchantment extends SBEnchantment {
 
     public TetheringEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.tethering.RARITY), EnchantmentTarget.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.tethering.RARITY), EnchantmentCategory.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.tethering.ENABLED;}
@@ -32,20 +32,20 @@ public class TetheringEnchantment extends SBEnchantment {
     @Override
     public int getPowerRange(){return Spellbound.config.tethering.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.tethering.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.tethering.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.tethering.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.tethering.IS_FOR_SALE;}
 
     @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack)
+    public boolean canEnchant(ItemStack stack) {
+        return super.canEnchant(stack)
                 || stack.getItem() instanceof SwordItem
                 || stack.getItem() instanceof AxeItem
-                || EnchantmentTarget.DIGGER.isAcceptableItem(stack.getItem());
+                || EnchantmentCategory.DIGGER.canEnchant(stack.getItem());
     }
 
     @Override
-    public void onThrownTridentEntityHit(int level, TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){
+    public void onThrownTridentEntityHit(int level, ThrownTrident tridentEntity, ItemStack tridentItem, Entity defender){
         if(defender instanceof LivingEntity){
             tetherTarget(level, tridentEntity,(LivingEntity)defender);
         }
@@ -53,19 +53,19 @@ public class TetheringEnchantment extends SBEnchantment {
     }
 
     @Override
-    public void onTargetDamaged(LivingEntity user, Entity target, int level) {
+    public void doPostAttack(LivingEntity user, Entity target, int level) {
         //Spellbound.LOGGER.info("Tether Target Hit");
         if(target instanceof LivingEntity
                 /*&& EnchantmentHelper.get(((LivingEntity) target).getMainHandStack()).containsKey(SBEnchantments.TETHERING)*/) {
             tetherTarget(level, user, (LivingEntity) target);
         }
 
-        super.onTargetDamaged(user, target, level);
+        super.doPostAttack(user, target, level);
     }
 
     private void tetherTarget(int level, Entity anchor, LivingEntity target){
-        target.removeStatusEffect(SBStatusEffects.TETHERED);
-        target.addStatusEffect(new OwnedStatusEffectInstance(anchor, SBStatusEffects.TETHERED, 20+(20*level), 0));
+        target.removeEffect(SBStatusEffects.TETHERED);
+        target.addEffect(new OwnedStatusEffectInstance(anchor, SBStatusEffects.TETHERED, 20+(20*level), 0));
     }
 
     //doesn't support bows/crossbows because arrows usually dont survive impact

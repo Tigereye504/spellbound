@@ -1,40 +1,40 @@
 package net.tigereye.spellbound.util;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.FishingBobberEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.Tuple;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.SpellboundClientPlayerEntity;
@@ -58,149 +58,149 @@ public class SBEnchantmentHelper {
     public static final String ON_BREAK_LOCKOUT_KEY = Spellbound.MODID+"OnBreakLockout";
 
     //called after vanilla's getAttackDamage
-    public static int beforeDurabilityLoss(ItemStack stack, ServerPlayerEntity user, int loss){
-        if(Spellbound.config.STORIED_WORLD && !stack.hasEnchantments()){
-            Map<Enchantment,Integer> enchantments = EnchantmentHelper.get(stack);
+    public static int beforeDurabilityLoss(ItemStack stack, ServerPlayer user, int loss){
+        if(Spellbound.config.STORIED_WORLD && !stack.isEnchanted()){
+            Map<Enchantment,Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
             enchantments.put(SBEnchantments.STORIED, 1);
-            EnchantmentHelper.set(enchantments,stack);
+            EnchantmentHelper.setEnchantments(enchantments,stack);
         }
         MutableInt mutableInt = new MutableInt(loss);
         if(Spellbound.DEBUG){
-            Spellbound.LOGGER.info(stack.getName().getString() + " is taking " + loss + " damage before spellbound");
+            Spellbound.LOGGER.info(stack.getHoverName().getString() + " is taking " + loss + " damage before spellbound");
         }
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableInt.setValue(enchantment.beforeDurabilityLoss(level, stack, user, mutableInt.intValue())), stack);
 
         if(Spellbound.DEBUG){
-            Spellbound.LOGGER.info(stack.getName().getString() + " is taking " + mutableInt.intValue() + " damage after spellbound");
+            Spellbound.LOGGER.info(stack.getHoverName().getString() + " is taking " + mutableInt.intValue() + " damage after spellbound");
         }
         return mutableInt.intValue();
     }
 
     //called after vanilla's getAttackDamage
-    public static float getAttackDamage(LivingEntity attacker, Entity defender){
+    public static float getDamageBonus(LivingEntity attacker, Entity defender){
         MutableFloat mutableFloat = new MutableFloat();
-        ItemStack weapon = attacker.getMainHandStack();
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(enchantment.getAttackDamage(level, weapon, attacker, defender)), weapon);
+        ItemStack weapon = attacker.getMainHandItem();
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(enchantment.getDamageBonus(level, weapon, attacker, defender)), weapon);
         return mutableFloat.floatValue();
     }
 
-    public static float getLocalDifficultyModifier(World world, PlayerEntity player){
+    public static float getLocalDifficultyModifier(Level world, Player player){
         MutableFloat mutableFloat = new MutableFloat(0);
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add((enchantment).getLocalDifficultyModifier(level, world, player, itemStack)), player.getItemsEquipped());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add((enchantment).getLocalDifficultyModifier(level, world, player, itemStack)), player.getAllSlots());
         return mutableFloat.floatValue();
     }
 
     public static int getLooting(LivingEntity entity){
         MutableInt mutableInt = new MutableInt(0);
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableInt.add(enchantment.getLootingValue(level, entity, itemStack)), entity.getItemsEquipped());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableInt.add(enchantment.getLootingValue(level, entity, itemStack)), entity.getAllSlots());
         return mutableInt.intValue();
     }
 
     //called at the head of LivingEntity::onKilledBy
     //change: called just before drops onKilledBy
     public static void onDeath(DamageSource source, LivingEntity victim){
-        LivingEntity killer = victim.getPrimeAdversary();
+        LivingEntity killer = victim.getKillCredit();
         ItemStack projectileSource = null;
-        if(source.isIn(DamageTypeTags.IS_PROJECTILE)){
-            if(source.getSource() instanceof TridentEntity){
-                projectileSource = ((TridentEntityItemAccessor) source.getSource()).spellbound_getTridentStack();
+        if(source.is(DamageTypeTags.IS_PROJECTILE)){
+            if(source.getDirectEntity() instanceof ThrownTrident){
+                projectileSource = ((TridentEntityItemAccessor) source.getDirectEntity()).spellbound_getTridentStack();
             }
-            else if(source.getSource() instanceof SpellboundProjectileEntity) {
-                projectileSource = ((SpellboundProjectileEntity) source.getSource()).getSource();
+            else if(source.getDirectEntity() instanceof SpellboundProjectileEntity) {
+                projectileSource = ((SpellboundProjectileEntity) source.getDirectEntity()).getSource();
             }
         }
         if(killer != null) {
             if (projectileSource != null) {
-                SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onKill(level, itemStack, source, killer, victim), killer.getArmorItems());
+                SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onKill(level, itemStack, source, killer, victim), killer.getArmorSlots());
                 SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onKill(level, itemStack, source, killer, victim), projectileSource);
             }
             else{
-                SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onKill(level, itemStack, source, killer, victim), killer.getItemsEquipped());
+                SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onKill(level, itemStack, source, killer, victim), killer.getAllSlots());
             }
         }
 
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDeath(level, itemStack, source, killer, victim), victim.getItemsEquipped());
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDeath(level, itemStack, source, killer, victim), victim.getAllSlots());
     }
 
     public static void onEquipmentChange(LivingEntity livingEntity, EquipmentSlot equipmentSlot, ItemStack previousStack, ItemStack currentStack){
-        Map<SBEnchantment,Pair<Integer,Integer>> enchantmentsToCheck = new HashMap<>();
+        Map<SBEnchantment,Tuple<Integer,Integer>> enchantmentsToCheck = new HashMap<>();
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) ->
-                enchantmentsToCheck.put(enchantment, new Pair<>(level,0)),previousStack);
+                enchantmentsToCheck.put(enchantment, new Tuple<>(level,0)),previousStack);
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
             if(enchantmentsToCheck.containsKey(enchantment)) {
-                enchantmentsToCheck.put(enchantment, new Pair<>(enchantmentsToCheck.get(enchantment).getLeft(),level));
+                enchantmentsToCheck.put(enchantment, new Tuple<>(enchantmentsToCheck.get(enchantment).getA(),level));
             }
             else {
-                enchantmentsToCheck.put(enchantment, new Pair<>(0,level));
+                enchantmentsToCheck.put(enchantment, new Tuple<>(0,level));
             }
         },currentStack);
         enchantmentsToCheck.forEach((enchantment,levels) ->
-                enchantment.onEquipmentChangeOnce(levels.getLeft(),levels.getRight(),previousStack,currentStack,livingEntity));
+                enchantment.onEquipmentChangeOnce(levels.getA(),levels.getB(),previousStack,currentStack,livingEntity));
     }
 
     public static void onJump(LivingEntity entity){
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onJump(level, itemStack, entity), entity.getItemsEquipped());
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onJump(level, itemStack, entity), entity.getAllSlots());
     }
 
-    public static void onFireProjectile(Entity entity, ItemStack source, ProjectileEntity projectile){
+    public static void onFireProjectile(Entity entity, ItemStack source, Projectile projectile){
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onFireProjectile(level, itemStack, entity, projectile), source);
     }
 
     public static int onApplyIFrameDuration(int frames, DamageSource source, float damageAmount, LivingEntity defender) {
         MutableInt mutableInt = new MutableInt(frames);
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableInt.setValue((enchantment).getIFrameAmount(level, mutableInt.intValue(), source, damageAmount, itemStack, defender)), defender.getArmorItems());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableInt.setValue((enchantment).getIFrameAmount(level, mutableInt.intValue(), source, damageAmount, itemStack, defender)), defender.getArmorSlots());
         return mutableInt.intValue();
     }
 
     public static float onApplyIFrameMagnitude(float magnitude, DamageSource source, float damageAmount, LivingEntity defender) {
         MutableFloat mutableFloat = new MutableFloat(magnitude);
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue((enchantment).getIFrameMagnitude(level, mutableFloat.floatValue(), source, damageAmount, itemStack, defender)), defender.getArmorItems());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue((enchantment).getIFrameMagnitude(level, mutableFloat.floatValue(), source, damageAmount, itemStack, defender)), defender.getArmorSlots());
         return mutableFloat.floatValue();
     }
 
-    public static void onGainExperience(PlayerEntity player, int amount) {
+    public static void onGainExperience(Player player, int amount) {
         for (SBEnchantment enchantment:
                 SBEnchantments.SBEnchantmentList) {
             enchantment.onGainExperienceAlways(player,amount);
         }
     }
 
-    public static void onMidairJump(SpellboundClientPlayerEntity sbPlayer, PlayerEntity player, boolean isJumping) {
-        if (player.isOnGround() || player.isClimbing() || player.isSwimming()) {
+    public static void onMidairJump(SpellboundClientPlayerEntity sbPlayer, Player player, boolean isJumping) {
+        if (player.onGround() || player.onClimbable() || player.isSwimming()) {
             sbPlayer.spellbound$setJumpReleased(false);
         }
         else if(!isJumping){
             sbPlayer.spellbound$setJumpReleased(true);
         }
-        else if(sbPlayer.spellbound$getJumpReleased() && !player.getAbilities().flying && !player.hasVehicle()){
+        else if(sbPlayer.spellbound$getJumpReleased() && !player.getAbilities().flying && !player.isPassenger()){
             sbPlayer.spellbound$setJumpReleased(false);
-            SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> (enchantment).onMidairJump(level, itemStack, player), player.getItemsEquipped());
+            SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> (enchantment).onMidairJump(level, itemStack, player), player.getAllSlots());
         }
     }
 
     //called at the head of LivingEntity::applyArmor, before armor is actually applied.
     public static float onPreArmorDefense(DamageSource source, LivingEntity defender, Float amount){
         MutableFloat mutableFloat = new MutableFloat(amount);
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(enchantment.onPreArmorDefense(level, itemStack, source, defender, mutableFloat.floatValue())), defender.getItemsEquipped());
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(enchantment.onPreArmorDefense(level, itemStack, source, defender, mutableFloat.floatValue())), defender.getAllSlots());
         return mutableFloat.floatValue();
     }
 
     public static void onTargetDamaged(LivingEntity user, Entity defender){
-        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onTargetDamaged(level, itemStack, user, defender), user.getItemsEquipped());
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onTargetDamaged(level, itemStack, user, defender), user.getAllSlots());
     }
 
     //called right after TridentEntity calls getdamage
-    public static float getThrownTridentDamage(TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){
+    public static float getThrownTridentDamage(ThrownTrident tridentEntity, ItemStack tridentItem, Entity defender){
         MutableFloat mutableFloat = new MutableFloat();
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(enchantment.getThrownTridentDamage(level, tridentEntity, itemStack, defender)), tridentItem);
         return mutableFloat.getValue();
     }
 
-    public static void onThrownTridentEntityHit(TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){
+    public static void onThrownTridentEntityHit(ThrownTrident tridentEntity, ItemStack tridentItem, Entity defender){
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onThrownTridentEntityHit(level, tridentEntity, itemStack, defender), tridentItem);
     }
 
-    public static void onThrowTrident(Entity entity, ItemStack source, TridentEntity projectile){
+    public static void onThrowTrident(Entity entity, ItemStack source, ThrownTrident projectile){
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onThrowTrident(level, itemStack, entity, projectile), source);
     }
 
@@ -209,7 +209,7 @@ public class SBEnchantmentHelper {
         List<SBEnchantment> checked = new LinkedList<>();
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
             if(enchantment.requiresPreferredSlot()) {
-                if (entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) != itemStack) {
+                if (entity.getItemBySlot(LivingEntity.getEquipmentSlotForItem(itemStack)) != itemStack) {
                     return;
                 }
             }
@@ -218,7 +218,7 @@ public class SBEnchantmentHelper {
                 enchantment.onTickOnceWhileEquipped(level, itemStack, entity);
             }
             enchantment.onTickWhileEquipped(level, itemStack, entity);
-        },entity.getItemsEquipped());
+        },entity.getAllSlots());
 
     }
 
@@ -231,31 +231,31 @@ public class SBEnchantmentHelper {
 
     public static int getArmorAmount(LivingEntity entity) {
         MutableFloat mutableFloat = new MutableFloat();
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(enchantment.getArmorAmount(level, itemStack, entity)), entity.getArmorItems());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(enchantment.getArmorAmount(level, itemStack, entity)), entity.getArmorSlots());
         return Math.round(mutableFloat.floatValue());
     }
 
     public static int getProtectionAmount(DamageSource source, LivingEntity target, int k, float amount) {
         MutableFloat mutableFloat = new MutableFloat();
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(enchantment.getProtectionAmount(level, source, itemStack, target)), target.getArmorItems());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(enchantment.getProtectionAmount(level, source, itemStack, target)), target.getArmorSlots());
         return k + Math.round(mutableFloat.floatValue());
     }
-    public static float getMiningSpeed(PlayerEntity playerEntity, BlockState block, float h) {
+    public static float getMiningSpeed(Player playerEntity, BlockState block, float h) {
         MutableFloat mutableFloat = new MutableFloat(h);
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(enchantment.getMiningSpeed(level, playerEntity, itemStack, block, mutableFloat.getValue())), playerEntity.getMainHandStack());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(enchantment.getMiningSpeed(level, playerEntity, itemStack, block, mutableFloat.getValue())), playerEntity.getMainHandItem());
         return mutableFloat.getValue();
     }
 
-    public static void onActivate(PlayerEntity playerEntity, Entity target, Hand hand){
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onActivate(level, playerEntity, itemStack, target), playerEntity.getStackInHand(hand));
+    public static void onActivate(Player playerEntity, Entity target, InteractionHand hand){
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onActivate(level, playerEntity, itemStack, target), playerEntity.getItemInHand(hand));
     }
 
-    public static void onBreakBlockDirectly(Block block, World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onBreakBlockDirectly(level, itemStack, world, pos, state, player), player.getMainHandStack());
+    public static void onBreakBlockDirectly(Block block, Level world, BlockPos pos, BlockState state, Player player) {
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onBreakBlockDirectly(level, itemStack, world, pos, state, player), player.getMainHandItem());
     }
 
-    public static void onBreakBlock(Block block, World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onBreakBlock(level, itemStack, world, pos, state, player), player.getMainHandStack());
+    public static void onBreakBlock(Block block, Level world, BlockPos pos, BlockState state, Player player) {
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onBreakBlock(level, itemStack, world, pos, state, player), player.getMainHandItem());
     }
 
     //public static void onEquipmentChange(LivingEntity entity){
@@ -265,7 +265,7 @@ public class SBEnchantmentHelper {
     //}
 
 
-    public static void onInventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+    public static void onInventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
         forEachSpellboundEnchantment((((enchantment, level, itemStack) -> enchantment.onInventoryTick(level,stack,world,entity,slot,selected))), stack);
     }
 
@@ -273,7 +273,7 @@ public class SBEnchantmentHelper {
         List<SBEnchantment> checked = new LinkedList<>();
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
             if(enchantment.requiresPreferredSlot()) {
-                if (entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) != itemStack) {
+                if (entity.getItemBySlot(LivingEntity.getEquipmentSlotForItem(itemStack)) != itemStack) {
                     return;
                 }
             }
@@ -282,24 +282,24 @@ public class SBEnchantmentHelper {
                 enchantment.onRedHealthDamageOnce(level,itemStack,source,entity,redHealthDamage);
             }
             enchantment.onRedHealthDamage(level,itemStack,source,entity,redHealthDamage);
-        },entity.getItemsEquipped());
+        },entity.getAllSlots());
     }
 
     public static void onDoRedHealthDamage(LivingEntity attacker, DamageSource source, LivingEntity victim, float redHealthDamage) {
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDoRedHealthDamage(level,itemStack,attacker,victim,source,redHealthDamage),attacker.getItemsEquipped());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDoRedHealthDamage(level,itemStack,attacker,victim,source,redHealthDamage),attacker.getAllSlots());
     }
 
     public static boolean onItemDestroyed(ItemStack stack, Entity entity) {
         AtomicBoolean willBreak = new AtomicBoolean(true);
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> willBreak.set(enchantment.beforeToolBreak(level, itemStack, entity)), stack);
-        if(willBreak.get() && !stack.getOrCreateNbt().getBoolean(ON_BREAK_LOCKOUT_KEY)){
+        if(willBreak.get() && !stack.getOrCreateTag().getBoolean(ON_BREAK_LOCKOUT_KEY)){
             forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onToolBreak(level, itemStack, entity), stack);
-            stack.getOrCreateNbt().putBoolean(ON_BREAK_LOCKOUT_KEY,true);
+            stack.getOrCreateTag().putBoolean(ON_BREAK_LOCKOUT_KEY,true);
         }
         return willBreak.get();
     }
 
-    public static void onItemUse(ItemStack stack, ItemUsageContext context, ActionResult result){
+    public static void onItemUse(ItemStack stack, UseOnContext context, InteractionResult result){
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onItemUse(level, itemStack, context, result), stack);
     }
 
@@ -312,7 +312,7 @@ public class SBEnchantmentHelper {
         AtomicBoolean saved = new AtomicBoolean(false);
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
             if(enchantment.requiresPreferredSlot()) {
-                if (entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) != itemStack) {
+                if (entity.getItemBySlot(LivingEntity.getEquipmentSlotForItem(itemStack)) != itemStack) {
                     return;
                 }
             }
@@ -323,11 +323,11 @@ public class SBEnchantmentHelper {
             if(!saved.get()) {
                 saved.set(enchantment.onLethalDamage(level, source, entity));
             }
-        },entity.getItemsEquipped());
+        },entity.getAllSlots());
         return saved.get();
     }
 
-    public static int getProjectileDamage(PersistentProjectileEntity persistentProjectileEntity, EntityHitResult entityHitResult, int damage) {
+    public static int getProjectileDamage(AbstractArrow persistentProjectileEntity, EntityHitResult entityHitResult, int damage) {
         Entity entity = persistentProjectileEntity.getOwner();
         MutableFloat mutableFloat = new MutableFloat(damage);
         if(entity != null) {
@@ -336,7 +336,7 @@ public class SBEnchantmentHelper {
         return mutableFloat.intValue();
     }
 
-    public static void onProjectileEntityHit(PersistentProjectileEntity persistentProjectileEntity, Entity entity) {
+    public static void onProjectileEntityHit(AbstractArrow persistentProjectileEntity, Entity entity) {
         Entity owner = persistentProjectileEntity.getOwner();
         if(owner != null) {
             if(owner instanceof SpellboundPlayerEntity){
@@ -346,15 +346,15 @@ public class SBEnchantmentHelper {
         }
     }
 
-    public static void onPullHookedEntity(FishingBobberEntity bobber, ItemStack stack, Entity entity) {
+    public static void onPullHookedEntity(FishingHook bobber, ItemStack stack, Entity entity) {
         Entity owner = bobber.getOwner();
         if(owner instanceof LivingEntity) {
             forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onPullHookedEntity(level, bobber, stack, (LivingEntity)owner, entity), stack);
         }
     }
 
-    public static void onProjectileBlockHit(ProjectileEntity projectileEntity, BlockHitResult blockHitResult) {
-        if(projectileEntity instanceof TridentEntity){
+    public static void onProjectileBlockHit(Projectile projectileEntity, BlockHitResult blockHitResult) {
+        if(projectileEntity instanceof ThrownTrident){
             forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult), ((TridentEntityItemAccessor)projectileEntity).spellbound_getTridentStack());
         }
         else {
@@ -372,15 +372,15 @@ public class SBEnchantmentHelper {
         }
     }
 
-    public static Boolean onClientEntityIsGlowing(ClientPlayerEntity player, Entity entity, Boolean isGlowing) {
+    public static Boolean onClientEntityIsGlowing(LocalPlayer player, Entity entity, Boolean isGlowing) {
         AtomicBoolean glow = new AtomicBoolean(isGlowing);
-        forEachSpellboundEnchantment((((enchantment, level, itemStack) -> glow.set(enchantment.onClientEntityIsGlowing(level,itemStack,player,entity,glow.get())))), player.getItemsEquipped());
+        forEachSpellboundEnchantment((((enchantment, level, itemStack) -> glow.set(enchantment.onClientEntityIsGlowing(level,itemStack,player,entity,glow.get())))), player.getAllSlots());
         return glow.get();
     }
 
-    public static int overwriteClientEntityTeamColor(ClientPlayerEntity player, Entity entity, int _color) {
+    public static int overwriteClientEntityTeamColor(LocalPlayer player, Entity entity, int _color) {
         AtomicInteger color = new AtomicInteger(_color);
-        forEachSpellboundEnchantment((((enchantment, level, itemStack) -> color.set(enchantment.overwriteClientEntityTeamColor(level,itemStack,player,entity,color.get())))), player.getItemsEquipped());
+        forEachSpellboundEnchantment((((enchantment, level, itemStack) -> color.set(enchantment.overwriteClientEntityTeamColor(level,itemStack,player,entity,color.get())))), player.getAllSlots());
         return color.get();
     }
 
@@ -390,9 +390,9 @@ public class SBEnchantmentHelper {
         return ab.get();
     }
 
-    public static List<Text> addTooltip(ItemStack stack, List<Text> list, PlayerEntity player, TooltipContext context){
+    public static List<Component> addTooltip(ItemStack stack, List<Component> list, Player player, TooltipFlag context){
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
-            List<Text> tooltip = enchantment.addTooltip(level, itemStack, player, context);
+            List<Component> tooltip = enchantment.addTooltip(level, itemStack, player, context);
             if(tooltip != null) {
                 list.addAll(tooltip);
             }
@@ -404,19 +404,19 @@ public class SBEnchantmentHelper {
 
     private static void forEachSpellboundEnchantment(SBEnchantmentHelper.Consumer consumer, ItemStack stack) {
         if (stack != null && !stack.isEmpty()) {
-            NbtList NbtList = stack.getEnchantments();
-            ArrayList<Pair<SBEnchantment,Integer>> enchantmentsList = new ArrayList<>();
+            ListTag NbtList = stack.getEnchantmentTags();
+            ArrayList<Tuple<SBEnchantment,Integer>> enchantmentsList = new ArrayList<>();
             for(int i = 0; i < NbtList.size(); ++i) {
                 String string = NbtList.getCompound(i).getString("id");
                 int j = NbtList.getCompound(i).getInt("lvl");
-                Registries.ENCHANTMENT.getOrEmpty(Identifier.tryParse(string)).ifPresent((enchantment) -> {
+                BuiltInRegistries.ENCHANTMENT.getOptional(ResourceLocation.tryParse(string)).ifPresent((enchantment) -> {
                     if(enchantment instanceof SBEnchantment sbEnchantment) {
-                        enchantmentsList.add(new Pair<>(sbEnchantment,j));
+                        enchantmentsList.add(new Tuple<>(sbEnchantment,j));
                     }
                 });
             }
-            enchantmentsList.sort((o1, o2) -> -Integer.compare(o1.getLeft().getPriority(), o2.getLeft().getPriority()));
-            enchantmentsList.forEach((enchantment) -> consumer.accept(enchantment.getLeft(), enchantment.getRight(), stack));
+            enchantmentsList.sort((o1, o2) -> -Integer.compare(o1.getA().getPriority(), o2.getA().getPriority()));
+            enchantmentsList.forEach((enchantment) -> consumer.accept(enchantment.getA(), enchantment.getB(), stack));
         }
     }
     private static void forEachSpellboundEnchantment(SBEnchantmentHelper.Consumer consumer, Iterable<ItemStack> stacks) {
@@ -436,7 +436,7 @@ public class SBEnchantmentHelper {
     }
 
     public static int getSpellboundEnchantmentAmountCorrectlyWorn(Enchantment target, LivingEntity entity) {
-        return getSpellboundEnchantmentAmountCorrectlyWorn(entity.getItemsEquipped(),target,entity);
+        return getSpellboundEnchantmentAmountCorrectlyWorn(entity.getAllSlots(),target,entity);
     }
 
     public static int getSpellboundEnchantmentAmountCorrectlyWorn(Iterable<ItemStack> equipment, Enchantment target, LivingEntity entity) {
@@ -450,7 +450,7 @@ public class SBEnchantmentHelper {
     }
 
     public static boolean isEquipmentCorrectlyWorn(ItemStack itemStack, LivingEntity entity){
-        return entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) == itemStack;
+        return entity.getItemBySlot(LivingEntity.getEquipmentSlotForItem(itemStack)) == itemStack;
     }
 
     public static int countSpellboundEnchantmentInstances(Iterable<ItemStack> equipment, Enchantment target) {
@@ -474,78 +474,78 @@ public class SBEnchantmentHelper {
     }
     //returns false if they are pologamous, true if they are monogamous
     public static boolean testOwnerFaithfulness(ItemStack stack, LivingEntity owner){
-        if(owner.getWorld().isClient()){
+        if(owner.level().isClientSide()){
             return true;
         }
         UUID id = loadItemUUID(stack);
 
-        if(owner.hasStatusEffect(SBStatusEffects.POLYGAMY)){
-            StatusEffectInstance status = owner.getStatusEffect(SBStatusEffects.POLYGAMY);
+        if(owner.hasEffect(SBStatusEffects.POLYGAMY)){
+            MobEffectInstance status = owner.getEffect(SBStatusEffects.POLYGAMY);
             PolygamyInstance polygamy;
             if(!(status instanceof PolygamyInstance)) {
-                owner.removeStatusEffect(SBStatusEffects.POLYGAMY);
+                owner.removeEffect(SBStatusEffects.POLYGAMY);
                 polygamy = new PolygamyInstance(id, Spellbound.config.polygamous.DURATION,0,false,false,true);
-                owner.addStatusEffect(polygamy);
+                owner.addEffect(polygamy);
             }
             else{
                 polygamy = (PolygamyInstance) (status);
-                owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
+                owner.removeEffect(SBStatusEffects.MONOGAMY);
                 if(polygamy.itemUUID == null){
-                    owner.removeStatusEffect(SBStatusEffects.POLYGAMY);
-                    owner.addStatusEffect(new PolygamyInstance(id, Spellbound.config.polygamous.DURATION, 0, false, false, true));
+                    owner.removeEffect(SBStatusEffects.POLYGAMY);
+                    owner.addEffect(new PolygamyInstance(id, Spellbound.config.polygamous.DURATION, 0, false, false, true));
                     return true;
                 }
                 if(polygamy.itemUUID.compareTo(id) != 0){
                     polygamy = new PolygamyInstance(id, Spellbound.config.polygamous.DURATION,0,false,false,true);
-                    owner.addStatusEffect(polygamy);
+                    owner.addEffect(polygamy);
                 }
             }
             return false;
         }
-        else if(owner.hasStatusEffect(SBStatusEffects.MONOGAMY)) {
-            StatusEffectInstance status = owner.getStatusEffect(SBStatusEffects.MONOGAMY);
+        else if(owner.hasEffect(SBStatusEffects.MONOGAMY)) {
+            MobEffectInstance status = owner.getEffect(SBStatusEffects.MONOGAMY);
             MonogamyInstance monogamy;
             if(!(status instanceof MonogamyInstance)) {
-                owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
+                owner.removeEffect(SBStatusEffects.MONOGAMY);
                 monogamy = new MonogamyInstance(id, Spellbound.config.monogamous.DURATION,0,false,false,true);
-                owner.addStatusEffect(monogamy);
+                owner.addEffect(monogamy);
                 return true;
             }
             else{
                 monogamy = (MonogamyInstance)(status);
                 if(monogamy.itemUUID == null){
-                    owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-                    owner.addStatusEffect(new MonogamyInstance(id, Spellbound.config.monogamous.DURATION, 0, false, false, true));
+                    owner.removeEffect(SBStatusEffects.MONOGAMY);
+                    owner.addEffect(new MonogamyInstance(id, Spellbound.config.monogamous.DURATION, 0, false, false, true));
                     return true;
                 }
                 if(monogamy.itemUUID.compareTo(id) != 0) {
-                    owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-                    owner.addStatusEffect(new PolygamyInstance(id, Spellbound.config.polygamous.DURATION, 0, false, false, true));
+                    owner.removeEffect(SBStatusEffects.MONOGAMY);
+                    owner.addEffect(new PolygamyInstance(id, Spellbound.config.polygamous.DURATION, 0, false, false, true));
                     return false;
                 }
             }
         }
         //owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-        owner.addStatusEffect(new MonogamyInstance(id, Spellbound.config.monogamous.DURATION,0,false,false,true));
+        owner.addEffect(new MonogamyInstance(id, Spellbound.config.monogamous.DURATION,0,false,false,true));
         return true;
     }
 
     public static boolean doesPassPreferenceRequirement(SBEnchantment enchantment, ItemStack itemStack, LivingEntity entity){
         if(enchantment.requiresPreferredSlot()) {
-            return entity.getEquippedStack(LivingEntity.getPreferredEquipmentSlot(itemStack)) == itemStack;
+            return entity.getItemBySlot(LivingEntity.getEquipmentSlotForItem(itemStack)) == itemStack;
         }
         return true;
     }
 
     public static UUID loadItemUUID(ItemStack stack){
-        NbtCompound tag = stack.getOrCreateNbt();
+        CompoundTag tag = stack.getOrCreateTag();
         UUID id;
         if(tag.contains(Spellbound.MODID+"ItemID")){
-            id = tag.getUuid(Spellbound.MODID+"ItemID");
+            id = tag.getUUID(Spellbound.MODID+"ItemID");
         }
         else{
             id = UUID.randomUUID();
-            tag.putUuid(Spellbound.MODID+"ItemID",id);
+            tag.putUUID(Spellbound.MODID+"ItemID",id);
         }
         return id;
     }
@@ -557,20 +557,20 @@ public class SBEnchantmentHelper {
     //      this is to improve support for other enchantment mods that haven't added spellbound enchantment tags.
     //if all tags are checked and passed, return true.
     public static boolean areNotInSameCategory(SBEnchantment first, Enchantment second) {
-        RegistryEntry<Enchantment> firstEntry = getEnchantmentRegistryKey(first);
-        RegistryEntry<Enchantment> secondEntry = getEnchantmentRegistryKey(second);
+        Holder<Enchantment> firstEntry = getEnchantmentRegistryKey(first);
+        Holder<Enchantment> secondEntry = getEnchantmentRegistryKey(second);
         if(firstEntry == null || secondEntry == null){
             return true;
         }
         for (TagKey<Enchantment> category : SBTags.ENCHANTMENT_CATEGORIES) {
-            if(firstEntry.isIn(category) && secondEntry.isIn(category)){
+            if(firstEntry.is(category) && secondEntry.is(category)){
                 return false;
             }
             else if (SBTags.CATEGORY_PARENTS.containsKey(category) &&
-                    firstEntry.isIn(category) &&
+                    firstEntry.is(category) &&
                     !(secondEntry instanceof SBEnchantment)){
                 for (Enchantment parent : SBTags.CATEGORY_PARENTS.get(category)) {
-                    if(!(second.canCombine(parent))){
+                    if(!(second.isCompatibleWith(parent))){
                         return false;
                     }
                 }
@@ -579,12 +579,12 @@ public class SBEnchantmentHelper {
         return true;
     }
 
-    private static RegistryEntry<Enchantment> getEnchantmentRegistryKey(Enchantment enchantment){
-        RegistryKey<Enchantment> key;
-        Optional<RegistryKey<Enchantment>> optional = Registries.ENCHANTMENT.getKey(enchantment);
+    private static Holder<Enchantment> getEnchantmentRegistryKey(Enchantment enchantment){
+        ResourceKey<Enchantment> key;
+        Optional<ResourceKey<Enchantment>> optional = BuiltInRegistries.ENCHANTMENT.getResourceKey(enchantment);
         if(optional.isPresent()) {key = optional.get();}
         else {return null;}
-        Optional<RegistryEntry.Reference<Enchantment>> optional2 = Registries.ENCHANTMENT.getEntry(key);
+        Optional<Holder.Reference<Enchantment>> optional2 = BuiltInRegistries.ENCHANTMENT.getHolder(key);
         return optional2.orElse(null);
     }
 

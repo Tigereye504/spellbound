@@ -1,20 +1,20 @@
 package net.tigereye.spellbound.mixins;
 
 import com.google.common.collect.Maps;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.registration.SBStatusEffects;
@@ -36,12 +36,12 @@ import java.util.Map;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements SpellboundLivingEntity {
 
-    @Shadow protected float lastDamageTaken;
-    @Shadow private final Map<StatusEffect, StatusEffectInstance> activeStatusEffects = Maps.newHashMap();
+    @Shadow protected float lastHurt;
+    @Shadow private final Map<MobEffect, MobEffectInstance> activeEffects = Maps.newHashMap();
     @Unique
-    private Vec3d SB_OldPos;
+    private Vec3 SB_OldPos;
     @Unique
-    private Vec3d SB_LastPos;
+    private Vec3 SB_LastPos;
     @Unique
     private final List<DelayedAction> delayedActions = new LinkedList<>();
     @Unique
@@ -53,7 +53,7 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     @Unique
     private float graceMagnitude = 0;
     @Unique
-    private static final TrackedData<Boolean> SHIELDED = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SHIELDED = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
 
     public void spellbound$addDelayedAction(DelayedAction action){
         if (performingDelayedActions)
@@ -66,7 +66,7 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
         return delayedActions;
     }
 
-    public LivingEntityMixin(EntityType<?> type, World world) {
+    public LivingEntityMixin(EntityType<?> type, Level world) {
         super(type, world);
     }
 
@@ -76,31 +76,31 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     //}
 
 
-    @Inject(at = @At(value = "RETURN"),method = "getArmor", cancellable = true)
+    @Inject(at = @At(value = "RETURN"),method = "getArmorValue", cancellable = true)
     public void spellboundLivingEntityGetArmorMixin(CallbackInfoReturnable<Integer> info){
         info.setReturnValue(info.getReturnValueI() + SBEnchantmentHelper.getArmorAmount((LivingEntity)(Object)this));
     }
 
-    @Inject(method = "damage", at = @At(value = "INVOKE", target="Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V",ordinal = 1))
+    @Inject(method = "hurt", at = @At(value = "INVOKE", target="Lnet/minecraft/world/entity/LivingEntity;actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V",ordinal = 1))
     public void spellboundLivingEntityApplyIFramesDurationMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
-        this.lastDamageTaken = SBEnchantmentHelper.onApplyIFrameMagnitude(this.lastDamageTaken, source, amount, (LivingEntity)(Object)this);
-        int duration = SBEnchantmentHelper.onApplyIFrameDuration(this.timeUntilRegen, source, amount, (LivingEntity)(Object)this);
-        if(!this.getWorld().isClient && ((LivingEntity)(Object)this) instanceof ServerPlayerEntity entity){
-            NetworkingUtil.sendGraceDataPacket(this.lastDamageTaken,duration-10,entity);
+        this.lastHurt = SBEnchantmentHelper.onApplyIFrameMagnitude(this.lastHurt, source, amount, (LivingEntity)(Object)this);
+        int duration = SBEnchantmentHelper.onApplyIFrameDuration(this.invulnerableTime, source, amount, (LivingEntity)(Object)this);
+        if(!this.level().isClientSide && ((LivingEntity)(Object)this) instanceof ServerPlayer entity){
+            NetworkingUtil.sendGraceDataPacket(this.lastHurt,duration-10,entity);
         }
-        this.timeUntilRegen = duration;
+        this.invulnerableTime = duration;
     }
 
-    @ModifyVariable(at = @At("HEAD"), ordinal = 0, method = "applyArmorToDamage")
+    @ModifyVariable(at = @At("HEAD"), ordinal = 0, method = "getDamageAfterArmorAbsorb")
     public float spellboundLivingEntityApplyArmorMixin(float amount, DamageSource source){
         amount = SBEnchantmentHelper.onPreArmorDefense(source,(LivingEntity)(Object)this,amount);
         return SBStatusEffectHelper.onPreArmorDefense(source,(LivingEntity)(Object)this,amount);
     }
 
-    @Inject(at = @At(value="CONSTANT", args="floatValue=0",ordinal = 1), method = "applyDamage")
+    @Inject(at = @At(value="CONSTANT", args="floatValue=0",ordinal = 1), method = "actuallyHurt")
     public void spellboundLivingEntityApplyDamagePostDamageMixin(DamageSource source, float amount, CallbackInfo info){
         SBEnchantmentHelper.onRedHealthDamage(source,(LivingEntity)(Object)this,amount);
-        if(source.getAttacker() instanceof LivingEntity attacker) {
+        if(source.getEntity() instanceof LivingEntity attacker) {
             SBEnchantmentHelper.onDoRedHealthDamage(attacker, source, (LivingEntity) (Object) this, amount);
         }
     }
@@ -109,7 +109,7 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     //  Ljava/lang/Iterable;
     //  Lnet/minecraft/entity/damage/DamageSource;
     //)I
-    @ModifyVariable(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getProtectionAmount(Ljava/lang/Iterable;Lnet/minecraft/entity/damage/DamageSource;)I"), ordinal = 0, method = "modifyAppliedDamage")
+    @ModifyVariable(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getDamageProtection(Ljava/lang/Iterable;Lnet/minecraft/world/damagesource/DamageSource;)I"), ordinal = 0, method = "getDamageAfterMagicAbsorb")
     public int spellboundLivingEntityApplyEnchantmentsToDamageMixin(int k, DamageSource source, float amount){
         return SBEnchantmentHelper.getProtectionAmount(source,(LivingEntity)(Object)this,k,amount);
     }
@@ -133,7 +133,7 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "tryUseTotem", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "checkTotemDeathProtection", cancellable = true)
     public void spellboundLivingEntityTryUseTotemMixin(DamageSource source, CallbackInfoReturnable<Boolean> cir){
         if(SBEnchantmentHelper.onLethalDamage(source,(LivingEntity)(Object)this)){
             cir.setReturnValue(true);
@@ -144,40 +144,40 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     //Lnet/minecraft/entity/LivingEntity;onKilledBy(
     //  Lnet/minecraft/entity/LivingEntity;
     //)V
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onKilledBy(Lnet/minecraft/entity/LivingEntity;)V"), method = "onDeath")
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;createWitherRose(Lnet/minecraft/world/entity/LivingEntity;)V"), method = "die")
     public void spellboundLivingEntityOnDeathMixin(DamageSource source, CallbackInfo info){
         SBEnchantmentHelper.onDeath(source,(LivingEntity) (Object) this);
         SBStatusEffectHelper.onDeath(source,(LivingEntity) (Object) this);
     }
 
-    @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "collectEquipmentChanges", at = @At(value = "INVOKE", target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void spellboundLivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir, Map<EquipmentSlot, ItemStack> changes, EquipmentSlot[] slots, int slotsSize, int slotIndex, EquipmentSlot equipmentSlot, ItemStack previousStack, ItemStack currentStack) {
         SBEnchantmentHelper.onEquipmentChange((LivingEntity) (Object) this, equipmentSlot, previousStack, currentStack);
     }
 
-    @Inject(at = @At("TAIL"), method = "jump")
+    @Inject(at = @At("TAIL"), method = "jumpFromGround")
     public void spellboundLivingEntityJumpMixin(CallbackInfo info){
         SBEnchantmentHelper.onJump((LivingEntity)(Object)this);
     }
 
-    @Inject(at = @At("HEAD"), method = "initDataTracker")
+    @Inject(at = @At("HEAD"), method = "defineSynchedData")
     public void spellboundLivingEntityInitDataTracker(CallbackInfo info){
-        this.dataTracker.startTracking(SHIELDED, false);
+        this.entityData.define(SHIELDED, false);
     }
 
-    @Inject(at = @At("HEAD"), method = "updatePotionVisibility")
+    @Inject(at = @At("HEAD"), method = "updateEffectVisibility")
     public void spellboundLivingEntityUpdatePotionVisibilityMixin(CallbackInfo info){
-        this.dataTracker.set(SHIELDED, this.activeStatusEffects.containsKey(SBStatusEffects.SHIELDED));
+        this.entityData.set(SHIELDED, this.activeEffects.containsKey(SBStatusEffects.SHIELDED));
     }
 
     @Override
-    public void spellbound$updatePositionTracker(Vec3d pos) {
+    public void spellbound$updatePositionTracker(Vec3 pos) {
         SB_OldPos = SB_LastPos;
         SB_LastPos = pos;
     }
 
     @Override
-    public Vec3d spellbound$readPositionTracker() {
+    public Vec3 spellbound$readPositionTracker() {
         return SB_OldPos;
     }
 
@@ -194,5 +194,5 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     public void spellbound$setGraceTicks(int iFrameTicks){
         graceTicks = iFrameTicks;
     }
-    public boolean spellbound$shouldDisplayShielded(){return this.dataTracker.get(SHIELDED);}
+    public boolean spellbound$shouldDisplayShielded(){return this.entityData.get(SHIELDED);}
 }

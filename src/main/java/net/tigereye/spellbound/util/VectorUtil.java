@@ -1,29 +1,29 @@
 package net.tigereye.spellbound.util;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.tigereye.spellbound.Spellbound;
 
 public class VectorUtil {
 
-    public static Vec3d getEntityBoundingBoxOffset(Vec3d direction, Box boundingBox){
-        Vec3d borders = new Vec3d(
-                direction.x > 0 ? boundingBox.getXLength()/2 : -boundingBox.getXLength()/2,
+    public static Vec3 getEntityBoundingBoxOffset(Vec3 direction, AABB boundingBox){
+        Vec3 borders = new Vec3(
+                direction.x > 0 ? boundingBox.getXsize()/2 : -boundingBox.getXsize()/2,
                 0,
-                direction.z > 0 ? boundingBox.getZLength()/2 : -boundingBox.getZLength()/2);
-        BlockExitInfo info = getHorizontalExitPoint(Vec3d.ZERO,direction,borders);
+                direction.z > 0 ? boundingBox.getZsize()/2 : -boundingBox.getZsize()/2);
+        BlockExitInfo info = getHorizontalExitPoint(Vec3.ZERO,direction,borders);
         if(info != null) {
             return info.pos;
         }
         else{
-            return Vec3d.ZERO;
+            return Vec3.ZERO;
         }
     }
-    public static BlockExitInfo getHorizontalExitPoint(Vec3d position, Vec3d velocity, Vec3d borders){
+    public static BlockExitInfo getHorizontalExitPoint(Vec3 position, Vec3 velocity, Vec3 borders){
         double timeToImpactX;
         velocity = velocity.multiply(1,0,1);
         if(velocity.x != 0){
@@ -53,39 +53,39 @@ public class VectorUtil {
             output.direction = (velocity.z >= 0) ? Direction.SOUTH : Direction.NORTH;
         }
 
-        output.pos = position.add(velocity.multiply(timeToImpact));
+        output.pos = position.add(velocity.scale(timeToImpact));
         if(Spellbound.DEBUG){
             Spellbound.LOGGER.info("TTX: "+timeToImpactX+" TTZ: "+timeToImpactZ);
-            Spellbound.LOGGER.info("Border crossed: "+output.direction.name()+" "+output.pos.getX()+","+output.pos.getY()+","+output.pos.getZ());
+            Spellbound.LOGGER.info("Border crossed: "+output.direction.name()+" "+output.pos.x()+","+output.pos.y()+","+output.pos.z());
         }
         return output;
     }
 
-    public static Vec3d findCollisionWithStepAssistOnLine(World world, Vec3d position, Vec3d direction, double length){
+    public static Vec3 findCollisionWithStepAssistOnLine(Level world, Vec3 position, Vec3 direction, double length){
         int remainingMaxIterations = (int)(length*2+1);
-        BlockPos blockPos = BlockPos.ofFloored(position);
-        Vec3d unitVector = direction.normalize();
-        Vec3d finalPosition = position.add(unitVector.multiply(length/*level*DISTANCE_PER_LEVEL*/));
-        BlockPos finalBlockPosition = BlockPos.ofFloored(finalPosition);
+        BlockPos blockPos = BlockPos.containing(position);
+        Vec3 unitVector = direction.normalize();
+        Vec3 finalPosition = position.add(unitVector.scale(length/*level*DISTANCE_PER_LEVEL*/));
+        BlockPos finalBlockPosition = BlockPos.containing(finalPosition);
         boolean endPointFound = false;
         while(!endPointFound) {
             //find point and direction where next block is touched
-            Vec3d borders = new Vec3d(unitVector.x > 0 ? blockPos.getX()+1 : blockPos.getX(), blockPos.getY(), unitVector.z > 0 ? blockPos.getZ()+1 : blockPos.getZ());
+            Vec3 borders = new Vec3(unitVector.x > 0 ? blockPos.getX()+1 : blockPos.getX(), blockPos.getY(), unitVector.z > 0 ? blockPos.getZ()+1 : blockPos.getZ());
             if(Spellbound.DEBUG){
-                Spellbound.LOGGER.info("Tracked Borders: "+borders.getX()+","+borders.getY()+","+borders.getZ());
+                Spellbound.LOGGER.info("Tracked Borders: "+borders.x()+","+borders.y()+","+borders.z());
             }
             VectorUtil.BlockExitInfo exitInfo = VectorUtil.getHorizontalExitPoint(position,unitVector,borders);
             if(exitInfo == null){
                 return position;
             }
             position = exitInfo.pos;
-            blockPos = blockPos.offset(exitInfo.direction);
+            blockPos = blockPos.relative(exitInfo.direction);
             if(Spellbound.DEBUG){
                 Spellbound.LOGGER.info("Leap line entering block "+blockPos.getX()+","+blockPos.getY()+","+blockPos.getZ());
             }
             //check for obstruction, attempt to go over it
             if(SpellboundUtil.isPositionObstructed(world,blockPos)){
-                blockPos = blockPos.offset(Direction.UP);
+                blockPos = blockPos.relative(Direction.UP);
                 if(SpellboundUtil.isPositionObstructed(world,blockPos)){
                     endPointFound = true;
                     //blockPos = blockPos.offset(exitInfo.direction,-1);
@@ -93,9 +93,9 @@ public class VectorUtil {
                 }
                 else{
                     //move position and end position up one block
-                    position = new Vec3d(position.x,Math.floor(position.y+1)+.1,position.z);
-                    finalPosition = new Vec3d(finalPosition.x, Math.floor(finalPosition.y+1)+.1, finalPosition.z);
-                    finalBlockPosition = finalBlockPosition.add(0,1,0);
+                    position = new Vec3(position.x,Math.floor(position.y+1)+.1,position.z);
+                    finalPosition = new Vec3(finalPosition.x, Math.floor(finalPosition.y+1)+.1, finalPosition.z);
+                    finalBlockPosition = finalBlockPosition.offset(0,1,0);
                 }
             }
             //check if finalBlockPosition has been reached
@@ -119,37 +119,37 @@ public class VectorUtil {
     }
 
 
-    public static Vec3d backtrackToUsableSpace(World world, LivingEntity entity, Box boundingBox, Vec3d position) {
-        Vec3d moveVector = position.subtract(entity.getPos());
-        Vec3d moveVectorNorm = moveVector.normalize();
-        Box newBounds = Box.of(boundingBox.getCenter().add(moveVector),boundingBox.getXLength(),boundingBox.getYLength(),boundingBox.getZLength());
+    public static Vec3 backtrackToUsableSpace(Level world, LivingEntity entity, AABB boundingBox, Vec3 position) {
+        Vec3 moveVector = position.subtract(entity.position());
+        Vec3 moveVectorNorm = moveVector.normalize();
+        AABB newBounds = AABB.ofSize(boundingBox.getCenter().add(moveVector),boundingBox.getXsize(),boundingBox.getYsize(),boundingBox.getZsize());
         double length = moveVector.length();
-        while(!world.isSpaceEmpty(newBounds)){
+        while(!world.noCollision(newBounds)){
             if(length < .5){
                 return null;
             }
             length -= .5;
-            newBounds = Box.of(entity.getPos().add(moveVectorNorm.multiply(length)),
-                    boundingBox.getXLength(),boundingBox.getYLength(),boundingBox.getZLength());
+            newBounds = AABB.ofSize(entity.position().add(moveVectorNorm.scale(length)),
+                    boundingBox.getXsize(),boundingBox.getYsize(),boundingBox.getZsize());
         }
-        return entity.getPos().add(moveVectorNorm.multiply(length));
+        return entity.position().add(moveVectorNorm.scale(length));
     }
 
-    public static Vec3d roundVectorAxis(Vec3d pos,Direction.Axis axis){
+    public static Vec3 roundVectorAxis(Vec3 pos,Direction.Axis axis){
         switch(axis){
             case X:
-                return new Vec3d(Math.round(pos.x),pos.y,pos.z);
+                return new Vec3(Math.round(pos.x),pos.y,pos.z);
             case Y:
-                return new Vec3d(pos.x,Math.round(pos.y),pos.z);
+                return new Vec3(pos.x,Math.round(pos.y),pos.z);
             case Z:
-                return new Vec3d(pos.x,pos.y,Math.round(pos.z));
+                return new Vec3(pos.x,pos.y,Math.round(pos.z));
         }
         Spellbound.LOGGER.warn("Vector rounding failed, axis not found.");
         return pos;
     }
 
     public static class BlockExitInfo{
-        public Vec3d pos;
+        public Vec3 pos;
         public Direction direction;
     }
 }

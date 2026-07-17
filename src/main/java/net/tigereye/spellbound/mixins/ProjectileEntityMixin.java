@@ -1,12 +1,12 @@
 package net.tigereye.spellbound.mixins;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.RangedWeaponItem;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.phys.BlockHitResult;
 import net.tigereye.spellbound.interfaces.SpellboundProjectileEntity;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ProjectileEntity.class)
+@Mixin(Projectile.class)
 public class ProjectileEntityMixin  implements SpellboundProjectileEntity {
     private ItemStack source = null;
 
@@ -32,25 +32,25 @@ public class ProjectileEntityMixin  implements SpellboundProjectileEntity {
     protected void spellboundPersistentProjectileEntitySetOwnerMixin(Entity owner, CallbackInfo info){
         if(owner != null){
             if(owner instanceof LivingEntity){
-                Hand hand = ((LivingEntity) owner).getActiveHand();
+                InteractionHand hand = ((LivingEntity) owner).getUsedItemHand();
                 if(hand != null) {
-                    setSource(((LivingEntity) owner).getStackInHand(hand));
-                    SBEnchantmentHelper.onFireProjectile(owner,getSource(),(ProjectileEntity)(Object)this);
+                    setSource(((LivingEntity) owner).getItemInHand(hand));
+                    SBEnchantmentHelper.onFireProjectile(owner,getSource(),(Projectile)(Object)this);
                 }
             }
             else {
-                for (ItemStack stack : owner.getHandItems()) {
-                    if (stack.getItem() instanceof RangedWeaponItem) {
+                for (ItemStack stack : owner.getHandSlots()) {
+                    if (stack.getItem() instanceof ProjectileWeaponItem) {
                         setSource(stack);
-                        SBEnchantmentHelper.onFireProjectile(owner,getSource(),(ProjectileEntity)(Object)this);
+                        SBEnchantmentHelper.onFireProjectile(owner,getSource(),(Projectile)(Object)this);
                     }
                 }
             }
         }
     }
 
-    @Inject(at = @At(value = "TAIL"), method = "onBlockHit")
+    @Inject(at = @At(value = "TAIL"), method = "onHitBlock")
     protected void spellboundPersistentProjectileEntityOnBlockHitMixin(BlockHitResult blockHitResult, CallbackInfo info){
-        SBEnchantmentHelper.onProjectileBlockHit((ProjectileEntity)(Object)this, blockHitResult);
+        SBEnchantmentHelper.onProjectileBlockHit((Projectile)(Object)this, blockHitResult);
     }
 }

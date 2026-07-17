@@ -1,22 +1,26 @@
 package net.tigereye.spellbound.mixins;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.registry.Registry;
-import net.minecraft.world.HeightLimitView;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.*;
-import net.minecraft.world.gen.chunk.BlendingData;
-import net.minecraft.world.tick.BasicTickScheduler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraft.world.level.chunk.UpgradeData;
+import net.minecraft.world.level.levelgen.blending.BlendingData;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.ticks.TickContainerAccess;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.data.TouchedBlocksPersistentState;
 import org.jetbrains.annotations.Nullable;
@@ -27,21 +31,21 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(WorldChunk.class)
-public class WorldChunkMixin extends Chunk {
+@Mixin(LevelChunk.class)
+public class WorldChunkMixin extends ChunkAccess {
 
     @Final
     @Shadow
-    World world;
-    public WorldChunkMixin(ChunkPos pos, UpgradeData upgradeData, HeightLimitView heightLimitView, Registry<Biome> biome, long inhabitedTime, @Nullable ChunkSection[] sectionArrayInitializer, @Nullable BlendingData blendingData) {
+    Level level;
+    public WorldChunkMixin(ChunkPos pos, UpgradeData upgradeData, LevelHeightAccessor heightLimitView, Registry<Biome> biome, long inhabitedTime, @Nullable LevelChunkSection[] sectionArrayInitializer, @Nullable BlendingData blendingData) {
         super(pos, upgradeData, heightLimitView, biome, inhabitedTime, sectionArrayInitializer, blendingData);
     }
 
 
     @Inject(at = @At(value="HEAD"), method = "setBlockState")
     public void spellboundSetBlockStateMixin(BlockPos pos, BlockState state, boolean moved, CallbackInfoReturnable<BlockState> cir){
-        if(this.world != null && Spellbound.config.prospector.DETECT_ABUSE){
-            if(world instanceof ServerWorld serverWorld && getInhabitedTime() > Spellbound.config.prospector.NEW_CHUNK_GRACE_PERIOD) {
+        if(this.level != null && Spellbound.config.prospector.DETECT_ABUSE){
+            if(level instanceof ServerLevel serverWorld && getInhabitedTime() > Spellbound.config.prospector.NEW_CHUNK_GRACE_PERIOD) {
                 TouchedBlocksPersistentState tbpState = TouchedBlocksPersistentState.getTouchedBlocksPersistentState(serverWorld);
                 tbpState.TouchBlock(pos);
             }
@@ -71,19 +75,19 @@ public class WorldChunkMixin extends Chunk {
     }
     @Shadow
     @Nullable
-    public NbtCompound getPackedBlockEntityNbt(BlockPos pos) {
+    public CompoundTag getBlockEntityNbtForSaving(BlockPos pos) {
         return null;
     }
     @Shadow
-    public BasicTickScheduler<Block> getBlockTickScheduler() {
+    public TickContainerAccess<Block> getBlockTicks() {
         return null;
     }
     @Shadow
-    public BasicTickScheduler<Fluid> getFluidTickScheduler() {
+    public TickContainerAccess<Fluid> getFluidTicks() {
         return null;
     }
     @Shadow
-    public TickSchedulers getTickSchedulers() {
+    public TicksToSave getTicksForSerialization() {
         return null;
     }
     @Shadow

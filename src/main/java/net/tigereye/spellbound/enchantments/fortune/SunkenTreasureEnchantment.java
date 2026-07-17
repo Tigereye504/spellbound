@@ -1,13 +1,13 @@
 package net.tigereye.spellbound.enchantments.fortune;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.*;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootContextTypes;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.tigereye.modifydropsapi.api.GenerateLootCallbackAddLoot;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.blocks.entity.CrateBlockEntity;
@@ -24,7 +24,7 @@ public class SunkenTreasureEnchantment extends SBEnchantment {
 
 
     public SunkenTreasureEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.sunkenTreasure.RARITY), EnchantmentTarget.FISHING_ROD, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.sunkenTreasure.RARITY), EnchantmentCategory.FISHING_ROD, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.sunkenTreasure.ENABLED;}
@@ -39,23 +39,23 @@ public class SunkenTreasureEnchantment extends SBEnchantment {
     @Override
     public int getPowerRange(){return Spellbound.config.sunkenTreasure.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.sunkenTreasure.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.sunkenTreasure.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.sunkenTreasure.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.sunkenTreasure.IS_FOR_SALE;}
 
     public static void registerSunkenTreasureCrateFishing(){
         GenerateLootCallbackAddLoot.EVENT.register((type, lootContext) -> {
             List<ItemStack> loot = new ArrayList<>();
-            if(!lootContext.getWorld().isClient && type == LootContextTypes.FISHING) {
-                ItemStack tool = lootContext.get(LootContextParameters.TOOL);
+            if(!lootContext.getLevel().isClientSide && type == LootContextParamSets.FISHING) {
+                ItemStack tool = lootContext.getParamOrNull(LootContextParams.TOOL);
                 if (tool != null) {
-                    int level = EnchantmentHelper.getLevel(SBEnchantments.SUNKEN_TREASURE, tool);
+                    int level = EnchantmentHelper.getItemEnchantmentLevel(SBEnchantments.SUNKEN_TREASURE, tool);
                     if(lootContext.getRandom().nextFloat() < (level * Spellbound.config.sunkenTreasure.CRATE_CHANCE_PER_LEVEL / 2.0)){ //The odds are halved as a workaround to a bug where fishing (and only fishing) procs modify drops API twice
                         ItemStack crate = new ItemStack(SBItems.CRATE);
-                        NbtCompound blockEntityTag = new NbtCompound();
-                        blockEntityTag.putString(CrateBlockEntity.LOOT_DIMENSION_KEY,lootContext.getWorld().getDimensionKey().getValue().toString());
+                        CompoundTag blockEntityTag = new CompoundTag();
+                        blockEntityTag.putString(CrateBlockEntity.LOOT_DIMENSION_KEY,lootContext.getLevel().dimensionTypeId().location().toString());
                         blockEntityTag.putInt(CrateBlockEntity.LOOT_QUALITY_KEY, SunkenTreasureManager.getWeightedRandomQuality(lootContext.getRandom(),lootContext.getLuck()));
-                        BlockItem.setBlockEntityNbt(crate,SBItems.CRATE_BLOCK_ENTITY,blockEntityTag);
+                        BlockItem.setBlockEntityData(crate,SBItems.CRATE_BLOCK_ENTITY,blockEntityTag);
                         loot.add(crate);
                     }
                 }

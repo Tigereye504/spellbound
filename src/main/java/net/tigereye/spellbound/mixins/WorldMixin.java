@@ -1,9 +1,9 @@
 package net.tigereye.spellbound.mixins;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.tigereye.spellbound.interfaces.SpellboundLocalDifficulty;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,15 +11,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(World.class)
+@Mixin(Level.class)
 public abstract class WorldMixin {
 
-    @Inject(at = @At("RETURN"), method = "getLocalDifficulty")
-    public void spellboundWorldEmitGameEventMixin(BlockPos pos, CallbackInfoReturnable<LocalDifficulty> cir) {
+    @Inject(at = @At("RETURN"), method = "getCurrentDifficultyAt")
+    public void spellboundGetCurrentDifficultyMixin(BlockPos pos, CallbackInfoReturnable<DifficultyInstance> cir) {
         float modifier = 0;
-        for (PlayerEntity player : ((World)(Object)this).getPlayers()){
-            if(pos.isWithinDistance(player.getPos(),128)) {
-                modifier += SBEnchantmentHelper.getLocalDifficultyModifier((World) (Object) this, player);
+        for (Player player : ((Level)(Object)this).players()){
+            if(pos.closerToCenterThan(player.position(),128)) {
+                modifier += SBEnchantmentHelper.getLocalDifficultyModifier((Level) (Object) this, player);
             }
         }
         ((SpellboundLocalDifficulty)cir.getReturnValue()).spellbound$setLocalDifficultyModifier(modifier);

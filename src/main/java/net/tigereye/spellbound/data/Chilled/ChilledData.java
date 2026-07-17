@@ -1,8 +1,8 @@
 package net.tigereye.spellbound.data.Chilled;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class ChilledData {
-    Identifier block;
-    Identifier result;
+    ResourceLocation block;
+    ResourceLocation result;
 }

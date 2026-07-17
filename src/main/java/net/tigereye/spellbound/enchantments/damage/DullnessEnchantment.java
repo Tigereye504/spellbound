@@ -1,10 +1,10 @@
 package net.tigereye.spellbound.enchantments.damage;
 
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EntityGroup;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -12,7 +12,7 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class DullnessEnchantment extends SBEnchantment {
 
     public DullnessEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.dullness.RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND}, false);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.dullness.RARITY), EnchantmentCategory.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND}, false);
     }
 
     @Override
@@ -28,19 +28,19 @@ public class DullnessEnchantment extends SBEnchantment {
     @Override
     public int getPowerRange(){return Spellbound.config.dullness.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.dullness.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.dullness.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.dullness.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.dullness.IS_FOR_SALE;}
 
     @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack) ||
-                stack.getItem() instanceof ToolItem;
+    public boolean canEnchant(ItemStack stack) {
+        return super.canEnchant(stack) ||
+                stack.getItem() instanceof TieredItem;
 
     }
 
     @Override
-    public float getAttackDamage(int level, EntityGroup group) {
+    public float getDamageBonus(int level, MobType group) {
         return -1.5f - level;
     }
 

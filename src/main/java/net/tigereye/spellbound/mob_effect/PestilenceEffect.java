@@ -1,10 +1,10 @@
 package net.tigereye.spellbound.mob_effect;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.mob_effect.instance.OwnedStatusEffectInstance;
 import net.tigereye.spellbound.registration.SBDamageSources;
@@ -20,11 +20,11 @@ import static net.tigereye.spellbound.registration.SBStatusEffects.PESTILENCE;
 public class PestilenceEffect extends SBStatusEffect implements CustomDataStatusEffect{
 
     public PestilenceEffect(){
-        super(StatusEffectCategory.HARMFUL, 0x194212);
+        super(MobEffectCategory.HARMFUL, 0x194212);
     }
 
     @Override
-    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+    public boolean isDurationEffectTick(int duration, int amplifier) {
         int i = Spellbound.config.pestilence.PESTILENCE_DAMAGE_FREQUENCY >> amplifier;
         if (i > 1) {
             return duration % i == Spellbound.config.pestilence.PESTILENCE_DAMAGE_FREQUENCY_OFFSET; //offset with poison to reduce I-frame collision
@@ -32,11 +32,11 @@ public class PestilenceEffect extends SBStatusEffect implements CustomDataStatus
         return true;
     }
     @Override
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(!(entity.getWorld().isClient)){
+    public void applyEffectTick(LivingEntity entity, int amplifier) {
+        if(!(entity.level().isClientSide)){
             //first, check if the status is owned by the victim. If so, they are immune.
             Entity owner = null;
-            StatusEffectInstance instance = entity.getStatusEffect(PESTILENCE);
+            MobEffectInstance instance = entity.getEffect(PESTILENCE);
             if(instance instanceof OwnedStatusEffectInstance si && si.fillMissingOwnerData(entity)) {
                 if(si.owner == entity) return;
                 else owner = si.owner;
@@ -48,27 +48,27 @@ public class PestilenceEffect extends SBStatusEffect implements CustomDataStatus
 
             //tally up the levels of negative effects on the target
             AtomicInteger effectLevels = new AtomicInteger();
-            Collection<StatusEffectInstance> effects = entity.getStatusEffects();
+            Collection<MobEffectInstance> effects = entity.getActiveEffects();
             effects.forEach(effect -> {
-                if (effect.getEffectType().getCategory() == StatusEffectCategory.HARMFUL && effect.getEffectType() != PESTILENCE) {
+                if (effect.getEffect().getCategory() == MobEffectCategory.HARMFUL && effect.getEffect() != PESTILENCE) {
                     effectLevels.addAndGet(Math.min(effect.getAmplifier(), Spellbound.config.pestilence.MAX_DAMAGE_LEVELS_PER_EFFECT - 1) + 1);
                 }
             });
 
             //do damage based on the negitive effect count.
             if(owner != null) {
-                entity.damage(SBDamageSources.of(entity.getWorld(),SBDamageSources.PESTILENCE,owner),
+                entity.hurt(SBDamageSources.of(entity.level(),SBDamageSources.PESTILENCE,owner),
                         Spellbound.config.pestilence.DAMAGE_PER_EFFECT * effectLevels.get());
             }
             else{
-                entity.damage(SBDamageSources.of(entity.getWorld(),SBDamageSources.PESTILENCE),
+                entity.hurt(SBDamageSources.of(entity.level(),SBDamageSources.PESTILENCE),
                         Spellbound.config.pestilence.DAMAGE_PER_EFFECT * effectLevels.get());
             }
         }
     }
 
     @Override
-    public StatusEffectInstance getInstanceFromTag(NbtCompound tag) {
+    public MobEffectInstance getInstanceFromTag(CompoundTag tag) {
         return OwnedStatusEffectInstance.customFromNbt(SBStatusEffects.PESTILENCE,tag);
     }
 

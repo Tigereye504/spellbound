@@ -1,10 +1,10 @@
 package net.tigereye.spellbound.enchantments.protection;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.DelayedAction;
@@ -38,9 +38,9 @@ public class GoldskinEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.goldskin.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.goldskin.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.goldskin.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.goldskin.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.goldskin.IS_FOR_SALE;}
 
     @Override
     public void onEquipmentChangeOnce(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){
@@ -71,12 +71,12 @@ public class GoldskinEnchantment extends SBEnchantment{
     }
 
     private float calculateMaxAbsorption(LivingEntity entity){
-        Iterable<ItemStack> gear = entity.getItemsEquipped();
+        Iterable<ItemStack> gear = entity.getAllSlots();
         int totalLevels = 0;
         int instanceCount = 0;
         for(ItemStack item : gear){
             if(SBEnchantmentHelper.isEquipmentCorrectlyWorn(item,entity)){
-                int itemLevel = EnchantmentHelper.getLevel(SBEnchantments.GOLDSKIN, item);
+                int itemLevel = EnchantmentHelper.getItemEnchantmentLevel(SBEnchantments.GOLDSKIN, item);
                 if(itemLevel > 0) {
                     totalLevels += itemLevel;
                     instanceCount++;

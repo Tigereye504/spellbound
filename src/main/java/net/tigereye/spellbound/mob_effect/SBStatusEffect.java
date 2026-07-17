@@ -1,21 +1,20 @@
 package net.tigereye.spellbound.mob_effect;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffectCategory;
-
 import java.util.List;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 
-public class SBStatusEffect extends StatusEffect {
+public class SBStatusEffect extends MobEffect {
 
-    public SBStatusEffect(StatusEffectCategory type, int color) {
+    public SBStatusEffect(MobEffectCategory type, int color) {
         super(type, color);
     }
 
     //for when the user is struck, before armor is applied
-    public float onPreArmorDefense(StatusEffectInstance instance, DamageSource source, LivingEntity defender, float amount, List<StatusEffectInstance> effectsToAdd, List<StatusEffect> effectsToRemove){return amount;}
+    public float onPreArmorDefense(MobEffectInstance instance, DamageSource source, LivingEntity defender, float amount, List<MobEffectInstance> effectsToAdd, List<MobEffect> effectsToRemove){return amount;}
 
-    public void onDeath(StatusEffectInstance instance, DamageSource source, LivingEntity defender, List<StatusEffectInstance> effectsToAdd, List<StatusEffect> effectsToRemove) {}
+    public void onDeath(MobEffectInstance instance, DamageSource source, LivingEntity defender, List<MobEffectInstance> effectsToAdd, List<MobEffect> effectsToRemove) {}
 }

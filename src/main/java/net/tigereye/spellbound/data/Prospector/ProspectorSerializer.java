@@ -1,10 +1,10 @@
 package net.tigereye.spellbound.data.Prospector;
 
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class ProspectorSerializer {
-    public ProspectorData read(Identifier id, ProspectorJsonFormat prospectorJson) {
+    public ProspectorData read(ResourceLocation id, ProspectorJsonFormat prospectorJson) {
 
         if (prospectorJson.treasure == null) {
             throw new JsonSyntaxException("Prospector entry" + id + " must provide treasure");
@@ -15,7 +15,7 @@ public class ProspectorSerializer {
 
 
         ProspectorData prospectorData = new ProspectorData();
-        prospectorData.treasure = new Identifier(prospectorJson.treasure);
+        prospectorData.treasure = new ResourceLocation(prospectorJson.treasure);
         prospectorData.frequency = prospectorJson.frequency;
 
         if (prospectorJson.material != null){
@@ -26,7 +26,7 @@ public class ProspectorSerializer {
             else{
                 prospectorData.materialIsTag = false;
             }
-            prospectorData.material = new Identifier(prospectorJson.material);
+            prospectorData.material = new ResourceLocation(prospectorJson.material);
         }
 
         return prospectorData;

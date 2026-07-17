@@ -1,15 +1,15 @@
 package net.tigereye.spellbound.enchantments.utility.tool;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.data.Chilled.ChilledManager;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -18,7 +18,7 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class ChilledEnchantment extends SBEnchantment{
     public ChilledEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.chilled.RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.chilled.RARITY), EnchantmentCategory.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.chilled.ENABLED;}
@@ -33,30 +33,30 @@ public class ChilledEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.chilled.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.chilled.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.chilled.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.chilled.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.chilled.IS_FOR_SALE;}
 
     @Override
-    public void onBreakBlock(int level, ItemStack stack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        if (world.isClient()) {
+    public void onBreakBlock(int level, ItemStack stack, Level world, BlockPos pos, BlockState state, Player player) {
+        if (world.isClientSide()) {
             return;
         }
-        chillBlock(world, pos.up());
-        chillBlock(world, pos.down());
+        chillBlock(world, pos.above());
+        chillBlock(world, pos.below());
         chillBlock(world, pos.east());
         chillBlock(world, pos.west());
         chillBlock(world, pos.north());
         chillBlock(world, pos.south());
     }
 
-    public void chillBlock(World world, BlockPos pos){
+    public void chillBlock(Level world, BlockPos pos){
         BlockState block = world.getBlockState(pos);
-        Identifier resultID = ChilledManager.getResult(block);
+        ResourceLocation resultID = ChilledManager.getResult(block);
         if(resultID != null) {
-            Block result = Registries.BLOCK.get(resultID);
+            Block result = BuiltInRegistries.BLOCK.get(resultID);
             if(result != null){
-                world.setBlockState(pos,result.getDefaultState());
+                world.setBlockAndUpdate(pos,result.defaultBlockState());
             }
         }
     }

@@ -3,10 +3,10 @@ package net.tigereye.spellbound.data.SunkenTreasure;
 import com.google.common.util.concurrent.AtomicDouble;
 import com.google.gson.Gson;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.Tuple;
 import net.tigereye.spellbound.Spellbound;
 
 import java.io.InputStream;
@@ -18,21 +18,21 @@ public class SunkenTreasureManager implements SimpleSynchronousResourceReloadLis
 
     private static final String RESOURCE_LOCATION = "sunken_treasure";
     private final SunkenTreasureSerializer SERIALIZER = new SunkenTreasureSerializer();
-    private static final Map<Identifier, SunkenTreasureData> sunkenTreasureDataMap = new HashMap<>();
+    private static final Map<ResourceLocation, SunkenTreasureData> sunkenTreasureDataMap = new HashMap<>();
 
     @Override
-    public Identifier getFabricId() {
-        return new Identifier(Spellbound.MODID, RESOURCE_LOCATION);
+    public ResourceLocation getFabricId() {
+        return new ResourceLocation(Spellbound.MODID, RESOURCE_LOCATION);
     }
 
     @Override
-    public void reload(ResourceManager manager) {
+    public void onResourceManagerReload(ResourceManager manager) {
         sunkenTreasureDataMap.clear();
         Spellbound.LOGGER.info("Loading Spellbound Sunken Treasures.");
-        manager.findResources(RESOURCE_LOCATION, path -> path.getPath().endsWith(".json")).forEach((id,resource) -> {
-            try(InputStream stream = resource.getInputStream()) {
+        manager.listResources(RESOURCE_LOCATION, path -> path.getPath().endsWith(".json")).forEach((id,resource) -> {
+            try(InputStream stream = resource.open()) {
                 Reader reader = new InputStreamReader(stream);
-                Map<Identifier,SunkenTreasureData> treasureMap = SERIALIZER.read(id,new Gson().fromJson(reader, SunkenTreasureJsonFormat.class));
+                Map<ResourceLocation,SunkenTreasureData> treasureMap = SERIALIZER.read(id,new Gson().fromJson(reader, SunkenTreasureJsonFormat.class));
                 treasureMap.forEach((treasureId,treasureData) ->{
                     if(!sunkenTreasureDataMap.containsKey(treasureId) || treasureData.replace){
                         sunkenTreasureDataMap.put(treasureId,treasureData);
@@ -53,33 +53,33 @@ public class SunkenTreasureManager implements SimpleSynchronousResourceReloadLis
             original.dimensionList.addAll(donor.dimensionList);
         }
         else{
-            Set<Identifier> whiteList = original.isWhiteList ? original.dimensionList : donor.dimensionList;
-            Set<Identifier> blackList = original.isWhiteList ? donor.dimensionList : original.dimensionList;
+            Set<ResourceLocation> whiteList = original.isWhiteList ? original.dimensionList : donor.dimensionList;
+            Set<ResourceLocation> blackList = original.isWhiteList ? donor.dimensionList : original.dimensionList;
             whiteList.removeAll(blackList);
             original.dimensionList = whiteList;
             original.isWhiteList = true;
         }
     }
 
-    public static Identifier getWeightedRandomLootTableId(int quality, Identifier dimension, Random random){
+    public static ResourceLocation getWeightedRandomLootTableId(int quality, ResourceLocation dimension, RandomSource random){
         AtomicDouble totalWeight = new AtomicDouble();
-        List<Pair<Identifier,Double>> matchingLootTables = new LinkedList<>();
+        List<Tuple<ResourceLocation,Double>> matchingLootTables = new LinkedList<>();
         //first, determine which loot tables can be rolled
         sunkenTreasureDataMap.forEach((treasureId,treasureData) -> {
             if(treasureData.isWhiteList == treasureData.dimensionList.contains(dimension) //if the list is white and contains the dimension, or it is black and does not, the dimension is a match
                     && treasureData.quality == quality){ //if the quality also matches, we add it to the roll table
-                matchingLootTables.add(new Pair<>(treasureId,treasureData.weight));
+                matchingLootTables.add(new Tuple<>(treasureId,treasureData.weight));
                 totalWeight.addAndGet(treasureData.weight);
             }
         });
         //then, determine which one to return
         if(!matchingLootTables.isEmpty()) {
             double roll = random.nextDouble()*totalWeight.get();
-            for (Pair<Identifier, Double> pair : matchingLootTables) {
-                if (pair.getRight() > roll) {
-                    return pair.getLeft();
+            for (Tuple<ResourceLocation, Double> pair : matchingLootTables) {
+                if (pair.getB() > roll) {
+                    return pair.getA();
                 } else {
-                    roll -= pair.getRight();
+                    roll -= pair.getB();
                 }
             }
             Spellbound.LOGGER.error("End of Sunken Treasure weighted list reached! This shouldn't happen!");
@@ -87,7 +87,7 @@ public class SunkenTreasureManager implements SimpleSynchronousResourceReloadLis
         return null;
     }
 
-    public static int getWeightedRandomQuality(Random random, float luck){
+    public static int getWeightedRandomQuality(RandomSource random, float luck){
         double totalWeight = 0;
         int i = 0;
         List<Double> modifiedWeights = new LinkedList<>();

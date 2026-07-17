@@ -1,14 +1,14 @@
 package net.tigereye.spellbound.enchantments.efficiency;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -19,7 +19,7 @@ public class AccelerationEnchantment extends SBEnchantment{
     private static final String ACCELERATION_STACKS_KEY = Spellbound.MODID+"SB_Acceleration_Stacks";
     private static final String ACCELERATION_TIME_KEY = Spellbound.MODID+"SB_Acceleration_Time";
     public AccelerationEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.acceleration.RARITY), EnchantmentTarget.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.acceleration.RARITY), EnchantmentCategory.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.acceleration.ENABLED;}
@@ -34,25 +34,25 @@ public class AccelerationEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.acceleration.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.acceleration.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.acceleration.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.acceleration.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.acceleration.IS_FOR_SALE;}
     @Override
-    public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack stack, BlockState block, float miningSpeed) {
-        NbtCompound tag = stack.getOrCreateNbt();
+    public float getMiningSpeed(int level, Player playerEntity, ItemStack stack, BlockState block, float miningSpeed) {
+        CompoundTag tag = stack.getOrCreateTag();
         float accelerationStacks = tag.getFloat(ACCELERATION_STACKS_KEY);
-        if(accelerationStacks == 0 || !stack.isSuitableFor(block)) {
+        if(accelerationStacks == 0 || !stack.isCorrectToolForDrops(block)) {
             return miningSpeed;
         }
         return miningSpeed + (Math.min(Spellbound.config.acceleration.MAX_ACCELERATION_STACKS,accelerationStacks)*level*level/10f);
     }
 
     @Override
-    public void onBreakBlock(int level, ItemStack stack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        NbtCompound tag = stack.getOrCreateNbt();
+    public void onBreakBlock(int level, ItemStack stack, Level world, BlockPos pos, BlockState state, Player player) {
+        CompoundTag tag = stack.getOrCreateTag();
         float accelerationStacks = tag.getFloat(ACCELERATION_STACKS_KEY);
-        tag.putFloat(ACCELERATION_STACKS_KEY,accelerationStacks + state.getBlock().getHardness());
-        tag.putLong(ACCELERATION_TIME_KEY,world.getTime());
+        tag.putFloat(ACCELERATION_STACKS_KEY,accelerationStacks + state.getBlock().defaultDestroyTime());
+        tag.putLong(ACCELERATION_TIME_KEY,world.getGameTime());
         if(Spellbound.DEBUG){
             Spellbound.LOGGER.info("Mining Speed: "+(accelerationStacks*level*level/10f));
             Spellbound.LOGGER.info("Acceleration Stacks: "+accelerationStacks);
@@ -60,11 +60,11 @@ public class AccelerationEnchantment extends SBEnchantment{
     }
 
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        NbtCompound tag = stack.getOrCreateNbt();
+        CompoundTag tag = stack.getOrCreateTag();
         if(tag.contains(ACCELERATION_TIME_KEY)){
             long time = tag.getLong(ACCELERATION_TIME_KEY);
-            if(entity.getWorld().getTime() - time > Spellbound.config.acceleration.TIMEOUT){
-                if(entity.handSwinging){
+            if(entity.level().getGameTime() - time > Spellbound.config.acceleration.TIMEOUT){
+                if(entity.swinging){
                     if (Spellbound.DEBUG){
                         Spellbound.LOGGER.info("Acceleration in overtime");
                     }

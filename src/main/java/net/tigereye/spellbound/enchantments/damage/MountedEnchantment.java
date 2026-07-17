@@ -1,10 +1,10 @@
 package net.tigereye.spellbound.enchantments.damage;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantmentTargets;
@@ -29,20 +29,20 @@ public class MountedEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.mounted.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.mounted.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.mounted.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.mounted.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.mounted.IS_FOR_SALE;}
 
     @Override
-    public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
-        if(attacker.hasVehicle()){
+    public float getDamageBonus(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
+        if(attacker.isPassenger()){
             return (Spellbound.config.mounted.DAMAGE_PER_LEVEL * level) + Spellbound.config.mounted.DAMAGE_BASE;
         }
         return 0;
     }
 
     @Override
-    public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity defender, float damage) {
+    public float getProjectileDamage(int level, ItemStack stack, AbstractArrow projectile, Entity attacker, Entity defender, float damage) {
         if(attacker.getVehicle() != null){
             return damage * ((Spellbound.config.mounted.PROJECTILE_PER_LEVEL * level) + Spellbound.config.mounted.PROJECTILE_BASE);
         }

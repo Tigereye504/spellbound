@@ -1,28 +1,28 @@
 package net.tigereye.spellbound.enchantments;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.FishingBobberEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 
@@ -31,7 +31,7 @@ import java.util.List;
 public abstract class SBEnchantment extends Enchantment {
     protected boolean REQUIRES_PREFERRED_SLOT;
 
-    protected SBEnchantment(Rarity weight, EnchantmentTarget type, EquipmentSlot[] slotTypes,boolean requiresPreferedSlot) {
+    protected SBEnchantment(Rarity weight, EnchantmentCategory type, EquipmentSlot[] slotTypes,boolean requiresPreferedSlot) {
         super(weight, type, slotTypes);
         REQUIRES_PREFERRED_SLOT = requiresPreferedSlot;
     }
@@ -45,7 +45,7 @@ public abstract class SBEnchantment extends Enchantment {
     public int getPriority(){return 0;}
 
     @Override
-    public int getMinPower(int level) {
+    public int getMinCost(int level) {
         int power = (getPowerPerRank() * level) + getBasePower();
         if(level > getSoftLevelCap()) {
             power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
@@ -54,9 +54,9 @@ public abstract class SBEnchantment extends Enchantment {
     }
 
     @Override
-    public int getMaxPower(int level) {
+    public int getMaxCost(int level) {
         if(level < getHardLevelCap()) {
-            return super.getMinPower(level) + getPowerRange();
+            return super.getMinCost(level) + getPowerRange();
         }
         return Integer.MAX_VALUE;
     }
@@ -70,36 +70,36 @@ public abstract class SBEnchantment extends Enchantment {
     //triggers after unbreaking. Recieves remaining durability to be lost,
     //and return value determines how much will actually be lost.
     //Intended for unbreaking alternatives.
-    public int beforeDurabilityLoss(int level, ItemStack stack, ServerPlayerEntity user, int loss){return loss;}
+    public int beforeDurabilityLoss(int level, ItemStack stack, ServerPlayer user, int loss){return loss;}
 
     //returned float is added to attack damage. Negatives work, the final damage floors at 0 though.
-    public float getAttackDamage(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
+    public float getDamageBonus(int level, ItemStack stack, LivingEntity attacker, Entity defender) {
         return 0;
     }
 
     //called when a tool is used to dig. receives and returns mining speed
-    public float getMiningSpeed(int level, PlayerEntity playerEntity, ItemStack itemStack, BlockState block, float miningSpeed) {
+    public float getMiningSpeed(int level, Player playerEntity, ItemStack itemStack, BlockState block, float miningSpeed) {
         return miningSpeed;
     }
 
     public int getLootingValue(int level, LivingEntity user, ItemStack stack) {
         return 0;
     }
-    public void onActivate(int level, PlayerEntity playerEntity, ItemStack itemStack, Entity target) {}
+    public void onActivate(int level, Player playerEntity, ItemStack itemStack, Entity target) {}
 
     //for when equipment is changed
     //public void onEquipmentChange(int level, ItemStack stack, LivingEntity entity){}
 
     //for when you reel in a hooked entity
-    public void onPullHookedEntity(int level, FishingBobberEntity bobber, ItemStack stack, LivingEntity user, Entity target){}
+    public void onPullHookedEntity(int level, FishingHook bobber, ItemStack stack, LivingEntity user, Entity target){}
 
     //public void onArmorChangeEvenIfAbsent
 
-    public void onBreakBlockDirectly(int level, ItemStack itemStack, World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void onBreakBlockDirectly(int level, ItemStack itemStack, Level world, BlockPos pos, BlockState state, Player player) {
         onBreakBlock(level, itemStack, world, pos, state, player);
     }
 
-    public void onBreakBlock(int level, ItemStack itemStack, World world, BlockPos pos, BlockState state, PlayerEntity player) {}
+    public void onBreakBlock(int level, ItemStack itemStack, Level world, BlockPos pos, BlockState state, Player player) {}
 
     public boolean onLethalDamageOnce(int level, DamageSource source, LivingEntity entity){return false;}
     public boolean onLethalDamage(int level, DamageSource source, LivingEntity entity){return false;}
@@ -107,10 +107,10 @@ public abstract class SBEnchantment extends Enchantment {
     public void onDeath(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){}
 
     //for when arrows are fired
-    public void onFireProjectile(int level, ItemStack itemStack, Entity entity, ProjectileEntity projectile){}
+    public void onFireProjectile(int level, ItemStack itemStack, Entity entity, Projectile projectile){}
 
     //for every tick while the item is in a player's inventory
-    public void onInventoryTick(int level, ItemStack stack, World world, Entity entity, int slot, boolean selected){}
+    public void onInventoryTick(int level, ItemStack stack, Level world, Entity entity, int slot, boolean selected){}
 
     //for when the user jumps
     public void onJump(int level, ItemStack stack, LivingEntity entity){}
@@ -131,19 +131,19 @@ public abstract class SBEnchantment extends Enchantment {
 
     //for when a thrown trident strikes a target
     //called before vanilla on-hit but after vanilla on-hurt
-    public void onThrownTridentEntityHit(int level, TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){}
+    public void onThrownTridentEntityHit(int level, ThrownTrident tridentEntity, ItemStack tridentItem, Entity defender){}
 
     //for when a thrown trident strikes a target
     //called before vanilla on-hit but after vanilla on-hurt
-    public float getThrownTridentDamage(int level, TridentEntity tridentEntity, ItemStack tridentItem, Entity defender){
+    public float getThrownTridentDamage(int level, ThrownTrident tridentEntity, ItemStack tridentItem, Entity defender){
         if(tridentEntity.getOwner() instanceof LivingEntity){
-            return getAttackDamage(level,tridentItem,(LivingEntity)tridentEntity.getOwner(),defender);
+            return getDamageBonus(level,tridentItem,(LivingEntity)tridentEntity.getOwner(),defender);
         }
         return 0;
     }
 
     //for when trident thrown
-    public void onThrowTrident(int level, ItemStack itemStack, Entity entity, TridentEntity projectile){}
+    public void onThrowTrident(int level, ItemStack itemStack, Entity entity, ThrownTrident projectile){}
 
     //for every tick the enchanted item is equipped.
     // Careful, this will be called separately for every instance of the enchantment.
@@ -163,7 +163,7 @@ public abstract class SBEnchantment extends Enchantment {
         return 0;
     }
 
-    public float getLocalDifficultyModifier(int level, World world, PlayerEntity player, ItemStack itemStack) {
+    public float getLocalDifficultyModifier(int level, Level world, Player player, ItemStack itemStack) {
         return 0;
     }
     public float getProtectionAmount(int level, DamageSource source, ItemStack stack, LivingEntity target) {
@@ -178,20 +178,20 @@ public abstract class SBEnchantment extends Enchantment {
         return magnitude;
     }
 
-    public List<Text> addTooltip(int level, ItemStack itemStack, PlayerEntity player, TooltipContext context) {
+    public List<Component> addTooltip(int level, ItemStack itemStack, Player player, TooltipFlag context) {
         return null;
     }
 
-    public float getProjectileDamage(int level, ItemStack stack, PersistentProjectileEntity projectile, Entity attacker, Entity victim, float damage) {
+    public float getProjectileDamage(int level, ItemStack stack, AbstractArrow projectile, Entity attacker, Entity victim, float damage) {
         return damage;
     }
 
     public void onTargetDamaged(int level, ItemStack itemStack, LivingEntity user, Entity entity){}
 
-    public void onProjectileEntityHit(int level, ItemStack itemStack, PersistentProjectileEntity persistentProjectileEntity, Entity entity) {
+    public void onProjectileEntityHit(int level, ItemStack itemStack, AbstractArrow persistentProjectileEntity, Entity entity) {
     }
 
-    public void onProjectileBlockHit(int level, ItemStack itemStack, ProjectileEntity projectileEntity, BlockHitResult blockHitResult) {
+    public void onProjectileBlockHit(int level, ItemStack itemStack, Projectile projectileEntity, BlockHitResult blockHitResult) {
     }
 
     public void onRedHealthDamage(int level, ItemStack itemStack, DamageSource source, LivingEntity entity, float amount) {
@@ -207,40 +207,40 @@ public abstract class SBEnchantment extends Enchantment {
     }
 
     @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return (super.isAcceptableItem(stack) || stack.getItem() == Items.BOOK) && isEnabled();
+    public boolean canEnchant(ItemStack stack) {
+        return (super.canEnchant(stack) || stack.getItem() == Items.BOOK) && isEnabled();
     }
 
     @Override
-    public boolean isAvailableForEnchantedBookOffer() {
+    public boolean isTradeable() {
         return isEnabled();
     }
 
     @Override
-    public boolean isAvailableForRandomSelection() {
+    public boolean isDiscoverable() {
         return isEnabled();
     }
 
     @Override
-    public boolean canAccept(Enchantment other) {
-        return super.canAccept(other) && (SBEnchantmentHelper.areNotInSameCategory(this,other)
+    public boolean checkCompatibility(Enchantment other) {
+        return super.checkCompatibility(other) && (SBEnchantmentHelper.areNotInSameCategory(this,other)
                 || Spellbound.config.DISABLE_INCOMPATIBILITY);
     }
 
-    public void onGainExperienceAlways(PlayerEntity player, int amount) {}
+    public void onGainExperienceAlways(Player player, int amount) {}
 
-    public void onItemUse(int level, ItemStack itemStack, ItemUsageContext context, ActionResult result) {
+    public void onItemUse(int level, ItemStack itemStack, UseOnContext context, InteractionResult result) {
     }
 
     public boolean setItemSuitability(int level, ItemStack stack, BlockState state, Boolean suitability) {
         return suitability;
     }
 
-    public boolean onClientEntityIsGlowing(int level, ItemStack itemStack, ClientPlayerEntity player, Entity entity, Boolean isGlowing) {
+    public boolean onClientEntityIsGlowing(int level, ItemStack itemStack, LocalPlayer player, Entity entity, Boolean isGlowing) {
         return isGlowing;
     }
 
-    public int overwriteClientEntityTeamColor(int level, ItemStack itemStack, ClientPlayerEntity player, Entity entity, int color) {
+    public int overwriteClientEntityTeamColor(int level, ItemStack itemStack, LocalPlayer player, Entity entity, int color) {
         return color;
     }
 }

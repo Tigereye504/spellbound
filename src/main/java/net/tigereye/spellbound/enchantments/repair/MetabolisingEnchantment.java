@@ -1,12 +1,12 @@
 package net.tigereye.spellbound.enchantments.repair;
 
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.HungerManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.level.Level;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -14,7 +14,7 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class MetabolisingEnchantment extends SBEnchantment {
 
     public MetabolisingEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.metabolising.RARITY), EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.metabolising.RARITY), EnchantmentCategory.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.metabolising.ENABLED;}
@@ -29,26 +29,26 @@ public class MetabolisingEnchantment extends SBEnchantment {
     @Override
     public int getPowerRange(){return Spellbound.config.metabolising.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.metabolising.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.metabolising.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.metabolising.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.metabolising.IS_FOR_SALE;}
 
     @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack);
+    public boolean canEnchant(ItemStack stack) {
+        return super.canEnchant(stack);
     }
 
     @Override
     public void onTickWhileEquipped(int level, ItemStack stack, LivingEntity entity){
-        World world = entity.getWorld();
-        if(!world.isClient() && stack.isDamaged()){
-            if(!(entity instanceof PlayerEntity)){
+        Level world = entity.level();
+        if(!world.isClientSide() && stack.isDamaged()){
+            if(!(entity instanceof Player)){
                 return;
             }
-            HungerManager manager = ((PlayerEntity)entity).getHungerManager();
+            FoodData manager = ((Player)entity).getFoodData();
             if(manager.getFoodLevel() >= Spellbound.config.metabolising.FOOD_THRESHOLD){
-                ((PlayerEntity) entity).addExhaustion(Spellbound.config.metabolising.EXHAUSTION_COST);
-                stack.setDamage(stack.getDamage()-1);
+                ((Player) entity).causeFoodExhaustion(Spellbound.config.metabolising.EXHAUSTION_COST);
+                stack.setDamageValue(stack.getDamageValue()-1);
             }
         }
     }

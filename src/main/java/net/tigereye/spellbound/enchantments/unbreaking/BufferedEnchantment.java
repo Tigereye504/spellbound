@@ -2,16 +2,16 @@ package net.tigereye.spellbound.enchantments.unbreaking;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.*;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
@@ -24,7 +24,7 @@ public class BufferedEnchantment extends SBEnchantment {
     private static final int BUFFER_DULL_COLOR = 0x579ca2;
 
     public BufferedEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.buffered.RARITY), EnchantmentTarget.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(SpellboundUtil.rarityLookup(Spellbound.config.buffered.RARITY), EnchantmentCategory.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
     }
 
     @Override
@@ -42,29 +42,29 @@ public class BufferedEnchantment extends SBEnchantment {
     @Override
     public int getPowerRange(){return Spellbound.config.buffered.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.buffered.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.buffered.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.buffered.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.buffered.IS_FOR_SALE;}
 
     @Override
-    public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack);
+    public boolean canEnchant(ItemStack stack) {
+        return super.canEnchant(stack);
     }
 
     @Override
-    public int beforeDurabilityLoss(int level, ItemStack stack, ServerPlayerEntity entity, int loss){
+    public int beforeDurabilityLoss(int level, ItemStack stack, ServerPlayer entity, int loss){
         if(entity == null){
             return loss;
         }
-        World world = entity.getWorld();
-        if(!world.isClient()){
-            float durabilityBuffer = getDurabilityBuffer(level, stack, entity.getWorld());
+        Level world = entity.level();
+        if(!world.isClientSide()){
+            float durabilityBuffer = getDurabilityBuffer(level, stack, entity.level());
             if(Spellbound.DEBUG) {
-                Spellbound.LOGGER.info(stack.getName().getString() + " has " + durabilityBuffer + " buffer");
+                Spellbound.LOGGER.info(stack.getHoverName().getString() + " has " + durabilityBuffer + " buffer");
             }
             if(durabilityBuffer >= 1){
                 int cost = (int)Math.min(loss,Math.floor(durabilityBuffer));
-                setDurabilityBuffer(level, stack, entity.getWorld(), durabilityBuffer-cost);
+                setDurabilityBuffer(level, stack, entity.level(), durabilityBuffer-cost);
                 if(Spellbound.DEBUG){
                     Spellbound.LOGGER.info("Buffered prevented "+cost+" durability loss");
                     Spellbound.LOGGER.info(durabilityBuffer-cost + " buffer remains");
@@ -82,26 +82,26 @@ public class BufferedEnchantment extends SBEnchantment {
                 * level);
     }
 
-    private static float getDurabilityBuffer(int level, ItemStack item, World world){
-        NbtCompound nbtCompound = item.getOrCreateNbt();
+    private static float getDurabilityBuffer(int level, ItemStack item, Level world){
+        CompoundTag nbtCompound = item.getOrCreateTag();
         Long time = nbtCompound.getLong(BUFFER_TIME_KEY);
-        return getDurabilityBuffer(level, time, world.getTime());
+        return getDurabilityBuffer(level, time, world.getGameTime());
     }
 
-    private static float getDurabilityBuffer(ItemStack item, World world){
-        return getDurabilityBuffer(EnchantmentHelper.getLevel(SBEnchantments.BUFFERED,item),item,world);
+    private static float getDurabilityBuffer(ItemStack item, Level world){
+        return getDurabilityBuffer(EnchantmentHelper.getItemEnchantmentLevel(SBEnchantments.BUFFERED,item),item,world);
     }
 
-    private static void setDurabilityBuffer(int level, ItemStack item, World world, float buffer){
-        NbtCompound nbtCompound = item.getOrCreateNbt();
+    private static void setDurabilityBuffer(int level, ItemStack item, Level world, float buffer){
+        CompoundTag nbtCompound = item.getOrCreateTag();
         long timeDiff = (long) (buffer * Spellbound.config.buffered.RECOVERY_RATE)/level;
-        nbtCompound.putLong(BUFFER_TIME_KEY,world.getTime()-timeDiff);
+        nbtCompound.putLong(BUFFER_TIME_KEY,world.getGameTime()-timeDiff);
     }
 
     @Environment(EnvType.CLIENT)
-    public static void RenderBufferItemOverlay(DrawContext drawContext, ItemStack stack, int x, int y){
-        World world = MinecraftClient.getInstance().world;
-        int level = EnchantmentHelper.getLevel(SBEnchantments.BUFFERED,stack);
+    public static void RenderBufferItemOverlay(GuiGraphics drawContext, ItemStack stack, int x, int y){
+        Level world = Minecraft.getInstance().level;
+        int level = EnchantmentHelper.getItemEnchantmentLevel(SBEnchantments.BUFFERED,stack);
         if(world == null || level == 0){
             return;
         }
@@ -115,7 +115,7 @@ public class BufferedEnchantment extends SBEnchantment {
     }
 
     @Environment(EnvType.CLIENT)
-    private static void renderBufferAsAura(DrawContext drawContext, float durability, int x, int y){
+    private static void renderBufferAsAura(GuiGraphics drawContext, float durability, int x, int y){
 
         int totalLayers = (int)Math.ceil(durability);
         for(int i = 0; i < totalLayers && i < 8; i++){
@@ -129,21 +129,21 @@ public class BufferedEnchantment extends SBEnchantment {
             }
             int longSide = 15 - (i*2);
 
-            drawContext.fill(RenderLayer.getGuiOverlay(), x + i, y + i, x + i + longSide, y + i + 1, color | alpha << 24);
-            drawContext.fill(RenderLayer.getGuiOverlay(), x + 15 - i, y + i, x + 16 - i, y + i + longSide, color | alpha << 24);
-            drawContext.fill(RenderLayer.getGuiOverlay(), x + i, y + 1 + i, x + i + 1, y + 1 + i + longSide, color | alpha << 24);
-            drawContext.fill(RenderLayer.getGuiOverlay(), x + 1 + i, y + 15 - i, x + 1 + i + longSide, y + 16 - i, color | alpha << 24);
+            drawContext.fill(RenderType.guiOverlay(), x + i, y + i, x + i + longSide, y + i + 1, color | alpha << 24);
+            drawContext.fill(RenderType.guiOverlay(), x + 15 - i, y + i, x + 16 - i, y + i + longSide, color | alpha << 24);
+            drawContext.fill(RenderType.guiOverlay(), x + i, y + 1 + i, x + i + 1, y + 1 + i + longSide, color | alpha << 24);
+            drawContext.fill(RenderType.guiOverlay(), x + 1 + i, y + 15 - i, x + 1 + i + longSide, y + 16 - i, color | alpha << 24);
             durability--;
         }
     }
     
     @Environment(EnvType.CLIENT)
-    private static void renderBufferAsBar(DrawContext drawContext, int level, float durability, int x, int y){
+    private static void renderBufferAsBar(GuiGraphics drawContext, int level, float durability, int x, int y){
         int color = durability >= 1 ? BUFFER_COLOR : BUFFER_DULL_COLOR;
         int alpha = 255;//durabilityBuffer >= 1 ? 255 : 100;
         int width = (int) Math.ceil(Math.min(13, 13 * durability / (level * (float) Spellbound.config.buffered.MAX_PER_RANK)));
 
-        drawContext.fill(RenderLayer.getGuiOverlay(), x + 2, y + 14, x + 2 + width, y + 15, color | alpha << 24);
+        drawContext.fill(RenderType.guiOverlay(), x + 2, y + 14, x + 2 + width, y + 15, color | alpha << 24);
     }
 
 }

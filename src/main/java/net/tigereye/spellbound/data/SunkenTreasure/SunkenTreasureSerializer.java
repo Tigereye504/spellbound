@@ -2,7 +2,7 @@ package net.tigereye.spellbound.data.SunkenTreasure;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.tigereye.spellbound.Spellbound;
 
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class SunkenTreasureSerializer {
-    public Map<Identifier,SunkenTreasureData> read(Identifier id, SunkenTreasureJsonFormat sunkenTreasureJson) {
+    public Map<ResourceLocation,SunkenTreasureData> read(ResourceLocation id, SunkenTreasureJsonFormat sunkenTreasureJson) {
 
         if (sunkenTreasureJson.lootTables == null) {
             throw new JsonSyntaxException("Sunken Treasure entry" + id + " must provide a loot table");
@@ -23,14 +23,14 @@ public class SunkenTreasureSerializer {
             throw new JsonSyntaxException("Sunken Treasure entry" + id + " must have positive weight");
         }
 
-        Set<Identifier> dimensionList = new HashSet<>();
+        Set<ResourceLocation> dimensionList = new HashSet<>();
         if(sunkenTreasureJson.dimensionList != null) {
             int i = 0;
             for (JsonElement entry :
                     sunkenTreasureJson.dimensionList) {
                 ++i;
                 try {
-                    if(!dimensionList.add(new Identifier(entry.getAsString()))){
+                    if(!dimensionList.add(new ResourceLocation(entry.getAsString()))){
                         Spellbound.LOGGER.warn("Sunken Treasure entry "+id+": Duplicate dimension identifier no. " + i);
                     }
                 } catch (Exception e) {
@@ -39,7 +39,7 @@ public class SunkenTreasureSerializer {
             }
         }
 
-        Map<Identifier, SunkenTreasureData> treasureMap = new HashMap<>();
+        Map<ResourceLocation, SunkenTreasureData> treasureMap = new HashMap<>();
         int i = 0;
         for (JsonElement entry: sunkenTreasureJson.lootTables){
             ++i;
@@ -51,7 +51,7 @@ public class SunkenTreasureSerializer {
             sunkenTreasureData.replace = sunkenTreasureJson.replace;
 
             try {
-                treasureMap.put(new Identifier(entry.getAsString()),sunkenTreasureData);
+                treasureMap.put(new ResourceLocation(entry.getAsString()),sunkenTreasureData);
             } catch (Exception e) {
                 Spellbound.LOGGER.error("Sunken Treasure entry "+id+": Error parsing lootTable identifier no. " + i);
             }

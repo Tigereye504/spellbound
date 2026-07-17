@@ -4,19 +4,19 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.RelativeMovement;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import java.util.HashSet;
 import java.util.Set;
 
 public class SBNetworking {
-    public static final Identifier TELEPORT_REQUEST_PACKET_ID = new Identifier(Spellbound.MODID,"teleport_request");
-    public static final Identifier GRACE_DATA_PACKET_ID = new Identifier(Spellbound.MODID,"grace_data");
-    public static final Identifier REQUEST_STATUS_EFFECT_PACKET_ID = new Identifier(Spellbound.MODID,"status_effect_request");
+    public static final ResourceLocation TELEPORT_REQUEST_PACKET_ID = new ResourceLocation(Spellbound.MODID,"teleport_request");
+    public static final ResourceLocation GRACE_DATA_PACKET_ID = new ResourceLocation(Spellbound.MODID,"grace_data");
+    public static final ResourceLocation REQUEST_STATUS_EFFECT_PACKET_ID = new ResourceLocation(Spellbound.MODID,"status_effect_request");
 
     public static void register() {
         ServerPlayNetworking.registerGlobalReceiver(TELEPORT_REQUEST_PACKET_ID, (server, client, handler, buf, responseSender) -> {
@@ -24,11 +24,11 @@ public class SBNetworking {
             double y = buf.readDouble();
             double z = buf.readDouble();
             server.execute(() -> {
-                Set<PositionFlag> flags = new HashSet<>();
-                flags.add(PositionFlag.X);
-                flags.add(PositionFlag.Y);
-                flags.add(PositionFlag.Z);
-                client.networkHandler.requestTeleport(x, y, z, client.getYaw(), client.getPitch(), flags);
+                Set<RelativeMovement> flags = new HashSet<>();
+                flags.add(RelativeMovement.X);
+                flags.add(RelativeMovement.Y);
+                flags.add(RelativeMovement.Z);
+                client.connection.teleport(x, y, z, client.getYRot(), client.getXRot(), flags);
 
             });
         });
@@ -38,11 +38,11 @@ public class SBNetworking {
             int magnitude = buf.readInt();
             int rawId = buf.readInt();
             server.execute(() -> {
-                StatusEffect effect = StatusEffect.byRawId(rawId);
+                MobEffect effect = MobEffect.byId(rawId);
                 if (effect == null) {
-                    Spellbound.LOGGER.error("Nonexistant status effect requested by client " + client.getEntityName());
+                    Spellbound.LOGGER.error("Nonexistant status effect requested by client " + client.getScoreboardName());
                 } else {
-                    client.addStatusEffect(new StatusEffectInstance(effect, duration, magnitude));
+                    client.addEffect(new MobEffectInstance(effect, duration, magnitude));
                 }
             });
         });

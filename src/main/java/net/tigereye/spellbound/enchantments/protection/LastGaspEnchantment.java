@@ -1,17 +1,17 @@
 package net.tigereye.spellbound.enchantments.protection;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.text.Text;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.DyingEffect;
@@ -43,18 +43,18 @@ public class LastGaspEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.lastGasp.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.lastGasp.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.lastGasp.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.lastGasp.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.lastGasp.IS_FOR_SALE;}
 
     @Override
     public boolean onLethalDamageOnce(int level, DamageSource source, LivingEntity entity){
-        EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        AttributeInstance att = entity.getAttribute(Attributes.MAX_HEALTH);
         double currentHealthLost = 0;
         if(att != null) {
-            EntityAttributeModifier mod = att.getModifier(DyingEffect.DYING_HEATLH_ID);
+            AttributeModifier mod = att.getModifier(DyingEffect.DYING_HEATLH_ID);
             if(mod != null) {
-                currentHealthLost = mod.getValue();
+                currentHealthLost = mod.getAmount();
                 if (currentHealthLost <= -.99) {
                     return false;
                 }
@@ -66,18 +66,18 @@ public class LastGaspEnchantment extends SBEnchantment{
         entity.setHealth(entity.getMaxHealth()*levels*Spellbound.config.lastGasp.HEALTH_REBOUND_PER_RANK);
 
         int severity = 0;
-        if(entity.hasStatusEffect(SBStatusEffects.DYING)){
-            severity = entity.getStatusEffect(SBStatusEffects.DYING).getAmplifier() + 1;
+        if(entity.hasEffect(SBStatusEffects.DYING)){
+            severity = entity.getEffect(SBStatusEffects.DYING).getAmplifier() + 1;
         }
         int duration = Spellbound.config.lastGasp.SECONDS_TO_DIE*20;
-        entity.addStatusEffect(new StatusEffectInstance(SBStatusEffects.DYING, duration
+        entity.addEffect(new MobEffectInstance(SBStatusEffects.DYING, duration
                 , severity,false,true,true));
-        entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, duration
+        entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, duration
                 , severity,false,false,false));
-        entity.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, duration
+        entity.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, duration
                 , severity,false,false,false));
-        if(Spellbound.config.lastGasp.TEXT_PROMPT && entity instanceof PlayerEntity pEntity) {
-            pEntity.sendMessage(Text.translatable("enchantment.spellbound.last_gasp.message.dying"), true);
+        if(Spellbound.config.lastGasp.TEXT_PROMPT && entity instanceof Player pEntity) {
+            pEntity.displayClientMessage(Component.translatable("enchantment.spellbound.last_gasp.message.dying"), true);
         }
         //draw particles between entity and anchor
 
@@ -86,7 +86,7 @@ public class LastGaspEnchantment extends SBEnchantment{
             float driftX = (entity.getRandom().nextFloat() - .5f) * .15f;
             float driftY = (entity.getRandom().nextFloat() - .5f) * .15f;
             float driftZ = (entity.getRandom().nextFloat() - .5f) * .15f;
-            entity.getWorld().addParticle(ParticleTypes.FALLING_LAVA,
+            entity.level().addParticle(ParticleTypes.FALLING_LAVA,
                     entity.getX() + driftX, entity.getY() + driftY, entity.getZ() + driftZ,
                     driftX, driftY, driftZ);
         }
@@ -95,19 +95,19 @@ public class LastGaspEnchantment extends SBEnchantment{
 
     @Override
     public void onKill(int level, ItemStack stack, DamageSource source, LivingEntity killer, LivingEntity victim){
-        if(killer.hasStatusEffect(SBStatusEffects.DYING)){
-            killer.clearStatusEffects();
+        if(killer.hasEffect(SBStatusEffects.DYING)){
+            killer.removeAllEffects();
         }
     }
 
     @Override
-    public void onGainExperienceAlways(PlayerEntity player, int amount){
-        EntityAttributeInstance att = player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+    public void onGainExperienceAlways(Player player, int amount){
+        AttributeInstance att = player.getAttribute(Attributes.MAX_HEALTH);
         if(att != null) {
-            EntityAttributeModifier mod = att.getModifier(DyingEffect.DYING_HEATLH_ID);
+            AttributeModifier mod = att.getModifier(DyingEffect.DYING_HEATLH_ID);
             double value;
             if(mod != null){
-                value = mod.getValue() + (amount * Spellbound.config.lastGasp.RECOVERY_FROM_EXPERIENCE);
+                value = mod.getAmount() + (amount * Spellbound.config.lastGasp.RECOVERY_FROM_EXPERIENCE);
                 if(value < 0){
                     DyingEffect.UpdateDyingModifier(player,value);
                 }
@@ -119,7 +119,7 @@ public class LastGaspEnchantment extends SBEnchantment{
     }
 
     public void onStartSleepingAlways(LivingEntity entity){
-        EntityAttributeInstance att = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        AttributeInstance att = entity.getAttribute(Attributes.MAX_HEALTH);
         if(att != null) {
             att.removeModifier(DyingEffect.DYING_HEATLH_ID);
         }

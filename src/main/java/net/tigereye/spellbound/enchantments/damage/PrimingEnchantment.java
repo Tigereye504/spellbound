@@ -1,11 +1,11 @@
 package net.tigereye.spellbound.enchantments.damage;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.instance.OwnedStatusEffectInstance;
@@ -32,20 +32,20 @@ public class PrimingEnchantment extends SBEnchantment{
     @Override
     public int getPowerRange(){return Spellbound.config.priming.POWER_RANGE;}
     @Override
-    public boolean isTreasure() {return Spellbound.config.priming.IS_TREASURE;}
+    public boolean isTreasureOnly() {return Spellbound.config.priming.IS_TREASURE;}
     @Override
-    public boolean isAvailableForEnchantedBookOffer(){return Spellbound.config.priming.IS_FOR_SALE;}
+    public boolean isTradeable(){return Spellbound.config.priming.IS_FOR_SALE;}
 
     @Override
     public void onDoRedHealthDamage(int level, ItemStack itemStack, LivingEntity attacker, LivingEntity victim, DamageSource source, float amount) {
-        if(attacker.getWorld().isClient()){
+        if(attacker.level().isClientSide()){
             return;
         }
-        if(source.getTypeRegistryEntry().matchesKey(DamageTypes.EXPLOSION)){
+        if(source.typeHolder().is(DamageTypes.EXPLOSION)){
             return;
         }
         int effectLevel = 0;
-        StatusEffectInstance primedInstance = victim.getStatusEffect(SBStatusEffects.PRIMED);
+        MobEffectInstance primedInstance = victim.getEffect(SBStatusEffects.PRIMED);
         if (primedInstance != null) {
             int existingLevel = primedInstance.getAmplifier();
             if(existingLevel >= level) {
@@ -56,6 +56,6 @@ public class PrimingEnchantment extends SBEnchantment{
             }
         }
         Spellbound.LOGGER.debug("Applying Primed at magnitude " + effectLevel);
-        victim.addStatusEffect(new OwnedStatusEffectInstance(attacker, SBStatusEffects.PRIMED, Spellbound.config.priming.DURATION, effectLevel));
+        victim.addEffect(new OwnedStatusEffectInstance(attacker, SBStatusEffects.PRIMED, Spellbound.config.priming.DURATION, effectLevel));
     }
 }

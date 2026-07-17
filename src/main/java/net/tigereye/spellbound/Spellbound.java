@@ -4,7 +4,7 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.resource.ResourceType;
+import net.minecraft.server.packs.PackType;
 import net.tigereye.spellbound.config.SBConfig;
 import net.tigereye.spellbound.data.Chilled.ChilledManager;
 import net.tigereye.spellbound.data.Prospector.ProspectorManager;
@@ -25,9 +25,9 @@ public class Spellbound implements ModInitializer{
         AutoConfig.register(SBConfig.class, GsonConfigSerializer::new);
         config = AutoConfig.getConfigHolder(SBConfig.class).getConfig();
 
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new ProspectorManager());
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SunkenTreasureManager());
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new ChilledManager());
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new ProspectorManager());
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new SunkenTreasureManager());
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new ChilledManager());
 
 
         SBItems.register();

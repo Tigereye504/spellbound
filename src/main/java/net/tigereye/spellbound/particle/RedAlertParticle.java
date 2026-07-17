@@ -5,56 +5,56 @@ package net.tigereye.spellbound.particle;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 
 @Environment(value=EnvType.CLIENT)
 public class RedAlertParticle
-extends SpriteBillboardParticle {
-    private final SpriteProvider spriteProvider;
+extends TextureSheetParticle {
+    private final SpriteSet spriteProvider;
 
-    RedAlertParticle(ClientWorld world, double x, double y, double z, double d, SpriteProvider spriteProvider) {
+    RedAlertParticle(ClientLevel world, double x, double y, double z, double d, SpriteSet spriteProvider) {
         super(world, x, y, z, 0.0, 0.0, 0.0);
         float f;
         this.spriteProvider = spriteProvider;
-        this.maxAge = 1;
-        this.red = f = this.random.nextFloat() * 0.6f + 0.4f;
-        this.green = f;
-        this.blue = f;
-        this.scale = 1.2f - (float)d * 0.5f;
-        this.setSpriteForAge(this.spriteProvider);
+        this.lifetime = 1;
+        this.rCol = f = this.random.nextFloat() * 0.6f + 0.4f;
+        this.gCol = f;
+        this.bCol = f;
+        this.quadSize = 1.2f - (float)d * 0.5f;
+        this.setSpriteFromAge(this.spriteProvider);
     }
 
     @Override
-    public int getBrightness(float tint) {
+    public int getLightColor(float tint) {
         return 0xF000F0;
     }
 
     @Override
     public void tick() {
-        this.prevPosX = this.x;
-        this.prevPosY = this.y;
-        this.prevPosZ = this.z;
-        this.markDead();
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+        this.remove();
     }
 
     @Override
-    public ParticleTextureSheet getType() {
-        return ParticleTextureSheet.PARTICLE_SHEET_LIT;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_LIT;
     }
 
     @Environment(value=EnvType.CLIENT)
     public static class Factory
-    implements ParticleFactory<DefaultParticleType> {
-        private final SpriteProvider spriteProvider;
+    implements ParticleProvider<SimpleParticleType> {
+        private final SpriteSet spriteProvider;
 
-        public Factory(SpriteProvider spriteProvider) {
+        public Factory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
         @Override
-        public Particle createParticle(DefaultParticleType defaultParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
             return new RedAlertParticle(clientWorld, d, e, f, g, this.spriteProvider);
         }
     }
