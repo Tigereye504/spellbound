@@ -93,8 +93,8 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
 
     @ModifyVariable(at = @At("HEAD"), ordinal = 0, method = "getDamageAfterArmorAbsorb")
     public float spellboundLivingEntityApplyArmorMixin(float amount, DamageSource source){
-        amount = SBEnchantmentHelper.onPreArmorDefense(source,(LivingEntity)(Object)this,amount);
-        return SBStatusEffectHelper.onPreArmorDefense(source,(LivingEntity)(Object)this,amount);
+        amount = SBStatusEffectHelper.onPreArmorDefense(source,(LivingEntity)(Object)this,amount);
+        return SBEnchantmentHelper.onPreArmorDefense(source,(LivingEntity)(Object)this,amount);
     }
 
     @Inject(at = @At(value="CONSTANT", args="floatValue=0",ordinal = 1), method = "actuallyHurt")
@@ -168,6 +168,11 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     @Inject(at = @At("HEAD"), method = "updateEffectVisibility")
     public void spellboundLivingEntityUpdatePotionVisibilityMixin(CallbackInfo info){
         this.entityData.set(SHIELDED, this.activeEffects.containsKey(SBStatusEffects.SHIELDED));
+    }
+
+    @Inject(at = @At(value = "RETURN"),method = "removeAllEffects")
+    public void spellboundRemoveAllEffectsMixin(CallbackInfoReturnable<Boolean> info){
+        SBEnchantmentHelper.onStatusEffectsCleared((LivingEntity)(Object)this);
     }
 
     @Override

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.enchantments.protection.RedAlertEnchantment;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.registration.SBParticles;
 import net.tigereye.spellbound.registration.SBStatusEffects;
@@ -76,15 +77,19 @@ public class Shielded extends SBStatusEffect{
             int x = scaledWidth / 2 - 92;
             int y = scaledHeight - 40;
             int lineWidth = Math.max(10 - (lineMidValue - 2), 3);
-            int shieldLayers = 0;{
-                if(player.hasEffect(SBStatusEffects.SHIELDED)){
-                    shieldLayers = player.getEffect(SBStatusEffects.SHIELDED).getAmplifier()+1;
-                }
+            int activeShieldLayers = 0;
+            if(player.hasEffect(SBStatusEffects.SHIELDED)){
+                activeShieldLayers = player.getEffect(SBStatusEffects.SHIELDED).getAmplifier()+1;
+            }
+            int recoverableShieldLayers = 0;
+            int recoverableShieldStage = 0;
+            if(player.hasEffect(SBStatusEffects.SHIELDS_DOWN)){
+                MobEffectInstance shieldsDownInstance = player.getEffect(SBStatusEffects.SHIELDS_DOWN);
+                recoverableShieldLayers = shieldsDownInstance.getAmplifier()+1;
+                recoverableShieldStage = (int)(4 - Math.min(4,shieldsDownInstance.getDuration() * 4f / RedAlertEnchantment.getModifiedRecoveryRate(player)));
             }
 
-            int j = Mth.ceil((double) maxHealth / 2.0D);
-            int k = Mth.ceil((double) absorption / 2.0D);
-            int displayableShields = Math.min(shieldLayers,j + k);
+            int displayableShields = Math.max(recoverableShieldLayers,activeShieldLayers);
             RenderSystem.enableBlend();
             for (int m = displayableShields - 1; m >= 0; --m) {
 
@@ -92,14 +97,17 @@ public class Shielded extends SBStatusEffect{
                 int o = m % 10;
                 int posX = x + o * 8;
                 int posY = y - n * lineWidth;
-                boolean isRightmost = o == 9 || m == displayableShields - 1;
+
+                int recoveryOffset = m >= activeShieldLayers ? 11 * recoverableShieldStage : 44;
+
+                boolean isRightmost = o == 9 || m == displayableShields - 1 || m == activeShieldLayers - 1;
                 boolean isLeftmost = o == 0;
                 if (isLeftmost) {
-                    drawContext.blit(SHIELDED_HEART, posX, posY, 0, 0, 1, 11, 11, 11);
+                    drawContext.blit(SHIELDED_HEART, posX, posY, recoveryOffset+0, 0, 1, 11, 55, 11);
                 }
-                drawContext.blit(SHIELDED_HEART, posX+1, posY, 1, 0, 8, 11, 11, 11);
+                drawContext.blit(SHIELDED_HEART, posX+1, posY, recoveryOffset+1, 0, 8, 11, 55, 11);
                 if (isRightmost) {
-                    drawContext.blit(SHIELDED_HEART, posX+9, posY, 9, 0, 2, 11, 11, 11);
+                    drawContext.blit(SHIELDED_HEART, posX+9, posY, recoveryOffset+9, 0, 2, 11, 55, 11);
                 }
             }
             client.getProfiler().pop();

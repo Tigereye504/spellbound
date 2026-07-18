@@ -665,10 +665,9 @@ text.autoconfig.spellbound:
         redAlert.BASE_POWER: Enchanting Base Power
         redAlert.POWER_PER_RANK: Enchanting Power Per Rank
         redAlert.POWER_RANGE: Enchanting Power Range
-        redAlert.MINIMUM_RECOVERY_TIME: Red Alert Minimum Recovery Time
-        redAlert.RECOVERY_RATE: Base Recovery Rate
-        redAlert.RECOVERY_REDUCTION: Recovery Rate Per Level
-        redAlert.SHIELD_DURATION: Shield Duration
+        redAlert.MAXIMUM_RECOVERY_TIME: Mamimum Recovery Time
+        redAlert.FULL_SET_RECOVERY_TIME: Full Set Recovery Time
+        redAlert.MINIMUM_RECOVERY_TIME: Minimum Recovery Time
 
         repulsive: Repulsive
         repulsive.ENABLED: Enable

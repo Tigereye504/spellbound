@@ -372,6 +372,10 @@ public class SBEnchantmentHelper {
         }
     }
 
+    public static void onStatusEffectsCleared(LivingEntity livingEntity) {
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onStatusEffectsCleared(level, itemStack, livingEntity), livingEntity.getAllSlots());
+    }
+
     public static Boolean onClientEntityIsGlowing(LocalPlayer player, Entity entity, Boolean isGlowing) {
         AtomicBoolean glow = new AtomicBoolean(isGlowing);
         forEachSpellboundEnchantment((((enchantment, level, itemStack) -> glow.set(enchantment.onClientEntityIsGlowing(level,itemStack,player,entity,glow.get())))), player.getAllSlots());

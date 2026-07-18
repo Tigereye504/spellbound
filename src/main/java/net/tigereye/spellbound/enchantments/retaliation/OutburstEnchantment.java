@@ -38,6 +38,7 @@ public class OutburstEnchantment extends SBEnchantment {
     @Override
     public boolean isTradeable(){return Spellbound.config.outburst.IS_FOR_SALE;}
 
+    @Override
     public float onPreArmorDefense(int level, ItemStack stack, DamageSource source, LivingEntity defender, float amount){
         if(defender.getItemBySlot(LivingEntity.getEquipmentSlotForItem(stack)) != stack){
             return amount;

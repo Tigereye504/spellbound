@@ -610,10 +610,9 @@ public class SBConfig implements ConfigData {
         public int BASE_POWER = -10;
         public int POWER_PER_RANK = 11;
         public int POWER_RANGE = 50;
-        public int RECOVERY_RATE = 240;
-        public int RECOVERY_REDUCTION = 40;
-        public int SHIELD_DURATION = 600;
-        public int MINIMUM_RECOVERY_TIME = 20; //in case enchantment levels get dumb
+        public int MAXIMUM_RECOVERY_TIME = 1200; //recovery time of a Red Alert I set.
+        public int FULL_SET_RECOVERY_TIME = 300; //recovery time of a Red Alert IV set.
+        public int MINIMUM_RECOVERY_TIME = 60; //asymptotic limit of recovery time as levels go to infinity.
     }
 
     @ConfigEntry.Category("enchantment")
