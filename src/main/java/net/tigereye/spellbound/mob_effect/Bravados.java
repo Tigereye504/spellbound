@@ -12,12 +12,12 @@ public class Bravados extends SBStatusEffect{
         super(MobEffectCategory.NEUTRAL, 0x194212);
     }
 
-
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
-
+    @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         if(entity.getAbsorptionAmount() == 0){
             entity.removeEffect(SBStatusEffects.BRAVADOS);

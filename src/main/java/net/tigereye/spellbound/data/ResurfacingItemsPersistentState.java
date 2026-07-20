@@ -5,6 +5,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -24,6 +25,10 @@ public class ResurfacingItemsPersistentState extends SavedData {
     public static final String RESURFACING_ITEMS_LIST_KEY = Spellbound.MODID+"ResurfacingItems";
 
     private final List<ItemStack> resurfacingQueue = new LinkedList<>();
+
+    public static SavedData.Factory<ResurfacingItemsPersistentState> factory() {
+      return new SavedData.Factory<ResurfacingItemsPersistentState>(ResurfacingItemsPersistentState::new, ResurfacingItemsPersistentState::load, DataFixTypes.SAVED_DATA_FORCED_CHUNKS);
+    }
 
     public boolean canResurfaceItem(){
         return !resurfacingQueue.isEmpty();
@@ -67,7 +72,7 @@ public class ResurfacingItemsPersistentState extends SavedData {
         nbt.put(RESURFACING_ITEMS_LIST_KEY,nbtList);
         return nbt;
     }
-    public static ResurfacingItemsPersistentState createFromNbt(CompoundTag nbt){
+    public static ResurfacingItemsPersistentState load(CompoundTag nbt){
         ResurfacingItemsPersistentState ripState = new ResurfacingItemsPersistentState();
         if(nbt.contains(RESURFACING_ITEMS_LIST_KEY)){
             ListTag chunkList = nbt.getList(RESURFACING_ITEMS_LIST_KEY, Tag.TAG_COMPOUND);
@@ -81,9 +86,7 @@ public class ResurfacingItemsPersistentState extends SavedData {
     public static ResurfacingItemsPersistentState getResurfacingItemsPersistentState(MinecraftServer server){
         DimensionDataStorage persistentStateManager = server
                 .getLevel(Level.OVERWORLD).getDataStorage();
-        return persistentStateManager.computeIfAbsent(
-                ResurfacingItemsPersistentState::createFromNbt,
-                ResurfacingItemsPersistentState::new,
+        return persistentStateManager.computeIfAbsent( factory(),
                 RESURFACING_ITEMS_LIST_KEY);
     }
 

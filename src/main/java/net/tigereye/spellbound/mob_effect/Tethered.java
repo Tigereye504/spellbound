@@ -15,11 +15,12 @@ public class Tethered extends SBStatusEffect implements CustomDataStatusEffect{
         super(MobEffectCategory.HARMFUL, 0xaaaaaa);
     }
 
-
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
+    @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         //Spellbound.LOGGER.info("Dragging Target");
         MobEffectInstance temp = entity.getEffect(SBStatusEffects.TETHERED);

@@ -16,7 +16,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,10 +40,7 @@ import net.tigereye.spellbound.interfaces.SpellboundClientPlayerEntity;
 import net.tigereye.spellbound.interfaces.SpellboundPlayerEntity;
 import net.tigereye.spellbound.interfaces.SpellboundProjectileEntity;
 import net.tigereye.spellbound.interfaces.TridentEntityItemAccessor;
-import net.tigereye.spellbound.mob_effect.instance.MonogamyInstance;
-import net.tigereye.spellbound.mob_effect.instance.PolygamyInstance;
 import net.tigereye.spellbound.registration.SBEnchantments;
-import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.registration.SBTags;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -475,63 +471,6 @@ public class SBEnchantmentHelper {
             }
         }, equipment);
         return mutableInt.intValue();
-    }
-    //returns false if they are pologamous, true if they are monogamous
-    public static boolean testOwnerFaithfulness(ItemStack stack, LivingEntity owner){
-        if(owner.level().isClientSide()){
-            return true;
-        }
-        UUID id = loadItemUUID(stack);
-
-        if(owner.hasEffect(SBStatusEffects.POLYGAMY)){
-            MobEffectInstance status = owner.getEffect(SBStatusEffects.POLYGAMY);
-            PolygamyInstance polygamy;
-            if(!(status instanceof PolygamyInstance)) {
-                owner.removeEffect(SBStatusEffects.POLYGAMY);
-                polygamy = new PolygamyInstance(id, Spellbound.config.polygamous.DURATION,0,false,false,true);
-                owner.addEffect(polygamy);
-            }
-            else{
-                polygamy = (PolygamyInstance) (status);
-                owner.removeEffect(SBStatusEffects.MONOGAMY);
-                if(polygamy.itemUUID == null){
-                    owner.removeEffect(SBStatusEffects.POLYGAMY);
-                    owner.addEffect(new PolygamyInstance(id, Spellbound.config.polygamous.DURATION, 0, false, false, true));
-                    return true;
-                }
-                if(polygamy.itemUUID.compareTo(id) != 0){
-                    polygamy = new PolygamyInstance(id, Spellbound.config.polygamous.DURATION,0,false,false,true);
-                    owner.addEffect(polygamy);
-                }
-            }
-            return false;
-        }
-        else if(owner.hasEffect(SBStatusEffects.MONOGAMY)) {
-            MobEffectInstance status = owner.getEffect(SBStatusEffects.MONOGAMY);
-            MonogamyInstance monogamy;
-            if(!(status instanceof MonogamyInstance)) {
-                owner.removeEffect(SBStatusEffects.MONOGAMY);
-                monogamy = new MonogamyInstance(id, Spellbound.config.monogamous.DURATION,0,false,false,true);
-                owner.addEffect(monogamy);
-                return true;
-            }
-            else{
-                monogamy = (MonogamyInstance)(status);
-                if(monogamy.itemUUID == null){
-                    owner.removeEffect(SBStatusEffects.MONOGAMY);
-                    owner.addEffect(new MonogamyInstance(id, Spellbound.config.monogamous.DURATION, 0, false, false, true));
-                    return true;
-                }
-                if(monogamy.itemUUID.compareTo(id) != 0) {
-                    owner.removeEffect(SBStatusEffects.MONOGAMY);
-                    owner.addEffect(new PolygamyInstance(id, Spellbound.config.polygamous.DURATION, 0, false, false, true));
-                    return false;
-                }
-            }
-        }
-        //owner.removeStatusEffect(SBStatusEffects.MONOGAMY);
-        owner.addEffect(new MonogamyInstance(id, Spellbound.config.monogamous.DURATION,0,false,false,true));
-        return true;
     }
 
     public static boolean doesPassPreferenceRequirement(SBEnchantment enchantment, ItemStack itemStack, LivingEntity entity){

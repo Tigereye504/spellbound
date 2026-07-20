@@ -10,10 +10,12 @@ public class Hovering extends SBStatusEffect{
         super(MobEffectCategory.BENEFICIAL, 0x194212);
     }
 
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
+    @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         entity.setDeltaMovement(entity.getDeltaMovement().x(), Spellbound.config.hover.UPWARD_DRIFT,entity.getDeltaMovement().z());
         entity.fallDistance = 0;

@@ -4,6 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -38,7 +39,7 @@ public class SBNetworking {
             int magnitude = buf.readInt();
             int rawId = buf.readInt();
             server.execute(() -> {
-                MobEffect effect = MobEffect.byId(rawId);
+                MobEffect effect = BuiltInRegistries.MOB_EFFECT.byId(rawId);
                 if (effect == null) {
                     Spellbound.LOGGER.error("Nonexistant status effect requested by client " + client.getScoreboardName());
                 } else {

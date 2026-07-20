@@ -4,6 +4,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
@@ -88,7 +90,7 @@ public class OwnedStatusEffectInstance extends MobEffectInstance{
 
     @Override
     public CompoundTag save(CompoundTag tag) {
-        tag.putByte("Id", (byte)MobEffect.getId(this.getEffect()));
+        tag.putByte("Id", (byte)BuiltInRegistries.MOB_EFFECT.getId(getEffect()));
         tag.putByte("Amplifier", (byte)this.getAmplifier());
         tag.putInt("Duration", this.getDuration());
         tag.putBoolean("Ambient", this.isAmbient());

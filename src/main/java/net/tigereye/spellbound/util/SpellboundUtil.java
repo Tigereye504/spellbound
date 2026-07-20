@@ -10,6 +10,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -25,8 +27,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tigereye.spellbound.Spellbound;
-import net.tigereye.spellbound.registration.SBDamageSources;
-import net.tigereye.spellbound.registration.SBEnchantments;
 
 import java.util.List;
 
@@ -192,30 +192,6 @@ public class SpellboundUtil {
         stacks.add(Pair.of(stack, pos));
     }
 
-    public static void YandereViolence(LivingEntity entity){
-        int itemCount = 0;
-        for (ItemStack item:
-                entity.getAllSlots()) {
-            if(!item.isEmpty()) {
-                itemCount++;
-            }
-        }
-        int monogamy = SBEnchantmentHelper.getSpellboundEnchantmentAmount(entity.getAllSlots(), SBEnchantments.MONOGAMOUS);
-        int polygamy = SBEnchantmentHelper.getSpellboundEnchantmentAmount(entity.getAllSlots(), SBEnchantments.POLYGAMOUS);
-        int damage = 0;
-        //monogamous violence
-        if(monogamy + polygamy > 1 && monogamy > 0) {
-            damage += monogamy * (monogamy + polygamy);
-        }
-
-        //polygamous violence
-        if(monogamy + polygamy < itemCount) {
-            damage += polygamy * (itemCount - (monogamy + polygamy));
-        }
-
-        entity.hurt(SBDamageSources.of(entity.level(),SBDamageSources.INFIDELITY),damage);
-    }
-
     public static Enchantment.Rarity rarityLookup(int configValue){
         return switch (configValue) {
             case 1 -> Enchantment.Rarity.COMMON;
@@ -223,5 +199,12 @@ public class SpellboundUtil {
             case 3 -> Enchantment.Rarity.RARE;
             default -> Enchantment.Rarity.VERY_RARE;
         };
+    }
+
+    public static void ReplaceAttributeModifier(AttributeInstance att, AttributeModifier mod)
+    {
+        //removes any existing mod and replaces it with the updated one.
+        att.removeModifier(mod.getId());
+        att.addPermanentModifier(mod);
     }
 }

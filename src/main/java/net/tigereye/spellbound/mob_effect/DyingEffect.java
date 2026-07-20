@@ -32,7 +32,7 @@ public class DyingEffect extends SBStatusEffect{
         return true;
     }
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return duration % Math.max(2,20>>amplifier) == 1;
     }
     @Override
@@ -67,7 +67,7 @@ public class DyingEffect extends SBStatusEffect{
             AttributeModifier mod = att.getModifier(DYING_HEATLH_ID);
             if (mod != null) {
                 if(mod.getAmount() > 0){
-                    att.removeModifier(mod);
+                    att.removeModifier(mod.getId());
                 }
             }
         }
@@ -81,7 +81,7 @@ public class DyingEffect extends SBStatusEffect{
                 , AttributeModifier.Operation.MULTIPLY_TOTAL);
         //removes any existing mod and replaces it with the updated one.
         if(att != null) {
-            att.removeModifier(mod);
+            att.removeModifier(mod.getId());
             att.addPermanentModifier(mod);
             if(!entity.level().isClientSide() && entity instanceof ServerPlayer sPlayer){
                 sPlayer.resetSentInfo();

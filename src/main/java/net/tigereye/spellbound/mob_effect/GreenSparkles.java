@@ -9,9 +9,11 @@ public class GreenSparkles extends SBStatusEffect{
         super(MobEffectCategory.NEUTRAL, 0x49be50);
     }
 
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return false;
     }
 
+    @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {    }
 }

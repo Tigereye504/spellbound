@@ -382,22 +382,6 @@ public class SBConfig implements ConfigData {
 
     @ConfigEntry.Category("enchantment")
     @ConfigEntry.Gui.CollapsibleObject
-    public MonogamousConfig monogamous = new MonogamousConfig();
-    public static class MonogamousConfig {
-        public boolean ENABLED = false;
-        public boolean IS_TREASURE = false;
-        public boolean IS_FOR_SALE = false;
-        public int RARITY = 4;
-        public int SOFT_CAP = 1;
-        public int HARD_CAP = 1;
-        public int BASE_POWER = -10;
-        public int POWER_PER_RANK = 20;
-        public int POWER_RANGE = 50;
-        public int DURATION = 12000;
-    }
-
-    @ConfigEntry.Category("enchantment")
-    @ConfigEntry.Gui.CollapsibleObject
     public MountedConfig mounted = new MountedConfig();
     public static class MountedConfig {
         public boolean ENABLED = false;
@@ -521,22 +505,6 @@ public class SBConfig implements ConfigData {
         public int KILLS_TO_PAYOUT = 30;
         public int PAYOUT_MULTIPLIER = 30;
         public int ADVANCE_NOTICE = 3;
-    }
-
-    @ConfigEntry.Category("enchantment")
-    @ConfigEntry.Gui.CollapsibleObject
-    public PolygamousConfig polygamous = new PolygamousConfig();
-    public static class PolygamousConfig {
-        public boolean ENABLED = false;
-        public boolean IS_TREASURE = false;
-        public boolean IS_FOR_SALE = false;
-        public int RARITY = 3;
-        public int SOFT_CAP = 1;
-        public int HARD_CAP = 1;
-        public int BASE_POWER = -10;
-        public int POWER_PER_RANK = 20;
-        public int POWER_RANGE = 50;
-        public int DURATION = 12000;
     }
 
     @ConfigEntry.Category("enchantment")
@@ -926,8 +894,6 @@ public class SBConfig implements ConfigData {
     public boolean TAKE_ANY_TROPHY = false;
     @ConfigEntry.Category("tomfoolery")
     public boolean COLLECT_ANY_ROCK = false;
-    @ConfigEntry.Category("tomfoolery")
-    public boolean YANDERE_TOOLS = false;
     @ConfigEntry.Category("tomfoolery")
     public boolean STORIED_WORLD = false;
 }

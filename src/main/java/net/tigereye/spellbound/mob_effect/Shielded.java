@@ -29,10 +29,12 @@ public class Shielded extends SBStatusEffect{
         super(MobEffectCategory.BENEFICIAL, 0x7CB5C6);
     }
 
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
+    @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         Vec3 basePosition = entity.position();
         Vec3 velocity = entity.getDeltaMovement();
@@ -45,6 +47,7 @@ public class Shielded extends SBStatusEffect{
         }
     }
 
+    @Override
     public float onPreArmorDefense(MobEffectInstance instance, DamageSource source, LivingEntity defender, float amount, List<MobEffectInstance> effectsToAdd, List<MobEffect> effectsToRemove){
         if(amount <= 0){
             return amount;

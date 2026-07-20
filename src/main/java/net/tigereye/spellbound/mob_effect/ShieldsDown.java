@@ -12,10 +12,12 @@ public class ShieldsDown extends SBStatusEffect{
     } //7CB5C6 for shields up
 
 
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return duration <= 1;
     }
 
+    @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         if(!(entity.level().isClientSide)){
             entity.addEffect(new MobEffectInstance(SBStatusEffects.SHIELDED,

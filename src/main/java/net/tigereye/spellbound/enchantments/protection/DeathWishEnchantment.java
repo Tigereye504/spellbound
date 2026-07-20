@@ -52,17 +52,10 @@ public class DeathWishEnchantment extends SBEnchantment{
                     (SBEnchantmentHelper.getSpellboundEnchantmentAmountCorrectlyWorn(entity.getAllSlots(),SBEnchantments.DEATH_WISH,entity)*Spellbound.config.deathWish.DAMAGE_FACTOR_PER_LEVEL)+
                             (SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getAllSlots(),SBEnchantments.DEATH_WISH,entity)*Spellbound.config.deathWish.DAMAGE_FACTOR_BASE)
                             ,AttributeModifier.Operation.MULTIPLY_TOTAL);
-            ReplaceAttributeModifier(att, mod);
+            SpellboundUtil.ReplaceAttributeModifier(att, mod);
             if(entity.getHealth() > entity.getMaxHealth()){
                 entity.setHealth(entity.getMaxHealth());
             }
         }
-    }
-
-    private static void ReplaceAttributeModifier(AttributeInstance att, AttributeModifier mod)
-    {
-        //removes any existing mod and replaces it with the updated one.
-        att.removeModifier(mod);
-        att.addPermanentModifier(mod);
     }
 }

@@ -20,11 +20,12 @@ public class Primed extends SBStatusEffect implements CustomDataStatusEffect{
         super(MobEffectCategory.NEUTRAL, 0x194212);
     }
 
-
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return duration <= 1;
     }
 
+    @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         if(!(entity.level().isClientSide)){
             MobEffectInstance temp = entity.getEffect(SBStatusEffects.PRIMED);
@@ -45,6 +46,7 @@ public class Primed extends SBStatusEffect implements CustomDataStatusEffect{
         }
     }
 
+    @Override
     public void onDeath(MobEffectInstance instance, DamageSource source, LivingEntity defender, List<MobEffectInstance> effectsToAdd, List<MobEffect> effectsToRemove) {
         applyEffectTick(defender,instance.getAmplifier()+1);
     }

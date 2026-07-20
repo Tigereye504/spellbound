@@ -3,6 +3,7 @@ package net.tigereye.spellbound.util;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
@@ -23,7 +24,7 @@ public class NetworkingUtil {
         FriendlyByteBuf buf = PacketByteBufs.create();
         buf.writeInt(duration);
         buf.writeInt(magnitude);
-        buf.writeInt(MobEffect.getId(statusEffect));
+        buf.writeInt(BuiltInRegistries.MOB_EFFECT.getId(statusEffect));
         ClientPlayNetworking.send(SBNetworking.REQUEST_STATUS_EFFECT_PACKET_ID,buf);
     }
 

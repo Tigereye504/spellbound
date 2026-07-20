@@ -130,4 +130,4 @@
 
  
 
-Requires Minecraft 1.16.1/1.16.2/1.16.3/1.16.4, and Fabric API
+Requires Minecraft 1.20.1, and Fabric API

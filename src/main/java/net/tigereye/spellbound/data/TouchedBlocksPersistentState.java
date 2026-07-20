@@ -5,10 +5,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.tigereye.spellbound.Spellbound;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.*;
@@ -17,6 +19,10 @@ public class TouchedBlocksPersistentState extends SavedData {
 
     public static final String TOUCHED_BLOCKS_LIST_KEY = Spellbound.MODID+"TouchedBlocks";
     private final Map<ChunkPos, Set<Long>> touchedBlocks = new HashMap<>();
+
+    public static SavedData.Factory<TouchedBlocksPersistentState> factory() {
+      return new SavedData.Factory<TouchedBlocksPersistentState>(TouchedBlocksPersistentState::new, TouchedBlocksPersistentState::load, DataFixTypes.SAVED_DATA_FORCED_CHUNKS);
+    }
 
     public boolean isBlockTouched(BlockPos pos){
         Set<Long> chunkSet = touchedBlocks.get(new ChunkPos(pos.getX() >> 4,pos.getZ() >> 4));
@@ -59,7 +65,7 @@ public class TouchedBlocksPersistentState extends SavedData {
         nbt.put("TouchedChunks",nbtList);
         return nbt;
     }
-    public static TouchedBlocksPersistentState createFromNbt(CompoundTag nbt){
+    public static TouchedBlocksPersistentState load(CompoundTag nbt){
         TouchedBlocksPersistentState tbpState = new TouchedBlocksPersistentState();
         if(nbt.contains("TouchedChunks")){
             ListTag chunkList = nbt.getList("TouchedChunks", Tag.TAG_COMPOUND);
@@ -75,9 +81,6 @@ public class TouchedBlocksPersistentState extends SavedData {
 
     public static TouchedBlocksPersistentState getTouchedBlocksPersistentState(ServerLevel world){
         DimensionDataStorage persistentStateManager = world.getDataStorage();
-        return persistentStateManager.computeIfAbsent(
-                TouchedBlocksPersistentState::createFromNbt,
-                TouchedBlocksPersistentState::new,
-                TOUCHED_BLOCKS_LIST_KEY);
+        return persistentStateManager.computeIfAbsent(factory(),TOUCHED_BLOCKS_LIST_KEY);
     }
 }
