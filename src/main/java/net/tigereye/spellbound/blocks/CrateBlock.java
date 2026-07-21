@@ -19,9 +19,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.tigereye.spellbound.blocks.entity.CrateBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
+import com.mojang.serialization.MapCodec;
+
 import java.util.List;
 
 public class CrateBlock extends BaseEntityBlock {
+    public static final MapCodec<CrateBlock> CODEC = simpleCodec(CrateBlock::new);
+
+    @Override
+    public MapCodec<CrateBlock> codec() {
+        return CODEC;
+    }
+
     public CrateBlock(Properties settings) {
         super(settings);
     }
@@ -54,12 +63,12 @@ public class CrateBlock extends BaseEntityBlock {
         }
     }
     @Override
-    public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof CrateBlockEntity crateBlockEntity && !EnchantmentHelper.hasSilkTouch(player.getMainHandItem())) {
             crateBlockEntity.spawnLoot(world, pos, player);
         }
-        super.playerWillDestroy(world, pos, state, player);
+        return super.playerWillDestroy(world, pos, state, player);
     }
 
     @Override
@@ -74,4 +83,5 @@ public class CrateBlock extends BaseEntityBlock {
         }
     }
     //TODO: see fabricmc.net/wiki/tutorial:tooltip when updating to 1.20.5
+
 }

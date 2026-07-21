@@ -9,12 +9,12 @@ import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Block.class)
 public class BlockMixin {
     @Inject(at = @At(value="HEAD"), method = "playerWillDestroy")
-    public void spellboundBlockOnBreakMixin(Level world, BlockPos pos, BlockState state, Player player, CallbackInfo info){
+    public void spellboundBlockOnBreakMixin(Level world, BlockPos pos, BlockState state, Player player, CallbackInfoReturnable<BlockState> info){
         SBEnchantmentHelper.onBreakBlockDirectly((Block)(Object)this, world, pos, state, player);
     }
 }

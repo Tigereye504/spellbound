@@ -50,7 +50,7 @@ public class GoldskinEnchantment extends SBEnchantment{
     }
 
     @Override
-    public void onRedHealthDamageOnce(int level, ItemStack itemStack, DamageSource source, LivingEntity entity, float amount) {
+    public void onTakeRedHealthDamageOnce(int level, ItemStack itemStack, DamageSource source, LivingEntity entity, float amount) {
         resetGoldskin(entity);
     }
 

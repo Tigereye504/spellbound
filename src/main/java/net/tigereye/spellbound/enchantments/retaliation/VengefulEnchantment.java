@@ -58,7 +58,7 @@ public class VengefulEnchantment extends SBEnchantment {
     }
 
     @Override
-    public void onRedHealthDamage(int level, ItemStack stack, DamageSource source, LivingEntity entity, float amount) {
+    public void onTakeRedHealthDamage(int level, ItemStack stack, DamageSource source, LivingEntity entity, float amount) {
         //If damage was from an attacker, save the attacker and accumulate damage taken from that entity
         Entity attacker = source.getEntity();
         if(attacker != null){

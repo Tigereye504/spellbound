@@ -194,10 +194,10 @@ public abstract class SBEnchantment extends Enchantment {
     public void onProjectileBlockHit(int level, ItemStack itemStack, Projectile projectileEntity, BlockHitResult blockHitResult) {
     }
 
-    public void onRedHealthDamage(int level, ItemStack itemStack, DamageSource source, LivingEntity entity, float amount) {
+    public void onTakeRedHealthDamage(int level, ItemStack itemStack, DamageSource source, LivingEntity entity, float amount) {
     }
 
-    public void onRedHealthDamageOnce(int level, ItemStack itemStack, DamageSource source, LivingEntity entity, float amount) {}
+    public void onTakeRedHealthDamageOnce(int level, ItemStack itemStack, DamageSource source, LivingEntity entity, float amount) {}
 
     public void onDoRedHealthDamage(int level, ItemStack itemStack, LivingEntity attacker, LivingEntity victim, DamageSource source, float amount) {
     }

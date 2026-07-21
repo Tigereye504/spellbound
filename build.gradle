@@ -23,7 +23,7 @@ dependencies {
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	modImplementation ("com.terraformersmc:modmenu:${project.mod_menus_version}") {
+	modImplementation ("maven.modrinth:mOgUt4GM:${project.mod_menus_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
@@ -38,7 +38,7 @@ dependencies {
 repositories {
 	maven { url = 'https://jitpack.io' }
 	maven { url "https://maven.shedaniel.me/" }
-	maven { url = 'https://maven.terraformersmc.com/releases/' } //for mod menu
+	maven { url = 'https://api.modrinth.com/maven' } //for mod menu
 }
 
 processResources {

@@ -26,6 +26,6 @@ public class Bravados extends SBStatusEffect{
 
     public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributes, int amplifier) {
         entity.setAbsorptionAmount(0);
-        SBEnchantmentHelper.onRedHealthDamage(entity.damageSources().generic(),entity,0);
+        SBEnchantmentHelper.onTakeRedHealthDamage(entity.damageSources().generic(),entity,0);
     }
 }

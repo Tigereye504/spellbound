@@ -99,7 +99,7 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
 
     @Inject(at = @At(value="CONSTANT", args="floatValue=0",ordinal = 1), method = "actuallyHurt")
     public void spellboundLivingEntityApplyDamagePostDamageMixin(DamageSource source, float amount, CallbackInfo info){
-        SBEnchantmentHelper.onRedHealthDamage(source,(LivingEntity)(Object)this,amount);
+        SBEnchantmentHelper.onTakeRedHealthDamage(source,(LivingEntity)(Object)this,amount);
         if(source.getEntity() instanceof LivingEntity attacker) {
             SBEnchantmentHelper.onDoRedHealthDamage(attacker, source, (LivingEntity) (Object) this, amount);
         }

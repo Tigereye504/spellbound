@@ -39,7 +39,6 @@ import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.SpellboundClientPlayerEntity;
 import net.tigereye.spellbound.interfaces.SpellboundPlayerEntity;
 import net.tigereye.spellbound.interfaces.SpellboundProjectileEntity;
-import net.tigereye.spellbound.interfaces.TridentEntityItemAccessor;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBTags;
 import org.apache.commons.lang3.mutable.MutableFloat;
@@ -98,8 +97,8 @@ public class SBEnchantmentHelper {
         LivingEntity killer = victim.getKillCredit();
         ItemStack projectileSource = null;
         if(source.is(DamageTypeTags.IS_PROJECTILE)){
-            if(source.getDirectEntity() instanceof ThrownTrident){
-                projectileSource = ((TridentEntityItemAccessor) source.getDirectEntity()).spellbound_getTridentStack();
+            if(source.getDirectEntity() instanceof ThrownTrident thrownTrident){
+                projectileSource = thrownTrident.getPickupItemStackOrigin();
             }
             else if(source.getDirectEntity() instanceof SpellboundProjectileEntity) {
                 projectileSource = ((SpellboundProjectileEntity) source.getDirectEntity()).getSource();
@@ -265,7 +264,7 @@ public class SBEnchantmentHelper {
         forEachSpellboundEnchantment((((enchantment, level, itemStack) -> enchantment.onInventoryTick(level,stack,world,entity,slot,selected))), stack);
     }
 
-    public static void onRedHealthDamage(DamageSource source, @NotNull LivingEntity entity, float redHealthDamage) {
+    public static void onTakeRedHealthDamage(DamageSource source, @NotNull LivingEntity entity, float redHealthDamage) {
         List<SBEnchantment> checked = new LinkedList<>();
         SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
             if(enchantment.requiresPreferredSlot()) {
@@ -275,14 +274,14 @@ public class SBEnchantmentHelper {
             }
             if(!checked.contains(enchantment)){
                 checked.add(enchantment);
-                enchantment.onRedHealthDamageOnce(level,itemStack,source,entity,redHealthDamage);
+                enchantment.onTakeRedHealthDamageOnce(level,itemStack,source,entity,redHealthDamage);
             }
-            enchantment.onRedHealthDamage(level,itemStack,source,entity,redHealthDamage);
+            enchantment.onTakeRedHealthDamage(level,itemStack,source,entity,redHealthDamage);
         },entity.getAllSlots());
     }
 
     public static void onDoRedHealthDamage(LivingEntity attacker, DamageSource source, LivingEntity victim, float redHealthDamage) {
-        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDoRedHealthDamage(level,itemStack,attacker,victim,source,redHealthDamage),attacker.getAllSlots());
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDoRedHealthDamage(level,itemStack,attacker,victim,source,redHealthDamage),getAttackEquipment(attacker, source));
     }
 
     public static boolean onItemDestroyed(ItemStack stack, Entity entity) {
@@ -350,8 +349,8 @@ public class SBEnchantmentHelper {
     }
 
     public static void onProjectileBlockHit(Projectile projectileEntity, BlockHitResult blockHitResult) {
-        if(projectileEntity instanceof ThrownTrident){
-            forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult), ((TridentEntityItemAccessor)projectileEntity).spellbound_getTridentStack());
+        if(projectileEntity instanceof ThrownTrident thrownTrident){
+            forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onProjectileBlockHit(level, itemStack, projectileEntity, blockHitResult), thrownTrident.getPickupItemStackOrigin());
         }
         else {
             Entity owner = projectileEntity.getOwner();
@@ -491,6 +490,18 @@ public class SBEnchantmentHelper {
             tag.putUUID(Spellbound.MODID+"ItemID",id);
         }
         return id;
+    }
+
+    public static Iterable<ItemStack> getAttackEquipment(LivingEntity entity, DamageSource source){
+        List<ItemStack> equipment = new ArrayList<>();
+        entity.getArmorSlots().forEach((itemStack) -> equipment.add(itemStack));
+        if(source.getDirectEntity() instanceof SpellboundProjectileEntity spe){
+            equipment.add(spe.getSource());
+        }
+        else{
+            entity.getHandSlots().forEach((itemStack) -> equipment.add(itemStack));
+        }
+        return equipment;
     }
 
     //This checks if the given enchantments are in the same enchantment tags and so are incompatible
