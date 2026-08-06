@@ -5,7 +5,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.phys.BlockHitResult;
 import net.tigereye.spellbound.interfaces.SpellboundProjectileEntity;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;

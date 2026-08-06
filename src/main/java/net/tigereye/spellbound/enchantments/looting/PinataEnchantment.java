@@ -1,6 +1,5 @@
 package net.tigereye.spellbound.enchantments.looting;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;

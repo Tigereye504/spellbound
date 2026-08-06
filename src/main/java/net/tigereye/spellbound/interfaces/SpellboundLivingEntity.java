@@ -1,7 +1,6 @@
 package net.tigereye.spellbound.interfaces;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import net.minecraft.world.phys.Vec3;

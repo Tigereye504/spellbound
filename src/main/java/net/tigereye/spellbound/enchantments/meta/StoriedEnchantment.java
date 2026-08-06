@@ -2,9 +2,7 @@ package net.tigereye.spellbound.enchantments.meta;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
@@ -26,18 +24,14 @@ import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.registration.SBComponents;
 import net.tigereye.spellbound.registration.SBEnchantments;
-import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 public class StoriedEnchantment extends SBEnchantment {
     public static final String STORIED_XP_KEY = Spellbound.MODID+"StoriedXP";

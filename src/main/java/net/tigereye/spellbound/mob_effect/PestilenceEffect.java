@@ -2,7 +2,6 @@ package net.tigereye.spellbound.mob_effect;
 
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.registration.SBDamageSources;
@@ -32,7 +31,7 @@ public class PestilenceEffect extends SBStatusEffect{
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         if(!(entity.level().isClientSide)){
             //first, check if the status is owned by the victim. If so, they are immune.
-            Entity owner = null;
+            //Entity owner = null;
             //MobEffectInstance instance = entity.getEffect(PESTILENCE);
             //if(instance instanceof OwnedStatusEffectInstance si && si.fillMissingOwnerData(entity)) {
             //    if(si.owner == entity) return true;

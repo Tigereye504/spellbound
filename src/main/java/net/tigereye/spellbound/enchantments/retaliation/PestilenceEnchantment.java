@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.mob_effect.instance.OwnedStatusEffectInstance;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
@@ -74,7 +73,7 @@ public class PestilenceEnchantment  extends SBEnchantment {
                         longestDuration.set(duration);
                     }
                 });
-                OwnedStatusEffectInstance osei = new OwnedStatusEffectInstance(defender, SBStatusEffects.PESTILENCE,
+                MobEffectInstance osei = new MobEffectInstance(SBStatusEffects.PESTILENCE,
                         Math.max(Spellbound.config.pestilence.PESTILENCE_DAMAGE_FREQUENCY,(longestDuration.get() - (longestDuration.get() % Spellbound.config.pestilence.PESTILENCE_DAMAGE_FREQUENCY))
                                 + Spellbound.config.pestilence.PESTILENCE_DAMAGE_FREQUENCY_OFFSET));
                 stank.addEffect(osei);

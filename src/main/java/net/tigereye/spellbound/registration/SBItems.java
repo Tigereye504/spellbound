@@ -1,8 +1,6 @@
 package net.tigereye.spellbound.registration;
 
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -12,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.blocks.CrateBlock;
 import net.tigereye.spellbound.blocks.entity.CrateBlockEntity;
@@ -28,7 +27,7 @@ public class SBItems {
     public static final Item DIAMOND_SHARD = new Item(new Item.Properties().stacksTo(64));
     public static final Item EMERALD_SHARD = new Item(new Item.Properties().stacksTo(64));
     //public static final Item ANCIENT_SHARD = new Item(new Item.Settings().maxCount(64));
-    public static final Block CRATE = new CrateBlock(FabricBlockSettings.copyOf(Blocks.BARREL));
+    public static final Block CRATE = new CrateBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BARREL));
 
     public static final BlockEntityType<CrateBlockEntity> CRATE_BLOCK_ENTITY = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
@@ -45,7 +44,7 @@ public class SBItems {
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Spellbound.MODID, "emerald_shard"), EMERALD_SHARD);
         //Registry.register(Registry.ITEM, new Identifier(Spellbound.MODID, "ancient_shard"), ANCIENT_SHARD);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Spellbound.MODID, "crate"), CRATE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Spellbound.MODID, "crate"), new BlockItem(CRATE, new FabricItemSettings()));
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Spellbound.MODID, "crate"), new BlockItem(CRATE, new Item.Properties().stacksTo(64)));
 
         registerItemGroups();
     }

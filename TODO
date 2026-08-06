@@ -14,6 +14,9 @@ Verify Trophy Collecting works after rework to use components
 Verify Rock Collecting works after rework to use components
 Verify onBreak effects (legacy, resurfacing) still work after removing anti-duplication nbt.
 I recall components are supposed to be immutable. Storied maight be running afoul of that.
+Verify Phase Leap/Strafe still work after networking changes
+Verify Grace still works after networking changes
+Verify Hover still works after networking changes
 
 Later:
 Change Outburst to be more like Vengeful
