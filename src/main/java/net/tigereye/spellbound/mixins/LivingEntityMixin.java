@@ -32,6 +32,8 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements SpellboundLivingEntity {
@@ -54,6 +56,10 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     private float graceMagnitude = 0;
     @Unique
     private static final EntityDataAccessor<Boolean> SHIELDED = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+    @Unique
+    private static final EntityDataAccessor<Optional<UUID>> LAST_PRIMER = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    @Unique
+    private static final EntityDataAccessor<Optional<UUID>> LAST_TETHER = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
     public void spellbound$addDelayedAction(DelayedAction action){
         if (performingDelayedActions)
@@ -95,6 +101,11 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     public float spellboundLivingEntityApplyArmorMixin(float amount, DamageSource source){
         amount = SBStatusEffectHelper.onPreArmorDefense(source,(LivingEntity)(Object)this,amount);
         return SBEnchantmentHelper.onPreArmorDefense(source,(LivingEntity)(Object)this,amount);
+    }
+
+    @Inject(method = "heal", at =@At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V", shift = At.Shift.AFTER))
+    public void spellboundLivingEntityHealMixin(float amount, CallbackInfo info){
+        SBEnchantmentHelper.afterHeal((LivingEntity)(Object)this,amount);
     }
 
     @Inject(at = @At(value="CONSTANT", args="floatValue=0",ordinal = 1), method = "actuallyHurt")
@@ -161,13 +172,15 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     }
 
     @Inject(at = @At("HEAD"), method = "defineSynchedData")
-    public void spellboundLivingEntityInitDataTracker(CallbackInfo info){
-        this.entityData.define(SHIELDED, false);
+    public void spellboundLivingEntityInitDataTracker(SynchedEntityData.Builder builder, CallbackInfo info){
+        builder.define(SHIELDED, false);
+        builder.define(LAST_PRIMER, Optional.empty());
+        builder.define(LAST_TETHER, Optional.empty());
     }
 
     @Inject(at = @At("HEAD"), method = "updateEffectVisibility")
     public void spellboundLivingEntityUpdatePotionVisibilityMixin(CallbackInfo info){
-        this.entityData.set(SHIELDED, this.activeEffects.containsKey(SBStatusEffects.SHIELDED));
+        this.entityData.set(SHIELDED, this.activeEffects.containsKey(SBStatusEffects.SHIELDED.value()));
     }
 
     @Inject(at = @At(value = "RETURN"),method = "removeAllEffects")
@@ -200,4 +213,10 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
         graceTicks = iFrameTicks;
     }
     public boolean spellbound$shouldDisplayShielded(){return this.entityData.get(SHIELDED);}
+    
+    public void spellbound$setLastPrimer(UUID uuid){this.entityData.set(LAST_PRIMER,Optional.of(uuid));}
+    public UUID spellbound$getLastPrimer(){return this.entityData.get(LAST_PRIMER).orElse(null);}
+    
+    public void spellbound$setLastTether(UUID uuid){this.entityData.set(LAST_TETHER,Optional.of(uuid));}
+    public UUID spellbound$setLastTether(){return this.entityData.get(LAST_TETHER).orElse(null);}
 }

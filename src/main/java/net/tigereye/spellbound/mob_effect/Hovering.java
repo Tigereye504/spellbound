@@ -16,8 +16,9 @@ public class Hovering extends SBStatusEffect{
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         entity.setDeltaMovement(entity.getDeltaMovement().x(), Spellbound.config.hover.UPWARD_DRIFT,entity.getDeltaMovement().z());
         entity.fallDistance = 0;
+        return true;
     }
 }

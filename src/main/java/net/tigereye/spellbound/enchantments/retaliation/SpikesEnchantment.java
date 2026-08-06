@@ -1,11 +1,11 @@
 package net.tigereye.spellbound.enchantments.retaliation;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
@@ -18,20 +18,19 @@ import java.util.Objects;
 public class SpikesEnchantment extends SBEnchantment {
 
     public SpikesEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.spikes.RARITY), EnchantmentCategory.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND},true);
+        super(definition(ItemTags.ARMOR_ENCHANTABLE, ItemTags.CHEST_ARMOR_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.spikes.RARITY), //enchantment weight
+            Spellbound.config.spikes.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.spikes.BASE_POWER,Spellbound.config.spikes.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.spikes.BASE_POWER+Spellbound.config.spikes.POWER_RANGE,Spellbound.config.spikes.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.spikes.RARITY-1), //level cost at anvil
+            new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots
+            true); //can work outside of prefered slot
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.spikes.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.spikes.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.spikes.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.spikes.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.spikes.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.spikes.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.spikes.IS_TREASURE;}
     @Override

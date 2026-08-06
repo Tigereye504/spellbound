@@ -27,6 +27,7 @@ public class SBConfig implements ConfigData {
         public int POWER_RANGE = 50;
         public int TIMEOUT = 50;
         public float MAX_ACCELERATION_STACKS = 5;
+        public float ACCELERATION_FACTOR = 0.1f;
     }
 
     @ConfigEntry.Category("enchantment")

@@ -1,5 +1,6 @@
 package net.tigereye.spellbound.enchantments.protection;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -9,8 +10,8 @@ import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
-import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBEnchantments;
+import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
@@ -19,24 +20,21 @@ import java.util.List;
 public class GoldskinEnchantment extends SBEnchantment{
 
     public GoldskinEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.goldskin.RARITY), SBEnchantmentTargets.ARMOR_MAYBE_SHIELD,
-                Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
+        super(definition(Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS ? SBTags.ARMOR_AND_SHIELD_ENCHANTABLE : ItemTags.ARMOR_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.goldskin.RARITY), //enchantment weight
+            Spellbound.config.goldskin.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.goldskin.BASE_POWER,Spellbound.config.goldskin.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.goldskin.BASE_POWER+Spellbound.config.goldskin.POWER_RANGE,Spellbound.config.goldskin.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.goldskin.RARITY-1), //level cost at anvil
+            Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
                         ? new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND}
-                        : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}
-                ,true);
+                        : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots
+            true); //can work outside of prefered slot
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.goldskin.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.goldskin.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.goldskin.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.goldskin.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.goldskin.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.goldskin.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.goldskin.IS_TREASURE;}
     @Override

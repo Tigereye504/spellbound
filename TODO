@@ -1,0 +1,19 @@
+Pre-compile:
+Everything related to networking.
+
+
+Post-compile:
+Replace rarity lookup with weight in configs.
+Add anvil cost to configs (default value is 2^(old rarity tier - 1))
+Adjust Base Power; power = base + per_rank * (level - 1), not (level).
+Universal must cycle through basic diggable blocks (dirt, stone, log, leaves, cobweb) to find best digging speed.
+
+Verification:
+Verify Flesh Wound works after rework to not use components/nbt
+Verify Trophy Collecting works after rework to use components
+Verify Rock Collecting works after rework to use components
+Verify onBreak effects (legacy, resurfacing) still work after removing anti-duplication nbt.
+I recall components are supposed to be immutable. Storied maight be running afoul of that.
+
+Later:
+Change Outburst to be more like Vengeful

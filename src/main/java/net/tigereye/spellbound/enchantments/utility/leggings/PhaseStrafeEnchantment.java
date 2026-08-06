@@ -1,11 +1,11 @@
 package net.tigereye.spellbound.enchantments.utility.leggings;
 
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.phys.Vec3;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -18,7 +18,14 @@ import net.tigereye.spellbound.util.VectorUtil;
 public class PhaseStrafeEnchantment extends SBEnchantment {
 
     public PhaseStrafeEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.phaseStrafe.RARITY), EnchantmentCategory.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS},true);
+        super(definition(ItemTags.LEG_ARMOR_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.phaseStrafe.RARITY), //enchantment weight
+            Spellbound.config.phaseStrafe.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.phaseStrafe.BASE_POWER,Spellbound.config.phaseStrafe.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.phaseStrafe.BASE_POWER+Spellbound.config.phaseStrafe.POWER_RANGE,Spellbound.config.phaseStrafe.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.phaseStrafe.RARITY-1), //level cost at anvil
+            new EquipmentSlot[] {EquipmentSlot.LEGS}), //prefered slots
+            true); //can work outside of prefered slot
     }
 
     @Override
@@ -27,14 +34,6 @@ public class PhaseStrafeEnchantment extends SBEnchantment {
     }
     @Override
     public int getSoftLevelCap(){return Spellbound.config.phaseStrafe.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.phaseStrafe.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.phaseStrafe.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.phaseStrafe.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.phaseStrafe.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.phaseStrafe.IS_TREASURE;}
     @Override

@@ -2,8 +2,6 @@ package net.tigereye.spellbound.mob_effect;
 
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
-import net.tigereye.spellbound.registration.SBStatusEffects;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 
 public class Bravados extends SBStatusEffect{
@@ -14,18 +12,13 @@ public class Bravados extends SBStatusEffect{
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return true;
+        return duration == 1;
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
-        if(entity.getAbsorptionAmount() == 0){
-            entity.removeEffect(SBStatusEffects.BRAVADOS);
-        }
-    }
-
-    public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributes, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         entity.setAbsorptionAmount(0);
         SBEnchantmentHelper.onTakeRedHealthDamage(entity.damageSources().generic(),entity,0);
+        return true;
     }
 }

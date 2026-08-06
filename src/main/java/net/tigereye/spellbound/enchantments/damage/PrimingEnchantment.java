@@ -8,29 +8,29 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.mob_effect.instance.OwnedStatusEffectInstance;
-import net.tigereye.spellbound.registration.SBEnchantmentTargets;
+import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.registration.SBStatusEffects;
+import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class PrimingEnchantment extends SBEnchantment{
 
     public PrimingEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.priming.RARITY), SBEnchantmentTargets.ANY_WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE, //enchantment targets: ALL weapons, both melee and ranged
+            SpellboundUtil.rarityLookup(Spellbound.config.priming.RARITY), //enchantment weight
+            Spellbound.config.priming.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.priming.BASE_POWER,Spellbound.config.priming.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.priming.BASE_POWER+Spellbound.config.priming.POWER_RANGE,Spellbound.config.priming.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.priming.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            true); //can work outside of prefered slot
     }
+
 
     @Override
     public boolean isEnabled() {return Spellbound.config.priming.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.priming.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.priming.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.priming.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.priming.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.priming.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.priming.IS_TREASURE;}
     @Override
@@ -56,6 +56,7 @@ public class PrimingEnchantment extends SBEnchantment{
             }
         }
         Spellbound.LOGGER.debug("Applying Primed at magnitude " + effectLevel);
-        victim.addEffect(new OwnedStatusEffectInstance(attacker, SBStatusEffects.PRIMED, Spellbound.config.priming.DURATION, effectLevel));
+        ((SpellboundLivingEntity)victim).spellbound$setLastPrimer(attacker.getUUID());
+        victim.addEffect(new MobEffectInstance(SBStatusEffects.PRIMED, Spellbound.config.priming.DURATION, effectLevel));
     }
 }

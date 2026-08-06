@@ -1,9 +1,9 @@
 package net.tigereye.spellbound.enchantments.utility.leggings;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.SpellboundClientPlayerEntity;
@@ -14,7 +14,14 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class HoverEnchantment extends SBEnchantment {
 
     public HoverEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.hover.RARITY), EnchantmentCategory.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS},true);
+        super(definition(ItemTags.LEG_ARMOR_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.hover.RARITY), //enchantment weight
+            Spellbound.config.hover.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.hover.BASE_POWER,Spellbound.config.hover.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.hover.BASE_POWER+Spellbound.config.hover.POWER_RANGE,Spellbound.config.hover.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.hover.RARITY-1), //level cost at anvil
+            new EquipmentSlot[] {EquipmentSlot.LEGS}), //prefered slots
+            true); //can work outside of prefered slot
     }
 
     @Override
@@ -23,14 +30,6 @@ public class HoverEnchantment extends SBEnchantment {
     }
     @Override
     public int getSoftLevelCap(){return Spellbound.config.hover.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.hover.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.hover.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.hover.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.hover.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.hover.IS_TREASURE;}
     @Override
@@ -61,7 +60,7 @@ public class HoverEnchantment extends SBEnchantment {
             player.spellbound$setHasMidairJumped(true);
             NetworkingUtil.sendStatusEffectRequestPacket(
                     Spellbound.config.hover.DURATION_BASE + Spellbound.config.hover.DURATION_PER_LEVEL * level, 0,
-                    SBStatusEffects.HOVERING);
+                    SBStatusEffects.HOVERING.value());
         }
     }
 }

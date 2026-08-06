@@ -2,6 +2,7 @@ package net.tigereye.spellbound.enchantments.protection;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -15,33 +16,30 @@ import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.DyingEffect;
-import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
+import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class LastGaspEnchantment extends SBEnchantment{
 
     public LastGaspEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.lastGasp.RARITY), SBEnchantmentTargets.ARMOR_MAYBE_SHIELD,
-                Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
+        super(definition(Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS ? SBTags.ARMOR_AND_SHIELD_ENCHANTABLE : ItemTags.ARMOR_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.lastGasp.RARITY), //enchantment weight
+            Spellbound.config.lastGasp.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.lastGasp.BASE_POWER,Spellbound.config.lastGasp.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.lastGasp.BASE_POWER+Spellbound.config.lastGasp.POWER_RANGE,Spellbound.config.lastGasp.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.lastGasp.RARITY-1), //level cost at anvil
+            Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
                         ? new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND}
-                        : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}
-                ,true);
+                        : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots
+            true); //can work outside of prefered slot
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.lastGasp.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.lastGasp.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.lastGasp.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.lastGasp.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.lastGasp.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.lastGasp.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.lastGasp.IS_TREASURE;}
     @Override
@@ -54,7 +52,7 @@ public class LastGaspEnchantment extends SBEnchantment{
         if(att != null) {
             AttributeModifier mod = att.getModifier(DyingEffect.DYING_HEATLH_ID);
             if(mod != null) {
-                currentHealthLost = mod.getAmount();
+                currentHealthLost = mod.amount();
                 if (currentHealthLost <= -.99) {
                     return false;
                 }
@@ -107,7 +105,7 @@ public class LastGaspEnchantment extends SBEnchantment{
             AttributeModifier mod = att.getModifier(DyingEffect.DYING_HEATLH_ID);
             double value;
             if(mod != null){
-                value = mod.getAmount() + (amount * Spellbound.config.lastGasp.RECOVERY_FROM_EXPERIENCE);
+                value = mod.amount() + (amount * Spellbound.config.lastGasp.RECOVERY_FROM_EXPERIENCE);
                 if(value < 0){
                     DyingEffect.UpdateDyingModifier(player,value);
                 }

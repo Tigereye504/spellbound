@@ -4,10 +4,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,21 +24,20 @@ import java.util.*;
 public class DemolitionEnchantment extends SBEnchantment {
 
     public DemolitionEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.demolition.RARITY), EnchantmentCategory.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
+        super(definition(ItemTags.MINING_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.demolition.RARITY), //enchantment weight
+            Spellbound.config.demolition.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.demolition.BASE_POWER,Spellbound.config.demolition.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.demolition.BASE_POWER+Spellbound.config.demolition.POWER_RANGE,Spellbound.config.demolition.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.demolition.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            true); //can work outside of prefered slot
     }
 
     @Override
     public boolean isEnabled() {return Spellbound.config.demolition.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.demolition.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.demolition.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.demolition.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.demolition.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.demolition.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.demolition.IS_TREASURE;}
     @Override
@@ -99,7 +98,7 @@ public class DemolitionEnchantment extends SBEnchantment {
                 explosion.finalizeExplosion(true);
             }
             else{
-                this.world.playLocalSound(x, y, z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);
+                this.world.playLocalSound(x, y, z, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.PLAYERS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);
 
                 if (!(this.power < 2.0F)) {
                     this.world.addParticle(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 1.0D, 0.0D, 0.0D);

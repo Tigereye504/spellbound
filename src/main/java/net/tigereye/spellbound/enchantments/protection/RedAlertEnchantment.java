@@ -1,5 +1,6 @@
 package net.tigereye.spellbound.enchantments.protection;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -7,33 +8,30 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.registration.SBStatusEffects;
+import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class RedAlertEnchantment extends SBEnchantment{
 
     public RedAlertEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.redAlert.RARITY), SBEnchantmentTargets.ARMOR_MAYBE_SHIELD,
-                Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
+        super(definition(Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS ? SBTags.ARMOR_AND_SHIELD_ENCHANTABLE : ItemTags.ARMOR_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.redAlert.RARITY), //enchantment weight
+            Spellbound.config.redAlert.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.redAlert.BASE_POWER,Spellbound.config.redAlert.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.redAlert.BASE_POWER+Spellbound.config.redAlert.POWER_RANGE,Spellbound.config.redAlert.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.redAlert.RARITY-1), //level cost at anvil
+            Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
                         ? new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND}
-                        : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}
-                ,true);
+                        : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots
+            true); //can work outside of prefered slot
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.redAlert.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.redAlert.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.redAlert.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.redAlert.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.redAlert.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.redAlert.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.redAlert.IS_TREASURE;}
     @Override

@@ -5,6 +5,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -12,7 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.tigereye.spellbound.Spellbound;
@@ -27,20 +27,20 @@ import java.util.Map;
 public class ProspectorEnchantment extends SBEnchantment {
 
     public ProspectorEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.prospector.RARITY), EnchantmentCategory.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
+        super(definition(ItemTags.MINING_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.prospector.RARITY), //enchantment weight
+            Spellbound.config.prospector.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.prospector.BASE_POWER,Spellbound.config.prospector.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.prospector.BASE_POWER+Spellbound.config.prospector.POWER_RANGE,Spellbound.config.prospector.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.prospector.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            true); //can work outside of prefered slot
     }
+
     @Override
     public boolean isEnabled() {return Spellbound.config.prospector.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.prospector.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.prospector.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.prospector.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.prospector.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.prospector.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.prospector.IS_TREASURE;}
     @Override

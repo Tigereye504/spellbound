@@ -1,9 +1,9 @@
 package net.tigereye.spellbound.enchantments.utility.chestplate;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.util.SpellboundUtil;
@@ -11,7 +11,14 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class AttractiveEnchantment extends SBEnchantment{
 
     public AttractiveEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.attractive.RARITY), EnchantmentCategory.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.CHEST},true);
+        super(definition(ItemTags.ARMOR_ENCHANTABLE, ItemTags.CHEST_ARMOR_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.outburst.RARITY), //enchantment weight
+            Spellbound.config.outburst.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.outburst.BASE_POWER,Spellbound.config.outburst.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.outburst.BASE_POWER+Spellbound.config.outburst.POWER_RANGE,Spellbound.config.outburst.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.outburst.RARITY-1), //level cost at anvil
+            new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots
+            true); //can work outside of prefered slot
     }
 
     @Override
@@ -20,14 +27,6 @@ public class AttractiveEnchantment extends SBEnchantment{
     }
     @Override
     public int getSoftLevelCap(){return Spellbound.config.attractive.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.attractive.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.attractive.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.attractive.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.attractive.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.attractive.IS_TREASURE;}
     @Override

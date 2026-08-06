@@ -1,5 +1,6 @@
 package net.tigereye.spellbound.registration;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -9,27 +10,27 @@ import net.tigereye.spellbound.mob_effect.*;
 
 public class SBStatusEffects {
 
-    public static MobEffect BRAVADOS = new Bravados();
-    public static MobEffect DYING = new DyingEffect();
-    public static MobEffect GREEN_SPARKLES = new GreenSparkles();
-    public static MobEffect HOVERING = new Hovering();
-    public static MobEffect PESTILENCE = new PestilenceEffect();
-    public static MobEffect PRIMED = new Primed();
-    public static MobEffect SHIELDS_DOWN = new ShieldsDown();
-    public static MobEffect SHIELDED = new Shielded();
-    public static MobEffect TETHERED = new Tethered();
+    public static Holder<MobEffect> BRAVADOS;
+    public static Holder<MobEffect> DYING;
+    public static Holder<MobEffect> GREEN_SPARKLES;
+    public static Holder<MobEffect> HOVERING;
+    public static Holder<MobEffect> PESTILENCE;
+    public static Holder<MobEffect> PRIMED;
+    public static Holder<MobEffect> SHIELDS_DOWN;
+    public static Holder<MobEffect> SHIELDED;
+    public static Holder<MobEffect> TETHERED;
 
 
 
     public static void register(){
-        Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "bravados"), BRAVADOS);
-        Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "dying"), DYING);
-        Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "green_sparkles"), GREEN_SPARKLES);
-        Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "hovering"), HOVERING);
-        Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "pestilence"), PESTILENCE);
-        Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "primed"), PRIMED);
-        Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "shields_down"), SHIELDS_DOWN);
-        Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "shielded"), SHIELDED);
-        Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "tethered"), TETHERED);
+        BRAVADOS = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "bravados"), new Bravados());
+        DYING = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "dying"), new DyingEffect());
+        GREEN_SPARKLES = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "green_sparkles"), new GreenSparkles());
+        HOVERING = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "hovering"), new Hovering());
+        PESTILENCE = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "pestilence"), new PestilenceEffect());
+        PRIMED = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "primed"), new Primed());
+        SHIELDS_DOWN = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "shields_down"), new ShieldsDown());
+        SHIELDED = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "shielded"), new Shielded());
+        TETHERED = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Spellbound.MODID, "tethered"), new Tethered());
     }
 }

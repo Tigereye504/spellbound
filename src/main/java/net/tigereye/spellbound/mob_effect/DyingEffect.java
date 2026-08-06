@@ -31,18 +31,20 @@ public class DyingEffect extends SBStatusEffect{
     public boolean isInstantenous() {
         return true;
     }
+
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return duration % Math.max(2,20>>amplifier) == 1;
     }
+    
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         AttributeInstance att = entity.getAttribute(Attributes.MAX_HEALTH);
         if(att != null) {
             AttributeModifier oldmod = att.getModifier(DYING_HEATLH_ID);
             double newValue = 0;
             if(oldmod != null) {
-                newValue = oldmod.getAmount();
+                newValue = oldmod.amount();
             }
             newValue -= Math.max(-.999,1d/Spellbound.config.lastGasp.SECONDS_TO_DIE);
 
@@ -59,15 +61,17 @@ public class DyingEffect extends SBStatusEffect{
                 }
             }
         }
+        return true;
     }
 
-    public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributes, int amplifier) {
-        AttributeInstance att = entity.getAttribute(Attributes.MAX_HEALTH);
+    @Override
+    public void removeAttributeModifiers(AttributeMap attributeMap) {
+        AttributeInstance att = attributeMap.getInstance(Attributes.MAX_HEALTH);
         if(att != null) {
             AttributeModifier mod = att.getModifier(DYING_HEATLH_ID);
             if (mod != null) {
-                if(mod.getAmount() > 0){
-                    att.removeModifier(mod.getId());
+                if(mod.amount() > 0){
+                    att.removeModifier(mod);
                 }
             }
         }
@@ -78,10 +82,10 @@ public class DyingEffect extends SBStatusEffect{
         AttributeInstance att = entity.getAttribute(Attributes.MAX_HEALTH);
         AttributeModifier mod = new AttributeModifier(DYING_HEATLH_ID, "SpellboundDyingMaxHP",
                 newValue
-                , AttributeModifier.Operation.MULTIPLY_TOTAL);
+                , AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         //removes any existing mod and replaces it with the updated one.
         if(att != null) {
-            att.removeModifier(mod.getId());
+            att.removeModifier(mod);
             att.addPermanentModifier(mod);
             if(!entity.level().isClientSide() && entity instanceof ServerPlayer sPlayer){
                 sPlayer.resetSentInfo();

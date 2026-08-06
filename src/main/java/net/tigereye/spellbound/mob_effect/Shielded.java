@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -35,7 +36,7 @@ public class Shielded extends SBStatusEffect{
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         Vec3 basePosition = entity.position();
         Vec3 velocity = entity.getDeltaMovement();
         if(entity instanceof SpellboundLivingEntity slEntity && slEntity.spellbound$shouldDisplayShielded()) {
@@ -45,10 +46,11 @@ public class Shielded extends SBStatusEffect{
                     finalPos.x, finalPos.y + 1, finalPos.z,
                     velocity.x, velocity.y, velocity.z);
         }
+        return true;
     }
 
     @Override
-    public float onPreArmorDefense(MobEffectInstance instance, DamageSource source, LivingEntity defender, float amount, List<MobEffectInstance> effectsToAdd, List<MobEffect> effectsToRemove){
+    public float onPreArmorDefense(MobEffectInstance instance, DamageSource source, LivingEntity defender, float amount, List<MobEffectInstance> effectsToAdd, List<Holder<MobEffect>> effectsToRemove){
         if(amount <= 0){
             return amount;
         }

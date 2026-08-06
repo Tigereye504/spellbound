@@ -7,28 +7,27 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBStatusEffects;
+import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class DespoilingEnchantment extends SBEnchantment{
 
     public DespoilingEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.despoiling.RARITY), SBEnchantmentTargets.ANY_WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.despoiling.RARITY), //enchantment weight
+            Spellbound.config.despoiling.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.despoiling.BASE_POWER,Spellbound.config.despoiling.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.despoiling.BASE_POWER+Spellbound.config.despoiling.POWER_RANGE,Spellbound.config.despoiling.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.despoiling.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            true); //can work outside of prefered slot
     }
 
     @Override
     public boolean isEnabled() {return Spellbound.config.despoiling.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.despoiling.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.despoiling.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.despoiling.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.despoiling.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.despoiling.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.despoiling.IS_TREASURE;}
     @Override

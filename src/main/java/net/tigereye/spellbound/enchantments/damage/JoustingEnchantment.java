@@ -1,60 +1,38 @@
 package net.tigereye.spellbound.enchantments.damage;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShovelItem;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.phys.Vec3;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
+import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class JoustingEnchantment extends SBEnchantment{
 
     public JoustingEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.jousting.RARITY), EnchantmentCategory.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(definition(SBTags.JOUSTING_ENCHANTABLE, ItemTags.TRIDENT_ENCHANTABLE, //enchantment targets: supports shovels and melee weapons, primarily for tridents
+            SpellboundUtil.rarityLookup(Spellbound.config.jousting.RARITY), //enchantment weight
+            Spellbound.config.jousting.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.jousting.BASE_POWER,Spellbound.config.jousting.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.jousting.BASE_POWER+Spellbound.config.jousting.POWER_RANGE,Spellbound.config.jousting.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.jousting.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            true); //can work outside of prefered slot
     }
 
     @Override
-    public boolean isEnabled() {
-        return Spellbound.config.jousting.ENABLED;
-    }
+    public boolean isEnabled() {return Spellbound.config.jousting.ENABLED;}
     @Override
-    public int getSoftLevelCap(){
-        return Spellbound.config.jousting.SOFT_CAP;
-    }
-    @Override
-    public int getHardLevelCap(){
-        return Spellbound.config.jousting.HARD_CAP;
-    }
-    @Override
-    public int getBasePower(){
-        return Spellbound.config.jousting.BASE_POWER;
-    }
-    @Override
-    public int getPowerPerRank(){
-        return Spellbound.config.jousting.POWER_PER_RANK;
-    }
-    @Override
-    public int getPowerRange(){
-        return Spellbound.config.jousting.POWER_RANGE;
-    }
+    public int getSoftLevelCap(){return Spellbound.config.jousting.SOFT_CAP;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.jousting.IS_TREASURE;}
     @Override
     public boolean isTradeable(){return Spellbound.config.jousting.IS_FOR_SALE;}
-
-    @Override
-    public boolean canEnchant(ItemStack stack) {
-        return super.canEnchant(stack)
-                || EnchantmentCategory.WEAPON.canEnchant(stack.getItem())
-                || stack.getItem() instanceof ShovelItem
-                || stack.getItem() instanceof AxeItem;
-    }
 
     @Override
     public float getDamageBonus(int level, ItemStack stack, LivingEntity attacker, Entity defender) {

@@ -4,6 +4,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -11,13 +12,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
 import net.tigereye.spellbound.Spellbound;
+import net.tigereye.spellbound.components.VengenceComponent;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
+import net.tigereye.spellbound.registration.SBComponents;
 import net.tigereye.spellbound.registration.SBDamageSources;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
@@ -25,23 +27,24 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class VengefulEnchantment extends SBEnchantment {
 
-    private static final String VENGENCE_NBT_KEY = "SB_Vengence";
+    public static final String VENGENCE_KEY = "SB_Vengence";
+    public static final String VENGENCE_DAMAGE_KEY = "SB_Vengence_Damage";
+    public static final String VENGENCE_TARGET_KEY = "SB_Vengence_Target";
 
     public VengefulEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.spikes.RARITY), EnchantmentCategory.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND},true);
+        super(definition(ItemTags.ARMOR_ENCHANTABLE, ItemTags.CHEST_ARMOR_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.outburst.RARITY), //enchantment weight
+            Spellbound.config.outburst.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.outburst.BASE_POWER,Spellbound.config.outburst.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.outburst.BASE_POWER+Spellbound.config.outburst.POWER_RANGE,Spellbound.config.outburst.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.outburst.RARITY-1), //level cost at anvil
+            new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots
+            true); //can work outside of prefered slot
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.spikes.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.spikes.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.spikes.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.spikes.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.spikes.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.spikes.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.spikes.IS_TREASURE;}
     @Override
@@ -53,7 +56,7 @@ public class VengefulEnchantment extends SBEnchantment {
             return;
         }
         if(entity.tickCount - entity.getLastHurtByMobTimestamp() > Spellbound.config.vengeful.TIMEOUT){
-            stack.removeTagKey(VENGENCE_NBT_KEY);
+            stack.remove(SBComponents.VENGEFUL_GRUDGES);
         }
     }
 
@@ -62,9 +65,8 @@ public class VengefulEnchantment extends SBEnchantment {
         //If damage was from an attacker, save the attacker and accumulate damage taken from that entity
         Entity attacker = source.getEntity();
         if(attacker != null){
-            CompoundTag nbt = stack.getOrCreateTagElement(VENGENCE_NBT_KEY);
-            String AttackerUUID = attacker.getStringUUID();
-            nbt.putFloat(AttackerUUID,nbt.getFloat(AttackerUUID)+amount);
+            VengenceComponent vengenceComponent = stack.getOrDefault(SBComponents.VENGEFUL_GRUDGES, new VengenceComponent());
+            stack.set(SBComponents.VENGEFUL_GRUDGES, vengenceComponent.withAddedGrudge(attacker.getStringUUID(), amount));
         }
     }
 
@@ -74,18 +76,18 @@ public class VengefulEnchantment extends SBEnchantment {
         //    return;
         //}
         //check if the target has enough damaged tracked to trigger.
-        if(SBEnchantmentHelper.isEquipmentCorrectlyWorn(stack,user)) {
-            CompoundTag nbt = stack.getOrCreateTagElement(VENGENCE_NBT_KEY);
+        if(SBEnchantmentHelper.isEquipmentCorrectlyWorn(stack,user) && stack.has(SBComponents.VENGEFUL_GRUDGES)) {
+            VengenceComponent vengenceComponent = stack.get(SBComponents.VENGEFUL_GRUDGES);
             String targetUUID = target.getStringUUID();
-            float excessDamage = nbt.getFloat(targetUUID) - getMinimumDamage(level);
+            float excessDamage = vengenceComponent.getGrudge(targetUUID) - getMinimumDamage(level);
             if(excessDamage > 0){
                 VengefulAction vAction = new VengefulAction(Spellbound.config.vengeful.DAMAGE_BASE + (excessDamage * Spellbound.config.vengeful.DAMAGE_RATIO)
                         , user, target, Spellbound.config.vengeful.FOLLOWUP_HIT_DELAY);
+                //if so, create a DelayedAction that hits them more.
                 vAction.ifVengeanceInQueueSetAsFollowupElseAddToQueue();
-                nbt.remove(targetUUID);
+                stack.set(SBComponents.VENGEFUL_GRUDGES, vengenceComponent.withRemovedGrudge(targetUUID));
             }
         }
-        //if so, create a DelayedAction that hits them more.
     }
 
     public boolean onClientEntityIsGlowing(int level, ItemStack itemStack, LocalPlayer player, Entity entity, Boolean isGlowing) {
@@ -97,9 +99,12 @@ public class VengefulEnchantment extends SBEnchantment {
     }
 
     private boolean isVengeanceReady(ItemStack itemStack, Entity target){
-        CompoundTag nbt = itemStack.getOrCreateTagElement(VENGENCE_NBT_KEY);
+        if(itemStack.has(SBComponents.VENGEFUL_GRUDGES)){
+            return false;
+        }
+        VengenceComponent grudges = itemStack.get(SBComponents.VENGEFUL_GRUDGES);
         String targetUUID = target.getStringUUID();
-        float damage = nbt.getFloat(targetUUID);
+        float damage = grudges.getGrudge(targetUUID);
         return damage > getMinimumDamage(EnchantmentHelper.getItemEnchantmentLevel(SBEnchantments.VENGEFUL,itemStack));
     }
 

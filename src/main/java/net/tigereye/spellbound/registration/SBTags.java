@@ -3,6 +3,7 @@ package net.tigereye.spellbound.registration;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.tigereye.spellbound.Spellbound;
@@ -26,6 +27,12 @@ public class SBTags {
     public static final TagKey<Enchantment> UNBREAKING_ENCHANTMENTS = TagKey.create(Registries.ENCHANTMENT, new ResourceLocation(Spellbound.MODID,"unbreaking"));
     public static final TagKey<Enchantment> UTILITY_ENCHANTMENTS = TagKey.create(Registries.ENCHANTMENT, new ResourceLocation(Spellbound.MODID,"utility"));
 
+    public static final TagKey<Item> ALL_WEAPONS_ENCHANTABLE = TagKey.create(Registries.ITEM, new ResourceLocation(Spellbound.MODID,"enchantable/all_weapons"));
+    public static final TagKey<Item> ARMOR_AND_SHIELD_ENCHANTABLE = TagKey.create(Registries.ITEM, new ResourceLocation(Spellbound.MODID,"enchantable/armor_and_shield"));
+    public static final TagKey<Item> RANGED_WEAPONS_ENCHANTABLE = TagKey.create(Registries.ITEM, new ResourceLocation(Spellbound.MODID,"enchantable/ranged_weapons"));
+    public static final TagKey<Item> JOUSTING_ENCHANTABLE = TagKey.create(Registries.ITEM, new ResourceLocation(Spellbound.MODID,"enchantable/jousting"));
+    public static final TagKey<Item> AXE_ENCHANTABLE = TagKey.create(Registries.ITEM, new ResourceLocation(Spellbound.MODID,"enchantable/axes"));
+
     public static void register(){
         ENCHANTMENT_CATEGORIES.add(DAMAGE_ENCHANTMENTS);
         ENCHANTMENT_CATEGORIES.add(EFFICIENCY_ENCHANTMENTS);
@@ -40,24 +47,24 @@ public class SBTags {
         ENCHANTMENT_CATEGORIES.add(UTILITY_ENCHANTMENTS);
         List<Enchantment> parentList = new ArrayList<>();
         parentList.add(Enchantments.SHARPNESS);
-        parentList.add(Enchantments.POWER_ARROWS);
+        parentList.add(Enchantments.POWER);
         CATEGORY_PARENTS.put(DAMAGE_ENCHANTMENTS, parentList);
         parentList = new ArrayList<>();
-        parentList.add(Enchantments.BLOCK_EFFICIENCY);
+        parentList.add(Enchantments.EFFICIENCY);
         CATEGORY_PARENTS.put(EFFICIENCY_ENCHANTMENTS, parentList);
         parentList = new ArrayList<>();
-        parentList.add(Enchantments.BLOCK_FORTUNE);
+        parentList.add(Enchantments.FORTUNE);
         parentList.add(Enchantments.SILK_TOUCH);
         CATEGORY_PARENTS.put(FORTUNE_ENCHANTMENTS, parentList);
         parentList = new ArrayList<>();
-        parentList.add(Enchantments.FISHING_SPEED);
+        parentList.add(Enchantments.LURE);
         CATEGORY_PARENTS.put(LURE_ENCHANTMENTS, parentList);
         parentList = new ArrayList<>();
-        parentList.add(Enchantments.MOB_LOOTING);
+        parentList.add(Enchantments.LOOTING);
         CATEGORY_PARENTS.put(LOOTING_ENCHANTMENTS, parentList);
         //meta enchantments have no parents
         parentList = new ArrayList<>();
-        parentList.add(Enchantments.ALL_DAMAGE_PROTECTION);
+        parentList.add(Enchantments.PROTECTION);
         CATEGORY_PARENTS.put(PROTECTION_ENCHANTMENTS, parentList);
         parentList = new ArrayList<>();
         parentList.add(Enchantments.MENDING);
@@ -70,7 +77,7 @@ public class SBTags {
         CATEGORY_PARENTS.put(UNBREAKING_ENCHANTMENTS, parentList);
         parentList = new ArrayList<>();
         parentList.add(Enchantments.KNOCKBACK);
-        parentList.add(Enchantments.PUNCH_ARROWS);
+        parentList.add(Enchantments.PUNCH);
         parentList.add(Enchantments.RIPTIDE);
         parentList.add(Enchantments.CHANNELING);
         parentList.add(Enchantments.FROST_WALKER);

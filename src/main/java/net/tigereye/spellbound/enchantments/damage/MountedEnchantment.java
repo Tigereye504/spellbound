@@ -7,27 +7,26 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.registration.SBEnchantmentTargets;
+import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class MountedEnchantment extends SBEnchantment{
 
     public MountedEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.mounted.RARITY), SBEnchantmentTargets.ANY_WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE, //enchantment targets: weapons
+            SpellboundUtil.rarityLookup(Spellbound.config.mounted.RARITY), //enchantment weight
+            Spellbound.config.mounted.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.mounted.BASE_POWER,Spellbound.config.mounted.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.mounted.BASE_POWER+Spellbound.config.mounted.POWER_RANGE,Spellbound.config.mounted.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.mounted.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            true); //can work outside of prefered slot
     }
 
     @Override
     public boolean isEnabled() {return Spellbound.config.mounted.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.mounted.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.mounted.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.mounted.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.mounted.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.mounted.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.mounted.IS_TREASURE;}
     @Override

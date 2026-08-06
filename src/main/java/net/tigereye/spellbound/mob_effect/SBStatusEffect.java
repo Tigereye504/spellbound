@@ -1,6 +1,8 @@
 package net.tigereye.spellbound.mob_effect;
 
 import java.util.List;
+
+import net.minecraft.core.Holder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -14,7 +16,7 @@ public class SBStatusEffect extends MobEffect {
     }
 
     //for when the user is struck, before armor is applied
-    public float onPreArmorDefense(MobEffectInstance instance, DamageSource source, LivingEntity defender, float amount, List<MobEffectInstance> effectsToAdd, List<MobEffect> effectsToRemove){return amount;}
+    public float onPreArmorDefense(MobEffectInstance instance, DamageSource source, LivingEntity defender, float amount, List<MobEffectInstance> effectsToAdd, List<Holder<MobEffect>> effectsToRemove){return amount;}
 
-    public void onDeath(MobEffectInstance instance, DamageSource source, LivingEntity defender, List<MobEffectInstance> effectsToAdd, List<MobEffect> effectsToRemove) {}
+    public void onDeath(MobEffectInstance instance, DamageSource source, LivingEntity defender, List<MobEffectInstance> effectsToAdd, List<Holder<MobEffect>> effectsToRemove) {}
 }

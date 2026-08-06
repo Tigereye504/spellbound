@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -13,32 +14,29 @@ import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
-import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBEnchantments;
+import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class GraceEnchantment extends SBEnchantment{
     public static final ResourceLocation GRACE_ARMOR = new ResourceLocation(Spellbound.MODID,"textures/gui/grace_armor.png");
     public GraceEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.grace.RARITY), SBEnchantmentTargets.ARMOR_MAYBE_SHIELD,
-                Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
+        super(definition(Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS ? SBTags.ARMOR_AND_SHIELD_ENCHANTABLE : ItemTags.ARMOR_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.grace.RARITY), //enchantment weight
+            Spellbound.config.grace.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.grace.BASE_POWER,Spellbound.config.grace.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.grace.BASE_POWER+Spellbound.config.grace.POWER_RANGE,Spellbound.config.grace.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.grace.RARITY-1), //level cost at anvil
+            Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
                         ? new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND}
-                        : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}
-                ,true);
+                        : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots
+            true); //can work outside of prefered slot
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.grace.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.grace.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.grace.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.grace.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.grace.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.grace.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.grace.IS_TREASURE;}
     @Override

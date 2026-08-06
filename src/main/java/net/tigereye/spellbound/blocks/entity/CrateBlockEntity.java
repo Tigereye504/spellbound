@@ -2,8 +2,10 @@ package net.tigereye.spellbound.blocks.entity;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,8 +24,8 @@ import net.tigereye.spellbound.registration.SBItems;
 import org.jetbrains.annotations.Nullable;
 
 public class CrateBlockEntity extends BlockEntity {
-    public static final String LOOT_DIMENSION_KEY = "LootDimension";
-    public static final String LOOT_QUALITY_KEY = "LootQuality";
+    public static final String LOOT_DIMENSION_KEY = "SBLootDimension";
+    public static final String LOOT_QUALITY_KEY = "SBLootQuality";
     ResourceLocation dimension;
     int quality;
 
@@ -43,8 +45,8 @@ public class CrateBlockEntity extends BlockEntity {
             if(player != null){
                 builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
             }
-            ResourceLocation lootTableId = SunkenTreasureManager.getWeightedRandomLootTableId(quality,dimension,this.level.getRandom());
-            LootTable lootTable = this.level.getServer().getLootData().getLootTable(lootTableId);
+            ResourceKey<LootTable> lootTableId = SunkenTreasureManager.getWeightedRandomLootTableId(quality,dimension,this.level.getRandom());
+            LootTable lootTable = this.level.getServer().reloadableRegistries().getLootTable(lootTableId);
             if (player instanceof ServerPlayer) {
                 CriteriaTriggers.GENERATE_LOOT.trigger((ServerPlayer)player, lootTableId);
             }
@@ -59,23 +61,24 @@ public class CrateBlockEntity extends BlockEntity {
     public void setDimension(ResourceLocation dimension){
         this.dimension = dimension;
     }
+
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-        if (nbt.contains(LOOT_DIMENSION_KEY, Tag.TAG_STRING)) {
-            this.dimension = new ResourceLocation(nbt.getString(LOOT_DIMENSION_KEY));
+    public void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.loadAdditional(compoundTag,provider);
+        if (compoundTag.contains(LOOT_DIMENSION_KEY, Tag.TAG_STRING)) {
+            this.dimension = new ResourceLocation(compoundTag.getString(LOOT_DIMENSION_KEY));
         }
-        if (nbt.contains(LOOT_QUALITY_KEY, Tag.TAG_INT)) {
-            this.quality = nbt.getInt(LOOT_QUALITY_KEY);
+        if (compoundTag.contains(LOOT_QUALITY_KEY, Tag.TAG_INT)) {
+            this.quality = compoundTag.getInt(LOOT_QUALITY_KEY);
         }
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.saveAdditional(compoundTag,provider);
         if(dimension != null) {
-            nbt.putString(LOOT_DIMENSION_KEY, dimension.toString());
+            compoundTag.putString(LOOT_DIMENSION_KEY, dimension.toString());
         }
-        nbt.putInt(LOOT_QUALITY_KEY,quality);
+        compoundTag.putInt(LOOT_QUALITY_KEY,quality);
     }
 }

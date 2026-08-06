@@ -2,7 +2,11 @@ package net.tigereye.spellbound.data.SunkenTreasure;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
+
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.tigereye.spellbound.Spellbound;
 
 import java.util.HashMap;
@@ -11,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class SunkenTreasureSerializer {
-    public Map<ResourceLocation,SunkenTreasureData> read(ResourceLocation id, SunkenTreasureJsonFormat sunkenTreasureJson) {
+    public Map<ResourceKey<LootTable>,SunkenTreasureData> read(ResourceLocation id, SunkenTreasureJsonFormat sunkenTreasureJson) {
 
         if (sunkenTreasureJson.lootTables == null) {
             throw new JsonSyntaxException("Sunken Treasure entry" + id + " must provide a loot table");
@@ -39,7 +43,7 @@ public class SunkenTreasureSerializer {
             }
         }
 
-        Map<ResourceLocation, SunkenTreasureData> treasureMap = new HashMap<>();
+        Map<ResourceKey<LootTable>, SunkenTreasureData> treasureMap = new HashMap<>();
         int i = 0;
         for (JsonElement entry: sunkenTreasureJson.lootTables){
             ++i;
@@ -51,7 +55,8 @@ public class SunkenTreasureSerializer {
             sunkenTreasureData.replace = sunkenTreasureJson.replace;
 
             try {
-                treasureMap.put(new ResourceLocation(entry.getAsString()),sunkenTreasureData);
+                //WARNING: if sunken treasure breaks this line might be why
+                treasureMap.put(ResourceKey.create(Registries.LOOT_TABLE, new ResourceLocation(entry.getAsString())),sunkenTreasureData);
             } catch (Exception e) {
                 Spellbound.LOGGER.error("Sunken Treasure entry "+id+": Error parsing lootTable identifier no. " + i);
             }

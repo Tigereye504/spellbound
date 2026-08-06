@@ -1,6 +1,7 @@
 package net.tigereye.spellbound.data;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -52,7 +53,7 @@ public class TouchedBlocksPersistentState extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag nbt) {
+    public CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
         ListTag nbtList = new ListTag();
         Set<Map.Entry<ChunkPos, Set<Long>>> chunkSet = touchedBlocks.entrySet();
         for (Map.Entry<ChunkPos, Set<Long>> chunk : chunkSet) {
@@ -62,13 +63,13 @@ public class TouchedBlocksPersistentState extends SavedData {
             nbtChunk.putLongArray("blocks",chunk.getValue().stream().toList());
             nbtList.add(nbtChunk);
         }
-        nbt.put("TouchedChunks",nbtList);
-        return nbt;
+        compoundTag.put("TouchedChunks",nbtList);
+        return compoundTag;
     }
-    public static TouchedBlocksPersistentState load(CompoundTag nbt){
+    public static TouchedBlocksPersistentState load(CompoundTag compoundTag, HolderLookup.Provider provider){
         TouchedBlocksPersistentState tbpState = new TouchedBlocksPersistentState();
-        if(nbt.contains("TouchedChunks")){
-            ListTag chunkList = nbt.getList("TouchedChunks", Tag.TAG_COMPOUND);
+        if(compoundTag.contains("TouchedChunks")){
+            ListTag chunkList = compoundTag.getList("TouchedChunks", Tag.TAG_COMPOUND);
             for (Tag element:chunkList) {
                 CompoundTag chunkNbt = (CompoundTag)element;
                 ChunkPos chunkPos = new ChunkPos(chunkNbt.getInt("x"),chunkNbt.getInt("z"));

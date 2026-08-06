@@ -9,28 +9,27 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
-import net.tigereye.spellbound.registration.SBEnchantmentTargets;
 import net.tigereye.spellbound.registration.SBStatusEffects;
+import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class RampageEnchantment extends SBEnchantment{
 
     public RampageEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.rampage.RARITY), SBEnchantmentTargets.ANY_WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE, //enchantment targets: ALL weapons, both melee and ranged
+            SpellboundUtil.rarityLookup(Spellbound.config.rampage.RARITY), //enchantment weight
+            Spellbound.config.rampage.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.rampage.BASE_POWER,Spellbound.config.rampage.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.rampage.BASE_POWER+Spellbound.config.rampage.POWER_RANGE,Spellbound.config.rampage.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.rampage.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            true); //can work outside of prefered slot
     }
 
     @Override
     public boolean isEnabled() {return Spellbound.config.rampage.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.rampage.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.rampage.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.rampage.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.rampage.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.rampage.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.rampage.IS_TREASURE;}
     @Override

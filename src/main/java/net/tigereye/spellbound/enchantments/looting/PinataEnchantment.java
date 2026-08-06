@@ -14,7 +14,8 @@ import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
-import net.tigereye.spellbound.registration.SBEnchantmentTargets;
+import net.tigereye.spellbound.registration.SBComponents;
+import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.ArrayList;
@@ -22,24 +23,23 @@ import java.util.List;
 import java.util.Objects;
 
 public class PinataEnchantment extends SBEnchantment{
-    private static final String PINATA_KILL_COUNT_KEY = Spellbound.MODID+"PinataCounter";
+    public static final String PINATA_KILL_COUNT_KEY = Spellbound.MODID+"PinataCounter";
     
     public PinataEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.pinata.RARITY), SBEnchantmentTargets.ANY_WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.pinata.RARITY), //enchantment weight
+            Spellbound.config.pinata.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.pinata.BASE_POWER,Spellbound.config.pinata.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.pinata.BASE_POWER+Spellbound.config.pinata.POWER_RANGE,Spellbound.config.pinata.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.pinata.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            true); //can work outside of prefered slot
     }
 
     @Override
     public boolean isEnabled() {return Spellbound.config.pinata.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.pinata.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.pinata.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.pinata.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.pinata.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.pinata.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.pinata.IS_TREASURE;}
     @Override
@@ -94,13 +94,11 @@ public class PinataEnchantment extends SBEnchantment{
     }
 
     private static int getKillcount(ItemStack item){
-        CompoundTag nbtCompound = item.getOrCreateTag();
-        return nbtCompound.getInt(PINATA_KILL_COUNT_KEY);
+        return item.has(SBComponents.PINIATA_PROGRESS) ? item.get(SBComponents.PINIATA_PROGRESS) : 0;
     }
 
     private static void setKillcount(ItemStack item, int killCount){
-        CompoundTag nbtCompound = item.getOrCreateTag();
-        nbtCompound.putLong(PINATA_KILL_COUNT_KEY,killCount);
+        item.set(SBComponents.PINIATA_PROGRESS, killCount);
     }
 
     private static class PinataLootFountainAction extends DelayedAction {

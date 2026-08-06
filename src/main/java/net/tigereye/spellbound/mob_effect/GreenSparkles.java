@@ -1,7 +1,6 @@
 package net.tigereye.spellbound.mob_effect;
 
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.LivingEntity;
 
 public class GreenSparkles extends SBStatusEffect{
 
@@ -13,7 +12,4 @@ public class GreenSparkles extends SBStatusEffect{
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return false;
     }
-
-    @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {    }
 }

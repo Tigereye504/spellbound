@@ -3,16 +3,15 @@ package net.tigereye.spellbound.enchantments.efficiency;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -34,22 +33,20 @@ import java.util.Set;
 public class WidenedEnchantment extends SBEnchantment {
 
     public WidenedEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.widened.RARITY), EnchantmentCategory.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
+        super(definition(ItemTags.MINING_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.widened.RARITY), //enchantment weight
+            Spellbound.config.widened.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.widened.BASE_POWER,Spellbound.config.widened.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.widened.BASE_POWER+Spellbound.config.widened.POWER_RANGE,Spellbound.config.widened.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.widened.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            true); //can work outside of prefered slot
     }
 
     @Override
     public boolean isEnabled() {return Spellbound.config.widened.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.widened.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.widened.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.widened.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.widened.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.widened.POWER_RANGE;}
-    @Override
     public boolean isTreasureOnly() {return Spellbound.config.widened.IS_TREASURE;}
     @Override
     public boolean isTradeable(){return Spellbound.config.widened.IS_FOR_SALE;}
@@ -311,7 +308,7 @@ public class WidenedEnchantment extends SBEnchantment {
                     new BlockHitResult(context.getClickLocation().add(blockOffset.getX(),blockOffset.getY(),blockOffset.getZ()),
                             context.getClickedFace(),blockPos,context.isInside()));
             BlockInWorld cachedBlockPosition = new BlockInWorld(newContext.getLevel(), blockPos, false);
-            if (playerEntity != null && !playerEntity.getAbilities().mayBuild && !stack.hasAdventureModePlaceTagForBlock(newContext.getLevel().registryAccess().registryOrThrow(Registries.BLOCK), cachedBlockPosition)) {
+            if (playerEntity != null && (!playerEntity.getAbilities().mayBuild || !stack.canBreakBlockInAdventureMode(cachedBlockPosition))) {
                 return;
             }
             Item item = stack.getItem();
@@ -322,7 +319,7 @@ public class WidenedEnchantment extends SBEnchantment {
                 Spellbound.LOGGER.info("x = "+newContext.getClickedPos().getX()+" y = "+newContext.getClickedPos().getY()+" z = "+newContext.getClickedPos().getZ());
             }
             InteractionResult actionResult = item.useOn(newContext);
-            if (playerEntity != null && actionResult.shouldAwardStats()) {
+            if (playerEntity != null && actionResult.indicateItemUse()) {
                 playerEntity.awardStat(Stats.ITEM_USED.get(item));
             }
         }

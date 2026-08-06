@@ -166,7 +166,7 @@ public class SpellboundUtil {
         }
 
         source.getCommandSenderWorld().playSound(null, position.x(), position.y(), position.z(),
-                SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS,
+                SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS,
                 (float) Math.min(4,Math.sqrt(strength)), (1.0F + (source.level().random.nextFloat() - source.level().random.nextFloat()) * 0.2F) * 0.7F);
     }
 
@@ -192,19 +192,19 @@ public class SpellboundUtil {
         stacks.add(Pair.of(stack, pos));
     }
 
-    public static Enchantment.Rarity rarityLookup(int configValue){
+    public static int rarityLookup(int configValue){
         return switch (configValue) {
-            case 1 -> Enchantment.Rarity.COMMON;
-            case 2 -> Enchantment.Rarity.UNCOMMON;
-            case 3 -> Enchantment.Rarity.RARE;
-            default -> Enchantment.Rarity.VERY_RARE;
+            case 1 -> 10;
+            case 2 -> 5;
+            case 3 -> 2;
+            default -> 1;
         };
     }
 
     public static void ReplaceAttributeModifier(AttributeInstance att, AttributeModifier mod)
     {
         //removes any existing mod and replaces it with the updated one.
-        att.removeModifier(mod.getId());
+        att.removeModifier(mod);
         att.addPermanentModifier(mod);
     }
 }

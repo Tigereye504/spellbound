@@ -14,7 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -24,6 +23,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.registration.SBEnchantments;
+import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.List;
@@ -33,30 +33,31 @@ public class FisherOfMenEnchantment extends SBEnchantment {
     static int PRIORITY = 1;
 
     public FisherOfMenEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.fisherOfMen.RARITY), EnchantmentCategory.FISHING_ROD, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
+        super(definition(ItemTags.FISHING_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.fisherOfMen.RARITY), //enchantment weight
+            Spellbound.config.fisherOfMen.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.fisherOfMen.BASE_POWER,Spellbound.config.fisherOfMen.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.fisherOfMen.BASE_POWER+Spellbound.config.fisherOfMen.POWER_RANGE,Spellbound.config.fisherOfMen.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.fisherOfMen.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            true); //can work outside of prefered slot
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.fisherOfMen.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.fisherOfMen.SOFT_CAP;}
     @Override
-    public int getHardLevelCap(){return Spellbound.config.fisherOfMen.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.fisherOfMen.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.fisherOfMen.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.fisherOfMen.POWER_RANGE;}
-    @Override
     public int getPriority(){return PRIORITY;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.fisherOfMen.IS_TREASURE;}
     @Override
     public boolean isTradeable(){return Spellbound.config.fisherOfMen.IS_FOR_SALE;}
+
     @Override
     public boolean checkCompatibility(Enchantment other) {
         return super.checkCompatibility(other) && other != SBEnchantments.DULLNESS;
     }
+
     @Override
     public int beforeDurabilityLoss(int level, ItemStack stack, ServerPlayer entity, int loss){
         return Math.min(1,loss); //slight hackjob, but fishing rods only lose more than one durability at a time when hooking entities. So we refuse to let that happen.
@@ -109,7 +110,7 @@ public class FisherOfMenEnchantment extends SBEnchantment {
             luck = playerEntity.getLuck();
         }
         LootParams.Builder LCPSBuilder = new LootParams.Builder((ServerLevel) bobber.level()).withParameter(LootContextParams.ORIGIN, bobber.position()).withParameter(LootContextParams.TOOL, stack).withParameter(LootContextParams.THIS_ENTITY, bobber).withLuck(EnchantmentHelper.getFishingLuckBonus(stack) + luck);
-        LootTable lootTable = bobber.level().getServer().getLootData().getLootTable(BuiltInLootTables.FISHING);
+        LootTable lootTable = bobber.level().getServer().reloadableRegistries().getLootTable(BuiltInLootTables.FISHING);
         LootParams LCPS = LCPSBuilder.create(LootContextParamSets.FISHING);
         List<ItemStack> list = lootTable.getRandomItems(LCPS);
         if(playerEntity != null) {

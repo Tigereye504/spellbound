@@ -3,10 +3,10 @@ package net.tigereye.spellbound.enchantments.utility.tool;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,20 +18,19 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class ChilledEnchantment extends SBEnchantment{
     public ChilledEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.chilled.RARITY), EnchantmentCategory.DIGGER, new EquipmentSlot[] {EquipmentSlot.MAINHAND},true);
+        super(definition(ItemTags.MINING_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.chilled.RARITY), //enchantment weight
+            Spellbound.config.chilled.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.chilled.BASE_POWER,Spellbound.config.chilled.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.chilled.BASE_POWER+Spellbound.config.chilled.POWER_RANGE,Spellbound.config.chilled.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.chilled.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            true); //can work outside of prefered slot
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.chilled.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.chilled.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.chilled.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.chilled.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.chilled.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.chilled.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.chilled.IS_TREASURE;}
     @Override

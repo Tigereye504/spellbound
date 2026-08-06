@@ -20,7 +20,6 @@
     "PersistentProjectileEntityMixin",
     "PlayerEntityMixin",
     "ProjectileEntityMixin",
-    "StatusEffectInstanceMixin",
     "TridentEntityMixin",
     "WorldChunkMixin",
     "WorldMixin"

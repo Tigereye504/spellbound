@@ -18,11 +18,12 @@ public class ShieldsDown extends SBStatusEffect{
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         if(!(entity.level().isClientSide)){
             entity.addEffect(new MobEffectInstance(SBStatusEffects.SHIELDED,
                         MobEffectInstance.INFINITE_DURATION,
                         amplifier, false, false, false));
         }
+        return true;
     }
 }

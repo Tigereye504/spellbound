@@ -1,10 +1,13 @@
 package net.tigereye.spellbound.enchantments.meta;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -13,41 +16,46 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.interfaces.DelayedAction;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
+import net.tigereye.spellbound.registration.SBComponents;
 import net.tigereye.spellbound.registration.SBEnchantments;
+import net.tigereye.spellbound.registration.SBTags;
+import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 public class StoriedEnchantment extends SBEnchantment {
     public static final String STORIED_XP_KEY = Spellbound.MODID+"StoriedXP";
 
     public StoriedEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.storied.RARITY), EnchantmentCategory.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(definition(ItemTags.DURABILITY_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.storied.RARITY), //enchantment weight
+            Spellbound.config.storied.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.storied.BASE_POWER,Spellbound.config.storied.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.storied.BASE_POWER+Spellbound.config.storied.POWER_RANGE,Spellbound.config.storied.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.storied.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            false); //can work outside of prefered slot
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.storied.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.storied.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.storied.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.storied.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.storied.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.storied.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.storied.IS_TREASURE;}
     @Override
@@ -73,32 +81,31 @@ public class StoriedEnchantment extends SBEnchantment {
     @Override
     public List<Component> addTooltip(int level, ItemStack stack, Player player, TooltipFlag context) {
         List<Component> output = new ArrayList<>();
-        CompoundTag nbt = stack.getOrCreateTag();
         int chapter = getStoryChapter(stack);
         output.add(Component.literal(
-                "Chapter "+ chapter +": "+((int)nbt.getFloat(STORIED_XP_KEY))+"/"
+                "Chapter "+ chapter +": "+((int)stack.getOrDefault(SBComponents.STORIED_XP,0))+"/"
                         +getXPToNextChapter(chapter)));
         return output;
     }
 
     private void gainStoryXP(ItemStack stack, LivingEntity owner, float xp){
-        CompoundTag nbt = stack.getOrCreateTag();
-        if(!nbt.contains(STORIED_XP_KEY)){
-            beginStory(owner,stack,EnchantmentHelper.getEnchantments(stack));
+        float oldXp = stack.getOrDefault(SBComponents.STORIED_XP, 0).floatValue();
+        if(oldXp == 0){
+            beginStory(owner,stack,EnchantmentHelper.getEnchantmentsForCrafting(stack));
         }
         int currentChapter = getStoryChapter(stack);
-        float currentXP = xp + nbt.getFloat(STORIED_XP_KEY);
+        float newXP = xp + oldXp;
         double xpToNextChapter = getXPToNextChapter(currentChapter);
-        while(currentXP > xpToNextChapter){
-            currentXP -= (float) xpToNextChapter;
+        while(newXP > xpToNextChapter){
+            newXP -= (float) xpToNextChapter;
             ++currentChapter;
             xpToNextChapter = getXPToNextChapter(currentChapter);
-            advanceStory(owner,stack,EnchantmentHelper.getEnchantments(stack));
+            advanceStory(owner,stack,stack.getEnchantments());
         }
-        nbt.putFloat(STORIED_XP_KEY,currentXP);
+        stack.set(SBComponents.STORIED_XP, newXP);
     }
 
-    private void beginStory(LivingEntity entity, ItemStack stack, Map<Enchantment,Integer> enchantments){
+    private void beginStory(LivingEntity entity, ItemStack stack, ItemEnchantments enchantments){
 
         //TODO: Get one of those rare item name generators, use it if the item lacks a custom name.
 
@@ -129,11 +136,10 @@ public class StoriedEnchantment extends SBEnchantment {
 
     private int getStoryChapter(ItemStack stack){
         AtomicInteger chapter = new AtomicInteger(-1);
-        Map<Enchantment,Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-        enchantments.forEach(((enchantment, integer) -> chapter.addAndGet(integer)));
+        SBEnchantmentHelper.runIterationOnItem((enchantment, level) -> chapter.addAndGet(level),stack);
         return chapter.get();
     }
-    private void advanceStory(LivingEntity entity, ItemStack stack, Map<Enchantment,Integer> enchantments){
+    private void advanceStory(LivingEntity entity, ItemStack stack, ItemEnchantments enchantments){
         //Determine which enchantments are not at max level
         List<Tuple<Enchantment,Integer>> levelableEnchantments = getLevelableEnchantments(enchantments);
         //if there are no level-able enchantments, try to add a new enchantment. Otherwise, the item's story is finished.
@@ -175,11 +181,11 @@ public class StoriedEnchantment extends SBEnchantment {
         }
     }
 
-    private List<Tuple<Enchantment,Integer>> getLevelableEnchantments(Map<Enchantment,Integer> enchantments){
+    private List<Tuple<Enchantment,Integer>> getLevelableEnchantments(ItemEnchantments enchantments){
         List<Tuple<Enchantment,Integer>> levelableEnchantments = new ArrayList<>();
-        enchantments.forEach((enchantment, enchLevel) -> {
-            if(enchantment.getMaxLevel() > enchLevel) {
-                levelableEnchantments.add(new Tuple<>(enchantment, enchLevel));
+        enchantments.entrySet().forEach((enchantmentHolder) -> {
+            if(enchantmentHolder.getKey().value().getMaxLevel() > enchantmentHolder.getIntValue()) {
+                levelableEnchantments.add(new Tuple<>(enchantmentHolder.getKey().value(), enchantmentHolder.getIntValue()));
             }
         });
         return levelableEnchantments;
@@ -188,6 +194,7 @@ public class StoriedEnchantment extends SBEnchantment {
     private Enchantment selectRandomAddableEnchantment(LivingEntity entity, ItemStack stack, boolean mustBeLevelable){
 
         List<Enchantment> options = new LinkedList<>();
+        Set<Holder<Enchantment>> existingEnchantments = EnchantmentHelper.getEnchantmentsForCrafting(stack).keySet();
         for (Enchantment enchantment : BuiltInRegistries.ENCHANTMENT) {
             if ((enchantment.getMaxLevel() != 1 || !mustBeLevelable)
                     && enchantment.getMaxLevel() > 0 //to prevent disabled enchantments from being rolled
@@ -196,15 +203,7 @@ public class StoriedEnchantment extends SBEnchantment {
                     && ((enchantment.isDiscoverable()) || Spellbound.config.storied.CAN_CREATE_NON_LOOT)
                     && enchantment.canEnchant(stack))
             {
-                boolean noConflict = true;
-                for (Enchantment existingEnchantment:
-                        EnchantmentHelper.getEnchantments(stack).keySet()) {
-                    if(!enchantment.isCompatibleWith(existingEnchantment)){
-                        noConflict = false;
-                        break;
-                    }
-                }
-                if(noConflict) {
+                if(EnchantmentHelper.isEnchantmentCompatible(existingEnchantments, enchantment)) {
                     options.add(enchantment);
                 }
             }
@@ -257,14 +256,14 @@ public class StoriedEnchantment extends SBEnchantment {
         }
         @Override
         public void act() {
-            Map<Enchantment,Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+            ItemEnchantments.Mutable enchantmentMutable = new ItemEnchantments.Mutable(stack.getEnchantments());
             if(newLevel == 0){
-                enchantments.remove(enchantment);
+                enchantmentMutable.removeIf((entry) -> entry.value() == enchantment);
             }
             else {
-                enchantments.put(enchantment, newLevel);
+                enchantmentMutable.set(enchantment, newLevel);
             }
-            EnchantmentHelper.setEnchantments(enchantments,stack);
+            EnchantmentHelper.setEnchantments(stack, enchantmentMutable.toImmutable());
         }
     }
 }

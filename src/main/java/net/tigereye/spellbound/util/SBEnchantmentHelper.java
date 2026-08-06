@@ -3,12 +3,10 @@ package net.tigereye.spellbound.util;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
@@ -28,7 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -45,19 +43,18 @@ import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.NotNull;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SBEnchantmentHelper {
-    public static final String ON_BREAK_LOCKOUT_KEY = Spellbound.MODID+"OnBreakLockout";
+    //public static final String ON_BREAK_LOCKOUT_KEY = Spellbound.MODID+"OnBreakLockout";
 
     //called after vanilla's getAttackDamage
     public static int beforeDurabilityLoss(ItemStack stack, ServerPlayer user, int loss){
         if(Spellbound.config.STORIED_WORLD && !stack.isEnchanted()){
-            Map<Enchantment,Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-            enchantments.put(SBEnchantments.STORIED, 1);
-            EnchantmentHelper.setEnchantments(enchantments,stack);
+            stack.enchant(SBEnchantments.STORIED, 1);
         }
         MutableInt mutableInt = new MutableInt(loss);
         if(Spellbound.DEBUG){
@@ -280,6 +277,22 @@ public class SBEnchantmentHelper {
         },entity.getAllSlots());
     }
 
+    public static void afterHeal(LivingEntity entity, float healing){
+        List<SBEnchantment> checked = new LinkedList<>();
+        SBEnchantmentHelper.forEachSpellboundEnchantment((enchantment, level, itemStack) -> {
+            if(enchantment.requiresPreferredSlot()) {
+                if (entity.getItemBySlot(LivingEntity.getEquipmentSlotForItem(itemStack)) != itemStack) {
+                    return;
+                }
+            }
+            if(!checked.contains(enchantment)){
+                checked.add(enchantment);
+                enchantment.afterHealOnce(level,itemStack,entity,healing);
+            }
+            enchantment.afterHeal(level,itemStack,entity,healing);
+        },entity.getAllSlots());
+    }
+
     public static void onDoRedHealthDamage(LivingEntity attacker, DamageSource source, LivingEntity victim, float redHealthDamage) {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onDoRedHealthDamage(level,itemStack,attacker,victim,source,redHealthDamage),getAttackEquipment(attacker, source));
     }
@@ -287,9 +300,9 @@ public class SBEnchantmentHelper {
     public static boolean onItemDestroyed(ItemStack stack, Entity entity) {
         AtomicBoolean willBreak = new AtomicBoolean(true);
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> willBreak.set(enchantment.beforeToolBreak(level, itemStack, entity)), stack);
-        if(willBreak.get() && !stack.getOrCreateTag().getBoolean(ON_BREAK_LOCKOUT_KEY)){
+        if(willBreak.get() /*&& !stack.getOrCreateTag().getBoolean(ON_BREAK_LOCKOUT_KEY)*/){
             forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onToolBreak(level, itemStack, entity), stack);
-            stack.getOrCreateTag().putBoolean(ON_BREAK_LOCKOUT_KEY,true);
+            /*stack.getOrCreateTag().putBoolean(ON_BREAK_LOCKOUT_KEY,true);*/
         }
         return willBreak.get();
     }
@@ -403,17 +416,13 @@ public class SBEnchantmentHelper {
 
     private static void forEachSpellboundEnchantment(SBEnchantmentHelper.Consumer consumer, ItemStack stack) {
         if (stack != null && !stack.isEmpty()) {
-            ListTag NbtList = stack.getEnchantmentTags();
+            ItemEnchantments enchantments = stack.getEnchantments();
             ArrayList<Tuple<SBEnchantment,Integer>> enchantmentsList = new ArrayList<>();
-            for(int i = 0; i < NbtList.size(); ++i) {
-                String string = NbtList.getCompound(i).getString("id");
-                int j = NbtList.getCompound(i).getInt("lvl");
-                BuiltInRegistries.ENCHANTMENT.getOptional(ResourceLocation.tryParse(string)).ifPresent((enchantment) -> {
-                    if(enchantment instanceof SBEnchantment sbEnchantment) {
-                        enchantmentsList.add(new Tuple<>(sbEnchantment,j));
-                    }
-                });
-            }
+            enchantments.entrySet().forEach((entry) -> {
+                if(entry.getKey().value() instanceof SBEnchantment sbEnchantment) {
+                        enchantmentsList.add(new Tuple<>(sbEnchantment,entry.getIntValue()));
+                }
+            });
             enchantmentsList.sort((o1, o2) -> -Integer.compare(o1.getA().getPriority(), o2.getA().getPriority()));
             enchantmentsList.forEach((enchantment) -> consumer.accept(enchantment.getA(), enchantment.getB(), stack));
         }
@@ -479,24 +488,14 @@ public class SBEnchantmentHelper {
         return true;
     }
 
-    public static UUID loadItemUUID(ItemStack stack){
-        CompoundTag tag = stack.getOrCreateTag();
-        UUID id;
-        if(tag.contains(Spellbound.MODID+"ItemID")){
-            id = tag.getUUID(Spellbound.MODID+"ItemID");
-        }
-        else{
-            id = UUID.randomUUID();
-            tag.putUUID(Spellbound.MODID+"ItemID",id);
-        }
-        return id;
-    }
-
     public static Iterable<ItemStack> getAttackEquipment(LivingEntity entity, DamageSource source){
         List<ItemStack> equipment = new ArrayList<>();
         entity.getArmorSlots().forEach((itemStack) -> equipment.add(itemStack));
         if(source.getDirectEntity() instanceof SpellboundProjectileEntity spe){
-            equipment.add(spe.getSource());
+            ItemStack sourceWeapon = spe.getSource();
+            if(sourceWeapon != null){
+                equipment.add(sourceWeapon);
+            }
         }
         else{
             entity.getHandSlots().forEach((itemStack) -> equipment.add(itemStack));
@@ -541,6 +540,19 @@ public class SBEnchantmentHelper {
         Optional<Holder.Reference<Enchantment>> optional2 = BuiltInRegistries.ENCHANTMENT.getHolder(key);
         return optional2.orElse(null);
     }
+
+    public static void runIterationOnItem(EnchantmentVisitor consumer, ItemStack itemStack) {
+		ItemEnchantments itemEnchantments = itemStack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+
+		for (Object2IntMap.Entry<Holder<Enchantment>> entry : itemEnchantments.entrySet()) {
+			consumer.accept(entry.getKey().value(), entry.getIntValue());
+		}
+	}
+
+    @FunctionalInterface //duplicate of EnchantmentHelper's Visitor class
+	public interface EnchantmentVisitor {
+		void accept(Enchantment enchantment, int i);
+	}
 
     @FunctionalInterface
     interface Consumer {

@@ -1,10 +1,10 @@
 package net.tigereye.spellbound.enchantments.unbreaking;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -13,20 +13,19 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class SaturatedEnchantment extends SBEnchantment {
 
     public SaturatedEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.saturated.RARITY), EnchantmentCategory.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(definition(ItemTags.DURABILITY_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.saturated.RARITY), //enchantment weight
+            Spellbound.config.saturated.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.saturated.BASE_POWER,Spellbound.config.saturated.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.saturated.BASE_POWER+Spellbound.config.saturated.POWER_RANGE,Spellbound.config.saturated.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.saturated.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            false); //can work outside of prefered slot
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.saturated.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.saturated.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.saturated.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.saturated.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.saturated.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.saturated.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.saturated.IS_TREASURE;}
     @Override

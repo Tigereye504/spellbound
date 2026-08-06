@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -19,7 +18,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -31,22 +29,18 @@ import java.util.List;
 public abstract class SBEnchantment extends Enchantment {
     protected boolean REQUIRES_PREFERRED_SLOT;
 
-    protected SBEnchantment(Rarity weight, EnchantmentCategory type, EquipmentSlot[] slotTypes,boolean requiresPreferedSlot) {
-        super(weight, type, slotTypes);
+    protected SBEnchantment(EnchantmentDefinition definition, boolean requiresPreferedSlot) {
+        super(definition);
         REQUIRES_PREFERRED_SLOT = requiresPreferedSlot;
     }
     public abstract boolean isEnabled();
     public abstract int getSoftLevelCap();
-    public abstract int getHardLevelCap();
-    public abstract int getBasePower();
-    public abstract int getPowerPerRank();
-    public abstract int getPowerRange();
 
     public int getPriority(){return 0;}
 
     @Override
     public int getMinCost(int level) {
-        int power = (getPowerPerRank() * level) + getBasePower();
+        int power = super.getMinCost(level);
         if(level > getSoftLevelCap()) {
             power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }
@@ -55,15 +49,16 @@ public abstract class SBEnchantment extends Enchantment {
 
     @Override
     public int getMaxCost(int level) {
-        if(level < getHardLevelCap()) {
-            return super.getMinCost(level) + getPowerRange();
+        int power = super.getMaxCost(level);
+        if(level > getSoftLevelCap()) {
+            power += Spellbound.config.POWER_TO_EXCEED_SOFT_CAP;
         }
-        return Integer.MAX_VALUE;
+        return power;
     }
 
     @Override
     public int getMaxLevel() {
-        if(isEnabled()) return getHardLevelCap();
+        if(isEnabled()) return super.getMaxLevel();
         else return 0;
     }
 
@@ -86,9 +81,6 @@ public abstract class SBEnchantment extends Enchantment {
         return 0;
     }
     public void onActivate(int level, Player playerEntity, ItemStack itemStack, Entity target) {}
-
-    //for when equipment is changed
-    //public void onEquipmentChange(int level, ItemStack stack, LivingEntity entity){}
 
     //for when you reel in a hooked entity
     public void onPullHookedEntity(int level, FishingHook bobber, ItemStack stack, LivingEntity user, Entity target){}
@@ -198,6 +190,12 @@ public abstract class SBEnchantment extends Enchantment {
     }
 
     public void onTakeRedHealthDamageOnce(int level, ItemStack itemStack, DamageSource source, LivingEntity entity, float amount) {}
+
+    public void afterHeal(int level, ItemStack itemStack, LivingEntity entity, float amount) {
+    }
+
+    public void afterHealOnce(int level, ItemStack itemStack, LivingEntity entity, float amount) {}
+
 
     public void onDoRedHealthDamage(int level, ItemStack itemStack, LivingEntity attacker, LivingEntity victim, DamageSource source, float amount) {
     }

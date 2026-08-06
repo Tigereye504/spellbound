@@ -17,7 +17,7 @@ public class NetworkingUtil {
         buf.writeDouble(pos.x());
         buf.writeDouble(pos.y());
         buf.writeDouble(pos.z());
-        ClientPlayNetworking.send(SBNetworking.TELEPORT_REQUEST_PACKET_ID,buf);
+        ClientPlayNetworking.send()//(SBNetworking.TELEPORT_REQUEST_PACKET_ID,buf);
     }
 
     public static void sendStatusEffectRequestPacket(int duration, int magnitude, MobEffect statusEffect){

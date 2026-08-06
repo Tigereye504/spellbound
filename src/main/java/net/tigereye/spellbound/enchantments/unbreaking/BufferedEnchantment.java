@@ -7,24 +7,32 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
+import net.tigereye.spellbound.registration.SBComponents;
 import net.tigereye.spellbound.registration.SBEnchantments;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class BufferedEnchantment extends SBEnchantment {
 
-    private static final String BUFFER_TIME_KEY = Spellbound.MODID+"BufferTime";
+    public static final String BUFFER_TIME_KEY = Spellbound.MODID+"BufferTime";
     private static final int BUFFER_COLOR = 0x1cd8e3;
     private static final int BUFFER_DULL_COLOR = 0x579ca2;
 
     public BufferedEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.buffered.RARITY), EnchantmentCategory.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND},false);
+        super(definition(ItemTags.DURABILITY_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.buffered.RARITY), //enchantment weight
+            Spellbound.config.buffered.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.buffered.BASE_POWER,Spellbound.config.buffered.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.buffered.BASE_POWER+Spellbound.config.buffered.POWER_RANGE,Spellbound.config.buffered.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.buffered.RARITY-1), //level cost at anvil
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
+            false); //can work outside of prefered slot
     }
 
     @Override
@@ -33,14 +41,6 @@ public class BufferedEnchantment extends SBEnchantment {
     }
     @Override
     public int getSoftLevelCap(){return Spellbound.config.buffered.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.buffered.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.buffered.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.buffered.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.buffered.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.buffered.IS_TREASURE;}
     @Override
@@ -83,8 +83,7 @@ public class BufferedEnchantment extends SBEnchantment {
     }
 
     private static float getDurabilityBuffer(int level, ItemStack item, Level world){
-        CompoundTag nbtCompound = item.getOrCreateTag();
-        Long time = nbtCompound.getLong(BUFFER_TIME_KEY);
+        Long time = item.getOrDefault(SBComponents.BUFFERED_TIME,0l);
         return getDurabilityBuffer(level, time, world.getGameTime());
     }
 
@@ -93,9 +92,8 @@ public class BufferedEnchantment extends SBEnchantment {
     }
 
     private static void setDurabilityBuffer(int level, ItemStack item, Level world, float buffer){
-        CompoundTag nbtCompound = item.getOrCreateTag();
         long timeDiff = (long) (buffer * Spellbound.config.buffered.RECOVERY_RATE)/level;
-        nbtCompound.putLong(BUFFER_TIME_KEY,world.getGameTime()-timeDiff);
+        item.set(SBComponents.BUFFERED_TIME,world.getGameTime()-timeDiff);
     }
 
     @Environment(EnvType.CLIENT)

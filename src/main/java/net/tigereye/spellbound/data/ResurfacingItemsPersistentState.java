@@ -1,5 +1,6 @@
 package net.tigereye.spellbound.data;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -64,20 +65,20 @@ public class ResurfacingItemsPersistentState extends SavedData {
         return output;
     }
     @Override
-    public CompoundTag save(CompoundTag nbt) {
+    public CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
         ListTag nbtList = new ListTag();
         for (ItemStack stack : resurfacingQueue) {
-            nbtList.add(stack.save(new CompoundTag()));
+            nbtList.add(stack.save(provider));
         }
-        nbt.put(RESURFACING_ITEMS_LIST_KEY,nbtList);
-        return nbt;
+        compoundTag.put(RESURFACING_ITEMS_LIST_KEY,nbtList);
+        return compoundTag;
     }
-    public static ResurfacingItemsPersistentState load(CompoundTag nbt){
+    public static ResurfacingItemsPersistentState load(CompoundTag compoundTag, HolderLookup.Provider provider){
         ResurfacingItemsPersistentState ripState = new ResurfacingItemsPersistentState();
-        if(nbt.contains(RESURFACING_ITEMS_LIST_KEY)){
-            ListTag chunkList = nbt.getList(RESURFACING_ITEMS_LIST_KEY, Tag.TAG_COMPOUND);
+        if(compoundTag.contains(RESURFACING_ITEMS_LIST_KEY)){
+            ListTag chunkList = compoundTag.getList(RESURFACING_ITEMS_LIST_KEY, Tag.TAG_COMPOUND);
             for (Tag element:chunkList) {
-                ripState.resurfacingQueue.add(ItemStack.of((CompoundTag)element));
+                ItemStack.parse(provider,element).ifPresent((stack) -> ripState.resurfacingQueue.add(stack));
             }
         }
         return ripState;

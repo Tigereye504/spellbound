@@ -1,6 +1,9 @@
 package net.tigereye.spellbound.interfaces;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import net.minecraft.world.phys.Vec3;
 
 public interface SpellboundLivingEntity {
@@ -13,4 +16,8 @@ public interface SpellboundLivingEntity {
     void spellbound$setGraceMagnitude(float lastDamageTaken);
     void spellbound$setGraceTicks(int GraceTicks);
     boolean spellbound$shouldDisplayShielded();
+    void spellbound$setLastPrimer(UUID uuid);
+    UUID spellbound$getLastPrimer();
+    void spellbound$setLastTether(UUID uuid);
+    UUID spellbound$setLastTether();
 }

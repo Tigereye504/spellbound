@@ -1,10 +1,10 @@
 package net.tigereye.spellbound.enchantments.utility.leggings;
 
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.phys.Vec3;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -16,7 +16,14 @@ import net.tigereye.spellbound.util.VectorUtil;
 public class PhaseLeapEnchantment extends SBEnchantment {
 
     public PhaseLeapEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.phaseLeap.RARITY), EnchantmentCategory.ARMOR_LEGS, new EquipmentSlot[] {EquipmentSlot.LEGS},true);
+        super(definition(ItemTags.LEG_ARMOR_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.phaseLeap.RARITY), //enchantment weight
+            Spellbound.config.phaseLeap.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.phaseLeap.BASE_POWER,Spellbound.config.phaseLeap.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.phaseLeap.BASE_POWER+Spellbound.config.phaseLeap.POWER_RANGE,Spellbound.config.phaseLeap.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.phaseLeap.RARITY-1), //level cost at anvil
+            new EquipmentSlot[] {EquipmentSlot.LEGS}), //prefered slots
+            true); //can work outside of prefered slot
     }
 
     @Override
@@ -25,14 +32,6 @@ public class PhaseLeapEnchantment extends SBEnchantment {
     }
     @Override
     public int getSoftLevelCap(){return Spellbound.config.phaseLeap.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.phaseLeap.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.phaseLeap.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.phaseLeap.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.phaseLeap.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.phaseLeap.IS_TREASURE;}
     @Override

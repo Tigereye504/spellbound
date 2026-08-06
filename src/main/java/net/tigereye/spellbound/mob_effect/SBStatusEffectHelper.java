@@ -5,6 +5,8 @@ import org.apache.commons.lang3.mutable.MutableFloat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import net.minecraft.core.Holder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -34,12 +36,12 @@ public class SBStatusEffectHelper {
 
     private static void forEachStatusEffect(SBStatusEffectHelper.Consumer consumer, Collection<MobEffectInstance> effects, LivingEntity entity) {
         List<MobEffectInstance> effectsToAdd = new ArrayList<>();
-        List<MobEffect> effectsToRemove = new ArrayList<>();
+        List<Holder<MobEffect>> effectsToRemove = new ArrayList<>();
         for (MobEffectInstance effect:
              effects) {
             consumer.accept(effect,effectsToAdd,effectsToRemove);
         }
-        for (MobEffect effect:
+        for (Holder<MobEffect> effect:
                 effectsToRemove) {
             entity.removeEffect(effect);
         }
@@ -51,6 +53,6 @@ public class SBStatusEffectHelper {
 
     @FunctionalInterface
     interface Consumer {
-        void accept(MobEffectInstance instance, List<MobEffectInstance> effectsToAdd, List<MobEffect> effectsToRemove);
+        void accept(MobEffectInstance instance, List<MobEffectInstance> effectsToAdd, List<Holder<MobEffect>> effectsToRemove);
     }
 }

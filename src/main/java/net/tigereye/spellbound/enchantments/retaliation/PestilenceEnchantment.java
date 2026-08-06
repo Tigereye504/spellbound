@@ -1,5 +1,6 @@
 package net.tigereye.spellbound.enchantments.retaliation;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -9,7 +10,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
 import net.tigereye.spellbound.mob_effect.instance.OwnedStatusEffectInstance;
@@ -26,20 +26,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PestilenceEnchantment  extends SBEnchantment {
 
     public PestilenceEnchantment() {
-        super(SpellboundUtil.rarityLookup(Spellbound.config.pestilence.RARITY), EnchantmentCategory.ARMOR_CHEST, new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND},true);
+        super(definition(ItemTags.ARMOR_ENCHANTABLE, ItemTags.CHEST_ARMOR_ENCHANTABLE,
+            SpellboundUtil.rarityLookup(Spellbound.config.pestilence.RARITY), //enchantment weight
+            Spellbound.config.pestilence.HARD_CAP, //level cap
+            dynamicCost(Spellbound.config.pestilence.BASE_POWER,Spellbound.config.pestilence.POWER_PER_RANK), //minimum enchanting power to roll
+            dynamicCost(Spellbound.config.pestilence.BASE_POWER+Spellbound.config.pestilence.POWER_RANGE,Spellbound.config.pestilence.POWER_PER_RANK), //maximum enchanting power to roll
+            (int)Math.pow(2,Spellbound.config.pestilence.RARITY-1), //level cost at anvil
+            new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots
+            true); //can work outside of prefered slot
     }
     @Override
     public boolean isEnabled() {return Spellbound.config.pestilence.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.pestilence.SOFT_CAP;}
-    @Override
-    public int getHardLevelCap(){return Spellbound.config.pestilence.HARD_CAP;}
-    @Override
-    public int getBasePower(){return Spellbound.config.pestilence.BASE_POWER;}
-    @Override
-    public int getPowerPerRank(){return Spellbound.config.pestilence.POWER_PER_RANK;}
-    @Override
-    public int getPowerRange(){return Spellbound.config.pestilence.POWER_RANGE;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.pestilence.IS_TREASURE;}
     @Override
@@ -56,7 +55,7 @@ public class PestilenceEnchantment  extends SBEnchantment {
         Collection<MobEffectInstance> effects = defender.getActiveEffects();
         List<MobEffectInstance> hostileEffects = new ArrayList<>();
         effects.forEach(effect -> {
-            if(effect.getEffect().getCategory() == MobEffectCategory.HARMFUL && !effect.getEffect().isInstantenous()){
+            if(effect.getEffect().value().getCategory() == MobEffectCategory.HARMFUL && !effect.getEffect().value().isInstantenous()){
                 hostileEffects.add(effect);
             }
         });
