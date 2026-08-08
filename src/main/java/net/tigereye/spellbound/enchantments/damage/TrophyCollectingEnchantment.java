@@ -28,8 +28,8 @@ import java.util.stream.Stream;
 
 public class TrophyCollectingEnchantment extends SBEnchantment{
 
-    public static final String TROPHY_COLLECTOR_KEY = Spellbound.MODID+"TrophyCollector";
-    public static final String UNIQUE_TROPHY_COUNT_KEY = Spellbound.MODID+"UniqueTrophyCount";
+    public static final String TROPHY_COLLECTOR_KEY = Spellbound.MODID+":trophy_collector";
+    public static final String UNIQUE_TROPHY_COUNT_KEY = Spellbound.MODID+":unique_trophy_count";
 
     public TrophyCollectingEnchantment() {
         super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE, //enchantment targets: ALL weapons, both melee and ranged
@@ -143,7 +143,7 @@ public class TrophyCollectingEnchantment extends SBEnchantment{
         if(Spellbound.config.TAKE_ANY_TROPHY ||
                 !(victim instanceof AgeableMob || victim instanceof WaterAnimal) || victim instanceof NeutralMob || victim instanceof Enemy) {
             boolean newTrophy = !hasTrophy(victim, stack);
-            TrophyCollectionComponent collection = stack.getOrDefault(SBComponents.TROPHY_COLECTION, new TrophyCollectionComponent()).withTrophyAdded(victim.getType());
+            TrophyCollectionComponent collection = stack.getOrDefault(SBComponents.TROPHY_COLECTION, TrophyCollectionComponent.ofTrophy(victim.getType()));
             stack.set(SBComponents.TROPHY_COLECTION,collection);
             if (killer instanceof Player killerPlayer) {
                 if (newTrophy) {

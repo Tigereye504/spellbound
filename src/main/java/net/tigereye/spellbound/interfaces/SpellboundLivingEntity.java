@@ -18,5 +18,5 @@ public interface SpellboundLivingEntity {
     void spellbound$setLastPrimer(UUID uuid);
     UUID spellbound$getLastPrimer();
     void spellbound$setLastTether(UUID uuid);
-    UUID spellbound$setLastTether();
+    UUID spellbound$getLastTether();
 }

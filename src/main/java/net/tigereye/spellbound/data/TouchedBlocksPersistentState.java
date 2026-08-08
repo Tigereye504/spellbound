@@ -18,7 +18,7 @@ import java.util.*;
 
 public class TouchedBlocksPersistentState extends SavedData {
 
-    public static final String TOUCHED_BLOCKS_LIST_KEY = Spellbound.MODID+"TouchedBlocks";
+    public static final String TOUCHED_BLOCKS_LIST_KEY = Spellbound.MODID+"_touched_blocks";
     private final Map<ChunkPos, Set<Long>> touchedBlocks = new HashMap<>();
 
     public static SavedData.Factory<TouchedBlocksPersistentState> factory() {

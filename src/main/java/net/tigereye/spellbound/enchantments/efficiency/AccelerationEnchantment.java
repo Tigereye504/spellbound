@@ -16,8 +16,8 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class AccelerationEnchantment extends SBEnchantment{
 
-    public static final String ACCELERATION_STACKS_KEY = Spellbound.MODID+"SB_Acceleration_Stacks";
-    public static final String ACCELERATION_TIME_KEY = Spellbound.MODID+"SB_Acceleration_Time";
+    public static final String ACCELERATION_STACKS_KEY = Spellbound.MODID+":acceleration_stacks";
+    public static final String ACCELERATION_TIME_KEY = Spellbound.MODID+":acceleration_time";
 
     public AccelerationEnchantment() {
         super(definition(ItemTags.MINING_ENCHANTABLE,
@@ -44,7 +44,8 @@ public class AccelerationEnchantment extends SBEnchantment{
         //if acceleration is stale, drop the combo and return
         if(checkForTimeout(stack, playerEntity)) return miningSpeed;
         //else get acceleration amount and reset the clock
-        stack.set(SBComponents.ACCELERATION_TIME,playerEntity.getCommandSenderWorld().getGameTime());
+        //TODO: find better way to do this
+        //stack.set(SBComponents.ACCELERATION_TIME,playerEntity.getCommandSenderWorld().getGameTime());
         float accelerationStacks = stack.getOrDefault(SBComponents.ACCELERATION_STACKS,0f);
         if(accelerationStacks == 0 || !stack.isCorrectToolForDrops(block)) {
             return miningSpeed;
@@ -59,15 +60,15 @@ public class AccelerationEnchantment extends SBEnchantment{
             Math.min(Spellbound.config.acceleration.MAX_ACCELERATION_STACKS,accelerationStacks + state.getBlock().defaultDestroyTime()));
         stack.set(SBComponents.ACCELERATION_TIME,world.getGameTime());
         if(Spellbound.DEBUG){
-            Spellbound.LOGGER.info("Mining Speed: "+(accelerationStacks*level*level/10f));
-            Spellbound.LOGGER.info("Acceleration Stacks: "+accelerationStacks);
+            Spellbound.LOGGER.info("Mining Speed: {}", accelerationStacks * level * level / 10f);
+            Spellbound.LOGGER.info("Acceleration Stacks: {}", accelerationStacks);
         }
     }
 
     private boolean checkForTimeout(ItemStack stack, LivingEntity entity){
         boolean timedOut = true;
         if(stack.has(SBComponents.ACCELERATION_TIME)){
-            long time = stack.getOrDefault(SBComponents.ACCELERATION_TIME,0l);
+            long time = stack.getOrDefault(SBComponents.ACCELERATION_TIME, 0L);
             timedOut = entity.level().getGameTime() - time > Spellbound.config.acceleration.TIMEOUT;
         }
         if(timedOut){

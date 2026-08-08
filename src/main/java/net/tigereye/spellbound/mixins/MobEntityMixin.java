@@ -14,7 +14,7 @@ public class MobEntityMixin {
     @ModifyVariable(at = @At(value = "INVOKE_ASSIGN",
             target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getDamageBonus(" +
                     "Lnet/minecraft/world/item/ItemStack;" +
-                    "Lnet/minecraft/world/entity/MobType;" +
+                    "Lnet/minecraft/world/entity/EntityType;" +
                     ")F"),
             ordinal = 0,
             method = "doHurtTarget")

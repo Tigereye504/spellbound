@@ -11,6 +11,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -22,9 +24,12 @@ import net.tigereye.spellbound.registration.SBTags;
 import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
-public class FleshWoundEnchantment extends SBEnchantment{
+import java.util.UUID;
 
+public class FleshWoundEnchantment extends SBEnchantment{
+    private static final int PRIORITY = -1;
     public static final ResourceLocation FLESH_WOUND_BREAKPOINT = new ResourceLocation(Spellbound.MODID,"textures/gui/flesh_wound_breakpoint.png");
+    private static final UUID FLESH_WOUND_ID = UUID.fromString("b5198866-4f45-41cb-b867-0789486328e5");
 
     public FleshWoundEnchantment() {
         super(definition(Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS ? SBTags.ARMOR_AND_SHIELD_ENCHANTABLE : ItemTags.ARMOR_ENCHANTABLE,
@@ -42,6 +47,8 @@ public class FleshWoundEnchantment extends SBEnchantment{
     public boolean isEnabled() {return Spellbound.config.fleshWound.ENABLED;}
     @Override
     public int getSoftLevelCap(){return Spellbound.config.fleshWound.SOFT_CAP;}
+    @Override
+    public int getPriority(){return PRIORITY;}
     @Override
     public boolean isTreasureOnly() {return Spellbound.config.fleshWound.IS_TREASURE;}
     @Override
@@ -82,10 +89,22 @@ public class FleshWoundEnchantment extends SBEnchantment{
         }
     }
 
-    private boolean isMissingBreakpoint(LivingEntity entity) {
-        if(!entity.hasEffect(SBStatusEffects.BRAVADOS)){
-            return false;
+    @Override
+    public void onEquipmentChangeOnce(int oldLevel, int newLevel, ItemStack oldItem, ItemStack newItem, LivingEntity entity){
+        AttributeInstance att = entity.getAttribute(Attributes.MAX_ABSORPTION);
+        if(att != null) {
+            AttributeModifier mod = new AttributeModifier(FLESH_WOUND_ID, "SpellboundFleshWoundMaxAbsorption",
+                    SBEnchantmentHelper.getSpellboundEnchantmentAmountCorrectlyWorn(entity.getAllSlots(),SBEnchantments.FLESH_WOUND,entity)
+                            *Spellbound.config.fleshWound.ABSORPTION_RATIO_PER_RANK*entity.getMaxHealth()
+                    ,AttributeModifier.Operation.ADD_VALUE);
+            SpellboundUtil.ReplaceAttributeModifier(att, mod);
         }
+    }
+
+
+    private static boolean isMissingBreakpoint(LivingEntity entity) {
+        if(entity.getHealth() == entity.getMaxHealth()){return true;}
+        if(!entity.hasEffect(SBStatusEffects.BRAVADOS)){return false;}
         return entity.getEffect(SBStatusEffects.BRAVADOS).getAmplifier() == 1;
     }
 
@@ -123,11 +142,14 @@ public class FleshWoundEnchantment extends SBEnchantment{
         Minecraft client = Minecraft.getInstance();
         LocalPlayer player = client.player;
         if(player != null && !(player.isCreative() || player.isSpectator())) {
-            int enchantmentCount = SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(player.getAllSlots(),SBEnchantments.FLESH_WOUND, player) + 1;
+            int enchantmentCount = SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(player.getAllSlots(),SBEnchantments.FLESH_WOUND, player);
             if(enchantmentCount <= 0){
                 return;
             }
             int activeBreakpoints = (int) Math.floor(player.getHealth() / player.getMaxHealth() * (enchantmentCount+1));
+            if(isMissingBreakpoint(player)){
+                activeBreakpoints -= 1;
+            }
             if(activeBreakpoints <= 0){
                 return;
             }

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class PinataEnchantment extends SBEnchantment{
-    public static final String PINATA_KILL_COUNT_KEY = Spellbound.MODID+"PinataCounter";
+    public static final String PINATA_KILL_COUNT_KEY = Spellbound.MODID+":pinata_counter";
     
     public PinataEnchantment() {
         super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE,

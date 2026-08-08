@@ -1,5 +1,6 @@
 package net.tigereye.spellbound.components;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.serialization.Codec;
@@ -17,6 +18,12 @@ public record VengenceComponent(List<Entry> grudges) {
     static {
         CODEC = VengenceComponent.Entry.CODEC.listOf().xmap(VengenceComponent::new, VengenceComponent::grudges);
         STREAM_CODEC = VengenceComponent.Entry.STREAM_CODEC.apply(ByteBufCodecs.list()).map(VengenceComponent::new, VengenceComponent::grudges);
+    }
+
+    public static VengenceComponent ofGrudge(String UUID, float amount) {
+        List<Entry> grudges = new ArrayList<>();
+        grudges.add(new Entry(UUID, amount));
+        return new VengenceComponent(grudges);
     }
 
     public VengenceComponent withAddedGrudge(String UUID, float injury){

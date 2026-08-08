@@ -20,17 +20,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ItemStackMixin {
 
     @ModifyVariable(at = @At(value = "CONSTANT", args = "intValue=0", ordinal = 1),
-            ordinal = 0, method = "hurt")
+            ordinal = 0, method = "hurtAndBreak(ILnet/minecraft/util/RandomSource;Lnet/minecraft/server/level/ServerPlayer;Ljava/lang/Runnable;)V")
     public int spellboundItemStackUnbreakingMixin(int amount, int alsoAmount, RandomSource random, ServerPlayer player){
         return SBEnchantmentHelper.beforeDurabilityLoss((ItemStack)(Object)this,player,amount);
     }
 
 
-    @Inject(at = @At(value = "RETURN"),method = "hurt")
-    public <T extends LivingEntity> void spellboundItemStackDamageMixin(int amount, RandomSource random, ServerPlayer player, CallbackInfoReturnable<Boolean> info){
-        if(info.getReturnValue()){
-            SBEnchantmentHelper.onItemDestroyed((ItemStack)(Object)this, player);
-        }
+    @Inject(at = @At(value = "INVOKE", target = "Ljava/lang/Runnable;run()V"),method = "hurtAndBreak(ILnet/minecraft/util/RandomSource;Lnet/minecraft/server/level/ServerPlayer;Ljava/lang/Runnable;)V")
+    public <T extends LivingEntity> void spellboundItemStackDamageMixin(int i, RandomSource randomSource, ServerPlayer serverPlayer, Runnable runnable, CallbackInfo ci){
+        SBEnchantmentHelper.onItemDestroyed((ItemStack)(Object)this, serverPlayer);
     }
 
     @Inject(at = @At("HEAD"), method = "inventoryTick")

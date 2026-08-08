@@ -19,8 +19,8 @@ public class SBStatusEffectHelper {
     public static float onPreArmorDefense(DamageSource source, LivingEntity defender, Float amount){
         MutableFloat mutableFloat = new MutableFloat(amount);
         SBStatusEffectHelper.forEachStatusEffect((instance,effectsToAdd,effectsToRemove) -> {
-            if(instance.getEffect() instanceof SBStatusEffect) {
-                mutableFloat.setValue(((SBStatusEffect)(instance.getEffect())).onPreArmorDefense(instance, source, defender, mutableFloat.floatValue(), effectsToAdd, effectsToRemove));
+            if(instance.getEffect().value() instanceof SBStatusEffect effect) {
+                mutableFloat.setValue(effect.onPreArmorDefense(instance, source, defender, mutableFloat.floatValue(), effectsToAdd, effectsToRemove));
             }
         }, defender.getActiveEffects(), defender);
         return mutableFloat.floatValue();
@@ -28,8 +28,8 @@ public class SBStatusEffectHelper {
 
     public static void onDeath(DamageSource source, LivingEntity defender){
         SBStatusEffectHelper.forEachStatusEffect((instance,effectsToAdd,effectsToRemove) -> {
-            if(instance.getEffect() instanceof SBStatusEffect) {
-                ((SBStatusEffect)(instance.getEffect())).onDeath(instance, source, defender, effectsToAdd, effectsToRemove);
+            if(instance.getEffect().value() instanceof SBStatusEffect effect) {
+                effect.onDeath(instance, source, defender, effectsToAdd, effectsToRemove);
             }
         }, defender.getActiveEffects(), defender);
     }

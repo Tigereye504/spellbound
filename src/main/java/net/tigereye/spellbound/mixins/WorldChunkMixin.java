@@ -75,11 +75,6 @@ public class WorldChunkMixin extends ChunkAccess {
 
     }
     @Shadow
-    @Nullable
-    public CompoundTag getBlockEntityNbtForSaving(BlockPos pos) {
-        return null;
-    }
-    @Shadow
     public TickContainerAccess<Block> getBlockTicks() {
         return null;
     }

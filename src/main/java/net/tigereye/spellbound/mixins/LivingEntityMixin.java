@@ -108,7 +108,7 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
         SBEnchantmentHelper.afterHeal((LivingEntity)(Object)this,amount);
     }
 
-    @Inject(at = @At(value="CONSTANT", args="floatValue=0",ordinal = 1), method = "actuallyHurt")
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V", shift = At.Shift.AFTER), method = "actuallyHurt")
     public void spellboundLivingEntityApplyDamagePostDamageMixin(DamageSource source, float amount, CallbackInfo info){
         SBEnchantmentHelper.onTakeRedHealthDamage(source,(LivingEntity)(Object)this,amount);
         if(source.getEntity() instanceof LivingEntity attacker) {
@@ -218,5 +218,5 @@ public abstract class LivingEntityMixin extends Entity implements SpellboundLivi
     public UUID spellbound$getLastPrimer(){return this.entityData.get(LAST_PRIMER).orElse(null);}
     
     public void spellbound$setLastTether(UUID uuid){this.entityData.set(LAST_TETHER,Optional.of(uuid));}
-    public UUID spellbound$setLastTether(){return this.entityData.get(LAST_TETHER).orElse(null);}
+    public UUID spellbound$getLastTether(){return this.entityData.get(LAST_TETHER).orElse(null);}
 }

@@ -348,7 +348,7 @@ public class SBEnchantmentHelper {
         Entity owner = persistentProjectileEntity.getOwner();
         if(owner != null) {
             if(owner instanceof SpellboundPlayerEntity){
-                ((SpellboundPlayerEntity)owner).setIsMakingFullChargeAttack(true);
+                ((SpellboundPlayerEntity)owner).spellbound$setIsMakingFullChargeAttack(true);
             }
             forEachSpellboundEnchantment((enchantment, level, itemStack) -> enchantment.onProjectileEntityHit(level, itemStack, persistentProjectileEntity, entity), ((SpellboundProjectileEntity)persistentProjectileEntity).getSource());
         }

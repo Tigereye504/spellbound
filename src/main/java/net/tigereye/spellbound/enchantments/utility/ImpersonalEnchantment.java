@@ -36,7 +36,7 @@ public class ImpersonalEnchantment extends SBEnchantment{
     @Override
     public void doPostAttack(LivingEntity user, Entity target, int level) {
         if(user instanceof SpellboundPlayerEntity &&
-                !(((SpellboundPlayerEntity)user).isMakingFullChargeAttack())){
+                !(((SpellboundPlayerEntity)user).spellbound$isMakingFullChargeAttack())){
             return;
         }
         if(user.isPassenger()){

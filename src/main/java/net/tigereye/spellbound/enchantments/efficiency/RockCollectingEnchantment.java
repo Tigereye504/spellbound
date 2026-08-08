@@ -25,8 +25,8 @@ import java.util.stream.Stream;
 
 public class RockCollectingEnchantment extends SBEnchantment{
 
-    public static final String ROCK_COLLECTOR_KEY = Spellbound.MODID+"RockCollector";
-    public static final String UNIQUE_ROCK_COUNT_KEY = Spellbound.MODID+"UniqueRockCount";
+    public static final String ROCK_COLLECTOR_KEY = Spellbound.MODID+":rock_collector";
+    public static final String UNIQUE_ROCK_COUNT_KEY = Spellbound.MODID+":unique_rock_count";
     public RockCollectingEnchantment() {
         super(definition(ItemTags.MINING_ENCHANTABLE,
             SpellboundUtil.rarityLookup(Spellbound.config.rockCollector.RARITY), //enchantment weight

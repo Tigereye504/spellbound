@@ -14,7 +14,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.EntityType;
-public record TrophyCollectionComponent (List<Entry> trophies) {
+import org.jetbrains.annotations.NotNull;
+
+public record TrophyCollectionComponent (@NotNull List<Entry> trophies) {
    public static final TrophyCollectionComponent EMPTY = new TrophyCollectionComponent(List.of());
    public static final Codec<TrophyCollectionComponent> CODEC;
    public static final StreamCodec<RegistryFriendlyByteBuf, TrophyCollectionComponent> STREAM_CODEC;
@@ -42,9 +44,9 @@ public record TrophyCollectionComponent (List<Entry> trophies) {
     }
 
     public static TrophyCollectionComponent ofTrophy(Holder<EntityType<?>> trophy) {
-        List<Entry> rocks = new ArrayList<>();
-        rocks.add(new Entry(trophy, 1));
-        return new TrophyCollectionComponent(rocks);
+        List<Entry> trophies = new ArrayList<>();
+        trophies.add(new Entry(trophy, 1));
+        return new TrophyCollectionComponent(trophies);
     }
     public static TrophyCollectionComponent ofTrophy(EntityType<?> trophy) {
         return ofTrophy(Holder.direct(trophy));

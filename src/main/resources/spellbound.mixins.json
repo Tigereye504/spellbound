@@ -6,11 +6,9 @@
   "mixins": [
     "BlockMixin",
     "EnchantmentHelperMixin",
-    "EnchantmentTargetMixin",
     "EntityMixin",
     "ExperienceOrbMixin",
     "ExplosionMixin",
-    "FabricItemMixin",
     "FishingBobberEntityMixin",
     "ItemMixin",
     "ItemStackMixin",

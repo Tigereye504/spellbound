@@ -26,9 +26,9 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class VengefulEnchantment extends SBEnchantment {
 
-    public static final String VENGENCE_KEY = "SB_Vengence";
-    public static final String VENGENCE_DAMAGE_KEY = "SB_Vengence_Damage";
-    public static final String VENGENCE_TARGET_KEY = "SB_Vengence_Target";
+    public static final String VENGENCE_KEY = Spellbound.MODID+":vengence";
+    public static final String VENGENCE_DAMAGE_KEY = Spellbound.MODID+":vengence_damage";
+    public static final String VENGENCE_TARGET_KEY = Spellbound.MODID+":vengence_target";
 
     public VengefulEnchantment() {
         super(definition(ItemTags.ARMOR_ENCHANTABLE, ItemTags.CHEST_ARMOR_ENCHANTABLE,
@@ -64,8 +64,8 @@ public class VengefulEnchantment extends SBEnchantment {
         //If damage was from an attacker, save the attacker and accumulate damage taken from that entity
         Entity attacker = source.getEntity();
         if(attacker != null){
-            VengenceComponent vengenceComponent = stack.getOrDefault(SBComponents.VENGEFUL_GRUDGES, new VengenceComponent());
-            stack.set(SBComponents.VENGEFUL_GRUDGES, vengenceComponent.withAddedGrudge(attacker.getStringUUID(), amount));
+            VengenceComponent vengenceComponent = stack.getOrDefault(SBComponents.VENGEFUL_GRUDGES, VengenceComponent.ofGrudge(attacker.getStringUUID(), amount));
+            stack.set(SBComponents.VENGEFUL_GRUDGES, vengenceComponent);
         }
     }
 

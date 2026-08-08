@@ -19,13 +19,14 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.data.SunkenTreasure.SunkenTreasureManager;
 import net.tigereye.spellbound.registration.SBItems;
 import org.jetbrains.annotations.Nullable;
 
 public class CrateBlockEntity extends BlockEntity {
-    public static final String LOOT_DIMENSION_KEY = "SBLootDimension";
-    public static final String LOOT_QUALITY_KEY = "SBLootQuality";
+    public static final String LOOT_DIMENSION_KEY = Spellbound.MODID+":crate_dimension";
+    public static final String LOOT_QUALITY_KEY = Spellbound.MODID+":crate_quality";
     ResourceLocation dimension;
     int quality;
 

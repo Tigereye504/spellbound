@@ -4,6 +4,9 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.tigereye.spellbound.Spellbound;
@@ -16,8 +19,11 @@ import net.tigereye.spellbound.util.SBEnchantmentHelper;
 import net.tigereye.spellbound.util.SpellboundUtil;
 
 import java.util.List;
+import java.util.UUID;
 
 public class GoldskinEnchantment extends SBEnchantment{
+    private static final int PRIORITY = -1;
+    private static final UUID GOLDSKIN_ID = UUID.fromString("ed0034c7-a983-40b3-ace0-f361d332c9a7");
 
     public GoldskinEnchantment() {
         super(definition(Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS ? SBTags.ARMOR_AND_SHIELD_ENCHANTABLE : ItemTags.ARMOR_ENCHANTABLE,
@@ -36,6 +42,8 @@ public class GoldskinEnchantment extends SBEnchantment{
     @Override
     public int getSoftLevelCap(){return Spellbound.config.goldskin.SOFT_CAP;}
     @Override
+    public int getPriority(){return PRIORITY;}
+    @Override
     public boolean isTreasureOnly() {return Spellbound.config.goldskin.IS_TREASURE;}
     @Override
     public boolean isTradeable(){return Spellbound.config.goldskin.IS_FOR_SALE;}
@@ -45,6 +53,19 @@ public class GoldskinEnchantment extends SBEnchantment{
         if(oldLevel > 0 || newLevel > 0) {
             resetGoldskin(entity);
         }
+        AttributeInstance att = entity.getAttribute(Attributes.MAX_ABSORPTION);
+        if(att != null) {
+            AttributeModifier mod = new AttributeModifier(GOLDSKIN_ID, "SpellboundGoldskinMaxAbsorption",
+                    this.calculateMaxAbsorption(entity)
+                    ,AttributeModifier.Operation.ADD_VALUE);
+            SpellboundUtil.ReplaceAttributeModifier(att, mod);
+        }
+    }
+
+    @Override
+    public float onPreArmorDefense(int level, ItemStack stack, DamageSource source, LivingEntity defender, float amount){
+        resetGoldskin(defender);
+        return amount;
     }
 
     @Override

@@ -33,7 +33,7 @@ public class LaunchingEnchantment extends SBEnchantment{
     @Override
     public void doPostAttack(LivingEntity user, Entity target, int level) {
         if(user instanceof SpellboundPlayerEntity &&
-                !(((SpellboundPlayerEntity)user).isMakingFullChargeAttack())){
+                !(((SpellboundPlayerEntity)user).spellbound$isMakingFullChargeAttack())){
             return;
         }
         target.setDeltaMovement(target.getDeltaMovement().x,Math.abs(target.getDeltaMovement().y)+(level*.3),target.getDeltaMovement().z);

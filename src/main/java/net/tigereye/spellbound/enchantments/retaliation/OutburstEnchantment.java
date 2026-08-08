@@ -15,7 +15,7 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class OutburstEnchantment extends SBEnchantment {
 
-    public static final String OUTBURST_RAGE_KEY = "SB_Rage";
+    public static final String OUTBURST_RAGE_KEY = Spellbound.MODID+":rage";
 
     public OutburstEnchantment() {
         super(definition(ItemTags.ARMOR_ENCHANTABLE, ItemTags.CHEST_ARMOR_ENCHANTABLE,

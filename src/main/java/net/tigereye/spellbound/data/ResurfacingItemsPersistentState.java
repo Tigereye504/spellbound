@@ -23,7 +23,7 @@ import java.util.List;
 
 public class ResurfacingItemsPersistentState extends SavedData {
 
-    public static final String RESURFACING_ITEMS_LIST_KEY = Spellbound.MODID+"ResurfacingItems";
+    public static final String RESURFACING_ITEMS_LIST_KEY = Spellbound.MODID+"_resurfacing_items";
 
     private final List<ItemStack> resurfacingQueue = new LinkedList<>();
 

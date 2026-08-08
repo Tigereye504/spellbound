@@ -1,6 +1,6 @@
 package net.tigereye.spellbound.interfaces;
 
 public interface SpellboundPlayerEntity {
-    void setIsMakingFullChargeAttack(boolean set);
-    boolean isMakingFullChargeAttack();
+    void spellbound$setIsMakingFullChargeAttack(boolean set);
+    boolean spellbound$isMakingFullChargeAttack();
 }

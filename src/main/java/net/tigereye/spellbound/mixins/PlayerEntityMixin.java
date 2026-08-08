@@ -26,7 +26,7 @@ public class PlayerEntityMixin implements SpellboundPlayerEntity {
     @ModifyVariable(at = @At(value = "INVOKE_ASSIGN",
             target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getDamageBonus(" +
                     "Lnet/minecraft/world/item/ItemStack;" +
-                    "Lnet/minecraft/world/entity/MobType;" +
+                    "Lnet/minecraft/world/entity/EntityType;" +
                     ")F"),
             //require = 2,
             ordinal = 1,
@@ -35,7 +35,7 @@ public class PlayerEntityMixin implements SpellboundPlayerEntity {
         return g + SBEnchantmentHelper.getDamageBonus((Player)(Object)this, target);
     }
 
-    @Inject(at = @At(value="CONSTANT", args="floatValue=0",ordinal = 1), method = "actuallyHurt")
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;setHealth(F)V", shift = At.Shift.AFTER), method = "actuallyHurt")
     public void spellboundLivingEntityApplyDamagePostDamageMixin(DamageSource source, float amount, CallbackInfo info){
         SBEnchantmentHelper.onTakeRedHealthDamage(source,(LivingEntity)(Object)this,amount);
         if(source.getEntity() instanceof LivingEntity attacker) {
@@ -44,19 +44,19 @@ public class PlayerEntityMixin implements SpellboundPlayerEntity {
     }
 
     @Override
-    public void setIsMakingFullChargeAttack(boolean set) {
+    public void spellbound$setIsMakingFullChargeAttack(boolean set) {
         spellboundEnchantments_IsMakingFullChargeAttack = set;
     }
 
     @Override
-    public boolean isMakingFullChargeAttack() {
+    public boolean spellbound$isMakingFullChargeAttack() {
         return spellboundEnchantments_IsMakingFullChargeAttack;
     }
 
     //Lnet/minecraft/entity/player/PlayerEntity;resetLastAttackedTicks()V
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;resetAttackStrengthTicker()V"), method = "attack")
     public void spellboundPlayerEntityAttackMixin(CallbackInfo info){
-        setIsMakingFullChargeAttack(((Player)(Object)this).getAttackStrengthScale(0.5F) == 1);
+        spellbound$setIsMakingFullChargeAttack(((Player)(Object)this).getAttackStrengthScale(0.5F) == 1);
     }
 
     //Lnet/minecraft/entity/effect/StatusEffectUtil;hasHaste(

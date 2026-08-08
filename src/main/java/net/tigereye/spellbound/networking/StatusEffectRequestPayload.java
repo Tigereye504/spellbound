@@ -10,7 +10,7 @@ import net.tigereye.spellbound.Spellbound;
 public record StatusEffectRequestPayload (int duration, int magnitude, MobEffect statusEffect) implements CustomPacketPayload{
     
     public static final StreamCodec<FriendlyByteBuf, StatusEffectRequestPayload> STREAM_CODEC = CustomPacketPayload.codec(StatusEffectRequestPayload::write, StatusEffectRequestPayload::new);
-    public static final CustomPacketPayload.Type<StatusEffectRequestPayload> TYPE = CustomPacketPayload.createType(Spellbound.MODID+"StatusEffectRequest");
+    public static final CustomPacketPayload.Type<StatusEffectRequestPayload> TYPE = CustomPacketPayload.createType(Spellbound.MODID+":status_effect_request");
 
     public StatusEffectRequestPayload(FriendlyByteBuf buf) {
         this(buf.readInt(),buf.readInt(),BuiltInRegistries.MOB_EFFECT.byId(buf.readInt()));

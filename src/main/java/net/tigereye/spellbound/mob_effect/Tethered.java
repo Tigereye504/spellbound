@@ -28,10 +28,10 @@ public class Tethered extends SBStatusEffect{
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         entity.fallDistance = 0;
         if(entity.level() instanceof ServerLevel sLevel) {
-            UUID ownerUuid = ((SpellboundLivingEntity) entity).spellbound$getLastPrimer();
+            UUID ownerUuid = ((SpellboundLivingEntity) entity).spellbound$getLastTether();
             Entity owner = sLevel.getEntity(ownerUuid);
             //if the anchor has been removed from the world, remove the tether
-            if(owner.isRemoved()){
+            if(owner == null || owner.isRemoved()){
                 return false;
             }
             //otherwise, drag them in if they are past the leash

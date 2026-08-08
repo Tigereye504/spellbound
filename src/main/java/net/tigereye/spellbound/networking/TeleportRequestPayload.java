@@ -9,7 +9,7 @@ import net.tigereye.spellbound.Spellbound;
 public record TeleportRequestPayload (Vec3 destination) implements CustomPacketPayload{
     
     public static final StreamCodec<FriendlyByteBuf, TeleportRequestPayload> STREAM_CODEC = CustomPacketPayload.codec(TeleportRequestPayload::write, TeleportRequestPayload::new);
-    public static final CustomPacketPayload.Type<TeleportRequestPayload> TYPE = CustomPacketPayload.createType(Spellbound.MODID+"TeleportRequest");
+    public static final CustomPacketPayload.Type<TeleportRequestPayload> TYPE = CustomPacketPayload.createType(Spellbound.MODID+":teleport_request");
 
     public TeleportRequestPayload(FriendlyByteBuf buf) {
         this(new Vec3(buf.readDouble(),buf.readDouble(),buf.readDouble()));

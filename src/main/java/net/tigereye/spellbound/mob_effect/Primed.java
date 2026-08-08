@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class Primed extends SBStatusEffect{
 
-    public static final String OWNER_KEY = Spellbound.MODID+"PrimedOwner";
+    public static final String OWNER_KEY = Spellbound.MODID+":primed_owner";
 
     public Primed(){
         super(MobEffectCategory.NEUTRAL, 0x194212);

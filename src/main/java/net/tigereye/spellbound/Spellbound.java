@@ -31,6 +31,7 @@ public class Spellbound implements ModInitializer{
 
 
         SBItems.register();
+        SBComponents.register();
         SBEnchantments.register();
         SBStatusEffects.register();
         SBParticles.register();

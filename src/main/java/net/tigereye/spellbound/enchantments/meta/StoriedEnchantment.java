@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class StoriedEnchantment extends SBEnchantment {
-    public static final String STORIED_XP_KEY = Spellbound.MODID+"StoriedXP";
+    public static final String STORIED_XP_KEY = Spellbound.MODID+":storied_xp";
 
     public StoriedEnchantment() {
         super(definition(ItemTags.DURABILITY_ENCHANTABLE,
@@ -77,7 +77,7 @@ public class StoriedEnchantment extends SBEnchantment {
         List<Component> output = new ArrayList<>();
         int chapter = getStoryChapter(stack);
         output.add(Component.literal(
-                "Chapter "+ chapter +": "+((int)stack.getOrDefault(SBComponents.STORIED_XP,0))+"/"
+                "Chapter "+ chapter +": "+((int)stack.getOrDefault(SBComponents.STORIED_XP,0).floatValue())+"/"
                         +getXPToNextChapter(chapter)));
         return output;
     }

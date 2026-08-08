@@ -19,7 +19,7 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 
 public class BufferedEnchantment extends SBEnchantment {
 
-    public static final String BUFFER_TIME_KEY = Spellbound.MODID+"BufferTime";
+    public static final String BUFFER_TIME_KEY = Spellbound.MODID+":buffer_time";
     private static final int BUFFER_COLOR = 0x1cd8e3;
     private static final int BUFFER_DULL_COLOR = 0x579ca2;
 

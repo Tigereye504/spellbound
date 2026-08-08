@@ -68,7 +68,7 @@ public class RedAlertEnchantment extends SBEnchantment{
         //          start shield recovery by applying 'Shields Down'.
         //   elseif magnitude is lower than count: 
         //      start shield recovery by applying 'Shields Down'.
-        int redAlertCount = SBEnchantmentHelper.countSpellboundEnchantmentInstances(entity.getAllSlots(), SBEnchantments.RED_ALERT);
+        int redAlertCount = SBEnchantmentHelper.countSpellboundEnchantmentInstancesCorrectlyWorn(entity.getAllSlots(), SBEnchantments.RED_ALERT,entity);
         MobEffectInstance shieldedInstance = null;
         int shieldedLevel = 0;
         if(entity.hasEffect(SBStatusEffects.SHIELDED)){
