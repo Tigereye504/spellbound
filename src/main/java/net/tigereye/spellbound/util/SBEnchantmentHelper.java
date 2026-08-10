@@ -232,6 +232,13 @@ public class SBEnchantmentHelper {
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.add(enchantment.getProtectionAmount(level, source, itemStack, target)), target.getArmorSlots());
         return k + Math.round(mutableFloat.floatValue());
     }
+
+    public static float getBaseMiningSpeed(ItemStack stack, BlockState block, float h) {
+        MutableFloat mutableFloat = new MutableFloat(h);
+        forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(enchantment.getBaseMiningSpeed(level, itemStack, block, mutableFloat.getValue())), stack);
+        return mutableFloat.getValue();
+    }
+
     public static float getMiningSpeed(Player playerEntity, BlockState block, float h) {
         MutableFloat mutableFloat = new MutableFloat(h);
         forEachSpellboundEnchantment((enchantment, level, itemStack) -> mutableFloat.setValue(enchantment.getMiningSpeed(level, playerEntity, itemStack, block, mutableFloat.getValue())), playerEntity.getMainHandItem());

@@ -1,10 +1,13 @@
 package net.tigereye.spellbound.enchantments.utility.tool;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.enchantments.SBEnchantment;
@@ -34,13 +37,23 @@ public class UniversalEnchantment extends SBEnchantment{
     @Override
     public boolean isTradeable(){return Spellbound.config.universal.IS_FOR_SALE;}
     @Override
-    public float getMiningSpeed(int level, Player playerEntity, ItemStack stack, BlockState block, float miningSpeed) {
-        if(!stack.isCorrectToolForDrops(block) && stack.getItem() instanceof DiggerItem mtItem){
-            //TODO: 1.20.6 Update Bug: Universal must cycle through basic diggable blocks (dirt, stone, log, leaves, cobweb) to find best digging speed.
-            miningSpeed = stack.getDestroySpeed(block)*Spellbound.config.universal.OFF_TYPE_MINING_SPEED_FACTOR;
+
+    public float getBaseMiningSpeed(int level, ItemStack itemStack, BlockState block, Float miningSpeed) {
+        if(miningSpeed > 1.0F){
+            return miningSpeed;
         }
-        return miningSpeed;
+        Tool tool = itemStack.get(DataComponents.TOOL);
+        if(tool == null){
+            return miningSpeed;
+        }
+        miningSpeed = Math.max(miningSpeed,tool.getMiningSpeed(Blocks.STONE.defaultBlockState()));
+        miningSpeed = Math.max(miningSpeed,tool.getMiningSpeed(Blocks.DIRT.defaultBlockState()));
+        miningSpeed = Math.max(miningSpeed,tool.getMiningSpeed(Blocks.OAK_LOG.defaultBlockState()));
+        miningSpeed = Math.max(miningSpeed,tool.getMiningSpeed(Blocks.OAK_LEAVES.defaultBlockState()));
+        miningSpeed = Math.max(miningSpeed,tool.getMiningSpeed(Blocks.COBWEB.defaultBlockState()));
+        return miningSpeed*Spellbound.config.universal.OFF_TYPE_MINING_SPEED_FACTOR;
     }
+
     @Override
     public boolean setItemSuitability(int level, ItemStack stack, BlockState state, Boolean suitability) {
         return true;

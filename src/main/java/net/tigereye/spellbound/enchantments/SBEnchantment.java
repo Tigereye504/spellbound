@@ -72,6 +72,11 @@ public abstract class SBEnchantment extends Enchantment {
         return 0;
     }
 
+
+    public float getBaseMiningSpeed(int level, ItemStack itemStack, BlockState block, Float miningSpeed) {
+        return miningSpeed;
+    }
+
     //called when a tool is used to dig. receives and returns mining speed
     public float getMiningSpeed(int level, Player playerEntity, ItemStack itemStack, BlockState block, float miningSpeed) {
         return miningSpeed;
