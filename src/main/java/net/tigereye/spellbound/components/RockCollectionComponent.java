@@ -21,18 +21,18 @@ public record RockCollectionComponent (List<Entry> rocks) {
    public static final StreamCodec<RegistryFriendlyByteBuf, RockCollectionComponent> STREAM_CODEC;
 
     public RockCollectionComponent withRockAdded(Holder<Block> rock) {
-        List<Entry> copy = List.of();
-        AtomicBoolean hasRockAlready = new AtomicBoolean(false);
-        rocks.forEach((entry) -> {
+        List<Entry> copy = new ArrayList<>();
+        boolean hasRockAlready = false;
+        for(Entry entry : rocks){
             if(entry.block == rock){
                 copy.add(new Entry(entry.block,entry.count+1));
-                hasRockAlready.set(false);;
+                hasRockAlready = true;
             }
             else{
                 copy.add(entry);
             }
-        });
-        if(hasRockAlready.get()){
+        };
+        if(!hasRockAlready){
             copy.add(new Entry(rock, 1));
         }
         return new RockCollectionComponent(copy);

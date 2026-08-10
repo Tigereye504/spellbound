@@ -1,40 +1,31 @@
-Pre-compile:
-Everything related to networking.
-
-
 Post-compile:
-Replace rarity lookup with weight in configs.
-Add anvil cost to configs (default value is 2^(old rarity tier - 1))
-Adjust Base Power; power = base + per_rank * (level - 1), not (level).
-Universal must cycle through basic diggable blocks (dirt, stone, log, leaves, cobweb) to find best digging speed.
-universal might need to hook in to player or itemstack.getDestroySpeed
-	it seems to have replaced suitability checks
-ItemStackClientMixin should inject tooltips where it used to rather than the very bottom
-Acceleration won't work with new implementation.
 
 Verification:
-Verify Flesh Wound works after rework to not use components/nbt
-Verify Trophy Collecting works after rework to use components
-Verify Rock Collecting works after rework to use components
-Verify onBreak effects (legacy, resurfacing) still work after removing anti-duplication nbt.
-I recall components are supposed to be immutable. Storied maight be running afoul of that.
-Verify Phase Leap/Strafe still work after networking changes
-Verify Grace still works after networking changes
-Verify Hover still works after networking changes
-Verify OnItemBreak effects (legacy and resurfacing) trigger from durability loss after mixin changes
-
-Later:
-Change Outburst to be more like Vengeful
+I recall components are supposed to be immutable. Storied might be running afoul of that.
 
 
 Verified checklist:
 up to Hover
 All protections
 Phase Leap/Strafe
+Trophy Collecting
 Widened
 
+Major Bugs:
+Universal must cycle through basic diggable blocks (dirt, stone, log, leaves, cobweb) to find best digging speed.
+universal might need to hook in to player or itemstack.getDestroySpeed
+	it seems to have replaced suitability checks
 
-Found issues:
+Minor Bugs:
+Correct Base Power; power = base + per_rank * (level - 1), not (level).
+ItemStackClientMixin should inject tooltips where it used to rather than the very bottom.
+
+Urgent Improvements:
+Replace rarity lookup with weight in configs.
+Add anvil cost to configs (default value is 2^(old rarity tier - 1))
+
+Improvements:
 Flesh wound feels... off currently. Maybe instead of taking it all away at once, Bravados instead should serve as a slow absorption decay?
-Shielded feels awkward at low levels currently. consider implementing layered shield recovery system.
-Phase Leap no longer preserves momentum. That's no good.
+Shielded feels off with one high-level instance. consider implementing layered shield recovery system.
+Change Outburst to be more like Vengeful
+Total Last Gasp Rework. Massively buff.

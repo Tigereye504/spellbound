@@ -8,18 +8,28 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.RelativeMovement;
 import net.tigereye.spellbound.Spellbound;
 import net.tigereye.spellbound.interfaces.SpellboundLivingEntity;
 import net.tigereye.spellbound.networking.GraceDataPayload;
 import net.tigereye.spellbound.networking.StatusEffectRequestPayload;
 import net.tigereye.spellbound.networking.TeleportRequestPayload;
+
+import java.util.HashSet;
+import java.util.Set;
+
 public class SBNetworking {
 
     public static void register() {
         PayloadTypeRegistry.playC2S().register(TeleportRequestPayload.TYPE, TeleportRequestPayload.STREAM_CODEC);
         ServerPlayNetworking.registerGlobalReceiver(TeleportRequestPayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
-                context.player().teleportTo(payload.destination().x, payload.destination().y, payload.destination().z);
+                Set<RelativeMovement> flags = new HashSet<>();
+                flags.add(RelativeMovement.X);
+                flags.add(RelativeMovement.Y);
+                flags.add(RelativeMovement.Z);
+                context.player().connection.teleport(payload.destination().x, payload.destination().y, payload.destination().z,
+                        context.player().getYRot(), context.player().getXRot(), flags);
             });
         });
 

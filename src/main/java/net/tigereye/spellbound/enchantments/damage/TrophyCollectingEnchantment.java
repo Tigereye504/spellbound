@@ -126,7 +126,7 @@ public class TrophyCollectingEnchantment extends SBEnchantment{
     private void writeLineInTooltip(List<Component> output, TrophyCollectionComponent.Entry entry, boolean isRanged){
         output.add(Component.literal(
             entry.count() + " ")
-            .append(Component.translatable(entry.entityType().getRegisteredName()))
+            .append(Component.translatable(entry.entityType()))
             .append( isRanged 
                 ? " (+" + String.format("%.1f", getRangedEntityDamageMultiple(entry.count())) + "x)" 
                 : " (+" + getEntityDamageBonus(entry.count()) + ")"));
@@ -143,7 +143,13 @@ public class TrophyCollectingEnchantment extends SBEnchantment{
         if(Spellbound.config.TAKE_ANY_TROPHY ||
                 !(victim instanceof AgeableMob || victim instanceof WaterAnimal) || victim instanceof NeutralMob || victim instanceof Enemy) {
             boolean newTrophy = !hasTrophy(victim, stack);
-            TrophyCollectionComponent collection = stack.getOrDefault(SBComponents.TROPHY_COLECTION, TrophyCollectionComponent.ofTrophy(victim.getType()));
+            TrophyCollectionComponent collection;
+            if(stack.has(SBComponents.TROPHY_COLECTION)){
+                collection = stack.get(SBComponents.TROPHY_COLECTION).withTrophyAdded(victim.getType());
+            }
+            else{
+                collection = TrophyCollectionComponent.ofTrophy(victim.getType());
+            }
             stack.set(SBComponents.TROPHY_COLECTION,collection);
             if (killer instanceof Player killerPlayer) {
                 if (newTrophy) {
@@ -187,8 +193,8 @@ public class TrophyCollectingEnchantment extends SBEnchantment{
         if(!stack.has(SBComponents.TROPHY_COLECTION)){
             return List.of();
         }
-        List<TrophyCollectionComponent.Entry> listToOrder = List.copyOf(stack.get(SBComponents.TROPHY_COLECTION).trophies());
-        listToOrder.sort((a,b) -> {return a.count() - b.count();});
+        List<TrophyCollectionComponent.Entry> listToOrder = new ArrayList<>(stack.get(SBComponents.TROPHY_COLECTION).trophies());
+        listToOrder.sort(Comparator.comparingInt(TrophyCollectionComponent.Entry::count));
         return listToOrder;
     }
 

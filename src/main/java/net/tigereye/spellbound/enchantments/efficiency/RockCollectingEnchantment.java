@@ -128,7 +128,7 @@ public class RockCollectingEnchantment extends SBEnchantment{
                 else{
                     stack.set(SBComponents.ROCK_COLECTION,stack.get(SBComponents.ROCK_COLECTION).withRockAdded(blockState.getBlockHolder()));
                 }
-                //anounce the new rock
+                //announce the new rock
                 if (miner instanceof Player) {
                     String message = stack.getHoverName().getString()
                             + " acquired a "

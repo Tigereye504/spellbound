@@ -46,7 +46,7 @@ public class BagOfTrophies extends Item {
                     }
                     //otherwise, combine the collections.
                     TrophyCollectionComponent itemsTrophys = item.get(SBComponents.TROPHY_COLECTION);
-                    Map<Holder<EntityType<?>>,Integer> itemTrophysMap = new HashMap<>();
+                    Map<String,Integer> itemTrophysMap = new HashMap<>();
                     itemsTrophys.trophies().forEach((entry) -> itemTrophysMap.put(entry.entityType(), entry.count()));
                     for(TrophyCollectionComponent.Entry entry : baggedTrophies.trophies()){
                         itemTrophysMap.put(entry.entityType(), itemTrophysMap.getOrDefault(entry.entityType(),0)+entry.count());
