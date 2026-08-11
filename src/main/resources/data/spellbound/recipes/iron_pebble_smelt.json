@@ -1,9 +1,11 @@
 {
-    "type": "minecraft:blasting",
+    "type": "minecraft:smelting",
     "ingredient": {
       "item": "spellbound:iron_pebble"
     },
-    "result": "minecraft:iron_nugget",
-    "experience": 0.04,
-    "cookingtime": 11
+    "result": {
+      "id": "minecraft:iron_nugget"
+    },
+    "experience": 0.08,
+    "cookingtime": 22
   }

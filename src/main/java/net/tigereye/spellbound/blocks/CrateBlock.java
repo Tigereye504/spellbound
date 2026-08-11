@@ -65,7 +65,7 @@ public class CrateBlock extends BaseEntityBlock {
     @Override
     public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof CrateBlockEntity crateBlockEntity && !EnchantmentHelper.hasSilkTouch(player.getMainHandItem())) {
+        if (blockEntity instanceof CrateBlockEntity crateBlockEntity /*&& !EnchantmentHelper.hasSilkTouch(player.getMainHandItem())*/) {
             crateBlockEntity.spawnLoot(world, pos, player);
         }
         return super.playerWillDestroy(world, pos, state, player);

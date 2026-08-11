@@ -13,11 +13,11 @@ public class RepulsiveEnchantment extends SBEnchantment{
 
     public RepulsiveEnchantment() {
         super(definition(ItemTags.ARMOR_ENCHANTABLE, ItemTags.CHEST_ARMOR_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.repulsive.RARITY), //enchantment weight
+            Spellbound.config.repulsive.WEIGHT, //enchantment weight
             Spellbound.config.repulsive.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.repulsive.BASE_POWER,Spellbound.config.repulsive.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.repulsive.BASE_POWER+Spellbound.config.repulsive.POWER_RANGE,Spellbound.config.repulsive.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.repulsive.RARITY-1), //level cost at anvil
+            Spellbound.config.repulsive.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots
             true); //can work outside of prefered slot
     }

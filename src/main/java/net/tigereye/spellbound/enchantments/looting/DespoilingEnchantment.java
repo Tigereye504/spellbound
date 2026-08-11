@@ -15,11 +15,11 @@ public class DespoilingEnchantment extends SBEnchantment{
 
     public DespoilingEnchantment() {
         super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.despoiling.RARITY), //enchantment weight
+            Spellbound.config.despoiling.WEIGHT, //enchantment weight
             Spellbound.config.despoiling.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.despoiling.BASE_POWER,Spellbound.config.despoiling.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.despoiling.BASE_POWER+Spellbound.config.despoiling.POWER_RANGE,Spellbound.config.despoiling.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.despoiling.RARITY-1), //level cost at anvil
+            Spellbound.config.despoiling.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

@@ -22,12 +22,12 @@
         },
         {
           "type": "minecraft:loot_table",
-          "name": "spellbound:chests/random_pottery_sherd",
+          "value": "spellbound:chests/random_pottery_sherd",
           "weight": 80
         },
         {
           "type": "minecraft:loot_table",
-          "name": "spellbound:chests/random_smithing_template",
+          "value": "spellbound:chests/random_smithing_template",
           "weight": 10
         }
       ],

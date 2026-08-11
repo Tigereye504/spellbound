@@ -23,11 +23,11 @@ public class GraceEnchantment extends SBEnchantment{
     public static final ResourceLocation GRACE_ARMOR = new ResourceLocation(Spellbound.MODID,"textures/gui/grace_armor.png");
     public GraceEnchantment() {
         super(definition(Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS ? SBTags.ARMOR_AND_SHIELD_ENCHANTABLE : ItemTags.ARMOR_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.grace.RARITY), //enchantment weight
+            Spellbound.config.grace.WEIGHT, //enchantment weight
             Spellbound.config.grace.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.grace.BASE_POWER,Spellbound.config.grace.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.grace.BASE_POWER+Spellbound.config.grace.POWER_RANGE,Spellbound.config.grace.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.grace.RARITY-1), //level cost at anvil
+            Spellbound.config.grace.ANVIL_COST, //level cost at anvil
             Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
                         ? new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND}
                         : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots

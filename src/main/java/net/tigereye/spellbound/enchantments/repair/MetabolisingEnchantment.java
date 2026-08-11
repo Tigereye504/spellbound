@@ -15,11 +15,11 @@ public class MetabolisingEnchantment extends SBEnchantment {
 
     public MetabolisingEnchantment() {
         super(definition(ItemTags.DURABILITY_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.metabolising.RARITY), //enchantment weight
+            Spellbound.config.metabolising.WEIGHT, //enchantment weight
             Spellbound.config.metabolising.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.metabolising.BASE_POWER,Spellbound.config.metabolising.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.metabolising.BASE_POWER+Spellbound.config.metabolising.POWER_RANGE,Spellbound.config.metabolising.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.metabolising.RARITY-1), //level cost at anvil
+            Spellbound.config.metabolising.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[] {EquipmentSlot.MAINHAND}),
             false); //can work outside of prefered slot
     }

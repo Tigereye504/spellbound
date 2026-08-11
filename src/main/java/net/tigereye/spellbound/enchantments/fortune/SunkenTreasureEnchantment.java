@@ -25,11 +25,11 @@ public class SunkenTreasureEnchantment extends SBEnchantment {
 
     public SunkenTreasureEnchantment() {
         super(definition(ItemTags.FISHING_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.sunkenTreasure.RARITY), //enchantment weight
+            Spellbound.config.sunkenTreasure.WEIGHT, //enchantment weight
             Spellbound.config.sunkenTreasure.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.sunkenTreasure.BASE_POWER,Spellbound.config.sunkenTreasure.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.sunkenTreasure.BASE_POWER+Spellbound.config.sunkenTreasure.POWER_RANGE,Spellbound.config.sunkenTreasure.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.sunkenTreasure.RARITY-1), //level cost at anvil
+            Spellbound.config.sunkenTreasure.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

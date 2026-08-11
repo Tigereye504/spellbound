@@ -21,11 +21,11 @@ public class ScalpingEnchantment extends SBEnchantment{
 
     public ScalpingEnchantment() {
         super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE, SBTags.AXE_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.scalping.RARITY), //enchantment weight
+            Spellbound.config.scalping.WEIGHT, //enchantment weight
             Spellbound.config.scalping.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.scalping.BASE_POWER,Spellbound.config.scalping.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.scalping.BASE_POWER+Spellbound.config.scalping.POWER_RANGE,Spellbound.config.scalping.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.scalping.RARITY-1), //level cost at anvil
+            Spellbound.config.scalping.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

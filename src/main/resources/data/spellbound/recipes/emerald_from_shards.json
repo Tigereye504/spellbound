@@ -1,5 +1,6 @@
 {
     "type": "minecraft:crafting_shaped",
+    "category": "building",
     "pattern": [
         "###",
         "###",
@@ -11,7 +12,7 @@
         }
     },
     "result": {
-        "item": "minecraft:emerald",
+        "id": "minecraft:emerald",
         "count": 1
     }
 }

@@ -14,11 +14,11 @@ public class SelfishEnchantment extends SBEnchantment {
 
     public SelfishEnchantment() {
         super(definition(ItemTags.DURABILITY_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.selfish.RARITY), //enchantment weight
+            Spellbound.config.selfish.WEIGHT, //enchantment weight
             Spellbound.config.selfish.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.selfish.BASE_POWER,Spellbound.config.selfish.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.selfish.BASE_POWER+Spellbound.config.selfish.POWER_RANGE,Spellbound.config.selfish.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.selfish.RARITY-1), //level cost at anvil
+            Spellbound.config.selfish.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[] {EquipmentSlot.MAINHAND}),
             false); //can work outside of prefered slot
     }

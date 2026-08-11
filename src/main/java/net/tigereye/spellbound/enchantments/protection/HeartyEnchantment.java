@@ -22,11 +22,11 @@ public class HeartyEnchantment extends SBEnchantment{
 
     public HeartyEnchantment() {
         super(definition(Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS ? SBTags.ARMOR_AND_SHIELD_ENCHANTABLE : ItemTags.ARMOR_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.hearty.RARITY), //enchantment weight
+            Spellbound.config.hearty.WEIGHT, //enchantment weight
             Spellbound.config.hearty.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.hearty.BASE_POWER,Spellbound.config.hearty.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.hearty.BASE_POWER+Spellbound.config.hearty.POWER_RANGE,Spellbound.config.hearty.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.hearty.RARITY-1), //level cost at anvil
+            Spellbound.config.hearty.ANVIL_COST, //level cost at anvil
             Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
                         ? new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND}
                         : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots

@@ -17,11 +17,11 @@ public class RampageEnchantment extends SBEnchantment{
 
     public RampageEnchantment() {
         super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE, //enchantment targets: ALL weapons, both melee and ranged
-            SpellboundUtil.rarityLookup(Spellbound.config.rampage.RARITY), //enchantment weight
+            Spellbound.config.rampage.WEIGHT, //enchantment weight
             Spellbound.config.rampage.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.rampage.BASE_POWER,Spellbound.config.rampage.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.rampage.BASE_POWER+Spellbound.config.rampage.POWER_RANGE,Spellbound.config.rampage.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.rampage.RARITY-1), //level cost at anvil
+            Spellbound.config.rampage.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

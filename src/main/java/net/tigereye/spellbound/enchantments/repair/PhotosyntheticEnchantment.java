@@ -14,11 +14,11 @@ public class PhotosyntheticEnchantment extends SBEnchantment {
 
     public PhotosyntheticEnchantment() {
         super(definition(ItemTags.DURABILITY_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.photosynthetic.RARITY), //enchantment weight
+            Spellbound.config.photosynthetic.WEIGHT, //enchantment weight
             Spellbound.config.photosynthetic.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.photosynthetic.BASE_POWER,Spellbound.config.photosynthetic.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.photosynthetic.BASE_POWER+Spellbound.config.photosynthetic.POWER_RANGE,Spellbound.config.photosynthetic.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.photosynthetic.RARITY-1), //level cost at anvil
+            Spellbound.config.photosynthetic.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[] {EquipmentSlot.MAINHAND}),
             false); //can work outside of prefered slot
     }

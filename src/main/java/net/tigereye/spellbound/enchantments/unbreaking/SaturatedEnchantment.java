@@ -14,11 +14,11 @@ public class SaturatedEnchantment extends SBEnchantment {
 
     public SaturatedEnchantment() {
         super(definition(ItemTags.DURABILITY_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.saturated.RARITY), //enchantment weight
+            Spellbound.config.saturated.WEIGHT, //enchantment weight
             Spellbound.config.saturated.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.saturated.BASE_POWER,Spellbound.config.saturated.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.saturated.BASE_POWER+Spellbound.config.saturated.POWER_RANGE,Spellbound.config.saturated.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.saturated.RARITY-1), //level cost at anvil
+            Spellbound.config.saturated.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             false); //can work outside of prefered slot
     }

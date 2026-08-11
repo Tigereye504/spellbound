@@ -18,11 +18,11 @@ public class UniversalEnchantment extends SBEnchantment{
     static int PRIORITY = 1;
     public UniversalEnchantment() {
         super(definition(ItemTags.MINING_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.acceleration.RARITY), //enchantment weight
+            Spellbound.config.acceleration.WEIGHT, //enchantment weight
             Spellbound.config.acceleration.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.acceleration.BASE_POWER,Spellbound.config.acceleration.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.acceleration.BASE_POWER+Spellbound.config.acceleration.POWER_RANGE,Spellbound.config.acceleration.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.acceleration.RARITY-1), //level cost at anvil
+            Spellbound.config.acceleration.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

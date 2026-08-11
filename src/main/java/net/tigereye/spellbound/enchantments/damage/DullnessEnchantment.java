@@ -11,11 +11,11 @@ public class DullnessEnchantment extends SBEnchantment {
 
     public DullnessEnchantment() {
         super(definition(ItemTags.WEAPON_ENCHANTABLE, ItemTags.MINING_ENCHANTABLE, //enchantment targets: supports weapons, primarily for tools
-            SpellboundUtil.rarityLookup(Spellbound.config.dullness.RARITY), //enchantment weight
+            Spellbound.config.dullness.WEIGHT, //enchantment weight
             Spellbound.config.dullness.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.dullness.BASE_POWER,Spellbound.config.dullness.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.dullness.BASE_POWER+Spellbound.config.dullness.POWER_RANGE,Spellbound.config.dullness.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.dullness.RARITY-1), //level cost at anvil
+            Spellbound.config.dullness.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

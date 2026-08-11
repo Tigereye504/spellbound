@@ -17,11 +17,11 @@ public class LegacyEnchantment extends SBEnchantment {
 
     public LegacyEnchantment() {
         super(definition(ItemTags.DURABILITY_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.legacy.RARITY), //enchantment weight
+            Spellbound.config.legacy.WEIGHT, //enchantment weight
             Spellbound.config.legacy.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.legacy.BASE_POWER,Spellbound.config.legacy.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.legacy.BASE_POWER+Spellbound.config.legacy.POWER_RANGE,Spellbound.config.legacy.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.legacy.RARITY-1), //level cost at anvil
+            Spellbound.config.legacy.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[] {EquipmentSlot.MAINHAND}),
             false); //can work outside of prefered slot
     }

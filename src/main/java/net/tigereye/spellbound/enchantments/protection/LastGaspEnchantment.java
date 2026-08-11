@@ -26,11 +26,11 @@ public class LastGaspEnchantment extends SBEnchantment{
 
     public LastGaspEnchantment() {
         super(definition(Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS ? SBTags.ARMOR_AND_SHIELD_ENCHANTABLE : ItemTags.ARMOR_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.lastGasp.RARITY), //enchantment weight
+            Spellbound.config.lastGasp.WEIGHT, //enchantment weight
             Spellbound.config.lastGasp.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.lastGasp.BASE_POWER,Spellbound.config.lastGasp.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.lastGasp.BASE_POWER+Spellbound.config.lastGasp.POWER_RANGE,Spellbound.config.lastGasp.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.lastGasp.RARITY-1), //level cost at anvil
+            Spellbound.config.lastGasp.ANVIL_COST, //level cost at anvil
             Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
                         ? new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND}
                         : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots

@@ -18,11 +18,11 @@ public class RedAlertEnchantment extends SBEnchantment{
 
     public RedAlertEnchantment() {
         super(definition(Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS ? SBTags.ARMOR_AND_SHIELD_ENCHANTABLE : ItemTags.ARMOR_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.redAlert.RARITY), //enchantment weight
+            Spellbound.config.redAlert.WEIGHT, //enchantment weight
             Spellbound.config.redAlert.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.redAlert.BASE_POWER,Spellbound.config.redAlert.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.redAlert.BASE_POWER+Spellbound.config.redAlert.POWER_RANGE,Spellbound.config.redAlert.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.redAlert.RARITY-1), //level cost at anvil
+            Spellbound.config.redAlert.ANVIL_COST, //level cost at anvil
             Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
                         ? new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND}
                         : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots

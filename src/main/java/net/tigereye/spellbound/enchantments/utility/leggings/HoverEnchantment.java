@@ -15,11 +15,11 @@ public class HoverEnchantment extends SBEnchantment {
 
     public HoverEnchantment() {
         super(definition(ItemTags.LEG_ARMOR_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.hover.RARITY), //enchantment weight
+            Spellbound.config.hover.WEIGHT, //enchantment weight
             Spellbound.config.hover.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.hover.BASE_POWER,Spellbound.config.hover.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.hover.BASE_POWER+Spellbound.config.hover.POWER_RANGE,Spellbound.config.hover.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.hover.RARITY-1), //level cost at anvil
+            Spellbound.config.hover.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[] {EquipmentSlot.LEGS}), //prefered slots
             true); //can work outside of prefered slot
     }

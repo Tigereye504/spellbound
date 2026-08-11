@@ -1,13 +1,10 @@
 Minor Bugs:
-Correct Base Power; power = base + per_rank * (level - 1), not (level).
-ItemStackClientMixin should inject tooltips where it used to rather than the very bottom.
-
-Urgent Improvements:
-Replace rarity lookup with weight in configs.
-Add anvil cost to configs (default value is 2^(old rarity tier - 1))
+Crate interaction with Silk Touch removed for now.
 
 Improvements:
-Flesh wound feels... off currently. Maybe instead of taking it all away at once, Bravados instead should serve as a slow absorption decay?
+Flesh wound feels... off currently. Maybe instead of taking all absorption away at once, Bravados instead should serve as a slow absorption decay?
 Shielded feels off with one high-level instance. consider implementing layered shield recovery system.
 Change Outburst to be more like Vengeful
 Total Last Gasp Rework. Massively buff.
+
+Add Enlightened: On block break in darkness, create 'glowing air' block

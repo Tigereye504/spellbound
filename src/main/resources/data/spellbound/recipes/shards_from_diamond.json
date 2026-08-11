@@ -6,7 +6,7 @@
         }
     ],
     "result": {
-        "item": "spellbound:diamond_shard",
+        "id": "spellbound:diamond_shard",
         "count": 9
     }
 }

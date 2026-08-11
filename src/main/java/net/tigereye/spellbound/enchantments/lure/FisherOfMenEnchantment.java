@@ -33,11 +33,11 @@ public class FisherOfMenEnchantment extends SBEnchantment {
 
     public FisherOfMenEnchantment() {
         super(definition(ItemTags.FISHING_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.fisherOfMen.RARITY), //enchantment weight
+            Spellbound.config.fisherOfMen.WEIGHT, //enchantment weight
             Spellbound.config.fisherOfMen.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.fisherOfMen.BASE_POWER,Spellbound.config.fisherOfMen.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.fisherOfMen.BASE_POWER+Spellbound.config.fisherOfMen.POWER_RANGE,Spellbound.config.fisherOfMen.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.fisherOfMen.RARITY-1), //level cost at anvil
+            Spellbound.config.fisherOfMen.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

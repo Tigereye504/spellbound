@@ -12,11 +12,11 @@ public class AttractiveEnchantment extends SBEnchantment{
 
     public AttractiveEnchantment() {
         super(definition(ItemTags.ARMOR_ENCHANTABLE, ItemTags.CHEST_ARMOR_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.outburst.RARITY), //enchantment weight
+            Spellbound.config.outburst.WEIGHT, //enchantment weight
             Spellbound.config.outburst.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.outburst.BASE_POWER,Spellbound.config.outburst.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.outburst.BASE_POWER+Spellbound.config.outburst.POWER_RANGE,Spellbound.config.outburst.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.outburst.RARITY-1), //level cost at anvil
+            Spellbound.config.outburst.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots
             true); //can work outside of prefered slot
     }

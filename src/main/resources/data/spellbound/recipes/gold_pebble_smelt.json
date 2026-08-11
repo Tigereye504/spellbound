@@ -1,9 +1,13 @@
 {
-    "type": "minecraft:blasting",
-    "ingredient": {
-      "item": "spellbound:gold_pebble"
-    },
-    "result": "minecraft:gold_nugget",
-    "experience": 0.04,
-    "cookingtime": 11
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 22,
+  "experience": 0.08,
+  "group": "gold_nugget",
+  "ingredient": {
+    "item": "spellbound:gold_pebble"
+  },
+  "result": {
+    "id": "minecraft:gold_nugget"
   }
+}

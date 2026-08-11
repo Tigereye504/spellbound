@@ -29,11 +29,11 @@ public class RockCollectingEnchantment extends SBEnchantment{
     public static final String UNIQUE_ROCK_COUNT_KEY = Spellbound.MODID+":unique_rock_count";
     public RockCollectingEnchantment() {
         super(definition(ItemTags.MINING_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.rockCollector.RARITY), //enchantment weight
+            Spellbound.config.rockCollector.WEIGHT, //enchantment weight
             Spellbound.config.rockCollector.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.rockCollector.BASE_POWER,Spellbound.config.rockCollector.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.rockCollector.BASE_POWER+Spellbound.config.rockCollector.POWER_RANGE,Spellbound.config.rockCollector.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.rockCollector.RARITY-1), //level cost at anvil
+            Spellbound.config.rockCollector.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }
@@ -105,7 +105,7 @@ public class RockCollectingEnchantment extends SBEnchantment{
     private void writeLineInTooltip(List<Component> output, Map.Entry<Holder<Block>, Integer> entry){
         output.add(Component.literal(
                 entry.getValue() + " ")
-                .append(entry.getKey().getRegisteredName())
+                .append(Component.translatable(entry.getKey().value().getDescriptionId()))
                 .append(" (+" + calculateBlockBonus(entry.getValue()) + ")"));
     }
 

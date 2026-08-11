@@ -19,11 +19,11 @@ public class PhaseStrafeEnchantment extends SBEnchantment {
 
     public PhaseStrafeEnchantment() {
         super(definition(ItemTags.LEG_ARMOR_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.phaseStrafe.RARITY), //enchantment weight
+            Spellbound.config.phaseStrafe.WEIGHT, //enchantment weight
             Spellbound.config.phaseStrafe.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.phaseStrafe.BASE_POWER,Spellbound.config.phaseStrafe.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.phaseStrafe.BASE_POWER+Spellbound.config.phaseStrafe.POWER_RANGE,Spellbound.config.phaseStrafe.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.phaseStrafe.RARITY-1), //level cost at anvil
+            Spellbound.config.phaseStrafe.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[] {EquipmentSlot.LEGS}), //prefered slots
             true); //can work outside of prefered slot
     }

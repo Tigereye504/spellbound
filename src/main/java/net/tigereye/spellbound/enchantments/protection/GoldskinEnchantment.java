@@ -27,11 +27,11 @@ public class GoldskinEnchantment extends SBEnchantment{
 
     public GoldskinEnchantment() {
         super(definition(Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS ? SBTags.ARMOR_AND_SHIELD_ENCHANTABLE : ItemTags.ARMOR_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.goldskin.RARITY), //enchantment weight
+            Spellbound.config.goldskin.WEIGHT, //enchantment weight
             Spellbound.config.goldskin.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.goldskin.BASE_POWER,Spellbound.config.goldskin.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.goldskin.BASE_POWER+Spellbound.config.goldskin.POWER_RANGE,Spellbound.config.goldskin.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.goldskin.RARITY-1), //level cost at anvil
+            Spellbound.config.goldskin.ANVIL_COST, //level cost at anvil
             Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
                         ? new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND}
                         : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots

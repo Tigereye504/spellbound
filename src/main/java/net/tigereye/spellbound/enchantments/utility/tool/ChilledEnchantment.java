@@ -19,11 +19,11 @@ import net.tigereye.spellbound.util.SpellboundUtil;
 public class ChilledEnchantment extends SBEnchantment{
     public ChilledEnchantment() {
         super(definition(ItemTags.MINING_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.chilled.RARITY), //enchantment weight
+            Spellbound.config.chilled.WEIGHT, //enchantment weight
             Spellbound.config.chilled.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.chilled.BASE_POWER,Spellbound.config.chilled.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.chilled.BASE_POWER+Spellbound.config.chilled.POWER_RANGE,Spellbound.config.chilled.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.chilled.RARITY-1), //level cost at anvil
+            Spellbound.config.chilled.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

@@ -38,11 +38,11 @@ public class StoriedEnchantment extends SBEnchantment {
 
     public StoriedEnchantment() {
         super(definition(ItemTags.DURABILITY_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.storied.RARITY), //enchantment weight
+            Spellbound.config.storied.WEIGHT, //enchantment weight
             Spellbound.config.storied.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.storied.BASE_POWER,Spellbound.config.storied.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.storied.BASE_POWER+Spellbound.config.storied.POWER_RANGE,Spellbound.config.storied.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.storied.RARITY-1), //level cost at anvil
+            Spellbound.config.storied.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             false); //can work outside of prefered slot
     }

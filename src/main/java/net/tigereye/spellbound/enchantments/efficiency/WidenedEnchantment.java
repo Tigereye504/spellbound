@@ -34,11 +34,11 @@ public class WidenedEnchantment extends SBEnchantment {
 
     public WidenedEnchantment() {
         super(definition(ItemTags.MINING_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.widened.RARITY), //enchantment weight
+            Spellbound.config.widened.WEIGHT, //enchantment weight
             Spellbound.config.widened.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.widened.BASE_POWER,Spellbound.config.widened.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.widened.BASE_POWER+Spellbound.config.widened.POWER_RANGE,Spellbound.config.widened.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.widened.RARITY-1), //level cost at anvil
+            Spellbound.config.widened.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

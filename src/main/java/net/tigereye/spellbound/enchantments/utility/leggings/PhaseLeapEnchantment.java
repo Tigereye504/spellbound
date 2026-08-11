@@ -17,11 +17,11 @@ public class PhaseLeapEnchantment extends SBEnchantment {
 
     public PhaseLeapEnchantment() {
         super(definition(ItemTags.LEG_ARMOR_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.phaseLeap.RARITY), //enchantment weight
+            Spellbound.config.phaseLeap.WEIGHT, //enchantment weight
             Spellbound.config.phaseLeap.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.phaseLeap.BASE_POWER,Spellbound.config.phaseLeap.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.phaseLeap.BASE_POWER+Spellbound.config.phaseLeap.POWER_RANGE,Spellbound.config.phaseLeap.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.phaseLeap.RARITY-1), //level cost at anvil
+            Spellbound.config.phaseLeap.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[] {EquipmentSlot.LEGS}), //prefered slots
             true); //can work outside of prefered slot
     }

@@ -25,11 +25,11 @@ public class DemolitionEnchantment extends SBEnchantment {
 
     public DemolitionEnchantment() {
         super(definition(ItemTags.MINING_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.demolition.RARITY), //enchantment weight
+            Spellbound.config.demolition.WEIGHT, //enchantment weight
             Spellbound.config.demolition.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.demolition.BASE_POWER,Spellbound.config.demolition.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.demolition.BASE_POWER+Spellbound.config.demolition.POWER_RANGE,Spellbound.config.demolition.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.demolition.RARITY-1), //level cost at anvil
+            Spellbound.config.demolition.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

@@ -15,7 +15,8 @@ import java.util.List;
 @Mixin(ItemStack.class)
 public class ItemStackClientMixin {
     //@ModifyVariable(at = @At(value="CONSTANT", args = "intValue=10", ordinal = 0), ordinal = 0, method = "getTooltipLines")
-    @ModifyVariable(at = @At(value="RETURN"), ordinal = 0, method = "getTooltipLines")
+    @ModifyVariable(at = @At(value = "INVOKE", ordinal = 5, target = "Lnet/minecraft/world/item/ItemStack;addToTooltip(Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/world/item/TooltipFlag;)V")
+            , ordinal = 0, method = "getTooltipLines")
     public List<Component> spellboundItemStackGetTooltipMixin(List<Component> list, Item.TooltipContext tooltipContext, Player player, TooltipFlag context) {
         return SBEnchantmentHelper.addTooltip((ItemStack)(Object)this, list, player, context);
     }

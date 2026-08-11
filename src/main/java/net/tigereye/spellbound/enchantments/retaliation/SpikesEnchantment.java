@@ -19,11 +19,11 @@ public class SpikesEnchantment extends SBEnchantment {
 
     public SpikesEnchantment() {
         super(definition(ItemTags.ARMOR_ENCHANTABLE, ItemTags.CHEST_ARMOR_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.spikes.RARITY), //enchantment weight
+            Spellbound.config.spikes.WEIGHT, //enchantment weight
             Spellbound.config.spikes.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.spikes.BASE_POWER,Spellbound.config.spikes.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.spikes.BASE_POWER+Spellbound.config.spikes.POWER_RANGE,Spellbound.config.spikes.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.spikes.RARITY-1), //level cost at anvil
+            Spellbound.config.spikes.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots
             true); //can work outside of prefered slot
     }

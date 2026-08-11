@@ -14,11 +14,11 @@ public class SkotosyntheticEnchantment extends SBEnchantment {
 
     public SkotosyntheticEnchantment() {
         super(definition(ItemTags.DURABILITY_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.skotosynthetic.RARITY), //enchantment weight
+            Spellbound.config.skotosynthetic.WEIGHT, //enchantment weight
             Spellbound.config.skotosynthetic.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.skotosynthetic.BASE_POWER,Spellbound.config.skotosynthetic.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.skotosynthetic.BASE_POWER+Spellbound.config.skotosynthetic.POWER_RANGE,Spellbound.config.skotosynthetic.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.skotosynthetic.RARITY-1), //level cost at anvil
+            Spellbound.config.skotosynthetic.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[] {EquipmentSlot.MAINHAND}),
             false); //can work outside of prefered slot
     }

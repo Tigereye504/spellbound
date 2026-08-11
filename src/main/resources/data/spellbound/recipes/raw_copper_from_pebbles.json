@@ -11,7 +11,7 @@
         }
     },
     "result": {
-        "item": "minecraft:raw_copper",
+        "id": "minecraft:raw_copper",
         "count": 1
     }
 }

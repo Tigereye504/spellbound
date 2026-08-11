@@ -22,11 +22,11 @@ public class DeathWishEnchantment extends SBEnchantment{
 
     public DeathWishEnchantment() {
         super(definition(Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS ? SBTags.ARMOR_AND_SHIELD_ENCHANTABLE : ItemTags.ARMOR_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.deathWish.RARITY), //enchantment weight
+            Spellbound.config.deathWish.WEIGHT, //enchantment weight
             Spellbound.config.deathWish.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.deathWish.BASE_POWER,Spellbound.config.deathWish.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.deathWish.BASE_POWER+Spellbound.config.deathWish.POWER_RANGE,Spellbound.config.deathWish.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.deathWish.RARITY-1), //level cost at anvil
+            Spellbound.config.deathWish.ANVIL_COST, //level cost at anvil
             Spellbound.config.CAN_SHIELD_HAVE_ARMOR_ENCHANTMENTS
                         ? new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET,EquipmentSlot.OFFHAND}
                         : new EquipmentSlot[] {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET}), //prefered slots

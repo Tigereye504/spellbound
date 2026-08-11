@@ -17,11 +17,11 @@ public class PrimingEnchantment extends SBEnchantment{
 
     public PrimingEnchantment() {
         super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE, //enchantment targets: ALL weapons, both melee and ranged
-            SpellboundUtil.rarityLookup(Spellbound.config.priming.RARITY), //enchantment weight
+            Spellbound.config.priming.WEIGHT, //enchantment weight
             Spellbound.config.priming.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.priming.BASE_POWER,Spellbound.config.priming.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.priming.BASE_POWER+Spellbound.config.priming.POWER_RANGE,Spellbound.config.priming.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.priming.RARITY-1), //level cost at anvil
+            Spellbound.config.priming.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

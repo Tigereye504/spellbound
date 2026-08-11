@@ -16,11 +16,11 @@ public class ImpersonalEnchantment extends SBEnchantment{
 
     public ImpersonalEnchantment() {
         super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.impersonal.RARITY), //enchantment weight
+            Spellbound.config.impersonal.WEIGHT, //enchantment weight
             Spellbound.config.impersonal.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.impersonal.BASE_POWER,Spellbound.config.impersonal.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.impersonal.BASE_POWER+Spellbound.config.impersonal.POWER_RANGE,Spellbound.config.impersonal.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.impersonal.RARITY-1), //level cost at anvil
+            Spellbound.config.impersonal.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

@@ -14,11 +14,11 @@ public class ResurfacingEnchantment extends SBEnchantment {
 
     public ResurfacingEnchantment() {
         super(definition(ItemTags.DURABILITY_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.resurfacing.RARITY), //enchantment weight
+            Spellbound.config.resurfacing.WEIGHT, //enchantment weight
             Spellbound.config.resurfacing.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.resurfacing.BASE_POWER,Spellbound.config.resurfacing.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.resurfacing.BASE_POWER+Spellbound.config.resurfacing.POWER_RANGE,Spellbound.config.resurfacing.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.resurfacing.RARITY-1), //level cost at anvil
+            Spellbound.config.resurfacing.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[] {EquipmentSlot.MAINHAND}),
             false); //can work outside of prefered slot
     }

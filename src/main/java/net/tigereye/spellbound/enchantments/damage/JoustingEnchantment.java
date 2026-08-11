@@ -16,11 +16,11 @@ public class JoustingEnchantment extends SBEnchantment{
 
     public JoustingEnchantment() {
         super(definition(SBTags.JOUSTING_ENCHANTABLE, ItemTags.TRIDENT_ENCHANTABLE, //enchantment targets: supports shovels and melee weapons, primarily for tridents
-            SpellboundUtil.rarityLookup(Spellbound.config.jousting.RARITY), //enchantment weight
+            Spellbound.config.jousting.WEIGHT, //enchantment weight
             Spellbound.config.jousting.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.jousting.BASE_POWER,Spellbound.config.jousting.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.jousting.BASE_POWER+Spellbound.config.jousting.POWER_RANGE,Spellbound.config.jousting.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.jousting.RARITY-1), //level cost at anvil
+            Spellbound.config.jousting.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }

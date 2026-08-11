@@ -25,11 +25,11 @@ public class BufferedEnchantment extends SBEnchantment {
 
     public BufferedEnchantment() {
         super(definition(ItemTags.DURABILITY_ENCHANTABLE,
-            SpellboundUtil.rarityLookup(Spellbound.config.buffered.RARITY), //enchantment weight
+            Spellbound.config.buffered.WEIGHT, //enchantment weight
             Spellbound.config.buffered.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.buffered.BASE_POWER,Spellbound.config.buffered.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.buffered.BASE_POWER+Spellbound.config.buffered.POWER_RANGE,Spellbound.config.buffered.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.buffered.RARITY-1), //level cost at anvil
+            Spellbound.config.buffered.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             false); //can work outside of prefered slot
     }

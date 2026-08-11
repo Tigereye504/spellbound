@@ -6,7 +6,7 @@
         }
     ],
     "result": {
-        "item": "spellbound:iron_pebble",
+        "id": "spellbound:iron_pebble",
         "count": 9
     }
 }

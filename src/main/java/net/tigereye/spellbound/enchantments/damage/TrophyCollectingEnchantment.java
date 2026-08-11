@@ -1,12 +1,11 @@
 package net.tigereye.spellbound.enchantments.damage;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -33,11 +32,11 @@ public class TrophyCollectingEnchantment extends SBEnchantment{
 
     public TrophyCollectingEnchantment() {
         super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE, //enchantment targets: ALL weapons, both melee and ranged
-            SpellboundUtil.rarityLookup(Spellbound.config.trophyCollector.RARITY), //enchantment weight
+            Spellbound.config.trophyCollector.WEIGHT, //enchantment weight
             Spellbound.config.trophyCollector.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.trophyCollector.BASE_POWER,Spellbound.config.trophyCollector.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.trophyCollector.BASE_POWER+Spellbound.config.trophyCollector.POWER_RANGE,Spellbound.config.trophyCollector.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.trophyCollector.RARITY-1), //level cost at anvil
+            Spellbound.config.trophyCollector.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
         }
@@ -124,9 +123,10 @@ public class TrophyCollectingEnchantment extends SBEnchantment{
     }
 
     private void writeLineInTooltip(List<Component> output, TrophyCollectionComponent.Entry entry, boolean isRanged){
+        EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.of(entry.entityType(),':'));
         output.add(Component.literal(
             entry.count() + " ")
-            .append(Component.translatable(entry.entityType()))
+            .append(Component.translatable(type.toString()))
             .append( isRanged 
                 ? " (+" + String.format("%.1f", getRangedEntityDamageMultiple(entry.count())) + "x)" 
                 : " (+" + getEntityDamageBonus(entry.count()) + ")"));

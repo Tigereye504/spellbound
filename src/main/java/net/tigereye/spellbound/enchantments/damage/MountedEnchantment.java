@@ -14,11 +14,11 @@ public class MountedEnchantment extends SBEnchantment{
 
     public MountedEnchantment() {
         super(definition(SBTags.ALL_WEAPONS_ENCHANTABLE, //enchantment targets: weapons
-            SpellboundUtil.rarityLookup(Spellbound.config.mounted.RARITY), //enchantment weight
+            Spellbound.config.mounted.WEIGHT, //enchantment weight
             Spellbound.config.mounted.HARD_CAP, //level cap
             dynamicCost(Spellbound.config.mounted.BASE_POWER,Spellbound.config.mounted.POWER_PER_RANK), //minimum enchanting power to roll
             dynamicCost(Spellbound.config.mounted.BASE_POWER+Spellbound.config.mounted.POWER_RANGE,Spellbound.config.mounted.POWER_PER_RANK), //maximum enchanting power to roll
-            (int)Math.pow(2,Spellbound.config.mounted.RARITY-1), //level cost at anvil
+            Spellbound.config.mounted.ANVIL_COST, //level cost at anvil
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}), //prefered slots
             true); //can work outside of prefered slot
     }
